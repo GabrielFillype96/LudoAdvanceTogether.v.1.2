@@ -32,7 +32,7 @@ public class MenuInterface extends JPanel {
         setLayout(null); // Define o layout do layer do menu como absoluto para sobrepor a primeira camada de layer criada ("MainScreenInterface")
         setSize(menuPanelWidth, menuPanelHeight); // Define o tamanho do layer do menu
         menuOptionsPanel.setOpaque(false); // Mantém transparente para o fundo do jogo aparecer atrás
-        menuOptionsPanel.setBounds(50, 150, 300, 350); // Define a posição (canto esquerdo) e o tamanho da box que irá conter os botões.
+        menuOptionsPanel.setBounds(25, 50, 300, 450); // Define a posição (canto esquerdo) e o tamanho da box que irá conter os botões.
 
         // Configuração do grid das opções do menu (GridBagConstraints)
         GridBagConstraints gbc = new GridBagConstraints();

@@ -3,6 +3,8 @@
 package gui.components.buttons;
 // Imports
 import java.awt.Dimension;
+import java.awt.Image;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
@@ -13,6 +15,8 @@ public class CustomButton extends JButton {
     // Variáveis
     private ImageIcon standardImage;
     private ImageIcon effectedImage;
+    private final int btnWidth = 220;
+    private final int btnHeight = 50;
 
     /*  
     *  Não é necessário atrelar um objeto aos métodos abaixo, pois a classe "CustomButton" é um JButton 
@@ -64,10 +68,20 @@ public class CustomButton extends JButton {
         if (effectedImage != null && standardImage != null) {
             /*
             * Espécie de if/else de forma compacta.
-            * Estrutura --> <condição> ? <seForVerdadeiro> : <seForFalso>
+            * Estrutura --> <condição> ? <seForVerdadeiro> : <se    ForFalso>
             */
             setIcon(selected ? effectedImage : standardImage);
         }
+    }
+
+    private ImageIcon resizedButton(ImageIcon originalImageBtn) {
+        if (originalImageBtn == null) return null;
+
+        Image catchImage = originalImageBtn.getImage();
+
+        Image resizedImageBtn = catchImage.getScaledInstance(btnWidth, btnHeight, Image.SCALE_SMOOTH);
+
+        return new ImageIcon(resizedImageBtn);
     }
 
     /* 
