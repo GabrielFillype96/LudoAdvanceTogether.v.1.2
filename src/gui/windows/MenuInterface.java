@@ -18,6 +18,11 @@ public class MenuInterface extends JPanel {
     private ExitButton btnExit;
     private int menuPanelWidth = 900;
     private int menuPanelHeight = 600;
+    private int menuOptionsPanelWidth = 300;
+    private int menuOptionsPanelHeight = 280;
+    private int menuOptionsPanelX = 20;
+    private int menuOptionsPanelY = 35;
+
 
     public MenuInterface() {
 
@@ -32,14 +37,14 @@ public class MenuInterface extends JPanel {
         setLayout(null); // Define o layout do layer do menu como absoluto para sobrepor a primeira camada de layer criada ("MainScreenInterface")
         setSize(menuPanelWidth, menuPanelHeight); // Define o tamanho do layer do menu
         menuOptionsPanel.setOpaque(false); // Mantém transparente para o fundo do jogo aparecer atrás
-        menuOptionsPanel.setBounds(25, 50, 300, 450); // Define a posição (canto esquerdo) e o tamanho da box que irá conter os botões.
+        menuOptionsPanel.setBounds(menuOptionsPanelX, menuOptionsPanelY, menuOptionsPanelWidth, menuOptionsPanelHeight); // Define a posição (canto esquerdo) e o tamanho da box que irá conter os botões
 
         // Configuração do grid das opções do menu (GridBagConstraints)
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0; // Tudo na mesma coluna (coluna 0)
         gbc.gridy = GridBagConstraints.RELATIVE; // O Java joga o próximo botão automaticamente na linha de baixo
         gbc.fill = GridBagConstraints.NONE; // Não estica a imagem do botão
-        gbc.insets = new Insets(10, 0, 10, 0); // Espaçamento de 10 pixels acima e abaixo de cada botão
+        gbc.insets = new Insets(7, 0, 7, 0); // Espaçamento de 10 pixels acima e abaixo de cada botão
 
         // Criação dos botões
         btnNewGame = new NewGameButton(); // Instancia o botão "btnNewGame" através da classe "NewGameButton"

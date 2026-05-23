@@ -4,6 +4,7 @@ package gui.components.buttons;
 // Imports
 import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.Insets;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -15,8 +16,8 @@ public class CustomButton extends JButton {
     // Variáveis
     private ImageIcon standardImage;
     private ImageIcon effectedImage;
-    private final int btnWidth = 220;
-    private final int btnHeight = 50;
+    private static final int btnWidth = 200;
+    private static final int btnHeight = 45;
 
     /*  
     *  Não é necessário atrelar um objeto aos métodos abaixo, pois a classe "CustomButton" é um JButton 
@@ -32,15 +33,18 @@ public class CustomButton extends JButton {
     */
     public CustomButton(ImageIcon  standardImage, ImageIcon effectedImage, boolean hoverStatus) { // O tipo de dado "ImageIcon" é nativo do Java Swing
         // Envia a imagem para o construtor original do JButton
-        super(standardImage); /*  SuperClasse que irá usar um construtor nativo do JButton e passar para ele o parâmetro "standardImage" (que receberá o path da imagem) */
+        super(standardImage != null ? new ImageIcon(standardImage.getImage().getScaledInstance(btnWidth, btnHeight, Image.SCALE_SMOOTH)) : null);
 
-        // Verifica se a imagem foi carregada ("effectedImage é diferente de vazio")
-        if (effectedImage != null) {
-            setRolloverIcon(effectedImage); // Método nativo do Java Swing que permite inserir a imagem referente ao parâmetro "effectedImage".
+        this.standardImage = resizedButton(standardImage); // Chama o método de redimensionamento e atribui a variável "resizedStandardImage" o resultado do método, passando como parâmetro a imagem original "standardImage".
+        ImageIcon resizedEffectedImage = resizedButton(effectedImage); // Chama o método de redimensionamento e atribui a variável "resizedEffectedImage" o resultado do método, passando como parâmetro a imagem original "effectedImage".
+
+        // Verifica se a imagem foi carregada ("effectedImage" é diferente de vazio).
+        if (resizedEffectedImage != null) {
+            setRolloverIcon(resizedEffectedImage); // Método nativo do Java Swing que permite inserir a imagem referente ao parâmetro "effectedImage".
             setRolloverEnabled(true); // Método nativo do Java Swing que habilita o recurso de hover.
         }
 
-        initStyle(standardImage); // Chama o método de limpeza
+        initStyle(); // Chama o método de limpeza
     }
 
     /*
@@ -49,13 +53,14 @@ public class CustomButton extends JButton {
     * @param effectedImage O ImageIcon que representa a arte do botão com efeito.
     */
     public CustomButton(ImageIcon standardImage, ImageIcon effectedImage) {
-        super(standardImage); /*  SuperClasse que irá usar um construtor nativo do JButton e passar para ele o parâmetro "standardImage" (que receberá o path da imagem) */
+        super(standardImage != null ? new ImageIcon(standardImage.getImage().getScaledInstance(btnWidth, btnHeight, Image.SCALE_SMOOTH)) : null); // Envia a imagem para o construtor original do JButton
+
 
         // O "this." permite fazer referência a variável global
-        this.standardImage = standardImage;
-        this.effectedImage = effectedImage;
+        this.standardImage = resizedButton(standardImage); // Chama o método de redimensionamento e atribui a variável global "standardImage" o resultado do método, passando como parâmetro a imagem original "standardImage".
+        this.effectedImage = resizedButton(effectedImage); // Chama o método de redimensionamento e atribui a variável global "effectedImage" o resultado do método, passando como parâmetro a imagem com efeito "effectedImage".
 
-        initStyle(standardImage);
+        initStyle(); // Chama o método de limpeza
     }
 
     /*
@@ -68,12 +73,13 @@ public class CustomButton extends JButton {
         if (effectedImage != null && standardImage != null) {
             /*
             * Espécie de if/else de forma compacta.
-            * Estrutura --> <condição> ? <seForVerdadeiro> : <se    ForFalso>
+            * Estrutura --> <condição> ? <seForVerdadeiro> : <seForFalso>
             */
             setIcon(selected ? effectedImage : standardImage);
         }
     }
 
+    // Método para redimensionar as imagens dos botões
     private ImageIcon resizedButton(ImageIcon originalImageBtn) {
         if (originalImageBtn == null) return null;
 
@@ -88,15 +94,25 @@ public class CustomButton extends JButton {
     * Método que realiza a limpeza visual dos botões nativos do Java Swing 
     * Visibilidade "private" --> permite ser visualizada/acionada dentro dessa classe "CustomButton"
     */
-    private void initStyle(ImageIcon image) {
+    private void initStyle() {
         setBorderPainted(false);     // Remove a borda quadrada cinza padrão
         setContentAreaFilled(false); // Remove o preenchimento de fundo padrão
         setFocusPainted(false);      // Remove a linha pontilhada quando o botão é selecionado
         setOpaque(false);     // Garante que o fundo do botão seja transparente (respeitando o PNG)
+        setMargin(new Insets(0, 0, 0, 0));
+        setIconTextGap(0);  
 
-        if (image != null) {
-            setPreferredSize(new Dimension(image.getIconWidth(), image.getIconHeight()));
-        }
+        Dimension tamanhoFixo = new Dimension(btnWidth, btnHeight);
+        setPreferredSize(tamanhoFixo);
+        setMinimumSize(tamanhoFixo);
+        setMaximumSize(tamanhoFixo);
+        setSize(tamanhoFixo);
+        
+        
+        
+        // if (image != null) {
+        //     setPreferredSize(new Dimension(image.getIconWidth(), image.getIconHeight()));
+        // }
         
     }
 
