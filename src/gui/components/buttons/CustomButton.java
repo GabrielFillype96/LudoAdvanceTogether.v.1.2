@@ -99,14 +99,14 @@ public class CustomButton extends JButton {
         setContentAreaFilled(false); // Remove o preenchimento de fundo padrão
         setFocusPainted(false);      // Remove a linha pontilhada quando o botão é selecionado
         setOpaque(false);     // Garante que o fundo do botão seja transparente (respeitando o PNG)
-        setMargin(new Insets(0, 0, 0, 0));
-        setIconTextGap(0);  
+        setMargin(new Insets(0, 0, 0, 0)); // Remove as margens internas para que a imagem ocupe todo o espaço do botão
+        setIconTextGap(0);   // Remove o espaço entre o ícone e o texto (caso haja texto, mas nesse caso não haverá)
 
-        Dimension tamanhoFixo = new Dimension(btnWidth, btnHeight);
-        setPreferredSize(tamanhoFixo);
-        setMinimumSize(tamanhoFixo);
-        setMaximumSize(tamanhoFixo);
-        setSize(tamanhoFixo);
+        Dimension fixedSize = new Dimension(btnWidth, btnHeight);
+        setPreferredSize(fixedSize);
+        setMinimumSize(fixedSize);
+        setMaximumSize(fixedSize);
+        setSize(fixedSize);
         
         
         

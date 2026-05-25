@@ -1,16 +1,18 @@
 package gui.windows;
 
+
 import gui.components.buttons.*;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import actions.NewGameMenuAction;
 
 public class MenuInterface extends JPanel {
     // Variáveis dos botões
     private JPanel menuOptionsPanel;
+    private WindowManager windowManager;
     private NewGameButton btnNewGame;
     private ConfigButton btnConfig;
     private ConnectionButton btnConnection;
@@ -22,9 +24,10 @@ public class MenuInterface extends JPanel {
     private int menuOptionsPanelHeight = 280;
     private int menuOptionsPanelX = 20;
     private int menuOptionsPanelY = 35;
+    
 
 
-    public MenuInterface() {
+    public MenuInterface(WindowManager windowManager) {
 
         setOpaque(false); 
         setLayout(null);
@@ -61,6 +64,8 @@ public class MenuInterface extends JPanel {
         menuOptionsPanel.add(btnExit, gbc);
 
         add(menuOptionsPanel);
+
+        btnNewGame.addActionListener(new NewGameMenuAction(windowManager));
 
     }
 
