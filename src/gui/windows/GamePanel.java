@@ -7,7 +7,6 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 
 public class GamePanel extends JPanel {
 
@@ -24,27 +23,41 @@ public class GamePanel extends JPanel {
         setOpaque(false);
 
         // --- PAINEL LATERAL DIREITO (Espaço restante: 300x600) ---
-        // Começa na posição X=600 (onde o tabuleiro termina) e vai até o fim da tela
         JPanel boardPanel = new JPanel();
         boardPanel.setBounds(600, 0, 300, 600);
-        boardPanel.setBackground(new Color(38, 24, 16)); // Tom amadeirado escuro para combinar com o menu
+        boardPanel.setBackground(new Color(38, 24, 16)); // Tom amadeirado escuro
         boardPanel.setLayout(null);
 
-        // 1. INSTANCIA O SEU CARDSPANEL
+        // 1. INSTANCIA O SEU CARDSPANEL (O contentor da carta)
         gui.windows.CardsPanel painelCartas = new gui.windows.CardsPanel();
         
-        // Centraliza o painel de largura 220 no menu de largura 300
-        painelCartas.setBounds((300 - 220) / 2, 25, 220, 340);
+        // Centraliza o painel de largura 220 dentro do menu lateral de largura 300
+        painelCartas.setBounds((300 - 220) / 2, 180, 220, 340);
         boardPanel.add(painelCartas);
 
-        // 2. BUSCA A PRIMEIRA CARTA DA LISTA DO SEU CARDMANAGER
-        Cards.CustomCards cartaAtual = Cards.CardManager.criarCartasFaceis().get(0);
+        // =========================================================================
+        // CORRIGIDO: Chamada com pacote 'cards' em minúsculo
+        // =========================================================================
+        cards.CustomCards cartaAtual = cards.CardManager.criarCartasFaceis().get(0);
         
-        // Configura o tamanho dela e adiciona no painel
+        // Configura o tamanho e posicionamento absoluto dela dentro do painel de cartas
         cartaAtual.setBounds(0, 0, 220, 340);
         painelCartas.add(cartaAtual);
 
-        // 3. FORÇA A ATUALIZAÇÃO IMEDIATA DO FLUXO GRÁFICO
+        // --- TEXTOS DE STATUS DO JOGADOR ---
+        JLabel lblPlayer = new JLabel("Jogador: " + this.playerName);
+        lblPlayer.setFont(new Font("Arial", Font.BOLD, 16));
+        lblPlayer.setForeground(new Color(222, 179, 102)); // Dourado fosco
+        lblPlayer.setBounds(20, 30, 260, 25);
+        boardPanel.add(lblPlayer);
+
+        JLabel lblDiff = new JLabel("Dificuldade CPU: " + this.cpuDifficulty);
+        lblDiff.setFont(new Font("Arial", Font.PLAIN, 14));
+        lblDiff.setForeground(Color.LIGHT_GRAY);
+        lblDiff.setBounds(20, 60, 260, 20);
+        boardPanel.add(lblDiff);
+
+        // Força a atualização do fluxo gráfico do Swing
         painelCartas.revalidate();
         painelCartas.repaint();
         boardPanel.revalidate();
@@ -53,33 +66,25 @@ public class GamePanel extends JPanel {
         add(boardPanel);
     }
 
-    // Método responsável por desenhar a arte do tabuleiro no lado esquerdo
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
         try {
-            // Busca a imagem do tabuleiro no seu pacote de assets
-            // CERTIFIQUE-SE DE QUE O NOME DO ARQUIVO ESTÁ CORRETO AQUI:
             ImageIcon boardIcon = new ImageIcon(GamePanel.class.getResource("/assets/gameBackground_600x600.jpg"));
             Image boardImage = boardIcon.getImage();
-
-            // Desenha o tabuleiro perfeitamente quadrado (600x600) colado no canto esquerdo (0,0)
             g.drawImage(boardImage, 0, 0, 600, 600, this);
 
         } catch (Exception e) {
-            // Fallback: Se a imagem sumir ou der erro, desenha um quadrado verde com borda para não travar o teste
             System.err.println("Erro ao carregar a imagem do tabuleiro: " + e.getMessage());
             
-            g.setColor(new Color(20, 53, 36)); // feltro verde
+            // Fallback: fundo verde caso a imagem falte no diretório de assets
+            g.setColor(new Color(20, 53, 36)); 
             g.fillRect(0, 0, 600, 600);
             
-            g.setColor(new Color(222, 179, 102)); // borda dourada
-            g.drawRect(5, 5, 590, 590);
-            
-            g.setColor(Color.WHITE);
-            g.setFont(new Font("SansSerif", Font.BOLD, 16));
-            g.drawString("[Arte do Tabuleiro Oculta ou Erro no Link]", 130, 300);
+            g.setColor(new Color(222, 179, 102));
+            g.setFont(new Font("Arial", Font.BOLD, 20));
+            g.drawString("Tabuleiro (Arte Omitida)", 180, 300);
         }
     }
 }

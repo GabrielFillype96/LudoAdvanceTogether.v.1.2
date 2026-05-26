@@ -6,26 +6,23 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.Component;
-import java.awt.Image;
 import javax.swing.JPanel;
-import Cards.CustomCards;
 
 /**
- * Painel base responsável por receber, renderizar e gerenciar 
- * a exibição visual das cartas durante o teste de jogabilidade.
+ * Painel base responsável por receber, posicionar e gerenciar 
+ * a exibição visual das novas cartas dinâmicas.
  */
 public class CardsPanel extends JPanel {
 
     private final Color MOLDURA_PRETA = new Color(0, 0, 0);
 
     public CardsPanel() {
-        // Dimensões definidas por si (220x340)
+        // Mantém as dimensões de 220x340 definidas no layout
         Dimension tamanhoCard = new Dimension(220, 340);
         setPreferredSize(tamanhoCard);
         setSize(tamanhoCard);
-        setOpaque(false); // Transparência total para ver o fundo amadeirado
-        setLayout(null);  
+        setOpaque(false);   // Mantém transparente para o fundo amadeirado do GamePanel aparecer atrás
+        setLayout(null);    // Permite que a CustomCards ocupe o espaço absoluto interno
     }
 
     @Override
@@ -33,7 +30,7 @@ public class CardsPanel extends JPanel {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g.create();
         
-        // Ativa o anti-aliasing para suavizar as bordas arredondadas
+        // Ativa o anti-aliasing para suavizar os contornos da moldura externa
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         int w = getWidth();
@@ -41,26 +38,15 @@ public class CardsPanel extends JPanel {
         int raioCurva = 18;
 
         // =========================================================================
-        // DESTAQUE: CAPTURA A CARTA ADICIONADA E DESENHA A SUA IMAGEM DIRECTAMENTE
+        // CORRIGIDO: Removeu-se a busca por 'carta.getCardImage()'.
+        // O Swing agora vai renderizar o paintComponent interno da CustomCards automaticamente.
         // =========================================================================
-        if (getComponentCount() > 0) {
-            Component comp = getComponent(0);
-            if (comp instanceof CustomCards) {
-                CustomCards carta = (CustomCards) comp;
-                Image imgCarta = carta.getCardImage(); // Pega a imagem carregada
-                
-                if (imgCarta != null) {
-                    // Desenha a imagem preenchendo os 220x340 do painel
-                    g2.drawImage(imgCarta, 0, 0, w, h, this);
-                }
-            }
-        }
 
-        // Desenha a moldura preta de acabamento por cima da imagem da carta
+        // Desenha apenas uma moldura preta fina de contenção ao redor do bloco da carta para dar acabamento
         g2.setColor(MOLDURA_PRETA);
-        g2.setStroke(new BasicStroke(6)); // Espessura nítida para a borda
-        g2.drawRoundRect(3, 3, w - 7, h - 7, raioCurva, raioCurva);
-        
+        g2.setStroke(new BasicStroke(2.0f)); 
+        g2.drawRoundRect(0, 0, w - 1, h - 1, raioCurva, raioCurva);
+
         g2.dispose();
     }
 }
