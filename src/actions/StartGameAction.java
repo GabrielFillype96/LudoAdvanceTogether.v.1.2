@@ -7,12 +7,12 @@ import gui.windows.WindowManager;
 
 public class StartGameAction implements ActionListener {
 
-    private NewGameMenuInterface menuOffline;
+    private NewGameMenuInterface offlineMenu;
     private WindowManager windowManager;
 
     // O construtor recebe o menu offline para poder ler os inputs e o gerenciador para mudar a tela
-    public StartGameAction(NewGameMenuInterface menuOffline, WindowManager windowManager) {
-        this.menuOffline = menuOffline;
+    public StartGameAction(NewGameMenuInterface offlineMenu, WindowManager windowManager) {
+        this.offlineMenu = offlineMenu;
         this.windowManager = windowManager;
     }
 
@@ -20,17 +20,17 @@ public class StartGameAction implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         System.out.println("[Action] Botão JOGAR detectado! Processando dados da partida...");
 
-        if (menuOffline != null && windowManager != null) {
+        if (offlineMenu != null && windowManager != null) {
             // 1. Extrai o nome do jogador do JTextField (vamos criar esses métodos no menu já já)
-            String nomeP1 = menuOffline.getNomeJogador();
+            String player1Name = offlineMenu.getPlayerName();
 
             // 2. Extrai a dificuldade selecionada nos RadioButtons
-            String dificuldade = menuOffline.getDificuldadeSelecionada();
+            String difficulty = offlineMenu.getCPUDifficulty();
 
-            System.out.println("[Action] Dados Coletados -> Jogador: " + nomeP1 + " | Dificuldade: " + dificuldade);
+            System.out.println("[Action] Dados Coletados -> Jogador: " + player1Name + " | Dificuldade: " + difficulty);
 
             // 3. Ordena ao WindowManager para carregar o jogo com esses parâmetros
-            windowManager.iniciarPartidaOffline(nomeP1, dificuldade);
+            windowManager.startOfflineGameMode(player1Name, difficulty);
         }
     }
 }

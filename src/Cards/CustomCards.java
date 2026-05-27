@@ -15,7 +15,10 @@ import java.awt.font.TextLayout;
 import java.text.AttributedString;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
+import gui.components.buttons.cardsButton.CardOptionButton;
+import actions.CardAnswerValidation;
 
+// IMPORTAÇÃO DO SEU NOVO BOTÃO
 public class CustomCards extends JPanel {
     
     // --- ATRIBUTOS LÓGICOS (ESTRUTURA DE DADOS) ---
@@ -39,9 +42,7 @@ public class CustomCards extends JPanel {
     private final Color MOLDURA_PRETA = new Color(20, 20, 20);
     private final Color TEXTO_ESCURO = new Color(35, 35, 35); 
     
-    // =========================================================================
-    // MODIFICADO AQUI: Cor das Molduras Internas alteradas para Preto sólido
-    // =========================================================================
+    // Molduras Internas em Preto
     private final Color COR_MOLDURA_EXTERNA = MOLDURA_PRETA;
     private final Color COR_MOLDURA_INTERNA = MOLDURA_PRETA; 
     
@@ -58,6 +59,8 @@ public class CustomCards extends JPanel {
     // =========================================================================
     // CONSTRUTORES
     // =========================================================================
+    
+    // Construtor 1: Cartas Especiais (Sorte, Azar, Sacanear)
     public CustomCards(int cardID, String cardType, String textoPrincipal, String cardEffect, String cardValue, String nomeIconePeao) {
         this.cardID = cardID;
         this.cardType = cardType.toUpperCase();
@@ -73,41 +76,90 @@ public class CustomCards extends JPanel {
         configurarComponente();
     }
 
+    // Construtor 2: Pergunta SIM / NÃO
     public CustomCards(int cardID, String cardType, String textoPrincipal, String cardEffect, String cardValue, String nomeIconePeao, String dificuldade, String cardAnswer) {
         this.cardID = cardID;
         this.cardType = cardType.toUpperCase();
         this.textoPrincipal = textoPrincipal;
         this.cardEffect = cardEffect.toUpperCase();
         this.cardValue = cardValue;
-        this.dificuldade = dificuldade.toUpperCase();
+        this.dificuldade = dificuldade != null ? dificuldade.toUpperCase() : "";
         this.tipoPergunta = "SIM_NAO";
         this.cardAnswer = cardAnswer;
-        this.alternativas = null;
+        this.alternativas = new String[]{"Sim", "Não"}; // Inicializa automaticamente as duas opções
         definirCorFundo();
         carregarIcones(nomeIconePeao);
         configurarComponente();
+        inicializarBotoesAlternativas(); // Cria e adiciona os botões físicos
     }
 
+    // Construtor 3: Pergunta de MÚLTIPLA ESCOLHA
     public CustomCards(int cardID, String cardType, String textoPrincipal, String cardEffect, String cardValue, String nomeIconePeao, String dificuldade, String[] alternativas, String cardAnswer) {
         this.cardID = cardID;
         this.cardType = cardType.toUpperCase();
         this.textoPrincipal = textoPrincipal;
         this.cardEffect = cardEffect.toUpperCase();
         this.cardValue = cardValue;
-        this.dificuldade = dificuldade.toUpperCase();
+        this.dificuldade = dificuldade != null ? dificuldade.toUpperCase() : "";
         this.tipoPergunta = "MULTIPLA_ESCHLE";
         this.alternativas = alternativas;
         this.cardAnswer = cardAnswer;
         definirCorFundo();
         carregarIcones(nomeIconePeao);
         configurarComponente();
+        inicializarBotoesAlternativas(); // Cria e adiciona os botões físicos
     }
 
     private void configurarComponente() {
-        setSize(220, 340);
-        setBounds(0, 0, 220, 340);
+        setSize(250, 340);
+        setBounds(0, 0, 250, 340);
         setOpaque(false);
+        setLayout(null); // Ativa o posicionamento absoluto para podermos alinhar os botões via código
     }
+
+    /**
+     * Instancia e adiciona os componentes reais de botão dentro do painel da carta
+     */
+    /**
+ * Instancia e adiciona os componentes reais de botão centralizados
+ * de forma reta (sem inclinação/skew).
+ */
+private void inicializarBotoesAlternativas() {
+    if (this.alternativas == null || this.alternativas.length == 0) return;
+
+    int larguraBotao = 152; 
+    int alturaBotao = 24;
+    int espacamento = 6;
+    int yInicial = 165; 
+    int xCentralizado = 29; 
+
+    Color corInterna = new Color(255, 255, 255, 195);
+    if (this.cardType.equals("PERGUNTA") && this.dificuldade.equals("FÁCIL")) {
+        corInterna = Color.decode("#99AD7A"); 
+    }
+
+    for (int i = 0; i < alternativas.length; i++) {
+        CardOptionButton btn = new CardOptionButton(alternativas[i], this.tipoPergunta, corInterna);
+        int yBotao = yInicial + (i * (alturaBotao + espacamento));
+        btn.setBounds(xCentralizado, yBotao, larguraBotao, alturaBotao);
+
+        // =========================================================================
+        // REDIRECIONANDO O EVENTO PARA O PACOTE ACTIONS
+        // =========================================================================
+        btn.addActionListener(e -> {
+            // Verifica se a carta está anexada ao CardsPanel antes de disparar
+            if (getParent() instanceof gui.windows.CardsPanel) {
+                gui.windows.CardsPanel painelPai = (gui.windows.CardsPanel) getParent();
+                
+                // Envia os dados para a sua classe especializada processar
+                actions.CardAnswerValidation.validar(btn.getTextoCompleto(), this, painelPai);
+            }
+        });
+        // =========================================================================
+
+        this.add(btn);
+    }
+}
 
     private void definirCorFundo() {
         if (this.cardType.equals("PERGUNTA")) {
@@ -152,18 +204,18 @@ public class CustomCards extends JPanel {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
-        int w = getWidth();
+        int w = 220; 
         int h = getHeight();
         int raioCarta = 24; 
 
-        // 1. FUNDO PRINCIPAL ESCURO (#546B41)
+        // 1. FUNDO PRINCIPAL ESCURO
         g2.setColor(corFundo);
         g2.fillRoundRect(0, 0, w, h, raioCarta, raioCarta);
 
-        // 2. MOLDURA EXTERNA DE CONTENÇÃO PRETA
+        // 2. MOLDURA EXTERNA DE CONTENÇÃO PRETA (Borda Fina)
         g2.setColor(MOLDURA_PRETA);
-        g2.setStroke(new BasicStroke(3.0f));
-        g2.drawRoundRect(2, 2, w - 4, h - 4, raioCarta, raioCarta);
+        g2.setStroke(new BasicStroke(2.5f));
+        g2.drawRoundRect(1, 1, w - 2, h - 2, raioCarta, raioCarta);
 
         int offsetExt = 22;      
         int cruzExt = 14;        
@@ -186,7 +238,7 @@ public class CustomCards extends JPanel {
         areaInternaClara.addPoint(offsetInt, offsetInt + cruzInt);
         areaInternaClara.addPoint(offsetInt + cruzInt, offsetInt + cruzInt);
 
-        // Preenchimento do centro claro (#99AD7A)
+        // Preenchimento do centro claro
         if (this.cardType.equals("PERGUNTA") && this.dificuldade.equals("FÁCIL")) {
             g2.setColor(Color.decode("#99AD7A"));
         } else {
@@ -194,7 +246,7 @@ public class CustomCards extends JPanel {
         }
         g2.fillPolygon(areaInternaClara);
 
-        // 4. DESENHO DAS MOLDURAS INTERNAS (Agora pretas)
+        // 4. DESENHO DAS MOLDURAS INTERNAS 
         g2.setColor(COR_MOLDURA_EXTERNA);
         g2.setStroke(new BasicStroke(2.0f));
         desenharMolduraCruzInvertida(g2, offsetExt, cruzExt, w, h);
@@ -203,26 +255,23 @@ public class CustomCards extends JPanel {
         g2.setStroke(new BasicStroke(1.2f)); 
         desenharMolduraCruzInvertida(g2, offsetInt, cruzInt, w, h);
 
-        // 5. TEXTOS SUPERIORES
-        g2.setFont(new Font("Arial", Font.BOLD, 12));
-        g2.setColor(Color.WHITE);
-        String cabecalho = cardType;
-        if (cardType.equals("PERGUNTA")) {
-            cabecalho += " - " + dificuldade;
-        }
-        g2.drawString(cabecalho, 34, 42); 
-
+        // 5. ICONE DO PEÃO (Texto removido conforme solicitado)
         if (imgPeao != null) {
             g2.drawImage(imgPeao, w - 46, 24, 24, 24, this);
         }
 
-        // 6. ENUNCIADO DO TEXTO
+        // 6. ENUNCIADO DO TEXTO (FORMATAÇÃO E FONTE)
         g2.setColor(TEXTO_ESCURO);
-        g2.setFont(new Font("Tahoma", Font.BOLD, 13)); 
-        int xTexto = offsetInt + 20;
-        int yTexto = offsetInt + 28;
+        String nomeDaFonte = "Georgia"; 
+        int estiloDaFonte = Font.BOLD; 
+        int tamanhoDaFonte = 13;       
+        g2.setFont(new Font(nomeDaFonte, estiloDaFonte, tamanhoDaFonte)); 
+        
+        int xTexto = offsetInt + 12;
+        int yTexto = offsetInt + 18; 
         int larguraMaxTexto = w - (xTexto * 2);
-        desenharTextoComQuebra(g2, textoPrincipal, xTexto, yTexto, larguraMaxTexto, "CENTRO");
+        
+        desenharTextoComQuebra(g2, textoPrincipal, xTexto, yTexto, larguraMaxTexto);
 
         // 7. RODAPÉ DA CARTA
         if (imgEfeito != null) {
@@ -256,44 +305,24 @@ public class CustomCards extends JPanel {
         g2.drawLine(w - offset - tamCruz, h - offset, w - offset - tamCruz, h - offset - tamCruz);
     }
 
-    /**
- * Quebra de linha automática baseada no limite da área útil,
- * com suporte a alinhamento: "ESQUERDA", "CENTRO" ou "DIREITA".
- */
-private void desenharTextoComQuebra(Graphics2D g2, String texto, int x, int y, int larguraMax, String alinhamento) {
-    if (texto == null || texto.isEmpty()) return;
+    private void desenharTextoComQuebra(Graphics2D g2, String texto, int x, int y, int larguraMax) {
+        if (texto == null || texto.isEmpty()) return;
 
-    FontRenderContext frc = g2.getFontRenderContext();
-    AttributedString attrString = new AttributedString(texto);
-    attrString.addAttribute(TextAttribute.FONT, g2.getFont());
-    attrString.addAttribute(TextAttribute.FOREGROUND, g2.getColor());
-    
-    LineBreakMeasurer measurer = new LineBreakMeasurer(attrString.getIterator(), frc);
-    int endIndex = texto.length();
+        FontRenderContext frc = g2.getFontRenderContext();
+        AttributedString attrString = new AttributedString(texto);
+        attrString.addAttribute(TextAttribute.FONT, g2.getFont());
+        attrString.addAttribute(TextAttribute.FOREGROUND, g2.getColor());
+        
+        LineBreakMeasurer measurer = new LineBreakMeasurer(attrString.getIterator(), frc);
+        int endIndex = texto.length();
 
-    while (measurer.getPosition() < endIndex) {
-        TextLayout layout = measurer.nextLayout(larguraMax);
-        y += layout.getAscent();
-        
-        // --- CÁLCULO DINÂMICO DO ALINHAMENTO ---
-        int xAlinhado = x; // Padrão: ESQUERDA
-        
-        if (alinhamento.equalsIgnoreCase("CENTRO")) {
-            // Calcula a sobra de espaço da linha e divide por 2 para centralizar
-            float larguraLinha = layout.getAdvance();
-            xAlinhado = x + (int)((larguraMax - larguraLinha) / 2);
-            
-        } else if (alinhamento.equalsIgnoreCase("DIREITA")) {
-            // Empurra a linha até o limite direito
-            float larguraLinha = layout.getAdvance();
-            xAlinhado = x + (int)(larguraMax - larguraLinha);
+        while (measurer.getPosition() < endIndex) {
+            TextLayout layout = measurer.nextLayout(larguraMax);
+            y += layout.getAscent();
+            layout.draw(g2, x, y);
+            y += layout.getDescent() + layout.getLeading();
         }
-        
-        // Desenha a linha na posição X corrigida
-        layout.draw(g2, xAlinhado, y);
-        y += layout.getDescent() + layout.getLeading();
     }
-}
 
     // --- GETTERS ---
     public int getCardID() { return cardID; }

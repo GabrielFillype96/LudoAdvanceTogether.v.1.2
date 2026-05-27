@@ -1,150 +1,95 @@
 package cards;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CardManager {
 
-    /**
-     * Cria e retorna as cartas de Pergunta da categoria FÁCIL.
-     * Configurado para o Construtor 2 (Sim/Não) e Construtor 3 (Múltipla Escolha).
-     */
-    public static List<CustomCards> criarCartasFaceis() {
-        List<CustomCards> cartasFaceis = new ArrayList<>();
-
-        // CARTA 1: Pergunta Sim/Não (Usa Construtor 2)
-        cartasFaceis.add(new CustomCards(
-            1,                                       // ID da Carta
-            "PERGUNTA",                              // Tipo Geral
-            "A reciclagem de pilhas comuns e baterias pode ser feita no mesmo lixo de plásticos?", // Enunciado
-            "AVANÇAR",                               // Efeito caso acerte
-            "2/6",                                   // Valor do efeito (fração visual)
-            "peao_azul.png",                         // Ícone do peão no canto superior direito
-            "FÁCIL",                                 // Dificuldade
-            "Não"                                    // Resposta correta
-        ));
-
-        // CARTA 2: Pergunta de Múltipla Escolha (Usa Construtor 3)
-        String[] opcoesCarta2 = {"A) Descarte em rios", "B) Coleta Seletiva", "C) Lixo Comum"};
-        cartasFaceis.add(new CustomCards(
-            2, 
-            "PERGUNTA", 
-            "Qual é o destino mais adequado para lâmpadas fluorescentes queimadas visando a preservação?", 
-            "AVANÇAR", 
-            "1/6", 
-            "peao_azul.png", 
-            "FÁCIL", 
-            opcoesCarta2, 
-            "B"
-        ));
-
-        return cartasFaceis;
-    }
+    private static final String CAMINHO_JSON = "/assets/data/cardsContent.json";
 
     /**
-     * Cria e retorna as cartas de Pergunta da categoria MÉDIO.
+     * Carrega todas as cartas do arquivo JSON e filtra pela categoria ou tipo solicitado.
+     * @param filtro Categoria de filtragem (Ex: "FÁCIL", "MÉDIO", "DIFÍCIL", "SORTE", "AZAR")
+     * @return Lista de objetos CustomCards prontos para uso.
      */
-    public static List<CustomCards> criarCartasMedias() {
-        List<CustomCards> cartasMedias = new ArrayList<>();
+    public static List<CustomCards> carregarCartas(String filtro) {
+        List<CustomCards> cartasFiltradas = new ArrayList<>();
+        Gson gson = new Gson();
 
-        // CARTA 3: Pergunta de Múltipla Escolha Médio
-        String[] opcoesCarta3 = {"A) Monóxido de Carbono", "B) Oxigénio", "C) Dióxido de Carbono"};
-        cartasMedias.add(new CustomCards(
-            3, 
-            "PERGUNTA", 
-            "Qual destes gases é o principal responsável pelo agravamento do efeito estufa gerado por indústrias?", 
-            "AVANÇAR", 
-            "3", 
-            "peao_verde.png", 
-            "MÉDIO", 
-            opcoesCarta3, 
-            "C"
-        ));
+        try {
+            // Abre o arquivo JSON armazenado dentro da pasta de recursos (assets)
+            var inputStream = CardManager.class.getResourceAsStream(CAMINHO_JSON);
+            if (inputStream == null) {
+                System.err.println("[CardManager] Erro: Arquivo JSON não encontrado em: " + CAMINHO_JSON);
+                return cartasFiltradas;
+            }
 
-        return cartasMedias;
-    }
+            // Lê o arquivo garantindo suporte a acentos (UTF-8)
+            Reader reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+            
+            // Converte o texto JSON em um Array de objetos interativos
+            JsonArray jsonArray = gson.fromJson(reader, JsonArray.class);
 
-    /**
-     * Cria e retorna as cartas de Pergunta da categoria DIFÍCIL.
-     */
-    public static List<CustomCards> criarCartasDificeis() {
-        List<CustomCards> cartasDificeis = new ArrayList<>();
+            // Varre cada objeto dentro do array do JSON
+            for (JsonElement elemento : jsonArray) {
+                JsonObject obj = elemento.getAsJsonObject();
 
-        // CARTA 4: Pergunta Sim/Não Difícil
-        cartasFechadasDificeis(cartasDificeis);
+                // Extrai os dados básicos de texto e controle
+                int id = obj.get("id").getAsInt();
+                String tipoGeral = obj.get("tipoGeral").getAsString().toUpperCase();
+                String enunciado = obj.get("enunciado").getAsString();
+                String efeito = obj.get("efeito").getAsString();
+                String valorEfeito = obj.get("valorEfeito").getAsString();
+                String iconePeao = obj.get("iconePeao").getAsString();
+                String dificuldade = obj.get("dificuldade").getAsString().toUpperCase();
+                String tipoPergunta = obj.get("tipoPergunta").getAsString().toUpperCase();
+                String respostaCorreta = obj.get("respostaCorreta").getAsString();
 
-        return cartasDificeis;
-    }
+                // Verifica se a carta atual corresponde ao filtro que estamos buscando
+                boolean correspondeAoFiltro = tipoGeral.equals(filtro.toUpperCase()) || dificuldade.equals(filtro.toUpperCase());
+                
+                if (correspondeAoFiltro) {
+                    CustomCards novaCarta;
 
-    private static void cartasFechadasDificeis(List<CustomCards> lista) {
-        lista.add(new CustomCards(
-            4, 
-            "PERGUNTA", 
-            "O Protocolo de Kyoto foi o primeiro tratado internacional com metas obrigatórias de redução de gases?", 
-            "AVANÇAR", 
-            "1/2", 
-            "peao_vermelho.png", 
-            "DIFÍCIL", 
-            "Sim"
-        ));
-    }
+                    // Decide qual Construtor da carta chamar com base no tipo
+                    if (tipoGeral.equals("PERGUNTA")) {
+                        if (tipoPergunta.equals("SIM_NAO")) {
+                            // Construtor 2: Pergunta Sim / Não
+                            novaCarta = new CustomCards(id, tipoGeral, enunciado, efeito, valorEfeito, iconePeao, dificuldade, respostaCorreta);
+                        } else {
+                            // Construtor 3: Múltipla Escolha
+                            // Converte o array de alternativas do JSON para String[] do Java
+                            JsonArray arrayAlternativas = obj.getAsJsonArray("alternativas");
+                            String[] alternativas = new String[arrayAlternativas.size()];
+                            for (int i = 0; i < arrayAlternativas.size(); i++) {
+                                alternativas[i] = arrayAlternativas.get(i).getAsString();
+                            }
+                            
+                            novaCarta = new CustomCards(id, tipoGeral, enunciado, efeito, valorEfeito, iconePeao, dificuldade, alternativas, respostaCorreta);
+                        }
+                    } else {
+                        // Construtor 1: Cartas Especiais (Sorte, Azar, Sacanear)
+                        novaCarta = new CustomCards(id, tipoGeral, enunciado, efeito, valorEfeito, iconePeao);
+                    }
 
-    /**
-     * Cria e retorna as cartas especiais de SORTE.
-     * Usa o Construtor 1 (Sem parâmetros de perguntas ou respostas).
-     */
-    public static List<CustomCards> criarCartasSorte() {
-        List<CustomCards> cartasSorte = new ArrayList<>();
+                    // Adiciona a carta gerada à nossa lista de retorno
+                    cartasFiltradas.add(novaCarta);
+                }
+            }
+            
+            reader.close();
+        } catch (Exception e) {
+            System.err.println("[CardManager] Erro crítico ao processar o JSON: " + e.getMessage());
+            e.printStackTrace();
+        }
 
-        // CARTA 5: Carta de Sorte pura (Usa Construtor 1)
-        cartasSorte.add(new CustomCards(
-            5, 
-            "SORTE", 
-            "Ótimas práticas ecológicas! A sua empresa adotou energia solar em todos os setores.", 
-            "AVANÇAR", 
-            "4", 
-            "peao_amarelo.png"
-        ));
-
-        return cartasSorte;
-    }
-
-    /**
-     * Cria e retorna as cartas especiais de AZAR.
-     * Usa o Construtor 1 (Efeito negativo de retroceder).
-     */
-    public static List<CustomCards> criarCartasAzar() {
-        List<CustomCards> cartasAzar = new ArrayList<>();
-
-        // CARTA 6: Carta de Azar pura (Usa Construtor 1)
-        cartasAzar.add(new CustomCards(
-            6, 
-            "AZAR", 
-            "Desastre! Foi detetado um vazamento de resíduos químicos não tratados no rio local.", 
-            "RETROCEDER", 
-            "3", 
-            "peao_vermelho.png"
-        ));
-
-        return cartasAzar;
-    }
-
-    /**
-     * Cria e retorna as cartas especiais de SACANEAR.
-     */
-    public static List<CustomCards> criarCartasSacanear() {
-        List<CustomCards> cartasSacanear = new ArrayList<>();
-
-        // CARTA 7: Carta de Sacanear (Usa Construtor 1)
-        cartasSacanear.add(new CustomCards(
-            7, 
-            "SACANEAR", 
-            "Sabotagem industrial! Troque de lugar com o jogador que estiver mais à sua frente.", 
-            "RETROCEDER", 
-            "2", 
-            "peao_verde.png"
-        ));
-
-        return cartasSacanear;
+        return cartasFiltradas;
     }
 }

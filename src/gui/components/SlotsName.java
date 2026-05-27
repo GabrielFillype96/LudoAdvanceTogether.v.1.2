@@ -17,7 +17,7 @@ public class SlotsName extends JLabel {
     private final static Color INPUT_BG = new Color(25, 14, 33); // Escuro das caixas de texto
 
 
-    public static JTextField slotsName(int x, int y, int w, int h, boolean ativo) {
+    public static JTextField slotName(int x, int y, int w, int h, boolean ativo) {
         // Construtor vazio, pois esta classe é apenas um modelo para os slots de nome dos jogadores
         JTextField slotName = new JTextField();
         slotName.setBounds(x, y, w, h);

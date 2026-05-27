@@ -28,23 +28,15 @@ public class GamePanel extends JPanel {
         boardPanel.setBackground(new Color(38, 24, 16)); // Tom amadeirado escuro
         boardPanel.setLayout(null);
 
-        // 1. INSTANCIA O SEU CARDSPANEL (O contentor da carta)
-        gui.windows.CardsPanel painelCartas = new gui.windows.CardsPanel();
+        // 1. INSTANCIA O SEU CARDSPANEL PASSANDO O FILTRO DIRETAMENTE NO CONSTRUTOR
+        // Ele mesmo vai carregar o JSON e inicializar a primeira carta.
+        gui.windows.CardsPanel painelCartas = new gui.windows.CardsPanel("FÁCIL");
         
         // Centraliza o painel de largura 220 dentro do menu lateral de largura 300
-        painelCartas.setBounds((300 - 220) / 2, 180, 220, 340);
+        painelCartas.setBounds(40, 110, 220, 340);
         boardPanel.add(painelCartas);
 
-        // =========================================================================
-        // CORRIGIDO: Chamada com pacote 'cards' em minúsculo
-        // =========================================================================
-        cards.CustomCards cartaAtual = cards.CardManager.criarCartasFaceis().get(0);
-        
-        // Configura o tamanho e posicionamento absoluto dela dentro do painel de cartas
-        cartaAtual.setBounds(0, 0, 220, 340);
-        painelCartas.add(cartaAtual);
-
-        // --- TEXTOS DE STATUS DO JOGADOR ---
+        // --- LABELS DE INFORMAÇÕES ADICIONAIS DO PAINEL LATERAL ---
         JLabel lblPlayer = new JLabel("Jogador: " + this.playerName);
         lblPlayer.setFont(new Font("Arial", Font.BOLD, 16));
         lblPlayer.setForeground(new Color(222, 179, 102)); // Dourado fosco
@@ -78,13 +70,9 @@ public class GamePanel extends JPanel {
         } catch (Exception e) {
             System.err.println("Erro ao carregar a imagem do tabuleiro: " + e.getMessage());
             
-            // Fallback: fundo verde caso a imagem falte no diretório de assets
-            g.setColor(new Color(20, 53, 36)); 
+            // Fallback: fundo verde caso a imagem falhe
+            g.setColor(new Color(34, 139, 34));
             g.fillRect(0, 0, 600, 600);
-            
-            g.setColor(new Color(222, 179, 102));
-            g.setFont(new Font("Arial", Font.BOLD, 20));
-            g.drawString("Tabuleiro (Arte Omitida)", 180, 300);
         }
     }
 }

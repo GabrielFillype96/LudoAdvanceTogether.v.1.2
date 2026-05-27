@@ -1,42 +1,40 @@
+// Classe responsável por criar a interface do menu do modo de jogo offline
+// Packages
 package gui.windows;
-
+// Imports internos
 import gui.components.buttons.DifficultyRadioButton;
+import gui.components.SlotsIcon;
 import gui.components.PlayerIdentifier;
 import gui.components.SlotsName;
 import gui.components.buttons.CustomButton;
+import gui.components.buttons.PlayButton;
+import actions.StartGameAction;
+//Imports externos
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 
-import actions.StartGameAction;
-
-/*
- * NewGameMenuInterface: Versão Preparada para Artes Customizadas
- * Adiciona espaçamento entre números e campos, e deixa os slots prontos para receber imagens.
- */
 public class NewGameMenuInterface extends JPanel {
     // Variável para armazenar a referência ao WindowManager, que é o responsável por controlar as telas do jogo
     private WindowManager windowManager;
 
-    // Variáveis de instância para as dimensões do menu e as cores baseadas na sua arte real
+    // Variáveis de instância para as dimensões do menu e as cores
     private int offlineMenuWidth = 560; // Define a largura do menu do modo de jogo offline
     private int offlineMenuHeight = 420; // Define a altura do menu do modo de jogo offline
     
-    // Cores baseadas na sua imagem real
-    private final Color PURPLE_BG = new Color(52, 34, 64); // Roxo profundo de fundo
-    private final Color GOLD_ACCENT = new Color(222, 179, 102); // Dourado fosco dos textos/bordas
-    private final static Color INPUT_BG = new Color(25, 14, 33); // Escuro das caixas de texto
+    // Cores utilizadas no design do menu
+    private String unicodeComputador = "\uD83D\uDCBB";
 
     // Componentes
     private JRadioButton rbEasy, rbMedium, rbHard; // Botões do tipo radio para a dificuldade
-    private JTextField txtP1, txtCPU1, txtCPU2, txtCPU3;
+    private JTextField txtP1, txtCPU1, txtCPU2, txtCPU3; // Campos de texto para os nomes dos jogadores
     
     // Componente do botão customizado que utiliza a classe "CustomButton"
-    private CustomButton btnJogarCustom; // Botão principal para iniciar o jogo;
-    private JButton btnJogarFallback; // Botão provisório para o teste atual
+    private CustomButton playBtn; // Botão principal para iniciar o jogo;
     private DifficultyRadioButton DifficultyRadioButton; // Instância da classe auxiliar para criar os botões de rádio de dificuldade 
 
 
+    // Construtor que recebe o WindowManager para poder chamar as transições de tela
     public NewGameMenuInterface(WindowManager windowManager) {
         this.windowManager = windowManager;
         // Dimensões exatas para o GridBagLayout centralizar perfeitamente
@@ -55,7 +53,7 @@ public class NewGameMenuInterface extends JPanel {
         JLabel title = new JLabel("MODO JOGO OFFLINE", SwingConstants.CENTER); 
         // Define a fonte, cor e posição do título
         title.setFont(new Font("Serif", Font.BOLD, 22));
-        title.setForeground(GOLD_ACCENT);
+        title.setForeground(gui.theme.GameColors.GOLD_ACCENT);
         title.setBounds(0, 25, 560, 30); 
         add(title); // Adiciona o título ao painel
 
@@ -64,11 +62,11 @@ public class NewGameMenuInterface extends JPanel {
         JLabel lblDif = new JLabel("Dificuldade da CPU:", SwingConstants.RIGHT);
         // Define a fonte, cor e posição do label de dificuldade
         lblDif.setFont(new Font("SansSerif", Font.BOLD, 13));
-        lblDif.setForeground(GOLD_ACCENT);
+        lblDif.setForeground(gui.theme.GameColors.GOLD_ACCENT);
         lblDif.setBounds(20, 70, 140, 25);
         add(lblDif); // Adiciona o label de dificuldade ao painel
 
-        
+        // Instancia os botões de rádio para as opções de dificuldade
         rbEasy = gui.components.buttons.DifficultyRadioButton.goldenBtnRd("Fácil");
         rbEasy.setBounds(180, 70, 70, 25);
         rbMedium = gui.components.buttons.DifficultyRadioButton.goldenBtnRd("Médio");
@@ -92,7 +90,7 @@ public class NewGameMenuInterface extends JPanel {
         // Slots para os nomes dos jogadores (Preparados para receber imagens e com espaçamento adequado)
         JLabel subTitle = new JLabel("INSERIR NOMES DOS JOGADORES", SwingConstants.CENTER);
         subTitle.setFont(new Font("SansSerif", Font.BOLD, 14));
-        subTitle.setForeground(GOLD_ACCENT);
+        subTitle.setForeground(gui.theme.GameColors.GOLD_ACCENT);
         subTitle.setBounds(0, 120, 560, 20);
         add(subTitle);
 
@@ -102,138 +100,76 @@ public class NewGameMenuInterface extends JPanel {
          * Campo de texto começa em X + 35 + 8.
          */
         
-        // --- LINHA 1 ---
-        // Slot 1 (Você)
-        add(PlayerIdentifier.squarePlayerIdentifier("1", 45, 155));
-        txtP1 = SlotsName.slotsName(88, 155, 155, 35, true); // 45 + 35 + 8 = 88 (Espaço perfeito)
+        // Adiciona ao menu o componente de identificação do jogador criado pela classe "PlayerIdentifier"
+        add(PlayerIdentifier.squarePlayerIdentifier("1", 45, 155)); // ID 1
+        add(PlayerIdentifier.squarePlayerIdentifier("2", 305, 155)); // ID 2
+        add(PlayerIdentifier.squarePlayerIdentifier("3", 45, 210)); // ID 3
+        add(PlayerIdentifier.squarePlayerIdentifier("4", 305, 210)); // ID 4
 
-        txtP1.setText("Digite seu nome");
+        // Cria o campo de texto para os jogadores utilizando a classe "SlotsName" e armazena a referência na variável.
+        // Não é preciso criar um novo objeto pois a classe "SlotsName" já tem um método estático que retorna o JTextField pronto para uso.
+        txtP1 = SlotsName.slotName(88, 155, 155, 35, true); // 45 + 35 + 8 = 88 --> P1
+        txtCPU1 = SlotsName.slotName(348, 155, 155, 35, false); // 305 + 35 + 8 = 348 --> CPU 1
+        txtCPU2 = SlotsName.slotName(88, 210, 155, 35, false); // 45 + 35 + 8 = 88 --> CPU 2
+        txtCPU3 = SlotsName.slotName(348, 210, 155, 35, false); // 305 + 35 + 8 = 348 --> CPU 3
+        
+        // Define o texto padrão dos campos
+        txtP1.setText("Digite seu nome"); // Player 1
+        txtCPU1.setText("Computador 1"); // CPU 1
+        txtCPU2.setText("Computador 2"); // CPU 2
+        txtCPU3.setText("Computador 3"); // CPU 3
+
+        // Adiciona os campos de texto ao painel para que sejam exibidos na interface
         add(txtP1);
-        add(criarSlotIcone("👤", 250, 155)); // Aqui entrará sua arte de Pessoa .png
-
-        // Slot 2 (CPU 1)
-        add(PlayerIdentifier.squarePlayerIdentifier("2", 305, 155));
-        txtCPU1 = SlotsName.slotsName(348, 155, 155, 35, false); // 305 + 35 + 8 = 348
-        txtCPU1.setText("Computador 1");
-
         add(txtCPU1);
-        add(criarSlotIcone("⚙️", 510, 155)); // Aqui entrará sua arte de Engrenagem .png
-
-        // --- LINHA 2 ---
-        // Slot 3 (CPU 2)
-        add(PlayerIdentifier.squarePlayerIdentifier("3", 45, 210));
-        txtCPU2 = SlotsName.slotsName(88, 210, 155, 35, false);
-        txtCPU2.setText("Computador 2");
-
         add(txtCPU2);
-        add(criarSlotIcone("⚙️", 250, 210));
-
-        // Slot 4 (CPU 3)
-        add(PlayerIdentifier.squarePlayerIdentifier("4", 305, 210));
-        txtCPU3 = SlotsName.slotsName(348, 210, 155, 35, false);
-        txtCPU3.setText("Computador 3");
-        
         add(txtCPU3);
-        add(criarSlotIcone("⚙️", 510, 210));
-
-
-        // --- SEÇÃO DO BOTÃO JOGAR (PREPARADO PARA SUA ARTE) ---
-        try {
-            // Quando suas imagens estiverem prontas na pasta de recursos, descomente as linhas abaixo:
-            ImageIcon imgNormal = new ImageIcon(getClass().getResource("/assets/playButton.png"));
-            ImageIcon imgHover = new ImageIcon(getClass().getResource("/assets/playButtonSelected.png"));
-            btnJogarCustom = new CustomButton(imgNormal, imgHover, true);
-            btnJogarCustom.setBounds(205, 295, 145, 45);
-            btnJogarCustom.addActionListener(new StartGameAction(this, this.windowManager));
-            add(btnJogarCustom);
-            
-            
-            // Forçando o erro para rodar o botão provisório enquanto você não tem o arquivo .png
-            throw new Exception("Aguardando imagens do usuário");
-        } catch (Exception e) {
-            // Botão reserva elegante de teste (Simula o tamanho real da sua futura arte)
-            btnJogarFallback = new JButton("JOGAR");
-            btnJogarFallback.setBounds(205, 295, 145, 45);
-            btnJogarFallback.setBackground(GOLD_ACCENT);
-            btnJogarFallback.setForeground(INPUT_BG);
-            btnJogarFallback.setFont(new Font("Arial", Font.BOLD, 18));
-            btnJogarFallback.setFocusPainted(false);
-            btnJogarFallback.setBorder(new LineBorder(GOLD_ACCENT.darker(), 2));
-            add(btnJogarFallback);
-        }
-        StartGameAction acaoJogar = new StartGameAction(this, this.windowManager);
-        btnJogarFallback.addActionListener(acaoJogar);
-    }
-
-    // Auxiliar para o ícone lateral (Pessoa/Engrenagem) - Também preparado para ImageIcon
-    private JLabel criarSlotIcone(String unicodePadrao, int x, int y) {
-        JLabel lbl = new JLabel(unicodePadrao, SwingConstants.CENTER);
-        lbl.setBounds(x, y, 25, 35);
-        lbl.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 18));
-        lbl.setForeground(GOLD_ACCENT);
         
-        // Quando tiver os arquivos .png prontos, a lógica será:
-        // if(unicodePadrao.equals("👤")) lbl.setIcon(new ImageIcon(getClass().getResource("/images/icone_humano.png")));
-        // else lbl.setIcon(new ImageIcon(getClass().getResource("/images/icone_engrenagem.png")));
-        // lbl.setText(""); 
+        // Adiciona os ícones laterais
+        add(SlotsIcon.slotIconLabel("👤", 250, 155)); // Aqui entrará sua arte de Pessoa
+        add(SlotsIcon.slotIconLabel("💻", 510, 155)); // Aqui entrará sua arte de Engrenagem
+        add(SlotsIcon.slotIconLabel("💻", 250, 210));
+        add(SlotsIcon.slotIconLabel("💻", 510, 210));
 
-        return lbl;
+        // Cria o botão de iniciar o jogo utilizando a classe "PlayButton" e armazena a referência na variável "playBtn"
+        playBtn = new PlayButton();
+        playBtn.setBounds(180, 300, 200, 45); // Define a posição e o tamanho do botão
+        StartGameAction startGameAction = new StartGameAction(this, this.windowManager); // Cria a ação de iniciar o jogo
+        playBtn.addActionListener(startGameAction); // Adiciona a ação de iniciar o jogo ao botão "playBtn"
+        add(playBtn);
     }
 
+    // Método para desenhar o fundo personalizado do menu offline
+    // Sobrescreve o método "paintComponent" para desenhar o fundo personalizado do menu offline
     @Override
+    // O método "paintComponent" é chamado sempre que o painel precisa ser redesenhado, permitindo que personalizemos a aparência do fundo do menu offline.
+    // O método "paintComponent" é "protected" para impedir que ele seja chamado por engano em outras classes.
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         // Placa roxa de fundo
-        g2.setColor(PURPLE_BG);
+        g2.setColor(gui.theme.GameColors.PURPLE_BG);
         g2.fillRoundRect(0, 0, getWidth(), getHeight(), 24, 24);
         
         // Moldura dourada externa
-        g2.setColor(GOLD_ACCENT);
+        g2.setColor(gui.theme.GameColors.GOLD_ACCENT);
         g2.setStroke(new BasicStroke(3));
         g2.drawRoundRect(2, 2, getWidth() - 5, getHeight() - 5, 24, 24);
 
     }
 
-    // --- MÉTODOS AUXILIARES PARA A AÇÃO LER OS DADOS ---
-
-    public String getNomeJogador() {
+    // Métodos getters para obter dados inseridos nos campos do menu do modo de jogo offline
+    public String getPlayerName() {
         // Retorna o texto do campo do P1 (certifique-se de que a variável txtP1 seja visível aqui)
         return txtP1.getText();
     }
 
-    public String getDificuldadeSelecionada() {
+    public String getCPUDifficulty() {
         // Verifica qual rádio botão está marcado no momento do clique
         if (rbEasy.isSelected()) return "FÁCIL";
         if (rbHard.isSelected()) return "DIFÍCIL";
         return "MÉDIO"; // Caso padrão
     }
-
-
-
-
-
-
-
-
-    // // ==========================================
-    // // MÉTODO MAIN INTEGRADO PARA SEU TESTE
-    // // ==========================================
-    // public static void main(String[] args) {
-    //     JFrame frame = new JFrame("Teste do Mini-Menu Offline com Espaçamento");
-    //     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    //     frame.setSize(900, 600);
-    //     frame.setLocationRelativeTo(null);
-
-    //     JPanel fundoMesa = new JPanel(new GridBagLayout());
-    //     fundoMesa.setBackground(new Color(38, 24, 16)); 
-
-    //     NewGameMenuInterface miniMenu = new NewGameMenuInterface();
-    //     fundoMesa.add(miniMenu);
-
-    //     frame.add(fundoMesa);
-    //     frame.setVisible(true);
-    // }
 }

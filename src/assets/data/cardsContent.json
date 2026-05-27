@@ -1,0 +1,54 @@
+[
+  {
+    "id": 1,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "Verdadeiro ou Falso: 'Em briga de marido e mulher, não se mete a colher'.",
+    "alternativas": [],
+    "respostaCorreta": "Não",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "2/6",
+    "iconePeao": "peao_azul.png"
+  },
+  {
+    "id": 2,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "MULTIPLA_ESCHLE",
+    "enunciado": "Qual o número da Central de atendimento à mulher no Brasil?",
+    "alternativas": [
+      "A) 180",
+      "B) 190",
+      "C) 193"
+    ],
+    "respostaCorreta": "A) 180",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "1/6",
+    "iconePeao": "peao_verde.png"
+  },
+  {
+    "id": 3,
+    "tipoGeral": "SORTE",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Ótimas práticas ecológicas! A sua empresa adotou energia solar em todos os setores.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "4",
+    "iconePeao": "peao_amarelo.png"
+  },
+  {
+    "id": 4,
+    "tipoGeral": "AZAR",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Desastre! Foi detetado um vazamento de resíduos químicos não tratados no rio local.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "RETROCEDER",
+    "valorEfeito": "3",
+    "iconePeao": "peao_vermelho.png"
+  }
+]

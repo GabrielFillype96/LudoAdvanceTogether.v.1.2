@@ -8,14 +8,6 @@ import javax.swing.ImageIcon;
 public class ConnectionButton extends CustomButton {
     // Método para aplicar a arte ao botão
     public ConnectionButton() {
-        // Carrega a imagem e envia imediatamente para o construtor da classe mãe (CustomButton)
-        /* ConnectionButton.class --> diz para o método "olhar" na pasta onde a classe ConnectionButton está
-            getResource(path) --> procure o arquivo definido nesse path
-        */
-        super(
-            new ImageIcon(ConnectionButton.class.getResource("/assets/connectionMenu.png")), // Imagem padrão
-            new ImageIcon(ConnectionButton.class.getResource("/assets/connectionMenuSelected.png")) // Imagem selecionada
-    
-    );
+        super("REDE");
     }
 }

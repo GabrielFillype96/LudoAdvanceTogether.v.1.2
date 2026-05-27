@@ -1,20 +1,20 @@
-/* Classe responsável por aplicar a arte ao botão "Novo Jogo" */
-// Packages
 package gui.components.buttons;
-// Imports
-import javax.swing.ImageIcon;
 
-// Cria a classe "NewGameButton" que irá herdar métodos da classe "CustomButton"
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 public class NewGameButton extends CustomButton {
-    // Método para aplicar a arte ao botão
+
     public NewGameButton() {
-        // Carrega a imagem e envia imediatamente para o construtor da classe mãe (CustomButton)
-        /* NewGameButton.class --> diz para o método "olhar" na pasta onde a classe NewGameButton está
-            getResource(path) --> procure o arquivo definido nesse path
-        */
-        super(
-            new ImageIcon( NewGameButton.class.getResource("/assets/newGameMenu.png")), // Imagem padrão
-            new ImageIcon( NewGameButton.class.getResource("/assets/newGameMenuSelected.png")) // Imagem selecionada
-        );
+        // Envia o texto específico que este botão deve carregar para a classe mãe tratar
+        super("NOVO JOGO");
+
+        // Ouvinte específico para capturar o clique e ativar o estado fixado dourado
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                setSelecionado(true);
+            }
+        });
     }
 }
