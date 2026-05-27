@@ -12,26 +12,30 @@ import actions.StartGameAction;
 //Imports externos
 import java.awt.*;
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 
 public class NewGameMenuInterface extends JPanel {
     // Variável para armazenar a referência ao WindowManager, que é o responsável por controlar as telas do jogo
     private WindowManager windowManager;
+    // Variável para armazenar a referência à ação de iniciar o jogo, que é acionada ao clicar no botão "playBtn"
+    private StartGameAction startGameAction; 
 
-    // Variáveis de instância para as dimensões do menu e as cores
+    // Variáveis de instância para as dimensões do menu
     private int offlineMenuWidth = 560; // Define a largura do menu do modo de jogo offline
     private int offlineMenuHeight = 420; // Define a altura do menu do modo de jogo offline
     
-    // Cores utilizadas no design do menu
+    // Variável para armazenar o unicode do ícone de computador (para os slots de CPU)
     private String unicodeComputador = "\uD83D\uDCBB";
 
-    // Componentes
+    // Variáveis para os componentes interativos do menu offline
     private JRadioButton rbEasy, rbMedium, rbHard; // Botões do tipo radio para a dificuldade
     private JTextField txtP1, txtCPU1, txtCPU2, txtCPU3; // Campos de texto para os nomes dos jogadores
+    private JLabel lblDif; // Label para a seção de dificuldade
+    private JLabel title; // Label para o título do menu offline
+    private JLabel subTitle; // Label para a seção de inserção dos nomes dos jogadores
     
-    // Componente do botão customizado que utiliza a classe "CustomButton"
+    // Variável para o botão de iniciar o jogo herdados da classe "CustomButton"
     private CustomButton playBtn; // Botão principal para iniciar o jogo;
-    private DifficultyRadioButton DifficultyRadioButton; // Instância da classe auxiliar para criar os botões de rádio de dificuldade 
+    private DifficultyRadioButton DifficultyRadioButton; // Botões de rádio para as dificuldades 
 
 
     // Construtor que recebe o WindowManager para poder chamar as transições de tela
@@ -40,7 +44,7 @@ public class NewGameMenuInterface extends JPanel {
         // Dimensões exatas para o GridBagLayout centralizar perfeitamente
         // Instancia (cria o objeto) da classe Dimension do Java Awt com as dimensões do menu offline
         Dimension offlineMenuSize = new Dimension(offlineMenuWidth, offlineMenuHeight); 
-        setSize(offlineMenuSize); // Define o tamanho do painel para as dimensões do menu offline
+        //setSize(offlineMenuSize); // Define o tamanho do painel para as dimensões do menu offline
         setPreferredSize(offlineMenuSize); //
         setMinimumSize(offlineMenuSize);
         setMaximumSize(offlineMenuSize);
@@ -50,7 +54,7 @@ public class NewGameMenuInterface extends JPanel {
 
         // Título do Menu
         // Instancia um JLabel com o texto "MODO JOGO OFFLINE" e centraliza o texto horizontalmente
-        JLabel title = new JLabel("MODO JOGO OFFLINE", SwingConstants.CENTER); 
+        title = new JLabel("MODO JOGO OFFLINE", SwingConstants.CENTER); 
         // Define a fonte, cor e posição do título
         title.setFont(new Font("Serif", Font.BOLD, 22));
         title.setForeground(gui.theme.GameColors.GOLD_ACCENT);
@@ -59,7 +63,7 @@ public class NewGameMenuInterface extends JPanel {
 
         // Seleção da dificuldade da CPU
         // Instancia um JLabel para a seção de dificuldade, alinhado à direita
-        JLabel lblDif = new JLabel("Dificuldade da CPU:", SwingConstants.RIGHT);
+        lblDif = new JLabel("Dificuldade da CPU:", SwingConstants.RIGHT);
         // Define a fonte, cor e posição do label de dificuldade
         lblDif.setFont(new Font("SansSerif", Font.BOLD, 13));
         lblDif.setForeground(gui.theme.GameColors.GOLD_ACCENT);
@@ -88,7 +92,7 @@ public class NewGameMenuInterface extends JPanel {
 
         // Seção de slots para os nomes dos jogadores
         // Slots para os nomes dos jogadores (Preparados para receber imagens e com espaçamento adequado)
-        JLabel subTitle = new JLabel("INSERIR NOMES DOS JOGADORES", SwingConstants.CENTER);
+        subTitle = new JLabel("INSERIR NOMES DOS JOGADORES", SwingConstants.CENTER);
         subTitle.setFont(new Font("SansSerif", Font.BOLD, 14));
         subTitle.setForeground(gui.theme.GameColors.GOLD_ACCENT);
         subTitle.setBounds(0, 120, 560, 20);
@@ -134,13 +138,14 @@ public class NewGameMenuInterface extends JPanel {
         // Cria o botão de iniciar o jogo utilizando a classe "PlayButton" e armazena a referência na variável "playBtn"
         playBtn = new PlayButton();
         playBtn.setBounds(180, 300, 200, 45); // Define a posição e o tamanho do botão
-        StartGameAction startGameAction = new StartGameAction(this, this.windowManager); // Cria a ação de iniciar o jogo
+        startGameAction = new StartGameAction(this, this.windowManager); // Cria a ação de iniciar o jogo
         playBtn.addActionListener(startGameAction); // Adiciona a ação de iniciar o jogo ao botão "playBtn"
         add(playBtn);
     }
 
     // Método para desenhar o fundo personalizado do menu offline
     // Sobrescreve o método "paintComponent" para desenhar o fundo personalizado do menu offline
+    // @Override indica que o método "paintComponent" está sendo sobrescrito da classe pai (JPanel). Serve como uma espécie de "guarda-costas" para garantir que estamos realmente sobrescrevendo um método existente e não criando um novo método por engano.
     @Override
     // O método "paintComponent" é chamado sempre que o painel precisa ser redesenhado, permitindo que personalizemos a aparência do fundo do menu offline.
     // O método "paintComponent" é "protected" para impedir que ele seja chamado por engano em outras classes.

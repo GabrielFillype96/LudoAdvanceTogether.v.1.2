@@ -1,10 +1,16 @@
 // Classe responsável por gerenciar as janelas e transições entre telas
 // Packages
 package gui.windows;
+// Imports internos
 
 public class WindowManager {
-    // Variáveis
-    private MainScreenInterface mainPanel; // A tela de fundo principal onde tudo acontece
+    // Variáveis de instância
+    // variável para armazenar a referência ao painel de fundo principal do jogo, onde as telas serão adicionadas ("MainScreenInterface")
+    private MainScreenInterface mainPanel; 
+    // Variável para armazenar a referência ao menu do modo de jogo offline ("NewGameMenuInterface")
+    private NewGameMenuInterface offlineMenuGameMode; 
+    // Variável para armazenar a referência à tela de jogo ("GamePanel")
+    private GamePanel gameScreen; 
 
     // Construtor que recebe a tela de fundo real para podermos adicionar coisas nela
     public WindowManager(MainScreenInterface mainPanel) {
@@ -16,7 +22,7 @@ public class WindowManager {
         System.out.println("[WindowManager] Criando e centralizando o NewGameMenuInterface (Menu Offline)...");
         
         // Cria a instância do menu passando este gerenciador para ele
-        NewGameMenuInterface offlineMenuGameMode = new NewGameMenuInterface(this);
+        offlineMenuGameMode = new NewGameMenuInterface(this);
         
         // Centraliza o menu baseado nas dimensões dele (560x420) na tela (900x600)
         offlineMenuGameMode.setBounds((900 - 560) / 2, (600 - 420) / 2, 560, 420);
@@ -48,7 +54,7 @@ public class WindowManager {
             mainPanel.removeAll(); // Limpa o plano de fundo para remover o menu e preparar para a tela de jogo
 
             // Cria a tela de jogo ("GamePanel") passando o nome do jogador e a dificuldade escolhida
-            GamePanel gameScreen = new GamePanel(playerName, difficulty);
+            gameScreen = new GamePanel(playerName, difficulty);
 
             // Adiciona a tela de jogo ao plano de fundo
             mainPanel.add(gameScreen);

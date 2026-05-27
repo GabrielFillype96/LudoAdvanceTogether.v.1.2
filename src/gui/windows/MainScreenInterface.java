@@ -1,12 +1,12 @@
 /*Essa classe "MainScreenInterface" irá renderizar a imagem de fundo da tela inicial */
+// Packages
 package gui.windows;
-
+// Imports externos
 import java.awt.Graphics;
 import java.awt.Image;
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
+;
 
 // Cria uma classe "MainScreenInterface" que irá herdar métodos da classe JPanel (nativa do Java Swing)
 public class MainScreenInterface extends JPanel { 

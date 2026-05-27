@@ -46,7 +46,7 @@ public class CustomButton extends JButton {
         setPreferredSize(fixedSize);
         setMinimumSize(fixedSize);
         setMaximumSize(fixedSize);
-        setSize(fixedSize);
+        //setSize(fixedSize);
 
         setCursor(new Cursor(Cursor.HAND_CURSOR));
 

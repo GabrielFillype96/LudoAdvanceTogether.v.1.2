@@ -13,7 +13,7 @@ public class Main {
             janela.setSize(900, 600); 
             janela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
             janela.setLocationRelativeTo(null); 
-            janela.setResizable(false); 
+            janela.setResizable(false);     
 
             // 1. Instancia o painel base de fundo que carrega a imagem de 900x600
             MainScreenInterface telaFundo = new MainScreenInterface();
