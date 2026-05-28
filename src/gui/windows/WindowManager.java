@@ -3,14 +3,18 @@
 package gui.windows;
 // Imports internos
 
+
 public class WindowManager {
     // Variáveis de instância
     // variável para armazenar a referência ao painel de fundo principal do jogo, onde as telas serão adicionadas ("MainScreenInterface")
-    private MainScreenInterface mainPanel; 
+    private MainScreenInterface mainPanel;
     // Variável para armazenar a referência ao menu do modo de jogo offline ("NewGameMenuInterface")
     private NewGameMenuInterface offlineMenuGameMode; 
     // Variável para armazenar a referência à tela de jogo ("GamePanel")
     private GamePanel gameScreen; 
+    // Variável para armazenar a referência ao menu principal ("MenuInterface")
+    private MenuInterface menuInterface;
+    private SubMenuContainer subMenuContainer; // Variável para armazenar a referência ao painel de opções do menu principal, onde os mini-menu's são exibidos
 
     // Construtor que recebe a tela de fundo real para podermos adicionar coisas nela
     public WindowManager(MainScreenInterface mainPanel) {
@@ -20,21 +24,20 @@ public class WindowManager {
     // Método para abrir o menu do modo de jogo offline (NewGameMenuInterface)
     public void openMenuOffline() {
         System.out.println("[WindowManager] Criando e centralizando o NewGameMenuInterface (Menu Offline)...");
+    
         
-        // Cria a instância do menu passando este gerenciador para ele
-        offlineMenuGameMode = new NewGameMenuInterface(this);
-        
-        // Centraliza o menu baseado nas dimensões dele (560x420) na tela (900x600)
-        offlineMenuGameMode.setBounds((900 - 560) / 2, (600 - 420) / 2, 560, 420);
-        
-        // Verifica se o "mainPanel" não é nulo antes de tentar adicionar o menu
-        if (mainPanel != null) {
-            // Se o "mainPanel" for diferente de "null", adiciona o menu do modo de jogo offline ("offlineMenuGameMode") ao plano de fundo
-            mainPanel.add(offlineMenuGameMode);
-            
-            // Força a placa roxa a ficar na camada mais alta da frente
-            mainPanel.setComponentZOrder(offlineMenuGameMode, 0); 
-            
+        // Verifica se o "mainPanel" não é nulo antes de tentar adicionar o menu e se
+        if (mainPanel != null && mainPanel.getComponentCount() > 0) {
+            // Se o primeiro componente do "MainPanel" for uma instância de "MenuInterface", adiciona o menu do modo de jogo offline ao painel de opções do menu principal
+           if (mainPanel.getComponent(0) instanceof MenuInterface) {
+                // Pega o componente do menu principal (MenuInterface) e transformo ele para o tipo "MenuInterface" para acessar seus métodos
+                menuInterface = (MenuInterface) mainPanel.getComponent(0);
+                
+                subMenuContainer = menuInterface.getSubMenuContainer(); // Pega o painel de opções do menu
+                offlineMenuGameMode = new NewGameMenuInterface(this, subMenuContainer); // Cria o menu do modo de jogo offline passando o painel de opções do menu principal para o construtor
+                subMenuContainer.displaySubMenu(offlineMenuGameMode); // Exibe o menu do modo de jogo offline no painel de opções do menu principal
+
+            }
             // Atualiza o Swing para redesenhar a tela imediatamente com o novo menu visível
             mainPanel.revalidate();
             mainPanel.repaint();

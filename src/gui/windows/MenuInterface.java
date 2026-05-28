@@ -76,13 +76,12 @@ public class MenuInterface extends JPanel {
 
         // --- CONFIGURAÇÕES REFERENTES AO PAINEL DOS MINI-MENUS ABERTOS PELO MENU PRINCIPAL --- //
         subMenuContainer = new SubMenuContainer(windowManager);
-        subMenuContainer.setBounds(350, 260, 420, 280);
+        subMenuContainer.setBounds(320, 50, subMenuContainer.getMenuOptionsPanelWidth(), subMenuContainer.getMenuOptionsPanelHeight());
         add(subMenuContainer); // Adiciona o painel de mini-menu's ao painel principal do menu
-
     }
 
-
-
-
-
+    // Método para obter a referência ao painel de opções do menu principal, onde os mini-menu's são exibidos
+    public SubMenuContainer getSubMenuContainer() {
+        return subMenuContainer;
+    }
 }

@@ -2,7 +2,6 @@
 // Packages
 package gui.windows;
 // Imports internos
-import gui.components.buttons.DifficultyRadioButton;
 import gui.components.SlotsIcon;
 import gui.components.PlayerIdentifier;
 import gui.components.SlotsName;
@@ -18,13 +17,12 @@ public class NewGameMenuInterface extends JPanel {
     private WindowManager windowManager;
     // Variável para armazenar a referência à ação de iniciar o jogo, que é acionada ao clicar no botão "playBtn"
     private StartGameAction startGameAction; 
+    // Variável para armazenar a referência ao painel de opções do menu principal, onde os mini-menu's são exibidos
+    private SubMenuContainer subMenuContainer;
 
     // Variáveis de instância para as dimensões do menu
-    private int offlineMenuWidth = 560; // Define a largura do menu do modo de jogo offline
+    private int offlineMenuWidth = 520; // Define a largura do menu do modo de jogo offline
     private int offlineMenuHeight = 420; // Define a altura do menu do modo de jogo offline
-    
-    // Variável para armazenar o unicode do ícone de computador (para os slots de CPU)
-    private String unicodeComputador = "\uD83D\uDCBB";
 
     // Variáveis para os componentes interativos do menu offline
     private JRadioButton rbEasy, rbMedium, rbHard; // Botões do tipo radio para a dificuldade
@@ -35,12 +33,11 @@ public class NewGameMenuInterface extends JPanel {
     
     // Variável para o botão de iniciar o jogo herdados da classe "CustomButton"
     private CustomButton playBtn; // Botão principal para iniciar o jogo;
-    private DifficultyRadioButton DifficultyRadioButton; // Botões de rádio para as dificuldades 
-
 
     // Construtor que recebe o WindowManager para poder chamar as transições de tela
-    public NewGameMenuInterface(WindowManager windowManager) {
+    public NewGameMenuInterface(WindowManager windowManager, SubMenuContainer subMenuContainer) {
         this.windowManager = windowManager;
+        this.subMenuContainer = subMenuContainer;
         // Dimensões exatas para o GridBagLayout centralizar perfeitamente
         // Instancia (cria o objeto) da classe Dimension do Java Awt com as dimensões do menu offline
         Dimension offlineMenuSize = new Dimension(offlineMenuWidth, offlineMenuHeight); 
@@ -58,7 +55,7 @@ public class NewGameMenuInterface extends JPanel {
         // Define a fonte, cor e posição do título
         title.setFont(new Font("Serif", Font.BOLD, 22));
         title.setForeground(gui.theme.GameColors.GOLD_ACCENT);
-        title.setBounds(0, 25, 560, 30); 
+        title.setBounds(0, 25, 520, 30); 
         add(title); // Adiciona o título ao painel
 
         // Seleção da dificuldade da CPU
@@ -95,7 +92,7 @@ public class NewGameMenuInterface extends JPanel {
         subTitle = new JLabel("INSERIR NOMES DOS JOGADORES", SwingConstants.CENTER);
         subTitle.setFont(new Font("SansSerif", Font.BOLD, 14));
         subTitle.setForeground(gui.theme.GameColors.GOLD_ACCENT);
-        subTitle.setBounds(0, 120, 560, 20);
+        subTitle.setBounds(0, 120, 520, 20);
         add(subTitle);
 
         /* * EXPLICAÇÃO DOS ESPAÇAMENTOS (X):
@@ -105,17 +102,17 @@ public class NewGameMenuInterface extends JPanel {
          */
         
         // Adiciona ao menu o componente de identificação do jogador criado pela classe "PlayerIdentifier"
-        add(PlayerIdentifier.squarePlayerIdentifier("1", 45, 155)); // ID 1
-        add(PlayerIdentifier.squarePlayerIdentifier("2", 305, 155)); // ID 2
-        add(PlayerIdentifier.squarePlayerIdentifier("3", 45, 210)); // ID 3
-        add(PlayerIdentifier.squarePlayerIdentifier("4", 305, 210)); // ID 4
+        add(PlayerIdentifier.squarePlayerIdentifier("1", 25, 155)); // ID 1
+        add(PlayerIdentifier.squarePlayerIdentifier("2", 280, 155)); // ID 2
+        add(PlayerIdentifier.squarePlayerIdentifier("3", 25, 210)); // ID 3
+        add(PlayerIdentifier.squarePlayerIdentifier("4", 280, 210)); // ID 4
 
         // Cria o campo de texto para os jogadores utilizando a classe "SlotsName" e armazena a referência na variável.
         // Não é preciso criar um novo objeto pois a classe "SlotsName" já tem um método estático que retorna o JTextField pronto para uso.
-        txtP1 = SlotsName.slotName(88, 155, 155, 35, true); // 45 + 35 + 8 = 88 --> P1
-        txtCPU1 = SlotsName.slotName(348, 155, 155, 35, false); // 305 + 35 + 8 = 348 --> CPU 1
-        txtCPU2 = SlotsName.slotName(88, 210, 155, 35, false); // 45 + 35 + 8 = 88 --> CPU 2
-        txtCPU3 = SlotsName.slotName(348, 210, 155, 35, false); // 305 + 35 + 8 = 348 --> CPU 3
+        txtP1 = SlotsName.slotName(68, 155, 155, 35, true); // 45 + 35 + 8 = 88 --> P1
+        txtCPU1 = SlotsName.slotName(328, 155, 155, 35, false); // 305 + 35 + 8 = 348 --> CPU 1
+        txtCPU2 = SlotsName.slotName(68, 210, 155, 35, false); // 45 + 35 + 8 = 88 --> CPU 2
+        txtCPU3 = SlotsName.slotName(328, 210, 155, 35, false); // 305 + 35 + 8 = 348 --> CPU 3
         
         // Define o texto padrão dos campos
         txtP1.setText("Digite seu nome"); // Player 1
@@ -130,10 +127,10 @@ public class NewGameMenuInterface extends JPanel {
         add(txtCPU3);
         
         // Adiciona os ícones laterais
-        add(SlotsIcon.slotIconLabel("👤", 250, 155)); // Aqui entrará sua arte de Pessoa
-        add(SlotsIcon.slotIconLabel("💻", 510, 155)); // Aqui entrará sua arte de Engrenagem
-        add(SlotsIcon.slotIconLabel("💻", 250, 210));
-        add(SlotsIcon.slotIconLabel("💻", 510, 210));
+        add(SlotsIcon.slotIconLabel("👤", 225, 155)); // Aqui entrará sua arte de Pessoa
+        add(SlotsIcon.slotIconLabel("💻", 485, 155)); // Aqui entrará sua arte de Engrenagem
+        add(SlotsIcon.slotIconLabel("💻", 225, 210));
+        add(SlotsIcon.slotIconLabel("💻", 485, 210));
 
         // Cria o botão de iniciar o jogo utilizando a classe "PlayButton" e armazena a referência na variável "playBtn"
         playBtn = new PlayButton();
@@ -162,15 +159,18 @@ public class NewGameMenuInterface extends JPanel {
         g2.setColor(gui.theme.GameColors.GOLD_ACCENT);
         g2.setStroke(new BasicStroke(3));
         g2.drawRoundRect(2, 2, getWidth() - 5, getHeight() - 5, 24, 24);
-
     }
 
-    // Métodos getters para obter dados inseridos nos campos do menu do modo de jogo offline
+    // Método para obter a referência ao painel de opções do menu principal, onde os mini-menu's são exibidos
+    public SubMenuContainer getSubMenuContainer() {
+        return subMenuContainer;
+    }
+    // Método para obter o nome do jogador inserido no campo de texto "txtP1"
     public String getPlayerName() {
         // Retorna o texto do campo do P1 (certifique-se de que a variável txtP1 seja visível aqui)
         return txtP1.getText();
     }
-
+    // Método para obter a dificuldade selecionada pelos botões de rádio
     public String getCPUDifficulty() {
         // Verifica qual rádio botão está marcado no momento do clique
         if (rbEasy.isSelected()) return "FÁCIL";

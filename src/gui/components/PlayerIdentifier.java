@@ -1,5 +1,9 @@
+// Classe responsável por criar o identificador do jogador (número) que aparece ao lado do nome do jogador na interface gráfica, tanto no menu de configuração quanto durante a partida.
+// Packages
 package gui.components;
 
+// Imports internos
+// Imports externos
 import java.awt.Color;
 import java.awt.Font;
 import javax.swing.ImageIcon;
@@ -8,17 +12,16 @@ import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
 public class PlayerIdentifier {
-    
-    private static final Color GOLD_ACCENT = new Color(222, 179, 102);
 
     /**
      * Método Estático para criar o identificador (número) do jogador.
      * Tenta carregar a arte customizada; se falhar, renderiza o fallback estruturado.
      */
     public static JLabel squarePlayerIdentifier(String text, int x, int y) {
+        // Cria um JLabel para o identificador do jogador, centralizando o texto
         JLabel squarePlayerId = new JLabel(text, SwingConstants.CENTER);
         
-        // Regra de Ouro: O tamanho e a posição devem ser definidos independente de ser imagem ou vetor
+        // Define o tamanho e a posição do JLabel para criar um quadrado de 35x35 pixels
         squarePlayerId.setBounds(x, y, 35, 35);
 
         try {
@@ -37,9 +40,9 @@ public class PlayerIdentifier {
             // --- BLOCO FALLBACK (Executa se a arte .png sumir ou falhar) ---
             squarePlayerId.setOpaque(true);
             squarePlayerId.setBackground(new Color(40, 26, 50)); 
-            squarePlayerId.setForeground(GOLD_ACCENT);
+            squarePlayerId.setForeground(gui.theme.GameColors.GOLD_ACCENT);
             squarePlayerId.setFont(new Font("Arial", Font.BOLD, 16));
-            squarePlayerId.setBorder(new LineBorder(GOLD_ACCENT, 1));
+            squarePlayerId.setBorder(new LineBorder(gui.theme.GameColors.GOLD_ACCENT, 1));
             squarePlayerId.setText(text); // Garante que o texto numérico apareça
         }
 
