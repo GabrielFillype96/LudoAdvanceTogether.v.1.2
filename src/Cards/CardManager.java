@@ -19,7 +19,7 @@ public class CardManager {
      * @param filtro Categoria de filtragem (Ex: "FÁCIL", "MÉDIO", "DIFÍCIL", "SORTE", "AZAR")
      * @return Lista de objetos CustomCards prontos para uso.
      */
-    public static List<CustomCards> carregarCartas(String filtro) {
+    public static List<CustomCards> loadCard(String filtro) {
         List<CustomCards> cartasFiltradas = new ArrayList<>();
         Gson gson = new Gson();
 

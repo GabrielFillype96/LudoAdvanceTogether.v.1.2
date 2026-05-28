@@ -18,10 +18,10 @@ import javax.swing.JPanel;
 import gui.components.buttons.cardsButton.CardOptionButton;
 import actions.CardAnswerValidation;
 
-// IMPORTAÇÃO DO SEU NOVO BOTÃO
+
 public class CustomCards extends JPanel {
     
-    // --- ATRIBUTOS LÓGICOS (ESTRUTURA DE DADOS) ---
+   // Variáveis
     private int cardID;
     private String cardType;       
     private String textoPrincipal;  
@@ -33,10 +33,15 @@ public class CustomCards extends JPanel {
     private String[] alternativas; 
     private String cardAnswer;     
     
-    // --- ATRIBUTOS VISUAIS (RENDERIZAÇÃO) ---
+   
     private Color corFundo;
     private Image imgPeao;
     private Image imgEfeito;
+    private Image backImgCard;
+    private Image frontImgCard;
+    private boolean displayBackImgCard = true;
+
+    private final String backImgCardURL = "/assets/backImgCard_220x340.png"; // Caminho da imagem de fundo da carta (verso)
     
     // --- CONSTANTES DE CORES PERSONALIZADAS ---
     private final Color MOLDURA_PRETA = new Color(20, 20, 20);
@@ -74,6 +79,20 @@ public class CustomCards extends JPanel {
         definirCorFundo();
         carregarIcones(nomeIconePeao);
         configurarComponente();
+
+        setOpaque(false);
+        setLayout(null);
+        setSize(220, 340);
+
+        java.net.URL backImgCardPath = getClass().getResource(backImgCardURL);
+        if (backImgCardPath != null) {
+            this.backImgCard = new ImageIcon(backImgCardPath).getImage();
+        } else {
+            System.err.println("[CustomCards] Erro: Imagem de fundo da carta não encontrada em /assets/images/deckImage_220x340.png");
+            this.backImgCard = null;
+        }
+        // Chama o método que irá carregar a imagem da frente da carta certa (Nesse construtor deve ser de carta especial)
+        selectFrontCardImage();
     }
 
     // Construtor 2: Pergunta SIM / NÃO
@@ -91,7 +110,18 @@ public class CustomCards extends JPanel {
         carregarIcones(nomeIconePeao);
         configurarComponente();
         inicializarBotoesAlternativas(); // Cria e adiciona os botões físicos
+
+        java.net.URL backImgCardPath = getClass().getResource(backImgCardURL);
+        if (backImgCardPath != null) {
+            this.backImgCard = new ImageIcon(backImgCardPath).getImage();
+        } else {
+            System.err.println("[CustomCards] Erro: Imagem de fundo da carta não encontrada em /assets/images/deckImage_220x340.png");
+            this.backImgCard = null;
+        }
+        // Chama o método que irá carregar a imagem da frente da carta certa (Nesse construtor deve ser de carta de pergunta sim/não)
+        selectFrontCardImage();
     }
+
 
     // Construtor 3: Pergunta de MÚLTIPLA ESCOLHA
     public CustomCards(int cardID, String cardType, String textoPrincipal, String cardEffect, String cardValue, String nomeIconePeao, String dificuldade, String[] alternativas, String cardAnswer) {
@@ -108,11 +138,22 @@ public class CustomCards extends JPanel {
         carregarIcones(nomeIconePeao);
         configurarComponente();
         inicializarBotoesAlternativas(); // Cria e adiciona os botões físicos
+
+        java.net.URL backImgCardPath = getClass().getResource(backImgCardURL);
+        if (backImgCardPath != null) {
+            this.backImgCard = new ImageIcon(backImgCardPath).getImage();
+        } else {
+            System.err.println("[CustomCards] Erro: Imagem de fundo da carta não encontrada em /assets/images/deckImage_220x340.png");
+            this.backImgCard = null;
+        }
+
+        // Chama o método que irá carregar a imagem da frente da carta certa (Nesse construtor deve ser de carta de pergunta multipla escolha)
+        selectFrontCardImage();
     }
 
     private void configurarComponente() {
-        setSize(250, 340);
-        setBounds(0, 0, 250, 340);
+        setSize(200, 340);
+        setBounds(0, 0, 200, 340);
         setOpaque(false);
         setLayout(null); // Ativa o posicionamento absoluto para podermos alinhar os botões via código
     }
@@ -128,7 +169,7 @@ private void inicializarBotoesAlternativas() {
     if (this.alternativas == null || this.alternativas.length == 0) return;
 
     int larguraBotao = 152; 
-    int alturaBotao = 24;
+    int alturaBotao = 32;
     int espacamento = 6;
     int yInicial = 165; 
     int xCentralizado = 29; 
@@ -202,11 +243,34 @@ private void inicializarBotoesAlternativas() {
         Graphics2D g2 = (Graphics2D) g.create();
         
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
-        int w = 220; 
+        int w = getWidth(); 
         int h = getHeight();
-        int raioCarta = 24; 
+        int raioCarta = 24;
+
+        if (displayBackImgCard) {
+            if (backImgCard != null) {
+                g2.drawImage(backImgCard, 0, 0, w, h, this);
+            } else {
+                // Caso a imagem falte, pinta um fundo cinza de segurança
+                g2.setColor(Color.RED);
+                g2.setStroke(new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, new float[]{5.0f}, 0.0f));
+                g2.drawRoundRect(0, 0, w - 1, h - 1, 18, 18);
+
+                // Escreve um aviso discreto na tela
+                g2.setFont(new Font("Arial", Font.BOLD, 12));
+                g2.drawString("Verso não encontrado", 40, h / 2);
+            }
+            return; // INTERROMPE O DESENHO AQUI (Não desenha os textos por cima do verso!)
+        }
+
+        if (frontImgCard != null) {
+            g2.drawImage(frontImgCard, 0, 0, w, h, this);
+        } else {
+            // Fundo roxo clássico de segurança caso a imagem do molde falte
+            g2.setColor(corFundo);
+            g2.fillRoundRect(0, 0, w, h, 18, 18);
+        }
 
         // 1. FUNDO PRINCIPAL ESCURO
         g2.setColor(corFundo);
@@ -333,4 +397,53 @@ private void inicializarBotoesAlternativas() {
     public String getTipoPergunta() { return tipoPergunta; }
     public String[] getAlternativas() { return alternativas; }
     public String getCardAnswer() { return cardAnswer; }
+    
+    public boolean isDisplayingBackImgCard() { return displayBackImgCard; }
+    public void setDisplayingBackImgCard(boolean displayingBackImgCard) { 
+        this.displayBackImgCard = displayingBackImgCard;
+        this.repaint(); // Força a repintura imediata ao mudar de estado
+    }
+
+    // Método para selecionar a frente da carta de acordo com o tipo (pergunta/efeito)
+    private void selectFrontCardImage() {
+        String imgReference = ""; // Variável para armazenar o caminho da imagem
+
+        // Lógica para escolher a imagem da frente com base no tipo e dificuldade
+        // Se a carta for do tipo "PERGUNTA", escolhe a imagem de acordo com a dificuldade
+        if ("PERGUNTA".equalsIgnoreCase(this.cardType)) {
+            // Se a dificuldade for "FÁCIL", usa a imagem fácil
+            if ("FÁCIL".equalsIgnoreCase(this.dificuldade)) {
+                imgReference = "easyCardFrontImg_220x340.png";
+                // Se a dificuldade for "MÉDIO", usa a imagem média
+            } else if ("MÉDIO".equalsIgnoreCase(this.dificuldade)) {
+                imgReference = "mediumCardFronImg_220x340.png";
+                // Se a dificuldade for "DIFÍCIL", usa a imagem difícil
+            } else if ("DIFÍCIL".equalsIgnoreCase(this.dificuldade)) {
+                imgReference = "hardCardFrontImg_220x340.png";
+            }
+        } else {
+            // Se a carta for do tipo "SORTE", "AZAR" ou "SACANEAR", escolhe a imagem correspondente
+            if ("SORTE".equalsIgnoreCase(this.cardType)) {
+            imgReference = "goodLuckCardFrontImg_220x340.png";
+            } else if ("AZAR".equalsIgnoreCase(this.cardType)) {
+                imgReference = "badLuckCardFrontImg_220x340.png";
+            } else if ("SACANEAR".equalsIgnoreCase(this.cardType)) {
+                imgReference = "trickCardFrontImg_220x340.png";
+            }
+        }
+
+        // Se o caminho da imagem foi definido (diferente de vazio), tenta carregar a imagem da frente
+        if (!imgReference.isEmpty()) {
+            final java.net.URL frontImgURL = getClass().getResource("/assets/" + imgReference);
+            // Se a imagem for encontrada, insere a imagem
+            if (frontImgURL != null) {
+                this.frontImgCard = new ImageIcon(frontImgURL).getImage();
+            } else {
+                // Se a imagem não for encontrada, exibe um erro no console e mantém a frente da carta como null (fundo roxo de segurança)
+                System.err.println("[CustomCards] Erro: Moldura '/assets/" + imgReference + "' não encontrada.");
+                this.frontImgCard = null;
+            }
+        }
+    }
 }
+
