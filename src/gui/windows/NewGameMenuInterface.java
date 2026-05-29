@@ -21,8 +21,8 @@ public class NewGameMenuInterface extends JPanel {
     private SubMenuContainer subMenuContainer;
 
     // Variáveis de instância para as dimensões do menu
-    private int offlineMenuWidth = 520; // Define a largura do menu do modo de jogo offline
-    private int offlineMenuHeight = 420; // Define a altura do menu do modo de jogo offline
+    private static final int offlineMenuWidth = 520; // Define a largura do menu do modo de jogo offline
+    private static final int offlineMenuHeight = 420; // Define a altura do menu do modo de jogo offline
 
     // Variáveis para os componentes interativos do menu offline
     private JRadioButton rbEasy, rbMedium, rbHard; // Botões do tipo radio para a dificuldade

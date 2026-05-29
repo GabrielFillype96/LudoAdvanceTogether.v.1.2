@@ -25,12 +25,12 @@ public class MenuInterface extends JPanel {
     private SubMenuContainer subMenuContainer; // Painel para conter os mini-menu's abertos pelos botões do menu principal
 
     // Variáveis para as dimensões e posicionamento do painel do menu e do painel de navegação dos botões
-    private int menuPanelWidth = 900; // Define a largura do painel do menu para cobrir toda a área da janela
-    private int menuPanelHeight = 600; // Define a altura do painel do menu para cobrir toda a área da janela
-    private int buttonNavigationPanelWidth = 300; // Define a largura do painel de opções do menu para conter os botões
-    private int buttonNavigationPanelHeight = 280; // Define a altura do painel de opções do menu para conter os botões
-    private int buttonNavigationPanelX = 20; // Define a posição X do painel de opções do menu 
-    private int buttonNavigationPanelY = 35; // Define a posição Y do painel de opções do menu
+    private static final int menuPanelWidth = 900; // Define a largura do painel do menu para cobrir toda a área da janela
+    private static final int menuPanelHeight = 600; // Define a altura do painel do menu para cobrir toda a área da janela
+    private static final int buttonNavigationPanelWidth = 300; // Define a largura do painel de opções do menu para conter os botões
+    private static final int buttonNavigationPanelHeight = 280; // Define a altura do painel de opções do menu para conter os botões
+    private static final int buttonNavigationPanelX = 20; // Define a posição X do painel de opções do menu 
+    private static final int buttonNavigationPanelY = 35; // Define a posição Y do painel de opções do menu
 
     // Construtor da classe MenuInterface, que recebe o WindowManager para gerenciar as transições entre telas
     public MenuInterface(WindowManager windowManager) {

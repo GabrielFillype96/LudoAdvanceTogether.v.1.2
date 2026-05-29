@@ -41,7 +41,7 @@ public class CustomCards extends JPanel {
     private Image frontImgCard;
     private boolean displayBackImgCard = true;
 
-    private final String backImgCardURL = "/assets/backImgCard_220x340.png"; // Caminho da imagem de fundo da carta (verso)
+    private static final String backImgCardURL = "/assets/backImgCard_220x340.png"; // Caminho da imagem de fundo da carta (verso)
     
     // --- CONSTANTES DE CORES PERSONALIZADAS ---
     private final Color MOLDURA_PRETA = new Color(20, 20, 20);
@@ -248,9 +248,10 @@ private void inicializarBotoesAlternativas() {
         int h = getHeight();
         int raioCarta = 24;
 
+        //*perguntar o pq desse displayBackImgCard sem condição dentro do if */
         if (displayBackImgCard) {
             if (backImgCard != null) {
-                g2.drawImage(backImgCard, 0, 0, w, h, this);
+                g2.drawImage(backImgCard, 0, 0, getWidth(), getHeight(), this);
             } else {
                 // Caso a imagem falte, pinta um fundo cinza de segurança
                 g2.setColor(Color.RED);

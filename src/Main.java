@@ -10,7 +10,7 @@ public class Main {
         SwingUtilities.invokeLater(() -> {
             // Instancia a janela principal do jogo
             JFrame janela = new JFrame("Jogo de Ludo - Advance Together");
-            janela.setSize(900, 600); 
+            janela.setSize(900, 600);
             janela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
             janela.setLocationRelativeTo(null); 
             janela.setResizable(false);     

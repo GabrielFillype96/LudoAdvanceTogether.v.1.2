@@ -8,8 +8,8 @@ import javax.swing.JPanel;
 public class SubMenuContainer extends JPanel {
     // Variáveis
     // Variável para armazenar a referência ao WindowManager, que é o responsável por controlar as telas do jogo       
-    private int menuOptionsPanelWidth = 535; // Define a largura do painel de opções do menu
-    private int menuOptionsPanelHeight = 420; // Define a altura do painel de opções
+    private static final int menuOptionsPanelWidth = 535; // Define a largura do painel de opções do menu
+    private static final int menuOptionsPanelHeight = 420; // Define a altura do painel de opções
     
     // Construtor da classe SubMenuContainer, que recebe o WindowManager para poder acessar e realizar a troca de telas
     public SubMenuContainer(WindowManager windowManager) {
