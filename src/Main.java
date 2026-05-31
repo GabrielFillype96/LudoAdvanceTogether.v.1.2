@@ -1,7 +1,10 @@
-import gui.windows.MainScreenInterface;
-import gui.windows.MenuInterface;
+
+// Importações internos
+import gui.windows.MainScreenContainer;
+import gui.windows.MainMenuScreen;
 import gui.windows.WindowManager;
 
+// Imports externos
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
@@ -16,14 +19,14 @@ public class Main {
             janela.setResizable(false);     
 
             // 1. Instancia o painel base de fundo que carrega a imagem de 900x600
-            MainScreenInterface telaFundo = new MainScreenInterface();
+            MainScreenContainer telaFundo = new MainScreenContainer();
             telaFundo.setLayout(null);
 
             // 2. Cria o WindowManager passando a tela de fundo para gerir as transições
             WindowManager gerenciadorJanelas = new WindowManager(telaFundo);
 
-            // 3. Instancia a MenuInterface principal (com os botões da esquerda)
-            MenuInterface menuPrincipal = new MenuInterface(gerenciadorJanelas);
+            // 3. Instancia a MainMenuScreen principal (com os botões da esquerda)
+            MainMenuScreen menuPrincipal = new MainMenuScreen(gerenciadorJanelas);
             
             // 4. Adiciona o menu principal à tela de fundo
             telaFundo.add(menuPrincipal);

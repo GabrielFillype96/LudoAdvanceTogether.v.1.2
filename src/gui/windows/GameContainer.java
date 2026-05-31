@@ -1,32 +1,50 @@
 // Classe responsável por construir o painel principal do jogo, onde o tabuleiro e as cartas serão exibidos
+
+// Package
 package gui.windows;
 
+// Import externos
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
-
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class GamePanel extends JPanel {
+public class GameContainer extends JPanel {
 
     private String playerName;
     private String cpuDifficulty;
-    private final static String boardImageURL = "/assets/gameBackground_600x600.jpg"; // Caminho da imagem do tabuleiro
-    private Graphics2D g2; // Variável para o contexto gráfico 2D, usada no paintComponent;
+    private Image boardImg; // Imagem do tabuleiro para mostrar atrás dos componentes
+    private final static String boardImgURL = "/assets/gameBackground_600x600.jpg"; // Caminho da imagem do tabuleiro
+    private final static Rectangle GAME_CONTAINER_BOUNDS = new Rectangle(0, 0, 900, 600);
 
-    public GamePanel(String playerName, String cpuDifficulty) {
+    public GameContainer(String playerName, String cpuDifficulty) {
         this.playerName = playerName;
         this.cpuDifficulty = cpuDifficulty;
 
         // Ocupa o tamanho total da janela (900x600)
-        setBounds(0, 0, 900, 600);
-        setLayout(null);
-        setOpaque(false);
+        // Dimensões fixas para o painel dos cards
+        setBounds(GAME_CONTAINER_BOUNDS);
+        setLayout(null); // Layout nulo torna o painel absoluto 
+        setOpaque(false); // Fundo transparente para permitir a exibição do deck
+
+         // Procura o path da imagem de fundo do deck
+        java.net.URL boardImgPath = getClass().getResource(boardImgURL);
+        if (boardImgPath != null) {
+            System.out.println(
+                "[GameContainer] Imagem do tabuleiro encontrada em: " + boardImgURL
+            );
+            this.boardImg = new ImageIcon(boardImgPath).getImage();
+        } else {
+            System.err.println(
+                "[GameContainer] Erro: Imagem do tabuleiro não encontrada em /assets/images/gameBackground_600x600.jpg"
+            );
+        }
 
         // --- PAINEL LATERAL DIREITO (Espaço restante: 300x600) ---
         JPanel boardPanel = new JPanel();
@@ -36,7 +54,7 @@ public class GamePanel extends JPanel {
 
         // 1. INSTANCIA O SEU CARDSPANEL PASSANDO O FILTRO DIRETAMENTE NO CONSTRUTOR
         // Ele mesmo vai carregar o JSON e inicializar a primeira carta.
-        gui.windows.CardsPanel painelCartas = new gui.windows.CardsPanel("SORTE");
+        gui.windows.CardsPanel painelCartas = new gui.windows.CardsPanel("FÁCIL");
         
         // Centraliza o painel de largura 220 dentro do menu lateral de largura 300
         painelCartas.setBounds(40, 110, 220, 340);
@@ -62,33 +80,20 @@ public class GamePanel extends JPanel {
         boardPanel.repaint();
 
         add(boardPanel);
-    }
 
-    // Sobrescreve o método de pintura para desenhar o fundo do tabuleiro
-    @Override
-    protected void paintComponent(Graphics g) {
-         // Estrutura padrão do "paintComponent" para garantir que o fundo seja desenhado corretamente
-        super.paintComponent(g);
-        // Cria um contexto gráfico 2D para aplicar renderizações avançadas (como anti-aliasing)
-        g2 = (Graphics2D) g.create(); 
-        // Habilita o anti-aliasing para suavizar as bordas das imagens desenhadas
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        JPanel boardScreen = new BoardScreen("Gabriel", "Azul", "Fernanda", "Roxo", "Raimunda", "Rosa", "Paulo", "Amarelo");
+        boardScreen.setBounds(0, 0, 600, 600);
+        add(boardScreen);
+
+
+
+
+
+    }
 
     
 
-
-        try {
-            ImageIcon boardIcon = new ImageIcon(GamePanel.class.getResource("/assets/gameBackground_600x600.jpg"));
-            Image boardImage = boardIcon.getImage();
-            g.drawImage(boardImage, 0, 0, getWidth(), getHeight(), this);
-            // *perguntar o pq de esse getWidth e getHeight aqui fazer a imagem esticar pra 900x600 mesmo o painel sendo 600x600
-
-        } catch (Exception e) {
-            System.err.println("Erro ao carregar a imagem do tabuleiro: " + e.getMessage());
-            
-            // Fallback: fundo verde caso a imagem falhe
-            g.setColor(new Color(34, 139, 34));
-            g.fillRect(0, 0, getWidth(), getHeight());
-        }
+    public static Rectangle getGameContainerBounds() {
+        return GAME_CONTAINER_BOUNDS;
     }
 }

@@ -2,16 +2,16 @@ package actions;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import gui.windows.NewGameMenuInterface;
+import gui.windows.NewGameMenuScreen;
 import gui.windows.WindowManager;
 
 public class StartGameAction implements ActionListener {
 
-    private NewGameMenuInterface offlineMenu;
+    private NewGameMenuScreen offlineMenu;
     private WindowManager windowManager;
 
     // O construtor recebe o menu offline para poder ler os inputs e o gerenciador para mudar a tela
-    public StartGameAction(NewGameMenuInterface offlineMenu, WindowManager windowManager) {
+    public StartGameAction(NewGameMenuScreen offlineMenu, WindowManager windowManager) {
         this.offlineMenu = offlineMenu;
         this.windowManager = windowManager;
     }
