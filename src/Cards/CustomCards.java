@@ -12,6 +12,7 @@ import java.awt.font.FontRenderContext;
 import java.awt.font.LineBreakMeasurer;
 import java.awt.font.TextAttribute;
 import java.awt.font.TextLayout;
+import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -24,7 +25,7 @@ public class CustomCards extends JPanel {
    // Variáveis
     private int cardID;
     private String cardType;       
-    private String textoPrincipal;  
+    private String mainTxt;  
     private String cardEffect;     
     private String cardValue;      
     
@@ -39,44 +40,30 @@ public class CustomCards extends JPanel {
     private Image imgEfeito;
     private Image backImgCard;
     private Image frontImgCard;
-    private boolean displayBackImgCard = true;
+    private boolean displayBackImgCard = false;
 
     private static final String backImgCardURL = "/assets/backImgCard_220x340.png"; // Caminho da imagem de fundo da carta (verso)
     
-    // --- CONSTANTES DE CORES PERSONALIZADAS ---
-    private final Color MOLDURA_PRETA = new Color(20, 20, 20);
-    private final Color TEXTO_ESCURO = new Color(35, 35, 35); 
     
-    // Molduras Internas em Preto
-    private final Color COR_MOLDURA_EXTERNA = MOLDURA_PRETA;
-    private final Color COR_MOLDURA_INTERNA = MOLDURA_PRETA; 
     
-    // Cores de fundo (Categorias)
-    private final Color COR_FACIL = Color.decode("#546B41");     
-    private final Color COR_MEDIO = new Color(222, 179, 102);    
-    private final Color COR_DIFICIL = new Color(178, 34, 34);    
-    
-    // Tons Metálicos para as Cartas Especiais
-    private final Color COR_SORTE = new Color(212, 175, 55);     
-    private final Color COR_SACANEAR = new Color(150, 165, 175); 
-    private final Color COR_AZAR = new Color(165, 90, 45);      
+       
 
     // =========================================================================
     // CONSTRUTORES
     // =========================================================================
     
     // Construtor 1: Cartas Especiais (Sorte, Azar, Sacanear)
-    public CustomCards(int cardID, String cardType, String textoPrincipal, String cardEffect, String cardValue, String nomeIconePeao) {
+    public CustomCards(int cardID, String cardType, String mainTxt, String cardEffect, String cardValue, String nomeIconePeao) {
         this.cardID = cardID;
         this.cardType = cardType.toUpperCase();
-        this.textoPrincipal = textoPrincipal;
+        this.mainTxt = mainTxt;
         this.cardEffect = cardEffect.toUpperCase();
         this.cardValue = cardValue;
         this.dificuldade = "";
         this.tipoPergunta = "";
         this.alternativas = null;
         this.cardAnswer = "";
-        definirCorFundo();
+        
         carregarIcones(nomeIconePeao);
         configurarComponente();
 
@@ -88,62 +75,70 @@ public class CustomCards extends JPanel {
         if (backImgCardPath != null) {
             this.backImgCard = new ImageIcon(backImgCardPath).getImage();
         } else {
-            System.err.println("[CustomCards] Erro: Imagem de fundo da carta não encontrada em /assets/images/deckImage_220x340.png");
+            System.err.println(
+                "[CustomCards] Erro: Imagem de fundo da carta não encontrada em /assets/images/deckImage_220x340.png"
+            );
             this.backImgCard = null;
         }
+        
         // Chama o método que irá carregar a imagem da frente da carta certa (Nesse construtor deve ser de carta especial)
         selectFrontCardImage();
     }
 
     // Construtor 2: Pergunta SIM / NÃO
-    public CustomCards(int cardID, String cardType, String textoPrincipal, String cardEffect, String cardValue, String nomeIconePeao, String dificuldade, String cardAnswer) {
+    public CustomCards(int cardID, String cardType, String mainTxt, String cardEffect, String cardValue, String nomeIconePeao, String dificuldade, String cardAnswer) {
         this.cardID = cardID;
         this.cardType = cardType.toUpperCase();
-        this.textoPrincipal = textoPrincipal;
+        this.mainTxt = mainTxt;
         this.cardEffect = cardEffect.toUpperCase();
         this.cardValue = cardValue;
         this.dificuldade = dificuldade != null ? dificuldade.toUpperCase() : "";
         this.tipoPergunta = "SIM_NAO";
         this.cardAnswer = cardAnswer;
         this.alternativas = new String[]{"Sim", "Não"}; // Inicializa automaticamente as duas opções
-        definirCorFundo();
+        inicializarBotoesAlternativas();
         carregarIcones(nomeIconePeao);
         configurarComponente();
-        inicializarBotoesAlternativas(); // Cria e adiciona os botões físicos
+        //inicializarBotoesAlternativas(); // Cria e adiciona os botões físicos
 
         java.net.URL backImgCardPath = getClass().getResource(backImgCardURL);
         if (backImgCardPath != null) {
             this.backImgCard = new ImageIcon(backImgCardPath).getImage();
         } else {
-            System.err.println("[CustomCards] Erro: Imagem de fundo da carta não encontrada em /assets/images/deckImage_220x340.png");
+            System.err.println(
+                "[CustomCards] Erro: Imagem de fundo da carta não encontrada em /assets/images/deckImage_220x340.png"
+            );
             this.backImgCard = null;
         }
+
         // Chama o método que irá carregar a imagem da frente da carta certa (Nesse construtor deve ser de carta de pergunta sim/não)
         selectFrontCardImage();
     }
 
 
     // Construtor 3: Pergunta de MÚLTIPLA ESCOLHA
-    public CustomCards(int cardID, String cardType, String textoPrincipal, String cardEffect, String cardValue, String nomeIconePeao, String dificuldade, String[] alternativas, String cardAnswer) {
+    public CustomCards(int cardID, String cardType, String mainTxt, String cardEffect, String cardValue, String nomeIconePeao, String dificuldade, String[] alternativas, String cardAnswer) {
         this.cardID = cardID;
         this.cardType = cardType.toUpperCase();
-        this.textoPrincipal = textoPrincipal;
+        this.mainTxt = mainTxt;
         this.cardEffect = cardEffect.toUpperCase();
         this.cardValue = cardValue;
         this.dificuldade = dificuldade != null ? dificuldade.toUpperCase() : "";
         this.tipoPergunta = "MULTIPLA_ESCHLE";
         this.alternativas = alternativas;
         this.cardAnswer = cardAnswer;
-        definirCorFundo();
+        inicializarBotoesAlternativas();
         carregarIcones(nomeIconePeao);
         configurarComponente();
-        inicializarBotoesAlternativas(); // Cria e adiciona os botões físicos
+        // inicializarBotoesAlternativas(); // Cria e adiciona os botões físicos
 
         java.net.URL backImgCardPath = getClass().getResource(backImgCardURL);
         if (backImgCardPath != null) {
             this.backImgCard = new ImageIcon(backImgCardPath).getImage();
         } else {
-            System.err.println("[CustomCards] Erro: Imagem de fundo da carta não encontrada em /assets/images/deckImage_220x340.png");
+            System.err.println(
+                "[CustomCards] Erro: Imagem de fundo da carta não encontrada em /assets/images/deckImage_220x340.png"
+            );
             this.backImgCard = null;
         }
 
@@ -184,41 +179,12 @@ private void inicializarBotoesAlternativas() {
         int yBotao = yInicial + (i * (alturaBotao + espacamento));
         btn.setBounds(xCentralizado, yBotao, larguraBotao, alturaBotao);
 
-        // =========================================================================
-        // REDIRECIONANDO O EVENTO PARA O PACOTE ACTIONS
-        // =========================================================================
-        btn.addActionListener(e -> {
-            // Verifica se a carta está anexada ao CardsPanel antes de disparar
-            if (getParent() instanceof gui.windows.CardsPanel) {
-                gui.windows.CardsPanel painelPai = (gui.windows.CardsPanel) getParent();
-                
-                // Envia os dados para a sua classe especializada processar
-                actions.CardAnswerValidation.validar(btn.getTextoCompleto(), this, painelPai);
-            }
-        });
-        // =========================================================================
 
-        this.add(btn);
-    }
-}
-
-    private void definirCorFundo() {
-        if (this.cardType.equals("PERGUNTA")) {
-            switch (this.dificuldade) {
-                case "FÁCIL" -> this.corFundo = COR_FACIL;
-                case "MÉDIO" -> this.corFundo = COR_MEDIO;
-                case "DIFÍCIL" -> this.corFundo = COR_DIFICIL;
-                default -> this.corFundo = COR_MEDIO;
-            }
-        } else {
-            switch (this.cardType) {
-                case "SORTE" -> this.corFundo = COR_SORTE;
-                case "SACANEAR" -> this.corFundo = COR_SACANEAR;
-                case "AZAR" -> this.corFundo = COR_AZAR;
-                default -> this.corFundo = COR_SORTE;
-            }
+            this.add(btn);
         }
     }
+
+   
 
     private void carregarIcones(String nomeIconePeao) {
         try {
@@ -237,6 +203,69 @@ private void inicializarBotoesAlternativas() {
         }
     }
 
+    // Método para inserir o texto principal do card (conteúdo vem de um arquivo JSON)
+    private void cardMainTxt(Graphics2D g2) {
+        // Se não houver texto, não faz nada
+        if (mainTxt == null || mainTxt.trim().isEmpty()) return;
+
+        // Configuração da Fonte (Ajuste o tamanho e estilo como preferir)
+        Font mainTxtFont = new Font("Arial", Font.BOLD, 14);
+        g2.setFont(mainTxtFont);
+        g2.setColor(Color.WHITE); // Cor do texto
+
+        // Configuração da área onde o texto pode ser escrito
+        float marginX = 25; // Distância da borda esquerda
+        float maxWidth = this.getWidth() - (marginX * 2); // Largura total menos as margens
+        float posY = 70; // Posição Y inicial (ajuste para descer ou subir o texto na sua arte)
+
+        // Prepara o texto para a quebra de linha automática
+        AttributedString attributedString = new AttributedString(mainTxt);
+        attributedString.addAttribute(TextAttribute.FONT, mainTxtFont);
+        AttributedCharacterIterator paragraph = attributedString.getIterator();
+        int paragraphStart = paragraph.getBeginIndex();
+        int paragraphEnd = paragraph.getEndIndex();
+
+        FontRenderContext frc = new FontRenderContext(null, true, true);
+        LineBreakMeasurer lineMeasurer = new LineBreakMeasurer(paragraph, frc);
+        lineMeasurer.setPosition(paragraphStart);
+           
+       // Loop que escreve linha por linha até o texto acabar
+        while (lineMeasurer.getPosition() < paragraphEnd) {
+            TextLayout layout = lineMeasurer.nextLayout(maxWidth);
+            
+            posY += layout.getAscent(); // Desce a altura da letra
+            layout.draw(g2, marginX, posY); // Desenha a linha atual
+            posY += layout.getDescent() + layout.getLeading(); // Prepara o Y para a próxima linha
+        }
+    }
+
+    // Método para inserir o texto referente ao valor da carta (conteúdo vem de um arquivo JSON)
+    private void cardEffectValue(Graphics2D g2) {
+        // Verifica se há um valor válido a ser desenhado (Ex: "2", "3", "-1")
+        if (this.cardValue == null || this.cardValue.trim().isEmpty()) {
+            return;
+        }
+
+        // Configuração estética do texto do efeito
+        Font cardEffectValueFont = new Font("Arial", Font.BOLD, 14);
+        g2.setFont(cardEffectValueFont);
+        g2.setColor(Color.WHITE);
+
+        // Altere os valores abaixo de acordo com a posição real do seu ícone de casa
+        float cardEffectValueSymbolX = 75;       // Posição X horizontal onde o seu símbolo começa
+        float cardEffectValueSymbolWidth = 22; // Largura aproximada do seu desenho/ícone de casa
+        float margin = 6;     // Distância em pixels entre o símbolo e o início do texto
+        
+        // O texto começará exatamente onde o símbolo termina + o espaçamento definido
+        float cardEffectValueTxtX = cardEffectValueSymbolX + cardEffectValueSymbolWidth + margin;
+        
+        // Alinhamento vertical (Y). Mude para subir ou descer a linha do texto
+        float cardEffectValueTxtY = 302.5f; 
+
+        // Desenha o valor extraído do JSON (ex: +3) na posição horizontal calculada
+        g2.drawString(this.cardValue, cardEffectValueTxtX, cardEffectValueTxtY);
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -246,7 +275,7 @@ private void inicializarBotoesAlternativas() {
 
         int w = getWidth(); 
         int h = getHeight();
-        int raioCarta = 24;
+        
 
         //*perguntar o pq desse displayBackImgCard sem condição dentro do if */
         if (displayBackImgCard) {
@@ -261,131 +290,19 @@ private void inicializarBotoesAlternativas() {
                 // Escreve um aviso discreto na tela
                 g2.setFont(new Font("Arial", Font.BOLD, 12));
                 g2.drawString("Verso não encontrado", 40, h / 2);
+                
             }
             return; // INTERROMPE O DESENHO AQUI (Não desenha os textos por cima do verso!)
         }
 
         if (frontImgCard != null) {
             g2.drawImage(frontImgCard, 0, 0, w, h, this);
+            cardMainTxt(g2);
+            cardEffectValue(g2);
         } else {
             // Fundo roxo clássico de segurança caso a imagem do molde falte
             g2.setColor(corFundo);
-            g2.fillRoundRect(0, 0, w, h, 18, 18);
-        }
-
-        // 1. FUNDO PRINCIPAL ESCURO
-        g2.setColor(corFundo);
-        g2.fillRoundRect(0, 0, w, h, raioCarta, raioCarta);
-
-        // 2. MOLDURA EXTERNA DE CONTENÇÃO PRETA (Borda Fina)
-        g2.setColor(MOLDURA_PRETA);
-        g2.setStroke(new BasicStroke(2.5f));
-        g2.drawRoundRect(1, 1, w - 2, h - 2, raioCarta, raioCarta);
-
-        int offsetExt = 22;      
-        int cruzExt = 14;        
-        int pequenoOffset = 6;   
-        int offsetInt = offsetExt + pequenoOffset; 
-        int cruzInt = cruzExt - 2;
-
-        // 3. MAPEAMENTO DO POLÍGONO DE RECORTE DAS QUINAS INVERTIDAS
-        Polygon areaInternaClara = new Polygon();
-        areaInternaClara.addPoint(offsetInt + cruzInt, offsetInt);
-        areaInternaClara.addPoint(w - offsetInt - cruzInt, offsetInt);
-        areaInternaClara.addPoint(w - offsetInt - cruzInt, offsetInt + cruzInt);
-        areaInternaClara.addPoint(w - offsetInt, offsetInt + cruzInt);
-        areaInternaClara.addPoint(w - offsetInt, h - offsetInt - cruzInt);
-        areaInternaClara.addPoint(w - offsetInt - cruzInt, h - offsetInt - cruzInt);
-        areaInternaClara.addPoint(w - offsetInt - cruzInt, h - offsetInt);
-        areaInternaClara.addPoint(offsetInt + cruzInt, h - offsetInt);
-        areaInternaClara.addPoint(offsetInt + cruzInt, h - offsetInt - cruzInt);
-        areaInternaClara.addPoint(offsetInt, h - offsetInt - cruzInt);
-        areaInternaClara.addPoint(offsetInt, offsetInt + cruzInt);
-        areaInternaClara.addPoint(offsetInt + cruzInt, offsetInt + cruzInt);
-
-        // Preenchimento do centro claro
-        if (this.cardType.equals("PERGUNTA") && this.dificuldade.equals("FÁCIL")) {
-            g2.setColor(Color.decode("#99AD7A"));
-        } else {
-            g2.setColor(new Color(255, 255, 255, 195)); 
-        }
-        g2.fillPolygon(areaInternaClara);
-
-        // 4. DESENHO DAS MOLDURAS INTERNAS 
-        g2.setColor(COR_MOLDURA_EXTERNA);
-        g2.setStroke(new BasicStroke(2.0f));
-        desenharMolduraCruzInvertida(g2, offsetExt, cruzExt, w, h);
-
-        g2.setColor(COR_MOLDURA_INTERNA);
-        g2.setStroke(new BasicStroke(1.2f)); 
-        desenharMolduraCruzInvertida(g2, offsetInt, cruzInt, w, h);
-
-        // 5. ICONE DO PEÃO (Texto removido conforme solicitado)
-        if (imgPeao != null) {
-            g2.drawImage(imgPeao, w - 46, 24, 24, 24, this);
-        }
-
-        // 6. ENUNCIADO DO TEXTO (FORMATAÇÃO E FONTE)
-        g2.setColor(TEXTO_ESCURO);
-        String nomeDaFonte = "Georgia"; 
-        int estiloDaFonte = Font.BOLD; 
-        int tamanhoDaFonte = 13;       
-        g2.setFont(new Font(nomeDaFonte, estiloDaFonte, tamanhoDaFonte)); 
-        
-        int xTexto = offsetInt + 12;
-        int yTexto = offsetInt + 18; 
-        int larguraMaxTexto = w - (xTexto * 2);
-        
-        desenharTextoComQuebra(g2, textoPrincipal, xTexto, yTexto, larguraMaxTexto);
-
-        // 7. RODAPÉ DA CARTA
-        if (imgEfeito != null) {
-            g2.drawImage(imgEfeito, 34, h - 72, 42, 42, this);
-        }
-
-        g2.setFont(new Font("Arial", Font.BOLD, 32));
-        g2.setColor(Color.WHITE);
-        g2.drawString(cardValue, 88, h - 38);
-        
-        g2.setFont(new Font("Arial", Font.ITALIC, 10));
-        g2.setColor(new Color(230, 230, 230));
-        g2.drawString("#" + cardID, w - 54, h - 32);
-
-        g2.dispose();
-    }
-
-    private void desenharMolduraCruzInvertida(Graphics2D g2, int offset, int tamCruz, int w, int h) {
-        g2.drawLine(offset + tamCruz, offset, w - offset - tamCruz, offset);
-        g2.drawLine(offset + tamCruz, h - offset, w - offset - tamCruz, h - offset);
-        g2.drawLine(offset, offset + tamCruz, offset, h - offset - tamCruz);
-        g2.drawLine(w - offset, offset + tamCruz, w - offset, h - offset - tamCruz);
-        
-        g2.drawLine(offset, offset + tamCruz, offset + tamCruz, offset + tamCruz);
-        g2.drawLine(offset + tamCruz, offset, offset + tamCruz, offset + tamCruz);
-        g2.drawLine(w - offset, offset + tamCruz, w - offset - tamCruz, offset + tamCruz);
-        g2.drawLine(w - offset - tamCruz, offset, w - offset - tamCruz, offset + tamCruz);
-        g2.drawLine(offset, h - offset - tamCruz, offset + tamCruz, h - offset - tamCruz);
-        g2.drawLine(offset + tamCruz, h - offset, offset + tamCruz, h - offset - tamCruz);
-        g2.drawLine(w - offset, h - offset - tamCruz, w - offset - tamCruz, h - offset - tamCruz);
-        g2.drawLine(w - offset - tamCruz, h - offset, w - offset - tamCruz, h - offset - tamCruz);
-    }
-
-    private void desenharTextoComQuebra(Graphics2D g2, String texto, int x, int y, int larguraMax) {
-        if (texto == null || texto.isEmpty()) return;
-
-        FontRenderContext frc = g2.getFontRenderContext();
-        AttributedString attrString = new AttributedString(texto);
-        attrString.addAttribute(TextAttribute.FONT, g2.getFont());
-        attrString.addAttribute(TextAttribute.FOREGROUND, g2.getColor());
-        
-        LineBreakMeasurer measurer = new LineBreakMeasurer(attrString.getIterator(), frc);
-        int endIndex = texto.length();
-
-        while (measurer.getPosition() < endIndex) {
-            TextLayout layout = measurer.nextLayout(larguraMax);
-            y += layout.getAscent();
-            layout.draw(g2, x, y);
-            y += layout.getDescent() + layout.getLeading();
+            g2.fillRoundRect(0, 0, w, h, 18, 18);   
         }
     }
 
@@ -393,11 +310,11 @@ private void inicializarBotoesAlternativas() {
     public int getCardID() { return cardID; }
     public String getCardType() { return cardType; }
     public String getCardEffect() { return cardEffect; }
-    public String getCardValueText() { return cardValue; }
+    public String getCardValueText() { return this.cardValue != null ? this.cardValue : "1"; }
     public String getDificuldade() { return dificuldade; }
     public String getTipoPergunta() { return tipoPergunta; }
     public String[] getAlternativas() { return alternativas; }
-    public String getCardAnswer() { return cardAnswer; }
+    public String getCardAnswer() { return this.cardAnswer != null ? this.cardAnswer.trim() : ""; }
     
     public boolean isDisplayingBackImgCard() { return displayBackImgCard; }
     public void setDisplayingBackImgCard(boolean displayingBackImgCard) { 
@@ -417,7 +334,7 @@ private void inicializarBotoesAlternativas() {
                 imgReference = "easyCardFrontImg_220x340.png";
                 // Se a dificuldade for "MÉDIO", usa a imagem média
             } else if ("MÉDIO".equalsIgnoreCase(this.dificuldade)) {
-                imgReference = "mediumCardFronImg_220x340.png";
+                imgReference = "mediumCardFrontImg_220x340.png";
                 // Se a dificuldade for "DIFÍCIL", usa a imagem difícil
             } else if ("DIFÍCIL".equalsIgnoreCase(this.dificuldade)) {
                 imgReference = "hardCardFrontImg_220x340.png";

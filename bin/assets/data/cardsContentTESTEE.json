@@ -1,0 +1,398 @@
+[
+  {
+    "id": 1,
+    "tipoGeral": "PERGUNTA",
+    "tipoPergunta":"SIM_NAO",
+    "enunciado": "A Lei Maria da Penha é conhecida pelo número 11.340. Isso é correto?",
+    "alternativas": ["Sim", "Não"],
+    "respostaCorreta": "Sim",
+    "dificuldade": "facil",
+    "efeito":"AVANÇAR",
+    "valorEfeito":"1/6",
+    "card_cor": "cardGreen.png" ,
+    "iconePeao":""
+},
+  {
+    "id": 2,
+    "tipoGeral": "PERGUNTA",
+    "tipoPergunta":"SIM_NAO",
+    "enunciado": "O canal de denúncia de violência contra a mulher no Brasil é o Ligue 180. Isso é verdade?",
+    "alternativas": ["Sim", "Não"],
+    "respostaCorreta": "Sim",
+    "dificuldade": "facil",
+    "efeito":"AVANÇAR",
+    "valorEfeito":"1/6",
+    "card_cor": "cardGreen.png" ,
+    "iconePeao":""
+},
+  {
+    "id": 3,
+    "tipoGeral": "PERGUNTA",
+    "tipoPergunta":"SIM_NAO",
+    "enunciado": "A violência doméstica ocorre apenas em relacionamentos de casamento formal. Isso é correto?",
+    "alternativas": ["Sim", "Não"],
+    "respostaCorreta": "Não",
+    "dificuldade": "facil",
+    "efeito":"AVANÇAR",
+    "valorEfeito":"1/6",
+    "card_cor": "cardGreen.png" ,
+    "iconePeao":""
+},
+ {
+    "id": 4,
+    "tipoGeral": "PERGUNTA",
+    "tipoPergunta":"MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das opções abaixo melhor descreve a violência patrimonial contra a mulher?",
+    "alternativas": [
+      "Retenção, subtração ou destruição de documentos, bens e recursos financeiros da mulher",
+      "Agressão física que deixa marcas no corpo da mulher",
+      "Ameaças verbais e isolamento social imposto pelo agressor"
+    ],
+    "respostaCorreta": "Retenção, subtração ou destruição de documentos, bens e recursos financeiros da mulher",
+    "dificuldade": "FÁCIL",
+    "efeito":"AVANÇAR",
+    "valorEfeito":"2/6",
+    "card_cor": "cardGreen.png" ,
+    "iconePeao":""
+},
+  {
+    "id": 5,
+    "tipoGeral": "PERGUNTA",
+    "tipoPergunta":"MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo melhor descreve o ciclo da violência doméstica?",
+    "alternativas": [
+      "Um padrão que inclui fases de tensão, agressão, arrependimento e lua de mel que se repetem",
+      "Um ciclo de denúncias e arquivamento de processos judiciais",
+      "Um processo de separação gradual mediado pelo Estado"
+    ],
+    "respostaCorreta": "Um padrão que inclui fases de tensão, agressão, arrependimento e lua de mel que se repetem",
+    "dificuldade": "facil",
+    "efeito":"AVANÇAR",
+    "valorEfeito":"2/6",
+    "card_cor": "cardGreen.png" ,
+    "iconePeao":""
+},
+{
+    "id": 6,
+    "tipoGeral": "PERGUNTA",
+    "tipoPergunta":"MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo é um recurso correto para mulheres em situação de violência buscarem ajuda no Brasil?",
+    "alternativas": [
+      "Ligar para o 180, que oferece orientação e encaminhamento para serviços de proteção",
+      "Ligar para o 190 exclusivamente, que é o único canal habilitado para esses casos",
+      "Procurar apenas hospitais, pois são os únicos autorizados a registrar violência"
+    ],
+    "respostaCorreta": "Ligar para o 180, que oferece orientação e encaminhamento para serviços de proteção",
+    "dificuldade": "facil",
+    "efeito":"AVANÇAR",
+    "valorEfeito":"2/6",
+    "card_cor": "cardGreen.png" ,
+    "iconePeao":""
+},
+{
+    "id": 7,
+    "tipoGeral": "PERGUNTA",
+    "tipoPergunta":"SIM_NAO",
+    "enunciado": "Crianças que presenciam violência doméstica também são consideradas vítimas pela legislação brasileira?",
+    "alternativas": ["Sim", "Não"],
+    "respostaCorreta": "Sim",
+    "dificuldade": "media",
+    "efeito":"AVANÇAR",
+    "valorEfeito":"3/6",
+    "card_cor": "cardYellow.png",
+    "iconePeao":""
+},
+  {
+    "id": 8,
+    "tipoGeral": "PERGUNTA",
+    "tipoPergunta":"SIM_NAO",
+    "enunciado": "A Convenção de Belém do Pará, tratado internacional sobre violência contra a mulher, foi adotada em 1994. Isso é correto?",
+    "alternativas": ["Sim", "Não"],
+    "respostaCorreta": "Sim",
+    "dificuldade": "media",
+    "efeito":"AVANÇAR",
+    "valorEfeito":"3/6",
+    "card_cor": "cardYellow.png",
+    "iconePeao":""
+},
+  {
+    "id": 9,
+    "tipoGeral": "PERGUNTA",
+    "tipoPergunta":"SIM_NAO",
+    "enunciado": "O CREAS é o equipamento público que atende famílias e indivíduos em situação de violação de direitos com vínculos fragilizados?",
+    "alternativas": ["Sim", "Não"],
+    "respostaCorreta": "Sim",
+    "dificuldade": "media",
+    "efeito":"AVANÇAR",
+    "valorEfeito":"3/6",
+    "card_cor": "cardYellow.png",
+    "iconePeao":""
+},
+{
+    "id": 10,
+    "tipoGeral": "PERGUNTA",
+    "tipoPergunta":"MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo melhor descreve o papel da Defensoria Pública no atendimento a mulheres vítimas de violência?",
+    "alternativas": [
+      "Presta assistência jurídica gratuita a mulheres sem condições de pagar advogado, ajudando na obtenção de medidas protetivas",
+      "Atua apenas como mediadora entre vítima e agressor para promover reconciliação",
+      "Representa exclusivamente o Estado em ações penais, sem contato direto com a vítima"
+    ],
+    "respostaCorreta": "Presta assistência jurídica gratuita a mulheres sem condições de pagar advogado, ajudando na obtenção de medidas protetivas",
+    "dificuldade": "media",
+    "efeito":"AVANÇAR",
+    "valorEfeito":"4/6",
+    "card_cor": "cardYellow.png",
+    "iconePeao":""
+},
+  {
+    "id": 11,
+    "tipoGeral": "PERGUNTA",
+    "tipoPergunta":"MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente o que é a Rede de Enfrentamento à Violência contra a Mulher?",
+    "alternativas": [
+      "Conjunto articulado de serviços públicos e privados que atendem mulheres em situação de violência, incluindo saúde, assistência social, segurança e justiça",
+      "Organização não governamental criada exclusivamente para arrecadação de fundos para casas-abrigo",
+      "Programa de treinamento de policiais militares para atendimento de ocorrências domésticas"
+    ],
+    "respostaCorreta": "Conjunto articulado de serviços públicos e privados que atendem mulheres em situação de violência, incluindo saúde, assistência social, segurança e justiça",
+    "dificuldade": "media",
+    "efeito":"AVANÇAR",
+    "valorEfeito":"4/6",
+    "card_cor": "cardYellow.png",
+    "iconePeao":""
+},
+  {
+    "id": 12,
+    "tipoGeral": "PERGUNTA",
+    "tipoPergunta":"MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo NÃO é uma atribuição das Delegacias Especializadas de Atendimento à Mulher (DEAMs)?",
+    "alternativas": [
+      "Realizar julgamentos e condenar agressores diretamente sem intervenção do Poder Judiciário",
+      "Receber denúncias e registrar boletins de ocorrência de violência doméstica",
+      "Investigar crimes e encaminhar inquéritos ao Ministério Público"
+    ],
+    "respostaCorreta": "Realizar julgamentos e condenar agressores diretamente sem intervenção do Poder Judiciário",
+    "dificuldade": "media",
+    "efeito":"AVANÇAR",
+    "valorEfeito":"3/6",
+    "card_cor": "cardYellow.png",
+    "iconePeao":""
+},
+{
+    "id": 13,
+    "tipoGeral": "PERGUNTA",
+    "tipoPergunta":"SIM_NAO",
+    "enunciado": "O conceito de interseccionalidade aplicado à violência contra a mulher considera que raça, classe e gênero são fatores independentes que não se influenciam mutuamente. Isso é correto?",
+    "alternativas": ["Sim", "Não"],
+    "respostaCorreta": "Não",
+    "dificuldade": "dificil",
+    "efeito":"AVANÇAR",
+    "valorEfeito":"5/6",
+    "card_cor": "cardRed.png",
+    "iconePeao":""
+},
+  {
+    "id": 14,
+    "tipoGeral": "PERGUNTA",
+    "tipoPergunta":"SIM_NAO",
+    "enunciado": "A Recomendação Geral nº 19 do Comitê CEDAW, de 1992, foi o primeiro documento internacional a reconhecer a violência baseada em gênero como forma de discriminação?",
+    "alternativas": ["Sim", "Não"],
+    "respostaCorreta": "Sim",
+    "dificuldade": "dificil",
+    "efeito":"AVANÇAR",
+    "valorEfeito":"6/6",
+    "card_cor": "cardRed.png",
+    "iconePeao":""
+},
+  {
+    "id": 15,
+    "tipoGeral": "PERGUNTA",
+    "tipoPergunta":"SIM_NAO",
+    "enunciado": "O Juizado Especial Criminal (JECRIM) é competente para julgar crimes de violência doméstica e familiar contra a mulher após a Lei Maria da Penha?",
+    "alternativas": ["Sim", "Não"],
+    "respostaCorreta": "Não",
+    "dificuldade": "dificil",
+    "efeito":"AVANÇAR",
+    "valorEfeito":"5/6",
+    "card_cor": "cardRed.png",
+    "iconePeao":""
+},
+{
+    "id": 16,
+    "tipoGeral": "PERGUNTA",
+    "tipoPergunta":"MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente o que o caso Maria da Penha Maia Fernandes na Comissão Interamericana de Direitos Humanos resultou para o Brasil?",
+    "alternativas": [
+      "Recomendação de reformas legislativas e reparação à vítima, o que impulsionou a criação da Lei 11.340/2006",
+      "Aplicação de sanções econômicas ao Brasil por descumprimento de tratados internacionais",
+      "Transferência do julgamento do agressor para o Tribunal Penal Internacional"
+    ],
+    "respostaCorreta": "Recomendação de reformas legislativas e reparação à vítima, o que impulsionou a criação da Lei 11.340/2006",
+    "dificuldade": "dificil",
+    "efeito":"AVANÇAR",
+    "valorEfeito":"6/6",
+    "card_cor": "cardRed.png",
+    "iconePeao":""
+},
+  {
+    "id": 17,
+    "tipoGeral": "PERGUNTA",
+    "tipoPergunta":"MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente o conceito de coercive control (controle coercitivo) no contexto da violência doméstica?",
+    "alternativas": [
+      "Padrão de comportamento que busca dominar e isolar a vítima por meio de intimidação e restrição de autonomia, muitas vezes sem agressão física aparente",
+      "Técnica policial de negociação usada em situações de crise em ocorrências domésticas",
+      "Mecanismo judicial que limita o contato do agressor com a vítima durante processos criminais"
+    ],
+    "respostaCorreta": "Padrão de comportamento que busca dominar e isolar a vítima por meio de intimidação e restrição de autonomia, muitas vezes sem agressão física aparente",
+    "dificuldade": "dificil",
+    "efeito":"AVANÇAR",
+    "valorEfeito":"6/6",
+    "card_cor": "cardRed.png",
+    "iconePeao":""
+},
+  {
+    "id": 18,
+    "tipoGeral": "PERGUNTA",
+    "tipoPergunta":"MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente a diferença entre violência de gênero e violência doméstica?",
+    "alternativas": [
+      "Violência de gênero é mais ampla e abarca qualquer violência motivada por gênero; violência doméstica é a que ocorre no ambiente familiar ou de convivência íntima",
+      "Violência de gênero e violência doméstica são sinônimos perfeitos e intercambiáveis em qualquer contexto jurídico",
+      "Violência doméstica é mais ampla por incluir homens e crianças sem distinção de motivação"
+    ],
+    "respostaCorreta": "Violência de gênero é mais ampla e abarca qualquer violência motivada por gênero; violência doméstica é a que ocorre no ambiente familiar ou de convivência íntima",
+    "dificuldade": "dificil",
+    "efeito":"AVANÇAR",
+    "valorEfeito":"5/6",
+    "card_cor": "cardRed.png",
+    "iconePeao":""
+},
+{
+     "id": 19,
+    "tipoGeral": "AZAR",
+    "tipoPergunta":"",
+    "enunciado": "Você perpetuou a cultura do silêncio. Volte 6 casas.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "dificuldade": "",
+    "efeito":"RETROCEDER",
+    "valorEfeito":"6/6",
+    "card_cor": "cardBronze.png",
+    "iconePeao": ""
+
+   },
+    {
+     "id": 20,
+    "tipoGeral": "PEGADINHA",
+    "tipoPergunta":"",
+    "enunciado": "Você achou que estava ajudando, mas interrompeu a vítima. Fique uma rodada sem jogar.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "dificuldade": "",
+    "efeito":"PROXIMO",
+    "valorEfeito":"0/6",
+    "card_cor": "cardPrata.png",
+    "iconePeao": ""
+
+   },
+    {
+     "id": 21,
+    "tipoGeral": "PEGADINHA",
+    "tipoPergunta":"",
+    "enunciado": "Você compartilhou uma notícia sem verificar a fonte. Retorne ao início.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "dificuldade": "",
+    "efeito":"INICIO",
+    "valorEfeito":"0/6",
+    "card_cor": "cardPrata.png",
+    "iconePeao": ""
+
+   },
+    {
+     "id": 22,
+    "tipoGeral": "AZAR",
+    "tipoPergunta":"",
+    "enunciado": "Você não se posicionou contra a violência. Volte 4 casas.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "dificuldade": "",
+    "efeito":"RETROCEDER",
+    "valorEfeito":"4/6",
+    "card_cor": "cardBronze.png",
+    "iconePeao": ""
+
+   }, 
+   {
+     "id": 23,
+    "tipoGeral": "AZAR",
+    "tipoPergunta":"",
+    "enunciado": "Você ignorou a necessidade de acolhimento. Volte 3 casas.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "dificuldade": "",
+    "efeito":"RETROCEDER",
+    "valorEfeito":"3/6",
+    "card_cor": "cardBronze.png",
+    "iconePeao": ""
+
+   }, 
+   {
+     "id": 24,
+    "tipoGeral": "PEGADINHA",
+    "tipoPergunta":"",
+    "enunciado": "Você ofereceu ajuda, mas desistiu no meio. Fique parado.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "dificuldade": "",
+    "efeito":"PROXIMO",
+    "valorEfeito":"0/6",
+    "card_cor": "cardPrata.png",
+    "iconePeao": ""
+
+   },
+   {
+     "id": 25,
+    "tipoGeral": "SORTE",
+    "tipoPergunta":"",
+    "enunciado": "Você compartilhou informações sobre canais de ajuda. Avance 3 casas",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "dificuldade": "",
+    "efeito":"AVANÇAR",
+    "valorEfeito":"3/10",
+    "card_cor": "cardDourado.png",
+    "iconePeao": ""
+
+   },
+  {
+     "id": 26,
+    "tipoGeral": "SORTE",
+    "tipoPergunta":"",
+    "enunciado": "Você interrompeu uma situação de violência. Avance 9 casas.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "dificuldade": "",
+    "efeito":"AVANÇAR",
+    "valorEfeito":"9/10",
+    "card_cor": "cardDourado.png",
+    "iconePeao": ""
+
+   },
+   {
+     "id": 27,
+    "tipoGeral": "SORTE",
+    "tipoPergunta":"",
+    "enunciado": "Você participou de uma campanha de conscientização. Avance 4 casas.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "dificuldade": "",
+    "efeito":"AVANÇAR",
+    "valorEfeito":"4/10",
+    "card_cor": "cardDourado.png",
+    "iconePeao": ""
+
+   }
+]

@@ -98,15 +98,21 @@ public class CardsPanel extends JPanel {
 
         this.revalidate(); // Atualiza o layout para acomodar a nova carta
         this.repaint(); // Redesenha o painel para mostrar a nova carta
+        System.out.println(
+            "[CardsPanel] Transição concluída. Exibindo carta ID: " + activeCard.getCardID()
+        );
     }
 
     // Sobrescreve o método de pintura para desenhar o fundo do baralho atrás das cartas
     @Override
     protected void paintComponent(Graphics g) {
+
         // Estrutura padrão do "paintComponent" para garantir que o fundo seja desenhado corretamente
         super.paintComponent(g);
+
         // Cria um contexto gráfico 2D para aplicar renderizações avançadas (como anti-aliasing)
         Graphics2D g2 = (Graphics2D) g.create(); 
+
         // Habilita o anti-aliasing para suavizar as bordas das imagens desenhadas
         g2.setRenderingHint(
             RenderingHints.KEY_ANTIALIASING, 
@@ -124,18 +130,23 @@ public class CardsPanel extends JPanel {
                 this.getHeight(), 
                 this
             );
+
             System.out.println(
                 "[CardsPanel] Imagem do baralho desenhada com sucesso."
             );
+
         } else {
+            
             // Fallback: fundo cinza caso a imagem do baralho falhe, e imprime um erro no console
             g.setColor(gui.theme.GameColors.PURPLE_BG);
+
             g.fillRect(
                 0, 
                 0, 
                 this.getWidth(), 
                 this.getHeight()
             );
+            
             // Se a imagem do baralho não foi carregada, imprime um erro no console
             System.err.println(
                 "[CardsPanel] Erro: A imagem do baralho não foi carregada."
@@ -144,5 +155,14 @@ public class CardsPanel extends JPanel {
 
         // Libera os recursos gráficos usados para desenhar o fundo, garantindo que não haja vazamentos de memória
         g2.dispose();
+    }
+
+    // Métodos getters
+    /**
+    * Retorna a lista de cartas carregadas no painel.
+    * @return List de CustomCards
+    */
+    public List<CustomCards> getCardList() {
+        return this.cardList;
     }
 }

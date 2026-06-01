@@ -13,12 +13,13 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 // Cria uma classe "MainScreenContainer" que irá herdar métodos da classe JPanel (nativa do Java Swing)
-public class MainScreenContainer extends JPanel { 
+public class MainScreenContainer extends JPanel {
+
     // VARIÁVEIS DE INSTÂNCIA
     private Image mainScreenImage; // Variável para armazenar a imagem de fundo da tela principal
     private final static String MAIN_SCREEN_IMAGE_PATH = "/assets/mainScreenBackground_900x600.jpeg"; // Caminho da imagem de fundo da tela principal
     private final static Rectangle MAIN_SCREEN_BOUNDS = new Rectangle( // Dimensões fixas para o painel da tela principal
-        0, 
+        0,
         0, 
         900, 
         600
@@ -50,8 +51,10 @@ public class MainScreenContainer extends JPanel {
     // O método "paintComponent" é chamado sempre que o painel precisa ser redesenhado, permitindo que personalizemos a aparência do fundo do menu offline.
     // Visibilidade "protected" para que apenas classes dentro do mesmo pacote ou subclasses possam acessar este método
     protected void paintComponent(Graphics g) {
+        
         // Estrutura padrão do "paintComponent" para garantir que o fundo seja desenhado corretamente
-        super.paintComponent(g); 
+        super.paintComponent(g);
+
         // Cria um contexto gráfico 2D para aplicar renderizações avançadas (como anti-aliasing)
         Graphics2D g2 = (Graphics2D) g.create();
         

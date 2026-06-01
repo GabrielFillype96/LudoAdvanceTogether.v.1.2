@@ -4,11 +4,11 @@
     "tipoGeral": "PERGUNTA",
     "dificuldade": "FÁCIL",
     "tipoPergunta": "SIM_NAO",
-    "enunciado": "Verdadeiro ou Falso: 'Em briga de marido e mulher, não se mete a colher'.",
+    "enunciado": "Sim ou Não: 'Em briga de marido e mulher, não se mete a colher'.",
     "alternativas": [],
     "respostaCorreta": "Não",
     "efeito": "AVANÇAR",
-    "valorEfeito": "2/6",
+    "valorEfeito": "6/6",
     "iconePeao": "peao_azul.png"
   },
   {
@@ -18,13 +18,13 @@
     "tipoPergunta": "MULTIPLA_ESCHLE",
     "enunciado": "Qual o número da Central de atendimento à mulher no Brasil?",
     "alternativas": [
-      "A) 180",
-      "B) 190",
-      "C) 193"
+      "180",
+      "190",
+      "193"
     ],
-    "respostaCorreta": "A) 180",
+    "respostaCorreta": "180",
     "efeito": "AVANÇAR",
-    "valorEfeito": "1/6",
+    "valorEfeito": "6/6",
     "iconePeao": "peao_verde.png"
   },
   {
@@ -50,5 +50,45 @@
     "efeito": "RETROCEDER",
     "valorEfeito": "3",
     "iconePeao": "peao_vermelho.png"
-  }
+  },
+{
+    "id": 5,
+    "tipoGeral": "PERGUNTA",
+    "tipoPergunta":"SIM_NAO",
+    "enunciado": "A Lei Maria da Penha é conhecida pelo número 11.340. Isso é correto?",
+    "alternativas": [],
+    "respostaCorreta": "Sim",
+    "dificuldade": "FÁCIL",
+    "efeito":"AVANÇAR",
+    "valorEfeito":"6/6",
+    "iconePeao":"peao_vermelho.png"
+},
+{
+    "id": 6,
+    "tipoGeral": "PERGUNTA",
+    "tipoPergunta":"SIM_NAO",
+    "enunciado": "O canal de denúncia de violência contra a mulher no Brasil é o Ligue 180. Isso é verdade?",
+    "alternativas": [],
+    "respostaCorreta": "Sim",
+    "dificuldade": "Fácil",
+    "efeito":"AVANÇAR",
+    "valorEfeito":"1/6",
+    "iconePeao":"peao_vermelho.png"
+},
+{
+    "id": 7,
+    "tipoGeral": "PERGUNTA",
+    "tipoPergunta":"MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das opções abaixo melhor descreve a violência patrimonial contra a mulher?",
+    "alternativas": [
+      "Retenção, subtração ou destruição de documentos, bens e recursos financeiros da mulher",
+      "Agressão física que deixa marcas no corpo da mulher",
+      "Ameaças verbais e isolamento social imposto pelo agressor"
+    ],
+    "respostaCorreta": "Retenção, subtração ou destruição de documentos, bens e recursos financeiros da mulher",
+    "dificuldade": "FÁCIL",
+    "efeito":"AVANÇAR",
+    "valorEfeito":"6/6",
+    "iconePeao":"peao_vermelho.png"
+}
 ]
