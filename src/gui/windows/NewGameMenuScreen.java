@@ -1,6 +1,8 @@
 // Classe responsável por criar a interface do menu do modo de jogo offline
+
 // Packages
 package gui.windows;
+
 // Imports internos
 import gui.components.SlotsIcon;
 import gui.components.PlayerIdentifier;
@@ -9,6 +11,7 @@ import gui.components.buttons.CustomButton;
 import gui.components.buttons.PlayButton;
 import actions.StartGameAction;
 import gui.theme.GameColors;
+
 //Imports externos
 import java.awt.*;
 import javax.swing.*;
@@ -27,10 +30,10 @@ public class NewGameMenuScreen extends JPanel {
     private JRadioButton rbEasy, rbMedium, rbHard; // Botões do tipo radio para a dificuldade
     // Depois irá precisar de um método getter para pegar o nome dos demais players 
     private JTextField txtP1, txtCPU1, txtCPU2, txtCPU3; // Campos de texto para os nomes dos jogadores
-
         
     // Construtor que recebe o WindowManager para poder chamar as transições de tela
     public NewGameMenuScreen(WindowManager windowManager, SubMenuContainer subMenuContainer) {
+
         this.windowManager = windowManager;
         this.subMenuContainer = subMenuContainer;
         // Dimensões exatas para o GridBagLayout centralizar perfeitamente
@@ -48,6 +51,7 @@ public class NewGameMenuScreen extends JPanel {
             "MODO JOGO OFFLINE", 
             SwingConstants.CENTER
         ); 
+
         // Define a fonte, cor e posição do título
         title.setFont(new Font(
             "Serif", // Fonte Serif
@@ -69,6 +73,7 @@ public class NewGameMenuScreen extends JPanel {
             "Dificuldade da CPU:", 
             SwingConstants.RIGHT
         );
+
         // Define a fonte, cor e posição do label de dificuldade
         lblDif.setFont(new Font(
             "SansSerif", // Fonte SansSerif

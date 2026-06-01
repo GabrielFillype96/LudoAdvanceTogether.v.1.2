@@ -84,14 +84,9 @@ public class GameContainer extends JPanel {
         JPanel boardScreen = new BoardScreen("Gabriel", "Azul", "Fernanda", "Roxo", "Raimunda", "Rosa", "Paulo", "Amarelo");
         boardScreen.setBounds(0, 0, 600, 600);
         add(boardScreen);
-
-
-
-
-
     }
 
-    
+
 
     public static Rectangle getGameContainerBounds() {
         return GAME_CONTAINER_BOUNDS;

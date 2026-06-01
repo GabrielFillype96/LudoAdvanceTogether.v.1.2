@@ -35,14 +35,18 @@ public class WindowManager {
             mainPanel.repaint();
         } else {
             // Se o "mainPanel" for "null", imprime um erro no console para ajudar na depuração
-            System.err.println("[WindowManager Erro] O plano de fundo está nulo!");
+            System.err.println(
+                "[WindowManager Erro] O plano de fundo está nulo!"
+            );
         }
     }
 
     // Método para iniciar a partida offline, recebendo o nome do jogador e a dificuldade escolhida
     public void startOfflineGameMode(String playerName, String difficulty) {
         // Imprime no console para confirmar que a transição está sendo iniciada
-        System.out.println("[WindowManager] Iniciando transição para a tela de jogo...");
+        System.out.println(
+            "[WindowManager] Iniciando transição para a tela de jogo..."
+        );
 
         if (mainPanel != null) {
             // Se o "mainPanel" for diferente de "null", inicia a transição para a tela de jogo ("GameContainer")

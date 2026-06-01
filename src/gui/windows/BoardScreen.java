@@ -18,6 +18,7 @@ import javax.swing.SwingConstants;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
+import java.awt.Dimension;
 
 public class BoardScreen extends JPanel {
 
@@ -45,6 +46,8 @@ public class BoardScreen extends JPanel {
         setOpaque(true);  // Mantém o fundo transparente para a imagem de fundo do jogo aparecer
         setLayout(null); // Layout nulo torna o painel absoluto 
         setBounds(BOARD_SCREEN_BOUNDS);
+        Dimension boardDimension = new Dimension(BOARD_SCREEN_BOUNDS.width, BOARD_SCREEN_BOUNDS.height);
+        setPreferredSize(boardDimension);
 
         JLabel player1Label = new JLabel(
             "JOGADOR 1: " + player1Name, 
@@ -323,8 +326,8 @@ public class BoardScreen extends JPanel {
             );
         }
 
-        // Loop para pintar a trilha do jogador 1 e 3
-        for (int y = 40; y <= 480; y += 40) {
+        // Loop para pintar a trilha do jogador 1 e 3 (cima para baixo)
+        for (int y = 40; y <= 520; y += 40) {
             if (y >= 240 && y <= 320) continue; // Salta uma etapa da repetição não preencher o centro do tabuleiro
             
             // Se a coord. "y" for menor que 240 utilizara a cor do jogador 1. Se for maior usa a cor do jogador 3
@@ -388,10 +391,10 @@ public class BoardScreen extends JPanel {
 
         // Loop para construir e pintar as casas de saída verticais dos jogadores 1 e 3 (cima e baixo)
         for (int x = 240; x <= 320; x += 80) { // x assume 240 e 320
-            for (int y = 40; y <= 480; y += 440) { // y assume 40 e 520
+            for (int y = 40; y <= 520; y += 480) { // y assume 40 e 520
                 
-                // Se for a combinação de cima (320, 40) OU a combinação de baixo (240, 320)
-                if ((x == 320 && y == 40) || (x == 240 && y == 480)) {
+                // Se for a combinação de cima (320, 40) OU a combinação de baixo (240, 520)
+                if ((x == 320 && y == 40) || (x == 240 && y == 520)) {
                     
                     // Se o x for 40, é o lado esquerdo (Jogador 3)
                     if (y == 40) {
