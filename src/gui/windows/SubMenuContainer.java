@@ -8,12 +8,13 @@ import java.awt.Rectangle;
 import javax.swing.JPanel;
 
 public class SubMenuContainer extends JPanel {
-    // VARIÁVEIS DE INSTÂNCIA     
+    // VARIÁVEIS DE INSTÂNCIA
+    private static final double SCALE = 1.5;   
     private static final Rectangle SUB_MENU_CONTAINER_BOUNDS = new Rectangle( // Dimensões fixas para o painel de opções do menu principal onde os mini-menu's são exibidos
         0, 
         0, 
-        520, 
-        420
+        (int) (520 * SCALE), 
+        (int) (420 * SCALE)
     ); 
 
     // Construtor da classe SubMenuContainer, que recebe o WindowManager para poder acessar e realizar a troca de telas

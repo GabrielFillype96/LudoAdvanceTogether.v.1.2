@@ -97,13 +97,13 @@ public class CardOptionButton extends JButton {
         
             // 2. Descobrir qual o CardsPanel que gerencia tudo
             java.awt.Component painelGerenciador = getParent();
-            while (painelGerenciador != null && !(painelGerenciador instanceof gui.windows.CardsPanel)) {
+            while (painelGerenciador != null && !(painelGerenciador instanceof gui.windows.CardsContainer)) {
                 painelGerenciador = painelGerenciador.getParent();
             }
             
-            if (pai instanceof CustomCards && painelGerenciador instanceof gui.windows.CardsPanel) {
+            if (pai instanceof CustomCards && painelGerenciador instanceof gui.windows.CardsContainer) {
                 CustomCards cartaAtual = (CustomCards) pai;
-                gui.windows.CardsPanel painelPai = (gui.windows.CardsPanel) painelGerenciador;
+                gui.windows.CardsContainer painelPai = (gui.windows.CardsContainer) painelGerenciador;
                 
                 // 3. Envia o texto completo desta alternativa para a validação
                 // Ex: "A) Coleta Seletiva" ou o formato que você gravou no JSON como resposta correta

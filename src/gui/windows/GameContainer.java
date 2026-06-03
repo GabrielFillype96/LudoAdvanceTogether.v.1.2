@@ -5,90 +5,79 @@ package gui.windows;
 
 // Import externos
 import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.Rectangle;
-import java.awt.RenderingHints;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class GameContainer extends JPanel {
 
+    // VARIÁVEIS DE INSTÂNCIA
     private String playerName;
     private String cpuDifficulty;
-    private Image boardImg; // Imagem do tabuleiro para mostrar atrás dos componentes
-    private final static String boardImgURL = "/assets/gameBackground_600x600.jpg"; // Caminho da imagem do tabuleiro
-    private final static Rectangle GAME_CONTAINER_BOUNDS = new Rectangle(0, 0, 900, 600);
+    private static final double SCALE = 1.5;
+    private static final Rectangle GAME_CONTAINER_BOUNDS = new Rectangle(
+        0, 
+        0, 
+        (int) (900 * SCALE), 
+        (int) (600 * SCALE)
+    );
+    private static final Rectangle CARDS_AREA_BOUNDS = new Rectangle(
+        (int) (600* SCALE), 
+        0, 
+        (int) (300 * SCALE), 
+        (int) (600 * SCALE)
+    );
+    private static final Rectangle CARDS_CONTAINER_BOUNDS = new Rectangle(
+        (int) (40 * SCALE), 
+        (int) (110 * SCALE), 
+        (int) (220 * SCALE), 
+        (int) (340 * SCALE)
+    );
+    private static final Rectangle BOARD_SCREEN_BOUNDS = new Rectangle(
+        (int) (0 * SCALE),
+        (int) (0 * SCALE),
+        (int) (600 * SCALE),
+        (int) (600 * SCALE)
+    );
 
+    // Construtor da classe "GamContainer"
     public GameContainer(String playerName, String cpuDifficulty) {
         this.playerName = playerName;
         this.cpuDifficulty = cpuDifficulty;
 
-        // Ocupa o tamanho total da janela (900x600)
         // Dimensões fixas para o painel dos cards
-        setBounds(GAME_CONTAINER_BOUNDS);
+        setBounds(GAME_CONTAINER_BOUNDS); // Tamanho do container do jogo (1350x900)
         setLayout(null); // Layout nulo torna o painel absoluto 
         setOpaque(false); // Fundo transparente para permitir a exibição do deck
 
-         // Procura o path da imagem de fundo do deck
-        java.net.URL boardImgPath = getClass().getResource(boardImgURL);
-        if (boardImgPath != null) {
-            System.out.println(
-                "[GameContainer] Imagem do tabuleiro encontrada em: " + boardImgURL
-            );
-            this.boardImg = new ImageIcon(boardImgPath).getImage();
-        } else {
-            System.err.println(
-                "[GameContainer] Erro: Imagem do tabuleiro não encontrada em /assets/images/gameBackground_600x600.jpg"
-            );
-        }
+        // Área reservada ao layout das cartas, controles e informações de jogador (450x900)
+        JPanel cardsArea = new JPanel(); // Instancia o painel completo que irá conter as cartas, controles e informações do jogador
+        cardsArea.setBounds(CARDS_AREA_BOUNDS); // Tamanho e posição da área das cartas (900, 0) (450x900)
+        cardsArea.setBackground(new Color(38, 24, 16)); // Tom amadeirado escuro
+        cardsArea.setLayout(null);
 
-        // --- PAINEL LATERAL DIREITO (Espaço restante: 300x600) ---
-        JPanel boardPanel = new JPanel();
-        boardPanel.setBounds(600, 0, 300, 600);
-        boardPanel.setBackground(new Color(38, 24, 16)); // Tom amadeirado escuro
-        boardPanel.setLayout(null);
-
-        // 1. INSTANCIA O SEU CARDSPANEL PASSANDO O FILTRO DIRETAMENTE NO CONSTRUTOR
+        // Instancia o "CardsContainer" que será responsável por conter e renderizar as cartas do jogo
         // Ele mesmo vai carregar o JSON e inicializar a primeira carta.
-        gui.windows.CardsPanel painelCartas = new gui.windows.CardsPanel("FÁCIL");
-        
-        // Centraliza o painel de largura 220 dentro do menu lateral de largura 300
-        painelCartas.setBounds(40, 110, 220, 340);
-        boardPanel.add(painelCartas);
-
-        // --- LABELS DE INFORMAÇÕES ADICIONAIS DO PAINEL LATERAL ---
-        JLabel lblPlayer = new JLabel("Jogador: " + this.playerName);
-        lblPlayer.setFont(new Font("Arial", Font.BOLD, 16));
-        lblPlayer.setForeground(new Color(222, 179, 102)); // Dourado fosco
-        lblPlayer.setBounds(20, 30, 260, 25);
-        boardPanel.add(lblPlayer);
-
-        JLabel lblDiff = new JLabel("Dificuldade CPU: " + this.cpuDifficulty);
-        lblDiff.setFont(new Font("Arial", Font.PLAIN, 14));
-        lblDiff.setForeground(Color.LIGHT_GRAY);
-        lblDiff.setBounds(20, 60, 260, 20);
-        boardPanel.add(lblDiff);
+        gui.windows.CardsContainer cardsContainer = new gui.windows.CardsContainer("FÁCIL");
+        cardsContainer.setBounds(CARDS_CONTAINER_BOUNDS); // Tamanho e posição do container das cartas (60, 165) (330x510)
+        cardsArea.add(cardsContainer);
 
         // Força a atualização do fluxo gráfico do Swing
-        painelCartas.revalidate();
-        painelCartas.repaint();
-        boardPanel.revalidate();
-        boardPanel.repaint();
-
-        add(boardPanel);
-
+        cardsContainer.revalidate();
+        cardsContainer.repaint();
+        cardsArea.revalidate();
+        cardsArea.repaint();
+        
+        // Instancia o painel do tabuleiro
         JPanel boardScreen = new BoardScreen("Gabriel", "Azul", "Fernanda", "Roxo", "Raimunda", "Rosa", "Paulo", "Amarelo");
-        boardScreen.setBounds(0, 0, 600, 600);
+        boardScreen.setBounds(BOARD_SCREEN_BOUNDS); // Tamanho e posição do tabuleiro (0, 0) (900x900)
+        
+        // Adiciona os componentes ao container do jogo
+        add(cardsArea);
         add(boardScreen);
     }
 
-
-
+    // Método getter para acessar as dimensões do GameContainer
     public static Rectangle getGameContainerBounds() {
-        return GAME_CONTAINER_BOUNDS;
+        return GAME_CONTAINER_BOUNDS; // Retorna as dimensões do GameContainer
     }
 }

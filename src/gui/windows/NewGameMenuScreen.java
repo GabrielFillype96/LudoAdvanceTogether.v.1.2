@@ -23,6 +23,9 @@ public class NewGameMenuScreen extends JPanel {
     // Variável para armazenar a referência ao painel de opções do menu principal, onde os mini-menu's são exibidos
     private SubMenuContainer subMenuContainer;
 
+    // Variável de escala para qualquer medida
+    private static final double SCALE = 1.5; // Fator de escala para ajustar o tamanho dos componentes (pode ser ajustado conforme necessário)
+
     // Instancia (cria o objeto) da classe Dimension do Java Awt com as dimensões do menu offline
     private static final Dimension OFFLINE_MENU_DIMENSION = new Dimension(520, 420); // Dimensões fixas para o menu offline
 
@@ -56,14 +59,14 @@ public class NewGameMenuScreen extends JPanel {
         title.setFont(new Font(
             "Serif", // Fonte Serif
             Font.BOLD, // Estilo da fonte em negrito
-            22 // Tamanho da fonte 22
+            (int) (22 * SCALE) // Tamanho da fonte 22
         ));
         title.setForeground(GameColors.GOLD_ACCENT); // Cor do título em dourado fosco
         title.setBounds(
             0, 
-            25, 
-            520, 
-            30
+            (int) (25 * SCALE), 
+            (int) (520 * SCALE), 
+            (int) (30 * SCALE)
         ); 
         add(title); // Adiciona o título ao painel
 
@@ -78,39 +81,39 @@ public class NewGameMenuScreen extends JPanel {
         lblDif.setFont(new Font(
             "SansSerif", // Fonte SansSerif
             Font.BOLD, // Estilo da fonte em negrito
-            13 // Tamanho da fonte 13
+            (int) (13 * SCALE)// Tamanho da fonte 13
         ));
         lblDif.setForeground(GameColors.GOLD_ACCENT);
         lblDif.setBounds(
-            20, 
-            70, 
-            140, 
-            25
+            (int) (20 * SCALE), 
+            (int) (70 * SCALE), 
+            (int) (140 * SCALE), 
+            (int) (25 * SCALE)
         );
         add(lblDif); // Adiciona o label de dificuldade ao painel
 
         // Instancia os botões de rádio para as opções de dificuldade e define a posição e tamanho
         rbEasy = gui.components.buttons.DifficultyRadioButton.goldenBtnRd("Fácil");
         rbEasy.setBounds(
-            180, 
-            70, 
-            70, 
-            25
+            (int) (180 * SCALE), 
+            (int) (70 * SCALE), 
+            (int) (70 * SCALE), 
+            (int) (25 *SCALE)
         );
         rbMedium = gui.components.buttons.DifficultyRadioButton.goldenBtnRd("Médio");
         rbMedium.setBounds(
-            260, 
-            70, 
-            80, 
-            25
+            (int) (260 * SCALE), 
+            (int) (70 * SCALE), 
+            (int) (80 * SCALE), 
+            (int) (25 * SCALE)
         );
         rbMedium.setSelected(true);
         rbHard = gui.components.buttons.DifficultyRadioButton.goldenBtnRd("Difícil");
         rbHard.setBounds(
-            350, 
-            70, 
-            80, 
-            25
+            (int) (350 * SCALE), 
+            (int) (70 * SCALE), 
+            (int) (80 * SCALE), 
+            (int) (25 * SCALE)
         );
 
         // O método ButtonGroup é utilizado para agrupar os botões de rádio, garantindo que apenas um possa ser selecionado por vez.
@@ -130,14 +133,14 @@ public class NewGameMenuScreen extends JPanel {
         subTitle.setFont(new Font(
             "SansSerif", // Fonte SansSerif
             Font.BOLD, // Estilo da fonte em negrito
-            14 // Tamanho da fonte 14
+            (int) (14 * SCALE) // Tamanho da fonte 14
         ));
         subTitle.setForeground(GameColors.GOLD_ACCENT);
         subTitle.setBounds(
-            0, 
-            120, 
-            520, 
-            20
+            (int) (0 * SCALE), 
+            (int) (120 * SCALE), 
+            (int) (520 * SCALE), 
+            (int) (20 * SCALE)
         );
         add(subTitle);
 
@@ -146,12 +149,18 @@ public class NewGameMenuScreen extends JPanel {
          * Damos +8px de espaço vazio (respiro para sua arte).
          * Campo de texto começa em X + 35 + 8.
          */
-        
-        // Adiciona ao menu o componente de identificação do jogador criado pela classe "PlayerIdentifier"
-        add(PlayerIdentifier.squarePlayerIdentifier("1", 25, 155)); // ID 1
-        add(PlayerIdentifier.squarePlayerIdentifier("2", 280, 155)); // ID 2
-        add(PlayerIdentifier.squarePlayerIdentifier("3", 25, 210)); // ID 3
-        add(PlayerIdentifier.squarePlayerIdentifier("4", 280, 210)); // ID 4
+        int i = 0;
+        for (int x = 25; x <= 280; x +=255) {
+            for (int y = 155; y <= 210; y += 55) {
+
+                add(PlayerIdentifier.squarePlayerIdentifier(
+                    String.valueOf(i + 1),
+                    (int) (x * SCALE),
+                    (int) (y * SCALE)
+                ));
+                i++;
+            }
+        }
 
         // Cria o campo de texto para os jogadores utilizando a classe "SlotsName" e armazena a referência na variável.
         // Não é preciso criar um novo objeto pois a classe "SlotsName" já tem um método estático que retorna o JTextField pronto para uso.

@@ -10,22 +10,22 @@ import java.awt.RenderingHints;
 import javax.swing.ImageIcon;
 
 public class PlayerPawn {
-    private String nomeJogador;
+    private String playerName;
     private int posicaoLogicaAtual; // Índice da casa de 0 até o fim do circuito
     private Point coordenadaVisual; // X e Y atuais na tela
-    private Image imagemPeao;       // Guarda o arquivo de imagem do peão
+    private Image pawnImg;       // Guarda o arquivo de imagem do peão
 
     /**
      * Construtor do Peão usando Imagem.
-     * @param nomeJogador Nome do jogador dono deste peão.
-     * @param nomeArquivoImagem Nome do arquivo dentro de /assets/ (Ex: "peao_vermelho.png")
+     * @param playerName Nome do jogador dono deste peão.
+     * @param pawnImg Nome do arquivo dentro de /assets/ (Ex: "peao_vermelho.png")
      */
-    public PlayerPawn(String nomeJogador, String nomeArquivoImagem) {
-        this.nomeJogador = nomeJogador;
+    public PlayerPawn(String playerName, String pawnImg) {
+        this.playerName = playerName;
         this.posicaoLogicaAtual = 0;
         this.coordenadaVisual = new Point(0, 0); // Começa na origem ou posição inicial
         
-        carregarImagem(nomeArquivoImagem);
+        carregarImagem(pawnImg);
     }
 
     /**
@@ -35,7 +35,7 @@ public class PlayerPawn {
         try {
             java.net.URL imgURL = getClass().getResource("/assets/" + nomeArquivoImagem);
             if (imgURL != null) {
-                this.imagemPeao = new ImageIcon(imgURL).getImage();
+                this.pawnImg = new ImageIcon(imgURL).getImage();
             } else {
                 System.err.println("[Peao] Erro: Imagem do peão não encontrada em assets: " + nomeArquivoImagem);
             }
@@ -48,7 +48,7 @@ public class PlayerPawn {
      * Desenha a imagem artística do peão centralizada na casa do tabuleiro.
      */
     public void desenhar(Graphics2D g2) {
-        if (imagemPeao == null) return;
+        if (pawnImg == null) return;
 
         // Ativa suavização para o redimensionamento da imagem ficar bonito
         g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
@@ -67,7 +67,7 @@ public class PlayerPawn {
         int yCentralizado = y + ((40 - alturaPeao) / 2);
 
         // Desenha a imagem do peão na tela
-        g2.drawImage(imagemPeao, xCentralizado, yCentralizado, larguraPeao, alturaPeao, null);
+        g2.drawImage(pawnImg, xCentralizado, yCentralizado, larguraPeao, alturaPeao, null);
     }
 
     // --- GETTERS E SETTERS ---
@@ -87,7 +87,7 @@ public class PlayerPawn {
         this.coordenadaVisual = coordenada; 
     }
     
-    public String getNomeJogador() { 
-        return nomeJogador; 
+    public String getPlayerName() { 
+        return playerName; 
     }
 }

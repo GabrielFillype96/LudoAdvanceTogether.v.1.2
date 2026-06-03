@@ -37,7 +37,7 @@ public class GameManager {
 
         // Se o jogador errou a carta
         if (!acertou) {
-            System.out.println("[GameManager] Resposta incorreta. O peão " + p1.getNomeJogador() + " permaneceu na casa " + p1.getPosicaoLogicaAtual());
+            System.out.println("[GameManager] Resposta incorreta. O peão " + p1.getPlayerName() + " permaneceu na casa " + p1.getPosicaoLogicaAtual());
             return;
         }
 
@@ -57,9 +57,10 @@ public class GameManager {
                 if (estaNaBase) {
                     if (valorDado == 1 || valorDado == 6) {
                         estaNaBase = false;
-                        System.out.println("[GameManager] " + p1.getNomeJogador() + " tirou " + valorDado + " e SAIU DA BASE!");
+                        System.out.println("[GameManager] " + p1.getPlayerName() + " tirou " + valorDado + " e SAIU DA BASE!");
                         
-                        int novaPosicaoLogica = valorDado; // Ex: se tirou 6, vai para a casa de índice 6
+                        // tentar utilizar um switch case para as diferentes saídas de casas
+                        int novaPosicaoLogica = 4; // Ex: se tirou 6, vai para a casa de índice 6
                         
                         if (novaPosicaoLogica >= mapaCasas.length) {
                             novaPosicaoLogica = mapaCasas.length - 1;
@@ -72,7 +73,7 @@ public class GameManager {
                         iniciarAnimacaoSuave(p1, -1, novaPosicaoLogica, mapaCasas, valorDado == 6);
                         return;
                     } else {
-                        System.out.println("[GameManager] " + p1.getNomeJogador() + " tirou " + valorDado + ", mas precisa de 1 ou 6 para sair da base.");
+                        System.out.println("[GameManager] " + p1.getPlayerName() + " tirou " + valorDado + ", mas precisa de 1 ou 6 para sair da base.");
                         return;
                     }
                 }
@@ -156,7 +157,7 @@ public class GameManager {
     private static void verificarCondicoesFinais(PlayerPawn peao, int posicaoAlcancada, boolean ganhouTurnoExtra) {
         if (posicaoAlcancada >= tabuleiro.getCaminhoCasas().length - 1) {
             JOptionPane.showMessageDialog(tabuleiro, 
-                "🏆 VITÓRIA! O peão de " + peao.getNomeJogador() + " alcançou o Centro do Tabuleiro!\nVocê venceu o jogo!", 
+                "🏆 VITÓRIA! O peão de " + peao.getPlayerName() + " alcançou o Centro do Tabuleiro!\nVocê venceu o jogo!", 
                 "Fim de Partida", 
                 JOptionPane.INFORMATION_MESSAGE);
             return;
@@ -170,3 +171,5 @@ public class GameManager {
         }
     }
 }
+
+

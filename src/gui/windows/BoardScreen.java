@@ -25,9 +25,18 @@ public class BoardScreen extends JPanel {
     // VARIÁVEIS DE INSTÂNCIA
     private String player1Name, player2Name, player3Name, player4Name;
     private String player1Color, player2Color, player3Color, player4Color;
-    private final static Rectangle BOARD_SCREEN_BOUNDS = new Rectangle(0, 0, 600, 600);
-    private PlayerPawn player1Pawn;
-    private java.awt.Point[] caminhoCasas;
+    private static final double SCALE = 1.5;
+    private static final Rectangle BOARD_SCREEN_BOUNDS = new Rectangle(
+        0, 
+        0, 
+        (int)(600 * SCALE), 
+        (int)(600 * SCALE)
+    );
+    private PlayerPawn pawn1P1, pawn2P1, pawn3P1, pawn4P1;
+    private PlayerPawn[] player1Pawns = {pawn1P1, pawn2P1, pawn3P1, pawn4P1};
+        
+    private java.awt.Point[] housesTrack;
+
     
     // Construtor do tabuleiro
     public BoardScreen(
@@ -43,11 +52,14 @@ public class BoardScreen extends JPanel {
         this.player4Name = player4Name;
         this.player4Color = player4Color;
 
-        setOpaque(true);  // Mantém o fundo transparente para a imagem de fundo do jogo aparecer
-        setLayout(null); // Layout nulo torna o painel absoluto 
-        setBounds(BOARD_SCREEN_BOUNDS);
+        setBounds(BOARD_SCREEN_BOUNDS); // Tamanho e posição do tabuleiro (0, 0) (900x900)
         Dimension boardDimension = new Dimension(BOARD_SCREEN_BOUNDS.width, BOARD_SCREEN_BOUNDS.height);
         setPreferredSize(boardDimension);
+        setOpaque(true);  // Mantém o fundo transparente para a imagem de fundo do jogo aparecer
+        setLayout(null); // Layout nulo torna o painel absoluto 
+
+        // Mapeia as coordenadas das casas
+        inicializarCaminhoTabuleiro();
 
         JLabel player1Label = new JLabel(
             "JOGADOR 1: " + player1Name, 
@@ -59,20 +71,33 @@ public class BoardScreen extends JPanel {
              22
         ));
 
-        String arquivoImagemP1 = "peaoAzul_90x90.png"; // Substitua pelo nome real dos seus arquivos PNG
-
-        this.player1Pawn = new PlayerPawn(
-            player1Name, 
-            arquivoImagemP1
-        );
-
-        // 2. Mapeia as coordenadas das casas
+        String player1PawnImg = "peaoAzul_90x90.png"; // Substitua pelo nome real dos seus arquivos PNG
+        
+        
+        // Loop para instanciar os peões do jogador 1 (peão 1, 2, 3 e 4)
+        for (int i = 0; i < player1Pawns.length; i++) {
+            player1Pawns[i] =  new PlayerPawn(
+                player1Name,
+                player1PawnImg
+            );
+            System.out.println("Instanciando peão " + (i+1) + " do Jogador 1 com a imagem: " + player1PawnImg);
+        }
+        
+        // Atribui as coordenadas do tabuleiro
         inicializarCaminhoTabuleiro();
 
-        // 3. Coloca o peão na casa inicial (casa 0)
-        if (caminhoCasas != null && caminhoCasas.length > 0) {
-            this.player1Pawn.setCoordenadaVisual(caminhoCasas[0]);
+
+        
+        int j = 0;
+        //Loop para atribuir a coordenada inicial dos pões do jogador 1
+        for (int i = 0; i < player1Pawns.length; i++) {
+            System.out.println("Atribuindo coordenada visual para o peão " + (i+1) + " do Jogador 1 na casa " + j);
+            if (housesTrack != null && housesTrack.length > 0) {
+            player1Pawns[i].setCoordenadaVisual(housesTrack[j]);
+            };
+            j++;
         }
+
         control.GameManager.setTabuleiro(this);
     }
 
@@ -95,47 +120,100 @@ public class BoardScreen extends JPanel {
     private void inicializarCaminhoTabuleiro() {
     // Vamos mapear um circuito de teste com as casas principais transitáveis.
     // Você pode aumentar o tamanho do array conforme adicionar mais casas ao circuito.
-    caminhoCasas = new java.awt.Point[80];
+    housesTrack = new java.awt.Point[61];
 
     // --- TRACKING DO CIRCUITO (A partir do canto inferior esquerdo) ---
-    // Cada ponto representa o canto superior esquerdo (X, Y) do quadrado de 40x40.
-    
-    // SUBINDO pela coluna da esquerda
-    caminhoCasas[0]  = new java.awt.Point(40, 480); // Casa Inicial (Saída do Azul)
-    caminhoCasas[1]  = new java.awt.Point(240, 480);
-    caminhoCasas[2]  = new java.awt.Point(240, 440);
-    caminhoCasas[3]  = new java.awt.Point(240, 400);
-    caminhoCasas[4]  = new java.awt.Point(240, 360);
-    
-    // CURVA: Avançando para o centro/topo esquerdo
-    caminhoCasas[5]  = new java.awt.Point(200, 320);
-    caminhoCasas[6]  = new java.awt.Point(160, 320);
-    caminhoCasas[7]  = new java.awt.Point(120, 320);
-    
-    // VIRANDO e subindo em direção ao topo
-    caminhoCasas[8]  = new java.awt.Point(80, 320);
-    caminhoCasas[9]  = new java.awt.Point(40, 320);
-    caminhoCasas[10] = new java.awt.Point(0, 320);
-    
-    // AVANÇANDO pela parte superior
-    caminhoCasas[11] = new java.awt.Point(0, 280);
-    caminhoCasas[12] = new java.awt.Point(0, 240);
-    caminhoCasas[13] = new java.awt.Point(40, 240);
+    // Cada ponto representa o canto superior esquerdo (X, Y) do quadrado de 60x60.
+   // --- OS 4 ÚLTIMOS PASSADOS PARA SEREM OS 4 PRIMEIROS ---
+    housesTrack[0]  = new java.awt.Point((int)(40 * SCALE), (int)(440 * SCALE)); // Casa final do jogador 1 (casa 58 - centro do tabuleiro)
+    housesTrack[1]  = new java.awt.Point((int)(40 * SCALE), (int)(520 * SCALE)); // Casa Inicial (Saída do Azul)
+    housesTrack[2]  = new java.awt.Point((int)(120 * SCALE), (int)(440 * SCALE)); // Casa Inicial (Saída do Azul)
+    housesTrack[3]  = new java.awt.Point((int)(120 * SCALE), (int)(520 * SCALE)); // Casa Inicial (Saída do Azul)
 
-    caminhoCasas[14] = new java.awt.Point(80, 240);
-    caminhoCasas[15] = new java.awt.Point(120, 240);
-    caminhoCasas[16] = new java.awt.Point(160, 240);
-
-    caminhoCasas[17] = new java.awt.Point(200, 240);
-    caminhoCasas[18] = new java.awt.Point(240, 200);
-    caminhoCasas[19] = new java.awt.Point(240, 120);
-
-
+    // --- CIRCUITO ORIGINAL (SEGUIDO DOS ÍNDICES [4] EM DIANTE, ATUALIZADOS) ---
+    // Caminho do jogador 1 - subindo em direção ao centro do tabuleiro
+    housesTrack[4]  = new java.awt.Point((int)(240 * SCALE), (int)(520 * SCALE));
+    housesTrack[5]  = new java.awt.Point((int)(240 * SCALE), (int)(480 * SCALE));
+    housesTrack[6]  = new java.awt.Point((int)(240 * SCALE), (int)(440 * SCALE));
+    housesTrack[7]  = new java.awt.Point((int)(240 * SCALE), (int)(400 * SCALE));
+    housesTrack[8]  = new java.awt.Point((int)(240 * SCALE), (int)(360 * SCALE));
     
+    // Caminho do jogador 1 - indo para esquerda em direção a borda esquerda do tabuleiro
+    housesTrack[9]  = new java.awt.Point((int)(200 * SCALE), (int)(320 * SCALE));
+    housesTrack[10] = new java.awt.Point((int)(160 * SCALE), (int)(320 * SCALE));
+    housesTrack[11] = new java.awt.Point((int)(120 * SCALE), (int)(320 * SCALE));
+    housesTrack[12] = new java.awt.Point((int)(80 * SCALE),  (int)(320 * SCALE));
+    housesTrack[13] = new java.awt.Point((int)(40* SCALE),   (int)(320 * SCALE));
+    housesTrack[14] = new java.awt.Point((int)(0 * SCALE),    (int)(320 * SCALE));
+
+    // Caminho do jogador 1 - subindo no braço esquerdo do tabuleiro
+    housesTrack[15] = new java.awt.Point((int)(0 * SCALE),    (int)(280 * SCALE));
+    housesTrack[16] = new java.awt.Point((int)(0 * SCALE),    (int)(240 * SCALE));
     
-    // ... Continue adicionando os Points (X, Y) seguindo o fluxo do desenho ...
-    // Dica: Vá somando ou subtraindo de 40 em 40 pixels para sincronizar perfeitamente 
-    // com os loops for que você criou no seu paintComponent!
+    // Caminho do jogador 1 - indo para direita em direção ao centro do tabuleiro
+    housesTrack[17] = new java.awt.Point((int)(40 * SCALE),  (int)(240 * SCALE));
+    housesTrack[18] = new java.awt.Point((int)(80 * SCALE),  (int)(240 * SCALE));
+    housesTrack[19] = new java.awt.Point((int)(120 * SCALE), (int)(240 * SCALE));
+    housesTrack[20] = new java.awt.Point((int)(160 * SCALE), (int)(240 * SCALE));
+    housesTrack[21] = new java.awt.Point((int)(200 * SCALE), (int)(240 * SCALE));
+
+    // Caminho do jogador 1 - subindo em direção a borda superior do tabuleiro
+    housesTrack[22] = new java.awt.Point((int)(240 * SCALE), (int)(200 * SCALE));
+    housesTrack[23] = new java.awt.Point((int)(240 * SCALE), (int)(160 * SCALE));
+    housesTrack[24] = new java.awt.Point((int)(240 * SCALE), (int)(120 * SCALE));
+    housesTrack[25] = new java.awt.Point((int)(240 * SCALE), (int)(80 * SCALE));
+    housesTrack[26] = new java.awt.Point((int)(240 * SCALE), (int)(40 * SCALE));
+    housesTrack[27] = new java.awt.Point((int)(240 * SCALE), (int)(0 * SCALE));
+    
+    // Caminho do jogador 1 - indo para direita no braço superior do tabuleiro
+    housesTrack[28] = new java.awt.Point((int)(280 * SCALE), (int)(0 * SCALE));
+    housesTrack[29] = new java.awt.Point((int)(320 * SCALE), (int)(0 * SCALE));
+
+    // Caminho do jogador 1 - descendo para o centro do tabuleiro
+    housesTrack[30] = new java.awt.Point((int)(320 * SCALE), (int)(40 * SCALE));
+    housesTrack[31] = new java.awt.Point((int)(320 * SCALE), (int)(80 * SCALE));
+    housesTrack[32] = new java.awt.Point((int)(320 * SCALE), (int)(120 * SCALE));
+    housesTrack[33] = new java.awt.Point((int)(320 * SCALE), (int)(160 * SCALE));
+    housesTrack[34] = new java.awt.Point((int)(320 * SCALE), (int)(200 * SCALE));
+    
+    // Caminho do jogador 1 - indo para direita em direção a borda do direita do tabuleiro
+    housesTrack[35] = new java.awt.Point((int)(360 * SCALE), (int)(240 * SCALE));
+    housesTrack[36] = new java.awt.Point((int)(400 * SCALE), (int)(240 * SCALE));
+    housesTrack[37] = new java.awt.Point((int)(440 * SCALE), (int)(240 * SCALE));
+    housesTrack[38] = new java.awt.Point((int)(480 * SCALE), (int)(240 * SCALE));
+    housesTrack[39] = new java.awt.Point((int)(520 * SCALE), (int)(240 * SCALE));
+    housesTrack[40] = new java.awt.Point((int)(560 * SCALE), (int)(240 * SCALE));
+    
+    // Caminho do jogador 1 - descendo no braço direito do tabuleiro
+    housesTrack[41] = new java.awt.Point((int)(560 * SCALE), (int)(280 * SCALE));
+    housesTrack[42] = new java.awt.Point((int)(560 * SCALE), (int)(320 * SCALE));
+    
+    // Caminho do jogador 1 - indo para esquerda em direção ao centro do tabuleiro
+    housesTrack[43] = new java.awt.Point((int)(520 * SCALE), (int)(320 * SCALE));
+    housesTrack[44] = new java.awt.Point((int)(480 * SCALE), (int)(320 * SCALE));
+    housesTrack[45] = new java.awt.Point((int)(440 * SCALE), (int)(320 * SCALE));
+    housesTrack[46] = new java.awt.Point((int)(400 * SCALE), (int)(320 * SCALE));
+    housesTrack[47] = new java.awt.Point((int)(360 * SCALE), (int)(320 * SCALE));
+
+    // Caminho do jogador 1 - descendo em direção a borda inferior do tabuleiro
+    housesTrack[48] = new java.awt.Point((int)(320 * SCALE), (int)(360 * SCALE));
+    housesTrack[49] = new java.awt.Point((int)(320 * SCALE), (int)(400 * SCALE));   
+    housesTrack[50] = new java.awt.Point((int)(320 * SCALE), (int)(440 * SCALE));
+    housesTrack[51] = new java.awt.Point((int)(320 * SCALE), (int)(480 * SCALE));
+    housesTrack[52] = new java.awt.Point((int)(320 * SCALE), (int)(520 * SCALE));
+    housesTrack[53] = new java.awt.Point((int)(320 * SCALE), (int)(560 * SCALE));
+    
+    // Caminho do jogador 1 - indo para esquerda no braço inferior do tabuleiro
+    housesTrack[54] = new java.awt.Point((int)(280 * SCALE), (int)(560 * SCALE));
+    
+    // Caminho do jogador 1 - subindo em direção ao centro do tabuleiro (caminho final do jogador 1)
+    housesTrack[55] = new java.awt.Point((int)(280 * SCALE), (int)(520 * SCALE));
+    housesTrack[56] = new java.awt.Point((int)(280 * SCALE), (int)(480 * SCALE));
+    housesTrack[57] = new java.awt.Point((int)(280 * SCALE), (int)(440 * SCALE));
+    housesTrack[58] = new java.awt.Point((int)(280 * SCALE), (int)(400 * SCALE));
+    housesTrack[59] = new java.awt.Point((int)(280 * SCALE), (int)(360 * SCALE));
+    housesTrack[60] = new java.awt.Point((int)(280 * SCALE), (int)(320 * SCALE)); // Casa final do jogador 1 (centro do tabuleiro)
+
 }
 
     // Método para desenhar o tabuleiro do jogo
@@ -161,8 +239,8 @@ public class BoardScreen extends JPanel {
         g2.fillRect(
             0, 
             0, 
-            getWidth(), 
-            getHeight()
+            (int) (getWidth() * SCALE), 
+            (int) (getHeight() * SCALE)
         );
 
         // Borda preta pequena para demarcar o tabuleiro
@@ -170,11 +248,11 @@ public class BoardScreen extends JPanel {
         g2.drawRect(
             0, 
             0,
-            getWidth() - 1, 
-            getHeight() - 1
+            (int) (getWidth() * SCALE) - 1, 
+            (int) (getHeight() * SCALE) - 1
         );
 
-        // Bases de cada jogador
+        // Bases de cada jogador    
         Color colorP1 = colorName(player1Color); // P1
         Color colorP2 = colorName(player2Color); // P2
         Color colorP3 = colorName(player3Color); // P3
@@ -195,20 +273,20 @@ public class BoardScreen extends JPanel {
                 // Desenha e atribui a cor para cada base
                 g2.setColor(colors[i]);
                 g2.fillRect(
-                    x, 
-                    y, 
-                    240, 
-                    240
+                    (int) (x * SCALE), 
+                    (int) (y * SCALE), 
+                    (int) (240 * SCALE), 
+                    (int) (240 * SCALE)
                 );
 
                 // Desenha uma borda preta ao redor de cada base e sua espessura
                 g2.setColor(Color.BLACK);
                 g2.setStroke(new java.awt.BasicStroke(2));
                 g2.drawRect(
-                    x, 
-                    y, 
-                    240, 
-                    240
+                    (int) (x * SCALE), 
+                    (int) (y * SCALE), 
+                    (int) (240 * SCALE), 
+                    (int)(240 * SCALE)
                 );
                 i++; // Aumenta o índice para percorrer todas as cores
                 
@@ -229,10 +307,10 @@ public class BoardScreen extends JPanel {
 
                 // Desenha os quadrados das casas horizontais
                 g2.drawRect(
-                    x, 
-                    y, 
-                    40,
-                    40
+                    (int) (x * SCALE), 
+                    (int) (y * SCALE), 
+                    (int) (40 * SCALE),
+                    (int) (40 * SCALE)
                 );
             }
         }
@@ -247,38 +325,41 @@ public class BoardScreen extends JPanel {
 
                 // Desenha os quadrados das casas verticais
                 g2.drawRect(
-                    x, 
-                    y, 
-                    40,
-                    40
+                    (int) (x * SCALE), 
+                    (int) (y * SCALE), 
+                    (int) (40 * SCALE),
+                    (int) (40 * SCALE)
                 );
             }
         }
 
-       // Desenho do quadrado central
-       // Desenha o triângulo debaixo do jogador 1
+        // Desenho do quadrado central
+        // Desenha o triângulo debaixo do jogador 1
         Polygon downTrianglePolygon = new Polygon();
-        downTrianglePolygon.addPoint(240, 360); // Canto inferior esquerdo do miolo
-        downTrianglePolygon.addPoint(360, 360); // Canto inferior direito do miolo
-        downTrianglePolygon.addPoint(300, 300); // Centro perfeito do tabuleiro
-
-        // Desenha o triângulo da esquerda do jogador 2
         Polygon leftTrianglePolygon = new Polygon();
-        leftTrianglePolygon.addPoint(240, 240); // Canto superior esquerdo do miolo
-        leftTrianglePolygon.addPoint(240, 360); // Canto inferior esquerdo do miolo
-        leftTrianglePolygon.addPoint(300, 300); // Centro perfeito do tabuleiro
-        
-        // Desenha o triângulo de cima do jogador 3
         Polygon upTrianglePolygon = new Polygon();
-        upTrianglePolygon.addPoint(240, 240); // Canto superior esquerdo do miolo
-        upTrianglePolygon.addPoint(360, 240); // Canto superior direito do miolo
-        upTrianglePolygon.addPoint(300, 300); // Centro perfeito do tabuleiro
-
-        // Desenha o triângulo da direita jogador 4
         Polygon rightTrianglePolygon = new Polygon();
-        rightTrianglePolygon.addPoint(360, 360); // Canto superior direito do miolo
-        rightTrianglePolygon.addPoint(360, 240); // Canto inferior direito do miolo
-        rightTrianglePolygon.addPoint(300, 300); // Centro perfeito do tabuleiro
+
+        // Montando o triângulo de Baixo (Geralmente associado ao P1)
+        downTrianglePolygon.addPoint((int) (240 * SCALE), (int) (360 * SCALE)); // Quina inferior esquerda
+        downTrianglePolygon.addPoint((int) (360 * SCALE), (int) (360 * SCALE)); // Quina inferior direita
+        downTrianglePolygon.addPoint((int) (300 * SCALE), (int) (300 * SCALE)); // Centro perfeito
+
+        // Montando o triângulo de Cima (Geralmente associado ao P3)
+        upTrianglePolygon.addPoint((int) (240 * SCALE), (int) (240 * SCALE));   // Quina superior esquerda
+        upTrianglePolygon.addPoint((int) (360 * SCALE), (int) (240 * SCALE));   // Quina superior direita
+        upTrianglePolygon.addPoint((int) (300 * SCALE), (int) (300 * SCALE));   // Centro perfeito
+
+        // Montando o triângulo da Direita (Geralmente associado ao P4)
+        rightTrianglePolygon.addPoint((int) (360 * SCALE), (int) (240 * SCALE)); // Quina superior direita
+        rightTrianglePolygon.addPoint((int) (360 * SCALE), (int) (360 * SCALE)); // Quina inferior direita
+        rightTrianglePolygon.addPoint((int) (300 * SCALE), (int) (300 * SCALE)); // Centro perfeito
+
+        // Montando o triângulo da Esquerda (Geralmente associado ao P2)
+        leftTrianglePolygon.addPoint((int) (240 * SCALE), (int) (240 * SCALE));  // Quina superior esquerda
+        leftTrianglePolygon.addPoint((int) (240 * SCALE), (int) (360 * SCALE));  // Quina inferior esquerda
+        leftTrianglePolygon.addPoint((int) (300 * SCALE), (int) (300 * SCALE));  // Centro perfeito
+      
 
         // Array para os triângulos de cada jogador
         Polygon[] trianglePolygon = {leftTrianglePolygon, downTrianglePolygon, upTrianglePolygon, rightTrianglePolygon};
@@ -296,7 +377,7 @@ public class BoardScreen extends JPanel {
             i++;
         }
         
-        // Loop para pintar a trilha do jogador 2 e 4 (esquerda para direita)
+        // Loop para aplicar a cor na trilha do jogador 2 e 4 (esquerda para direita)
         for (int x = 40; x <= 520; x += 40) {
             if (x >= 240 && x <= 320) continue; // Salta uma etapa da repetição não preencher o centro do tabuleiro
     
@@ -309,24 +390,24 @@ public class BoardScreen extends JPanel {
         
             // Desenha o quadrado uma única vez no código
             g2.fillRect(
-                x, 
-                280, 
-                40, 
-                40
+                (int) (x * SCALE), 
+                (int) (280 * SCALE), 
+                (int) (40 * SCALE), 
+                (int) (40 * SCALE)
             );
         
             // Desenha a borda
             g2.setColor(Color.BLACK);
             g2.setStroke(new java.awt.BasicStroke(1));
             g2.drawRect(
-                x, 
-                280, 
-                40, 
-                40
+                (int) (x * SCALE), 
+                (int) (280 * SCALE), 
+                (int) (40 * SCALE), 
+                (int) (40 * SCALE)
             );
         }
 
-        // Loop para pintar a trilha do jogador 1 e 3 (cima para baixo)
+        // Loop para aplicar a cor na trilha do jogador 1 e 3 (cima para baixo)
         for (int y = 40; y <= 520; y += 40) {
             if (y >= 240 && y <= 320) continue; // Salta uma etapa da repetição não preencher o centro do tabuleiro
             
@@ -339,25 +420,24 @@ public class BoardScreen extends JPanel {
         
             // Desenha o quadrado uma única vez no código
             g2.fillRect(
-                280, 
-                y, 
-                40, 
-                40
+                (int) (280 * SCALE), 
+                (int) (y * SCALE),
+                (int) (40 * SCALE), 
+                (int) (40 * SCALE)
             );
         
             // Desenha a borda
             g2.setColor(Color.BLACK);
             g2.setStroke(new java.awt.BasicStroke(1));
             g2.drawRect(
-                280, 
-                y, 
-                40, 
-                40
+                (int) (280 * SCALE), 
+                (int) (y * SCALE),
+                (int) (40 * SCALE), 
+                (int) (40 * SCALE)
             );
         }
 
         i = 0; // Como foi declarada anteriormente e utilizada no loop das cores dos triângulos, seu valor estava como "4". Repassada novamente para 0 seu valor e ser utilizado no loop abaixo
-
 
         // Loop para construir os quadrados da casa de saída dos jogadores 2 e 4 (direita e esquerda)
         for (int x = 40; x <= 520; x += 480) { // x assume 40 e 520
@@ -375,16 +455,21 @@ public class BoardScreen extends JPanel {
 
                     // Desenha o preenchimento da casa de saída
                     g2.fillRect(
-                        x, 
-                        y, 
-                        40, 
-                        40
+                        (int) (x * SCALE),
+                        (int) (y * SCALE),
+                        (int) (40 * SCALE), 
+                        (int) (40 * SCALE)
                     );
 
                     // Desenha a borda preta ao redor dela
                     g2.setColor(Color.BLACK);
                     g2.setStroke(new java.awt.BasicStroke(1));
-                    g2.drawRect(x, y, 40, 40);
+                    g2.drawRect(
+                        (int) (x * SCALE),
+                        (int) (y * SCALE),
+                        (int) (40 * SCALE),
+                        (int) (40 * SCALE)
+                    );
                 }
             }        
         }
@@ -404,19 +489,33 @@ public class BoardScreen extends JPanel {
                     }
 
                     // Desenha o preenchimento da casa de saída
-                    g2.fillRect(x, y, 40, 40);
+                    g2.fillRect(
+                        (int) (x * SCALE),
+                        (int) (y * SCALE),
+                        (int) (40 * SCALE),
+                        (int) (40 * SCALE)
+                    );
 
                     // Desenha a borda preta
                     g2.setColor(Color.BLACK);
                     g2.setStroke(new java.awt.BasicStroke(1));
-                    g2.drawRect(x, y, 40, 40);
+                    g2.drawRect(
+                        (int) (x * SCALE),
+                        (int) (y * SCALE),
+                        (int) (40 * SCALE),
+                        (int) (40 * SCALE)
+                    );
                 }
             }
         }
 
-        if (this.player1Pawn != null) {
-        this.player1Pawn.desenhar((Graphics2D) g);
-    }
+        if (this.player1Pawns != null) {
+            for (PlayerPawn pawn : player1Pawns) {
+                if (pawn != null) {
+                    pawn.desenhar((Graphics2D) g);
+                }
+            }
+        }
 
         // Libera os recursos do contexto gráfico 2D para evitar vazamentos de memória
         g2.dispose();
@@ -424,13 +523,13 @@ public class BoardScreen extends JPanel {
 
     // Métodos getters
     public PlayerPawn getPlayer1Pawn() {
-    return this.player1Pawn;
+        return this.player1Pawns[0];
     }
 
     /**
      * Permite que o GameManager consulte o vetor de coordenadas das casas do circuito.
      */
     public java.awt.Point[] getCaminhoCasas() {
-        return this.caminhoCasas;
+        return this.housesTrack;
     }
 }

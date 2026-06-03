@@ -2,12 +2,12 @@ package actions;
 
 import javax.swing.JOptionPane;
 import cards.CustomCards;
-import gui.windows.CardsPanel;
+import gui.windows.CardsContainer;
 import control.GameManager; // Certifique-se de importar o GameManager
 
 public class CardAnswerValidation {
 
-    public static void validar(String opcaoEscolhida, CustomCards carta, CardsPanel painelPai) {
+    public static void validar(String opcaoEscolhida, CustomCards carta, CardsContainer painelPai) {
         if (carta == null || painelPai == null) return;
 
        boolean acertou = opcaoEscolhida.trim().equalsIgnoreCase(carta.getCardAnswer().trim());

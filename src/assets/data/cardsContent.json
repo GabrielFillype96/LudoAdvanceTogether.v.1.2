@@ -24,7 +24,7 @@
     ],
     "respostaCorreta": "180",
     "efeito": "AVANÇAR",
-    "valorEfeito": "6/6",
+    "valorEfeito": "1/6",
     "iconePeao": "peao_verde.png"
   },
   {
@@ -60,7 +60,7 @@
     "respostaCorreta": "Sim",
     "dificuldade": "FÁCIL",
     "efeito":"AVANÇAR",
-    "valorEfeito":"6/6",
+    "valorEfeito":"1/6",
     "iconePeao":"peao_vermelho.png"
 },
 {

@@ -6,10 +6,8 @@ package gui.windows;
 // Import interno
 import cards.CardManager;
 import cards.CustomCards;
-import gui.theme.GameColors;
 
 // Import externo
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -23,20 +21,21 @@ import javax.swing.JPanel;
  * Painel base responsável por carregar, posicionar e gerenciar 
  * a exibição visual das novas cartas dinâmicas vindas do JSON.
  */
-public class CardsPanel extends JPanel {
+public class CardsContainer extends JPanel {
 
     // VARIÁVEIS DE INSTÂNCIA
     private List<CustomCards> cardList;
     private CustomCards activeCard;
     private Image deckImg; // Imagem do baralho para mostrar atrás das cartas
     private static final String deckImageURL = "/assets/deckCardImage_220x340.png"; // Caminho da imagem do baralho
+    private static final double SCALE = 1.5; // Fator de escala para ajustar as dimensões do painel e das cartas
     
 
     /**
      * Construtor atualizado: agora ele mesmo carrega as cartas do tipo solicitado
      * @param difficultyOrType Ex: "FÁCIL", "SORTE", "AZAR"
      */
-    public CardsPanel(String difficultyOrType) {
+    public CardsContainer(String difficultyOrType) {
         // Mantém as dimensões de 200x340 definidas no layout
         Dimension cardDimension = new Dimension( // Define as dimensões do painel que conterá as cartas
             200, 
