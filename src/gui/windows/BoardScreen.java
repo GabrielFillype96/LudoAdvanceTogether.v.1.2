@@ -93,7 +93,8 @@ public class BoardScreen extends JPanel {
         for (int i = 0; i < player1Pawns.length; i++) {
             System.out.println("Atribuindo coordenada visual para o peão " + (i+1) + " do Jogador 1 na casa " + j);
             if (housesTrack != null && housesTrack.length > 0) {
-            player1Pawns[i].setCoordenadaVisual(housesTrack[j]);
+                player1Pawns[i].setCoordenadaVisual(housesTrack[j]);
+                player1Pawns[i].setPosicaoLogicaAtual(j);
             };
             j++;
         }
@@ -522,8 +523,15 @@ public class BoardScreen extends JPanel {
     }
 
     // Métodos getters
-    public PlayerPawn getPlayer1Pawn() {
-        return this.player1Pawns[0];
+    /**
+    * Retorna o peão específico do jogador 1 baseado no índice (0 a 3).
+    * Para pegar o peão 1 (pawn1P1), passe o índice 0.
+    */
+    public PlayerPawn getPlayer1Pawn(int index) {
+        if (index >= 0 && index < player1Pawns.length) {
+            return this.player1Pawns[index];
+        }
+        return null;
     }
 
     /**

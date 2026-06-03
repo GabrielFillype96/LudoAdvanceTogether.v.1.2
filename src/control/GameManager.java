@@ -27,7 +27,7 @@ public class GameManager {
             return;
         }
 
-        PlayerPawn p1 = tabuleiro.getPlayer1Pawn();
+        PlayerPawn p1 = tabuleiro.getPlayer1Pawn(1);
         Point[] mapaCasas = tabuleiro.getCaminhoCasas();
 
         if (p1 == null || mapaCasas == null) {
@@ -58,9 +58,16 @@ public class GameManager {
                     if (valorDado == 1 || valorDado == 6) {
                         estaNaBase = false;
                         System.out.println("[GameManager] " + p1.getPlayerName() + " tirou " + valorDado + " e SAIU DA BASE!");
+
+                
+
+                        System.out.println("Posição atual: " + posicaoAtual);
+                        int novaPosicaoLogica = 4; // Ex: se tirou 6, vai para a casa de índice 6
+
+                        
+                        System.out.println("Nova posição logica: " + novaPosicaoLogica);
                         
                         // tentar utilizar um switch case para as diferentes saídas de casas
-                        int novaPosicaoLogica = 4; // Ex: se tirou 6, vai para a casa de índice 6
                         
                         if (novaPosicaoLogica >= mapaCasas.length) {
                             novaPosicaoLogica = mapaCasas.length - 1;
@@ -70,8 +77,9 @@ public class GameManager {
                         
                         // CORREÇÃO: Força o ponto inicial visual como -1 de forma abstrata 
                         // para que o primeiro passo intermediário seja obrigatoriamente a Casa [0]
-                        iniciarAnimacaoSuave(p1, -1, novaPosicaoLogica, mapaCasas, valorDado == 6);
+                        iniciarAnimacaoSuave(p1, posicaoAtual, novaPosicaoLogica, mapaCasas, valorDado == 6);
                         return;
+                        
                     } else {
                         System.out.println("[GameManager] " + p1.getPlayerName() + " tirou " + valorDado + ", mas precisa de 1 ou 6 para sair da base.");
                         return;
