@@ -19,7 +19,7 @@ public class CardAnswerValidation {
                 JOptionPane.INFORMATION_MESSAGE);
                 
             // CHAMADA REAL: Aciona as regras do peão e o movimento deslizante
-            GameManager.processarResultadoCarta(true, carta.getCardValueText(), carta.getCardEffect());
+            GameManager.cardResultVerification(true, carta.getCardValueText(), carta.getCardEffect());
 
         } else {
             JOptionPane.showMessageDialog(painelPai, 
@@ -28,7 +28,7 @@ public class CardAnswerValidation {
                 JOptionPane.ERROR_MESSAGE);
                 
             // Passa falso para a regra de negócio processar a punição ou retenção
-            GameManager.processarResultadoCarta(false, carta.getCardValueText(), carta.getCardEffect());
+            GameManager.cardResultVerification(false, carta.getCardValueText(), carta.getCardEffect());
         }
 
         // --- MECÂNICA DE AVANÇAR DE CARTA ---

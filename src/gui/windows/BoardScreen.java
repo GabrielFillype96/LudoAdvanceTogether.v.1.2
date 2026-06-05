@@ -35,7 +35,7 @@ public class BoardScreen extends JPanel {
     private PlayerPawn pawn1P1, pawn2P1, pawn3P1, pawn4P1;
     private PlayerPawn[] player1Pawns = {pawn1P1, pawn2P1, pawn3P1, pawn4P1};
         
-    private java.awt.Point[] housesTrack;
+    private java.awt.Point[] player1Path, player2Path, player3Path, player4Path;
 
     
     // Construtor do tabuleiro
@@ -59,7 +59,7 @@ public class BoardScreen extends JPanel {
         setLayout(null); // Layout nulo torna o painel absoluto 
 
         // Mapeia as coordenadas das casas
-        inicializarCaminhoTabuleiro();
+        pawnPath();
 
         JLabel player1Label = new JLabel(
             "JOGADOR 1: " + player1Name, 
@@ -82,9 +82,6 @@ public class BoardScreen extends JPanel {
             );
             System.out.println("Instanciando peão " + (i+1) + " do Jogador 1 com a imagem: " + player1PawnImg);
         }
-        
-        // Atribui as coordenadas do tabuleiro
-        inicializarCaminhoTabuleiro();
 
 
         
@@ -92,14 +89,14 @@ public class BoardScreen extends JPanel {
         //Loop para atribuir a coordenada inicial dos pões do jogador 1
         for (int i = 0; i < player1Pawns.length; i++) {
             System.out.println("Atribuindo coordenada visual para o peão " + (i+1) + " do Jogador 1 na casa " + j);
-            if (housesTrack != null && housesTrack.length > 0) {
-                player1Pawns[i].setCoordenadaVisual(housesTrack[j]);
+            if (player1Path != null && player1Path.length > 0) {
+                player1Pawns[i].setCoordenadaVisual(player1Path[j]);
                 player1Pawns[i].setPosicaoLogicaAtual(j);
             };
             j++;
         }
 
-        control.GameManager.setTabuleiro(this);
+        control.GameManager.setBoardGame(this);
     }
 
     private Color colorName(String colorName) {
@@ -118,104 +115,110 @@ public class BoardScreen extends JPanel {
     * Mapeia as coordenadas físicas (X, Y) do centro de cada casa do circuito 
     * a partir do ponto de partida do Jogador 1 (Azul, Canto Inferior Esquerdo).
     */
-    private void inicializarCaminhoTabuleiro() {
-    // Vamos mapear um circuito de teste com as casas principais transitáveis.
-    // Você pode aumentar o tamanho do array conforme adicionar mais casas ao circuito.
-    housesTrack = new java.awt.Point[61];
+   /**
+    * Mapeia as coordenadas físicas (X, Y) do centro de cada casa do circuito 
+    * a partir do ponto de partida do Jogador 1 (Azul).
+    */
+    private void pawnPath() {
+        
+        // CORREÇÃO: Removido o "player1Path[X] =" de dentro da atribuição
+        player1Path = new java.awt.Point[] {
+            // Local de "nascimento" / Spawn dos peões do jogador 1
+            new java.awt.Point((int)(40 * SCALE), (int)(400 * SCALE)),  // [0] Casa inicial peão 1
+            new java.awt.Point((int)(40 * SCALE), (int)(520 * SCALE)),  // [1] Casa inicial peão 2
+            new java.awt.Point((int)(160 * SCALE), (int)(400 * SCALE)), // [2] Casa inicial peão 3
+            new java.awt.Point((int)(160 * SCALE), (int)(520 * SCALE)), // [3] Casa inicial peão 4
 
-    // --- TRACKING DO CIRCUITO (A partir do canto inferior esquerdo) ---
-    // Cada ponto representa o canto superior esquerdo (X, Y) do quadrado de 60x60.
-   // --- OS 4 ÚLTIMOS PASSADOS PARA SEREM OS 4 PRIMEIROS ---
-    housesTrack[0]  = new java.awt.Point((int)(40 * SCALE), (int)(440 * SCALE)); // Casa final do jogador 1 (casa 58 - centro do tabuleiro)
-    housesTrack[1]  = new java.awt.Point((int)(40 * SCALE), (int)(520 * SCALE)); // Casa Inicial (Saída do Azul)
-    housesTrack[2]  = new java.awt.Point((int)(120 * SCALE), (int)(440 * SCALE)); // Casa Inicial (Saída do Azul)
-    housesTrack[3]  = new java.awt.Point((int)(120 * SCALE), (int)(520 * SCALE)); // Casa Inicial (Saída do Azul)
+            // Circuito do tabuleiro
+            // Caminho do jogador 1 - subindo em direção ao centro do tabuleiro
+            new java.awt.Point((int)(240 * SCALE), (int)(520 * SCALE)), // [4]
+            new java.awt.Point((int)(240 * SCALE), (int)(480 * SCALE)), // [5]
+            new java.awt.Point((int)(240 * SCALE), (int)(440 * SCALE)), // [6]
+            new java.awt.Point((int)(240 * SCALE), (int)(400 * SCALE)), // [7]
+            new java.awt.Point((int)(240 * SCALE), (int)(360 * SCALE)), // [8]
+            
+            // Caminho do jogador 1 - indo para esquerda em direção a borda esquerda do tabuleiro
+            new java.awt.Point((int)(200 * SCALE), (int)(320 * SCALE)),  // [9]
+            new java.awt.Point((int)(160 * SCALE), (int)(320 * SCALE)),  // [10]
+            new java.awt.Point((int)(120 * SCALE), (int)(320 * SCALE)),  // [11]
+            new java.awt.Point((int)(80 * SCALE),  (int)(320 * SCALE)),  // [12]
+            new java.awt.Point((int)(40* SCALE),   (int)(320 * SCALE)),  // [13]
+            new java.awt.Point((int)(0 * SCALE),    (int)(320 * SCALE)), // [14]
 
-    // --- CIRCUITO ORIGINAL (SEGUIDO DOS ÍNDICES [4] EM DIANTE, ATUALIZADOS) ---
-    // Caminho do jogador 1 - subindo em direção ao centro do tabuleiro
-    housesTrack[4]  = new java.awt.Point((int)(240 * SCALE), (int)(520 * SCALE));
-    housesTrack[5]  = new java.awt.Point((int)(240 * SCALE), (int)(480 * SCALE));
-    housesTrack[6]  = new java.awt.Point((int)(240 * SCALE), (int)(440 * SCALE));
-    housesTrack[7]  = new java.awt.Point((int)(240 * SCALE), (int)(400 * SCALE));
-    housesTrack[8]  = new java.awt.Point((int)(240 * SCALE), (int)(360 * SCALE));
-    
-    // Caminho do jogador 1 - indo para esquerda em direção a borda esquerda do tabuleiro
-    housesTrack[9]  = new java.awt.Point((int)(200 * SCALE), (int)(320 * SCALE));
-    housesTrack[10] = new java.awt.Point((int)(160 * SCALE), (int)(320 * SCALE));
-    housesTrack[11] = new java.awt.Point((int)(120 * SCALE), (int)(320 * SCALE));
-    housesTrack[12] = new java.awt.Point((int)(80 * SCALE),  (int)(320 * SCALE));
-    housesTrack[13] = new java.awt.Point((int)(40* SCALE),   (int)(320 * SCALE));
-    housesTrack[14] = new java.awt.Point((int)(0 * SCALE),    (int)(320 * SCALE));
+            // Caminho do jogador 1 - subindo no braço esquerdo do tabuleiro
+            new java.awt.Point((int)(0 * SCALE),    (int)(280 * SCALE)), // [15]
+            new java.awt.Point((int)(0 * SCALE),    (int)(240 * SCALE)), // [16]
+            
+            // Caminho do jogador 1 - indo para direita em direção ao centro do tabuleiro
+            new java.awt.Point((int)(40 * SCALE),  (int)(240 * SCALE)), // [17]
+            new java.awt.Point((int)(80 * SCALE),  (int)(240 * SCALE)), // [18]
+            new java.awt.Point((int)(120 * SCALE), (int)(240 * SCALE)), // [19]
+            new java.awt.Point((int)(160 * SCALE), (int)(240 * SCALE)), // [20]
+            new java.awt.Point((int)(200 * SCALE), (int)(240 * SCALE)), // [21]
 
-    // Caminho do jogador 1 - subindo no braço esquerdo do tabuleiro
-    housesTrack[15] = new java.awt.Point((int)(0 * SCALE),    (int)(280 * SCALE));
-    housesTrack[16] = new java.awt.Point((int)(0 * SCALE),    (int)(240 * SCALE));
-    
-    // Caminho do jogador 1 - indo para direita em direção ao centro do tabuleiro
-    housesTrack[17] = new java.awt.Point((int)(40 * SCALE),  (int)(240 * SCALE));
-    housesTrack[18] = new java.awt.Point((int)(80 * SCALE),  (int)(240 * SCALE));
-    housesTrack[19] = new java.awt.Point((int)(120 * SCALE), (int)(240 * SCALE));
-    housesTrack[20] = new java.awt.Point((int)(160 * SCALE), (int)(240 * SCALE));
-    housesTrack[21] = new java.awt.Point((int)(200 * SCALE), (int)(240 * SCALE));
+            // Caminho do jogador 1 - subindo em direção a borda superior do tabuleiro
+            new java.awt.Point((int)(240 * SCALE), (int)(200 * SCALE)), // [22]
+            new java.awt.Point((int)(240 * SCALE), (int)(160 * SCALE)), // [23]
+            new java.awt.Point((int)(240 * SCALE), (int)(120 * SCALE)), // [24]
+            new java.awt.Point((int)(240 * SCALE), (int)(80 * SCALE)),  // [25]
+            new java.awt.Point((int)(240 * SCALE), (int)(40 * SCALE)),  // [26]
+            new java.awt.Point((int)(240 * SCALE), (int)(0 * SCALE)),   // [27]
+            
+            // Caminho do jogador 1 - indo para direita no braço superior do tabuleiro
+            new java.awt.Point((int)(280 * SCALE), (int)(0 * SCALE)),   // [28]
+            new java.awt.Point((int)(320 * SCALE), (int)(0 * SCALE)),   // [29]
 
-    // Caminho do jogador 1 - subindo em direção a borda superior do tabuleiro
-    housesTrack[22] = new java.awt.Point((int)(240 * SCALE), (int)(200 * SCALE));
-    housesTrack[23] = new java.awt.Point((int)(240 * SCALE), (int)(160 * SCALE));
-    housesTrack[24] = new java.awt.Point((int)(240 * SCALE), (int)(120 * SCALE));
-    housesTrack[25] = new java.awt.Point((int)(240 * SCALE), (int)(80 * SCALE));
-    housesTrack[26] = new java.awt.Point((int)(240 * SCALE), (int)(40 * SCALE));
-    housesTrack[27] = new java.awt.Point((int)(240 * SCALE), (int)(0 * SCALE));
-    
-    // Caminho do jogador 1 - indo para direita no braço superior do tabuleiro
-    housesTrack[28] = new java.awt.Point((int)(280 * SCALE), (int)(0 * SCALE));
-    housesTrack[29] = new java.awt.Point((int)(320 * SCALE), (int)(0 * SCALE));
+            // Caminho do jogador 1 - descendo para o centro do tabuleiro
+            new java.awt.Point((int)(320 * SCALE), (int)(40 * SCALE)),  // [30]
+            new java.awt.Point((int)(320 * SCALE), (int)(80 * SCALE)),  // [31]
+            new java.awt.Point((int)(320 * SCALE), (int)(120 * SCALE)), // [32]
+            new java.awt.Point((int)(320 * SCALE), (int)(160 * SCALE)), // [33]
+            new java.awt.Point((int)(320 * SCALE), (int)(200 * SCALE)), // [34]
+            
+            // Caminho do jogador 1 - indo para direita em direção a borda do direita do tabuleiro
+            new java.awt.Point((int)(360 * SCALE), (int)(240 * SCALE)), // [35]
+            new java.awt.Point((int)(400 * SCALE), (int)(240 * SCALE)), // [36]
+            new java.awt.Point((int)(440 * SCALE), (int)(240 * SCALE)), // [37]
+            new java.awt.Point((int)(480 * SCALE), (int)(240 * SCALE)), // [38]
+            new java.awt.Point((int)(520 * SCALE), (int)(240 * SCALE)), // [39]
+            new java.awt.Point((int)(560 * SCALE), (int)(240 * SCALE)), // [40]
+            
+            // Caminho do jogador 1 - descendo no braço direito do tabuleiro
+            new java.awt.Point((int)(560 * SCALE), (int)(280 * SCALE)), // [41]
+            new java.awt.Point((int)(560 * SCALE), (int)(320 * SCALE)), // [42]
+            
+            // Caminho do jogador 1 - indo para esquerda em direção ao centro do tabuleiro
+            new java.awt.Point((int)(520 * SCALE), (int)(320 * SCALE)), // [43]
+            new java.awt.Point((int)(480 * SCALE), (int)(320 * SCALE)), // [44]
+            new java.awt.Point((int)(440 * SCALE), (int)(320 * SCALE)), // [45]
+            new java.awt.Point((int)(400 * SCALE), (int)(320 * SCALE)), // [46]
+            new java.awt.Point((int)(360 * SCALE), (int)(320 * SCALE)), // [47]
 
-    // Caminho do jogador 1 - descendo para o centro do tabuleiro
-    housesTrack[30] = new java.awt.Point((int)(320 * SCALE), (int)(40 * SCALE));
-    housesTrack[31] = new java.awt.Point((int)(320 * SCALE), (int)(80 * SCALE));
-    housesTrack[32] = new java.awt.Point((int)(320 * SCALE), (int)(120 * SCALE));
-    housesTrack[33] = new java.awt.Point((int)(320 * SCALE), (int)(160 * SCALE));
-    housesTrack[34] = new java.awt.Point((int)(320 * SCALE), (int)(200 * SCALE));
-    
-    // Caminho do jogador 1 - indo para direita em direção a borda do direita do tabuleiro
-    housesTrack[35] = new java.awt.Point((int)(360 * SCALE), (int)(240 * SCALE));
-    housesTrack[36] = new java.awt.Point((int)(400 * SCALE), (int)(240 * SCALE));
-    housesTrack[37] = new java.awt.Point((int)(440 * SCALE), (int)(240 * SCALE));
-    housesTrack[38] = new java.awt.Point((int)(480 * SCALE), (int)(240 * SCALE));
-    housesTrack[39] = new java.awt.Point((int)(520 * SCALE), (int)(240 * SCALE));
-    housesTrack[40] = new java.awt.Point((int)(560 * SCALE), (int)(240 * SCALE));
-    
-    // Caminho do jogador 1 - descendo no braço direito do tabuleiro
-    housesTrack[41] = new java.awt.Point((int)(560 * SCALE), (int)(280 * SCALE));
-    housesTrack[42] = new java.awt.Point((int)(560 * SCALE), (int)(320 * SCALE));
-    
-    // Caminho do jogador 1 - indo para esquerda em direção ao centro do tabuleiro
-    housesTrack[43] = new java.awt.Point((int)(520 * SCALE), (int)(320 * SCALE));
-    housesTrack[44] = new java.awt.Point((int)(480 * SCALE), (int)(320 * SCALE));
-    housesTrack[45] = new java.awt.Point((int)(440 * SCALE), (int)(320 * SCALE));
-    housesTrack[46] = new java.awt.Point((int)(400 * SCALE), (int)(320 * SCALE));
-    housesTrack[47] = new java.awt.Point((int)(360 * SCALE), (int)(320 * SCALE));
+            // Caminho do jogador 1 - descendo em direção a borda inferior do tabuleiro
+            new java.awt.Point((int)(320 * SCALE), (int)(360 * SCALE)), // [48]
+            new java.awt.Point((int)(320 * SCALE), (int)(400 * SCALE)), // [49]   
+            new java.awt.Point((int)(320 * SCALE), (int)(440 * SCALE)), // [50]
+            new java.awt.Point((int)(320 * SCALE), (int)(480 * SCALE)), // [51]
+            new java.awt.Point((int)(320 * SCALE), (int)(520 * SCALE)), // [52]
+            new java.awt.Point((int)(320 * SCALE), (int)(560 * SCALE)), // [53]
+            
+            // Caminho do jogador 1 - indo para esquerda no braço inferior do tabuleiro
+            new java.awt.Point((int)(280 * SCALE), (int)(560 * SCALE)), // [54]
+            
+            // Caminho do jogador 1 - subindo em direção ao centro do tabuleiro (caminho final do jogador 1)
+            new java.awt.Point((int)(280 * SCALE), (int)(520 * SCALE)), // [55]
+            new java.awt.Point((int)(280 * SCALE), (int)(480 * SCALE)), // [56]
+            new java.awt.Point((int)(280 * SCALE), (int)(440 * SCALE)), // [57]
+            new java.awt.Point((int)(280 * SCALE), (int)(400 * SCALE)), // [58]
+            new java.awt.Point((int)(280 * SCALE), (int)(360 * SCALE)), // [59]
+            new java.awt.Point((int)(280 * SCALE), (int)(320 * SCALE))  // [60] Casa final (centro)
+        };
 
-    // Caminho do jogador 1 - descendo em direção a borda inferior do tabuleiro
-    housesTrack[48] = new java.awt.Point((int)(320 * SCALE), (int)(360 * SCALE));
-    housesTrack[49] = new java.awt.Point((int)(320 * SCALE), (int)(400 * SCALE));   
-    housesTrack[50] = new java.awt.Point((int)(320 * SCALE), (int)(440 * SCALE));
-    housesTrack[51] = new java.awt.Point((int)(320 * SCALE), (int)(480 * SCALE));
-    housesTrack[52] = new java.awt.Point((int)(320 * SCALE), (int)(520 * SCALE));
-    housesTrack[53] = new java.awt.Point((int)(320 * SCALE), (int)(560 * SCALE));
-    
-    // Caminho do jogador 1 - indo para esquerda no braço inferior do tabuleiro
-    housesTrack[54] = new java.awt.Point((int)(280 * SCALE), (int)(560 * SCALE));
-    
-    // Caminho do jogador 1 - subindo em direção ao centro do tabuleiro (caminho final do jogador 1)
-    housesTrack[55] = new java.awt.Point((int)(280 * SCALE), (int)(520 * SCALE));
-    housesTrack[56] = new java.awt.Point((int)(280 * SCALE), (int)(480 * SCALE));
-    housesTrack[57] = new java.awt.Point((int)(280 * SCALE), (int)(440 * SCALE));
-    housesTrack[58] = new java.awt.Point((int)(280 * SCALE), (int)(400 * SCALE));
-    housesTrack[59] = new java.awt.Point((int)(280 * SCALE), (int)(360 * SCALE));
-    housesTrack[60] = new java.awt.Point((int)(280 * SCALE), (int)(320 * SCALE)); // Casa final do jogador 1 (centro do tabuleiro)
-
-}
+        // Quando for criar os outros jogadores, você fará exatamente igual para eles aqui:
+        // player2Path = new java.awt.Point[] { ... };
+        // player3Path = new java.awt.Point[] { ... };
+        // player4Path = new java.awt.Point[] { ... };
+    }
 
     // Método para desenhar o tabuleiro do jogo
     // @Override indica que o método "paintComponent" está sendo sobrescrito da classe pai (JPanel). Serve como uma espécie de "guarda-costas" para garantir que estamos realmente sobrescrevendo um método existente e não criando um novo método por engano.
@@ -510,6 +513,38 @@ public class BoardScreen extends JPanel {
             }
         }
 
+        g2.setColor(Color.WHITE); // Define a cor como Branco para o preenchimento
+       
+        // Garante que o caminho já foi gerado para evitar erros de NullPointer
+        if (this.player1Path != null) {
+            for (i = 0; i <= 3; i++) {
+                java.awt.Point pontoSpawn = this.player1Path[i];
+                
+                if (pontoSpawn != null) {
+                    // Definimos o tamanho do círculo branco (ajustado para a proporção do peão)
+                    int diametroCirculo = (int) (65 * SCALE); 
+                    
+                    // Alinhamento preciso: centraliza o círculo exatamente na mesma lógica do quadrado da casa (40 * SCALE)
+                    int offset = (int) (((40 * SCALE) - diametroCirculo) / 2);
+                    
+                    int xCirculo = pontoSpawn.x + offset - 9;
+                    int yCirculo = pontoSpawn.y + offset - 9;
+
+                    // fillOval pinta o círculo todo por dentro
+                    g2.fillOval(xCirculo, yCirculo, diametroCirculo, diametroCirculo);
+                    
+                    // Opcional: Desenha uma borda preta bem fina ao redor do círculo branco para dar destaque
+                    g2.setColor(Color.BLACK);
+                    g2.setStroke(new java.awt.BasicStroke(1));
+                    g2.drawOval(xCirculo, yCirculo, diametroCirculo, diametroCirculo);
+                    
+                    // Retorna a cor para branco para o próximo ciclo do loop
+                    g2.setColor(Color.WHITE); 
+                }
+            }
+        }
+
+        // Loop responsável por desenhar os peões no tabuleiro
         if (this.player1Pawns != null) {
             for (PlayerPawn pawn : player1Pawns) {
                 if (pawn != null) {
@@ -538,6 +573,6 @@ public class BoardScreen extends JPanel {
      * Permite que o GameManager consulte o vetor de coordenadas das casas do circuito.
      */
     public java.awt.Point[] getCaminhoCasas() {
-        return this.housesTrack;
+        return this.player1Path;
     }
 }

@@ -27,13 +27,14 @@ public class CardsContainer extends JPanel {
     private List<CustomCards> cardList;
     private CustomCards activeCard;
     private Image deckImg; // Imagem do baralho para mostrar atrás das cartas
-    private static final String deckImageURL = "/assets/deckCardImage_220x340.png"; // Caminho da imagem do baralho
+    private static final String DECK_IMG_URL = "/assets/deckCardImage_220x340.png"; // Caminho da imagem do baralho
     private static final double SCALE = 1.5; // Fator de escala para ajustar as dimensões do painel e das cartas
+    //private static final Dimension CARD_DIMENSION = Dimension((int) (200 * SCALE), (int) (320 * SCALE));
     
 
     /**
      * Construtor atualizado: agora ele mesmo carrega as cartas do tipo solicitado
-     * @param difficultyOrType Ex: "FÁCIL", "SORTE", "AZAR"
+     * @param difficultyOrType Tipo da carta Ex: "FÁCIL", "SORTE", "AZAR"
      */
     public CardsContainer(String difficultyOrType) {
         // Mantém as dimensões de 200x340 definidas no layout
@@ -48,17 +49,17 @@ public class CardsContainer extends JPanel {
 
         // Poderia ser utilizado o método "try/catch" para tratamento de erros, mas o if/else é mais sútil e simples
         // Carrega a imagem do baralho para usar como fundo das cartas
-        java.net.URL deckImagePath = getClass().getResource(deckImageURL);
+        java.net.URL deckImagePath = getClass().getResource(DECK_IMG_URL);
         if (deckImagePath != null) {
             // Se encontrou a imagem, carrega e armazena na variável deckImg
             System.out.println(
-                "[CardsPanel] Imagem do baralho encontrada em: " + deckImageURL
+                "[CardsContainer] Imagem do baralho encontrada em: " + DECK_IMG_URL
             );
             this.deckImg = new ImageIcon(deckImagePath).getImage();
         } else {
             // Se não encontrou a imagem, imprime um erro no console
             System.err.println(
-                "[CardsPanel] Erro: Imagem do baralho não encontrada em /assets/images/deckCardImage_220x340.png"
+                "[CardsContainer] Erro: Imagem do baralho não encontrada em /assets/images/deckCardImage_220x340.png"
             );
         }
 
@@ -105,7 +106,6 @@ public class CardsContainer extends JPanel {
     // Sobrescreve o método de pintura para desenhar o fundo do baralho atrás das cartas
     @Override
     protected void paintComponent(Graphics g) {
-
         // Estrutura padrão do "paintComponent" para garantir que o fundo seja desenhado corretamente
         super.paintComponent(g);
 

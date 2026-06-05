@@ -7,7 +7,7 @@ import gui.windows.WindowManager;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-public class Main {
+public class Main { 
     public static void main(String[] args) throws Exception {
         // CORREÇÃO 1: Propriedade definida ANTES de iniciar a Thread do Swing
         System.setProperty("sun.java2d.uiScale", "1");
