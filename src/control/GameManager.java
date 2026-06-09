@@ -7,7 +7,7 @@ import javax.swing.Timer;
 import javax.swing.JOptionPane;
 
 public class GameManager {
-    
+    // VARIÁVEIS DE INSTÂNCIA
     private static BoardScreen boardGame;
     private static Timer timerAnimation; // Variável para armazenar o método Timer
     private static boolean isAtBase = true; // Controle se o peão ainda não saiu para o circuito
@@ -49,7 +49,7 @@ public class GameManager {
         // Se o jogador errou a carta (diferente de "correct"), não acontece nada
         if (!correct) {
             System.out.println(
-                "[GameManager] Resposta incorreta. O peão " + p1.getPlayerName() + " permaneceu na casa " + p1.getPosicaoLogicaAtual()
+                "[GameManager] Resposta incorreta. O peão " + p1.getPlayerName() + " permaneceu na casa " + p1.getPawnCurrentPos()
             );
             return;
         }
@@ -67,7 +67,7 @@ public class GameManager {
                 }
 
                 int valorDado = Integer.parseInt(cardValueTreated);
-                int posicaoAtual = p1.getPosicaoLogicaAtual();
+                int posicaoAtual = p1.getPawnCurrentPos();
 
                 // Caso especial: O peão está saindo da base neste turno
                 if (isAtBase) {
@@ -89,7 +89,7 @@ public class GameManager {
                             novaPosicaoLogica = mapaCasas.length - 1;
                         }
                         
-                        p1.setPosicaoLogicaAtual(novaPosicaoLogica);
+                        p1.setPawnCurrentPos(novaPosicaoLogica);
                         
                         // CORREÇÃO: Força o ponto inicial visual como -1 de forma abstrata 
                         // para que o primeiro passo intermediário seja obrigatoriamente a Casa [0]
@@ -109,7 +109,7 @@ public class GameManager {
                     novaPosicaoLogica = mapaCasas.length - 1;
                 }
 
-                p1.setPosicaoLogicaAtual(novaPosicaoLogica);
+                p1.setPawnCurrentPos(novaPosicaoLogica);
                 pawnMovement(p1, posicaoAtual, novaPosicaoLogica, mapaCasas, valorDado == 6, false);
 
             } catch (NumberFormatException e) {
@@ -152,10 +152,17 @@ public class GameManager {
         final int[] STEP_INDEX = {0}; // Lista que armazena o número de casas que o peão já percorreu.
 
         // Capturam a posição real em pixels onde o peão está no exato momento.
-        final double[] VISUAL_POS_X = {playerPawn.getCoordenadaVisual().getX()}; // Pega a coordenada "x" do peão no momento exato que ele está desenhado na tela e adiciona a lista "VISUAL_POS_X"
-        final double[] VISUAL_POS_Y = {playerPawn.getCoordenadaVisual().getY()};// Pega a coordenada "y" do peão no momento exato que ele está desenhado na tela a lista "VISUAL_POS_Y"
+        final double[] VISUAL_POS_X = {playerPawn.getX()}; // Pega a coordenada "x" do peão no momento exato que ele está desenhado na tela e adiciona a lista "VISUAL_POS_X"
+        final double[] VISUAL_POS_Y = {playerPawn.getY()};// Pega a coordenada "y" do peão no momento exato que ele está desenhado na tela a lista "VISUAL_POS_Y"
         final int SPEED = 8; // Quantos pixels o peão irá andar em 0.015seg
 
+        // Ativa a trava na classe "PlayerPawn" para impedir que o peão bug ao "pular" enquanto se movimenta
+        playerPawn.setMoving(true);
+
+        // Força o peão a parar de pular se o mouse estiver em cima dele
+        playerPawn.stopBoardPawnShake();
+
+        // Cria uma classe anônima
         timerAnimation = new Timer(15, new java.awt.event.ActionListener() {
             @Override
             // Método para executar uma ação repetidamente a cada intervalo de tempo determinado (0.015seg)
@@ -191,8 +198,11 @@ public class GameManager {
                     VISUAL_POS_Y[0] = intermediateSteps.getY();
 
                     // "Seta" o peão para a coordenada do destino
-                    playerPawn.setCoordenadaVisual(intermediateSteps);
+                    playerPawn.setPawnVisualCoordinates(intermediateSteps);
                     
+                    // Permite que o peão possa "pular" novamente
+                    playerPawn.setMoving(false);
+
                     // Redesenha o tabuleiro
                     boardGame.repaint();
 
@@ -206,8 +216,7 @@ public class GameManager {
                     VISUAL_POS_Y[0] += (dy / remainingDistance) * SPEED;
                     
                     // A cada frame é inserida essa nova posição somada e o paintComponent "repinta" o peão nela
-                    playerPawn.setCoordenadaVisual(new Point((int) VISUAL_POS_X[0], (int) VISUAL_POS_Y[0]));
-                    boardGame.repaint();
+                    playerPawn.setPawnVisualCoordinates(new Point((int) VISUAL_POS_X[0], (int) VISUAL_POS_Y[0]));
                 }
             }
         });

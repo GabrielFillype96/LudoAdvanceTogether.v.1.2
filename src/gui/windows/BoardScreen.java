@@ -15,14 +15,19 @@ import java.awt.RenderingHints;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+
+import control.PawnControlManager;
+
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.Dimension;
+import java.awt.Point;
 
 public class BoardScreen extends JPanel {
 
     // VARIÁVEIS DE INSTÂNCIA
+    private PawnControlManager pawnControlManager;
     private String player1Name, player2Name, player3Name, player4Name;
     private String player1Color, player2Color, player3Color, player4Color;
     private static final double SCALE = 1.5;
@@ -34,7 +39,6 @@ public class BoardScreen extends JPanel {
     );
     private PlayerPawn pawn1P1, pawn2P1, pawn3P1, pawn4P1;
     private PlayerPawn[] player1Pawns = {pawn1P1, pawn2P1, pawn3P1, pawn4P1};
-        
     private java.awt.Point[] player1Path, player2Path, player3Path, player4Path;
 
     
@@ -71,7 +75,7 @@ public class BoardScreen extends JPanel {
              22
         ));
 
-        String player1PawnImg = "peaoAzul_90x90.png"; // Substitua pelo nome real dos seus arquivos PNG
+        String player1PawnImg = "/assets/peaoAzul_90x90.png"; // Substitua pelo nome real dos seus arquivos PNG
         
         
         // Loop para instanciar os peões do jogador 1 (peão 1, 2, 3 e 4)
@@ -81,17 +85,72 @@ public class BoardScreen extends JPanel {
                 player1PawnImg
             );
             System.out.println("Instanciando peão " + (i+1) + " do Jogador 1 com a imagem: " + player1PawnImg);
+
+            final int PAWN_INDEX = i;
+           
+            
+            player1Pawns[i].addMouseListener(new java.awt.event.MouseAdapter() {
+                // Sobrescreve o método nativo de "MouseListener"
+                // Métodos para que o peão do tabuleiro posso ser "sensível" ao hover
+                @Override
+                // Quando o mouse está sobre o peão do tabuleiro chama o método para fazer o peão de referência tremer
+                public void mouseEntered(java.awt.event.MouseEvent e) {
+                    if (pawnControlManager != null) {
+                        // Se o "pawnControlManager" não for nulo executa a chamada do método (espécie de trava de segurança)
+                        System.out.println(
+                            "Mouse ENTROU no peão do tabuleiro " + PAWN_INDEX + " - Iniciar wobble!"
+                        );
+
+                        /*
+                        * Avisa a classe "PawnControlManager" para que peão de referência ("ReferencePawn") possa executar a funcionalidade wobble através do método "startReferencePawnWobble" que está na classe "ReferencePawn". O método "onBoardPawnHoverEntered" é uma espécie de telefone que escuta quando o mouse passa por cima do peão do tabuleiro
+                        */
+                        pawnControlManager.onBoardPawnHoverEntered(PAWN_INDEX);
+                    }
+                }
+                @Override
+                // Quando o mouse sai de cima do peão do tabuleiro chama o método para fazer o peão de referência parar tremer
+                public void mouseExited(java.awt.event.MouseEvent e) {
+                    if (pawnControlManager != null) {
+                        // Se o "pawnControlManager" não for nulo executa a chamada do método (espécie de trava de segurança)
+                        System.out.println(
+                            "Mouse SAIU do peão do tabuleiro" + PAWN_INDEX + " - Parar wobble."
+                        );
+
+                        /*
+                        * Avisa a classe "PawnControlManager" para que peão de referência ("ReferencePawn") possa parar de executar a funcionalidade wobble através do método "stopReferencePawnWobble"
+                        */
+                        pawnControlManager.onBoardPawnHoverExit(PAWN_INDEX);
+                    }
+                }
+
+            });
         }
-
-
         
         int j = 0;
         //Loop para atribuir a coordenada inicial dos pões do jogador 1
         for (int i = 0; i < player1Pawns.length; i++) {
-            System.out.println("Atribuindo coordenada visual para o peão " + (i+1) + " do Jogador 1 na casa " + j);
+            System.out.println(
+                "Atribuindo coordenada visual para o peão " + (i+1) + " do Jogador 1 na casa " + j
+            );
             if (player1Path != null && player1Path.length > 0) {
-                player1Pawns[i].setCoordenadaVisual(player1Path[j]);
-                player1Pawns[i].setPosicaoLogicaAtual(j);
+
+                // Coordenadas originais do path
+                Point baseCoord = player1Path[j];
+
+                // Offset para ajustar a posição de nascimento do peão
+                int offsetX = 12;
+                int offsetY = 5;
+
+                // Cria uma nova coordenada para os peões da base, permitindo assim que eles nasçam na posição correta dentro do círculo
+                Point pawnCurrentCoord = new java.awt.Point(baseCoord.x + offsetX, baseCoord.y + offsetY);
+                player1Pawns[i].setPawnVisualCoordinates(pawnCurrentCoord);
+                player1Pawns[i].setPawnCurrentPos(j);
+
+                // Adiciona o peão ao tabuleiro
+                this.add(player1Pawns[i]);
+                System.out.println(
+                    "-> Peão " + (i+1) + " adicionado. Coordenadas: X=" + pawnCurrentCoord.x + ", Y=" + pawnCurrentCoord.y + " | Tamanho: " + player1Pawns[i].getSize()
+                );
             };
             j++;
         }
@@ -114,10 +173,6 @@ public class BoardScreen extends JPanel {
     /**
     * Mapeia as coordenadas físicas (X, Y) do centro de cada casa do circuito 
     * a partir do ponto de partida do Jogador 1 (Azul, Canto Inferior Esquerdo).
-    */
-   /**
-    * Mapeia as coordenadas físicas (X, Y) do centro de cada casa do circuito 
-    * a partir do ponto de partida do Jogador 1 (Azul).
     */
     private void pawnPath() {
         
@@ -543,24 +598,13 @@ public class BoardScreen extends JPanel {
                 }
             }
         }
-
-        // Loop responsável por desenhar os peões no tabuleiro
-        if (this.player1Pawns != null) {
-            for (PlayerPawn pawn : player1Pawns) {
-                if (pawn != null) {
-                    pawn.desenhar((Graphics2D) g);
-                }
-            }
-        }
-
-        // Libera os recursos do contexto gráfico 2D para evitar vazamentos de memória
-        g2.dispose();
     }
 
     // Métodos getters
     /**
     * Retorna o peão específico do jogador 1 baseado no índice (0 a 3).
-    * Para pegar o peão 1 (pawn1P1), passe o índice 0.
+    * @param index Índice do peão do jogador
+    * @return O peão selecionado 
     */
     public PlayerPawn getPlayer1Pawn(int index) {
         if (index >= 0 && index < player1Pawns.length) {
@@ -569,10 +613,13 @@ public class BoardScreen extends JPanel {
         return null;
     }
 
-    /**
-     * Permite que o GameManager consulte o vetor de coordenadas das casas do circuito.
-     */
+
+     // Permite que o GameManager consulte o vetor de coordenadas das casas do circuito. 
     public java.awt.Point[] getCaminhoCasas() {
         return this.player1Path;
+    }
+
+    public void setPawnControlManager(PawnControlManager pawnControlManager) {
+    this.pawnControlManager = pawnControlManager;
     }
 }

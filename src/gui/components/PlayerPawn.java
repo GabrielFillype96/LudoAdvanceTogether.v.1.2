@@ -2,89 +2,136 @@
 // Packages
 package gui.components;
 
+//Imports internos
+import control.ImageLoaderManager;
+
 // Imports externos
-import java.awt.Graphics2D;
-import java.awt.Image;
+
 import java.awt.Point;
-import java.awt.RenderingHints;
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 
-public class PlayerPawn {
+public class PlayerPawn extends JLabel {
+    // VARIÁVEIS DE INSTÂNCIA
+    private javax.swing.Timer hoverTimer;
+    private boolean isJumpingUp = true; // Controla se o próximo movimento é para cima ou para baixo
+    private int originalY; // Guarda a posição original para o peão não se perder no ar
     private String playerName;
-    private int posicaoLogicaAtual; // Índice da casa de 0 até o fim do circuito
-    private Point coordenadaVisual; // X e Y atuais na tela
-    private Image pawnImg;       // Guarda o arquivo de imagem do peão
+    private int pawnCurrentPos; // Índice da casa de 0 até o fim do circuito
+    private boolean isMoving = false;
+    private static final double SCALE = 1.5;
 
+    
     /**
-     * Construtor do Peão usando Imagem.
+     * Construtor do peão no tabuleiro
      * @param playerName Nome do jogador dono deste peão.
-     * @param pawnImg Nome do arquivo dentro de /assets/ (Ex: "peao_vermelho.png")
+     * @param pawnImg Nome do arquivo dentro de /assets/ (Ex: "bluePawnImg_90x90.png")
      */
-    public PlayerPawn(String playerName, String pawnImg) {
+    public PlayerPawn(String playerName, String pawnImgPath) {
         this.playerName = playerName;
-        this.posicaoLogicaAtual = 0;
-        this.coordenadaVisual = new Point(0, 0); // Começa na origem ou posição inicial
-        
-        carregarImagem(pawnImg);
-    }
+        this.pawnCurrentPos = 0;
 
-    /**
-     * Carrega a imagem do peão a partir da pasta de recursos (assets).
-     */
-    private void carregarImagem(String nomeArquivoImagem) {
-        try {
-            java.net.URL imgURL = getClass().getResource("/assets/" + nomeArquivoImagem);
-            if (imgURL != null) {
-                this.pawnImg = new ImageIcon(imgURL).getImage();
-            } else {
-                System.err.println("[Peao] Erro: Imagem do peão não encontrada em assets: " + nomeArquivoImagem);
-            }
-        } catch (Exception e) {
-            System.err.println("[Peao] Falha crítica ao carregar imagem do peão: " + e.getMessage());
+        // Define a largura e altura que o peão deve ter no tabuleiro, já que ao utilizar o "setSize" o Java lê o tamanho do JLabel e não diminui a imagem dentro em si
+        int boardPawnWidth = (int) (12 * SCALE);
+        int boardPawnHeight = (int) (17 * SCALE);
+        
+        // Chama o método na classe "ImageLoaderManager" para redimensionar a imagem
+        ImageIcon boardPawnIcon = ImageLoaderManager.loadIcon(
+            pawnImgPath, 
+            boardPawnWidth, 
+            boardPawnHeight
+        );
+
+        // Poderia ser utilizado o método "try/catch" para tratamento de erros, mas o if/else é mais sútil e simples
+        if (boardPawnIcon != null) {
+            // Se a imagem carregada não for nula, então insere ela
+            // Aplica a imagem redimensionada ao "JLabel"
+            this.setIcon(boardPawnIcon);
+            // Define o tamanho da imagem 
+            this.setSize(
+                boardPawnWidth, 
+                boardPawnHeight
+            );
+        } else {
+            this.setSize( // Tamanho de segurança caso a imagem falhe
+                (int) (20 * SCALE),
+                (int) (25 * SCALE)
+            ); 
         }
     }
 
-    /**
-     * Desenha a imagem artística do peão centralizada na casa do tabuleiro.
-     */
-    public void desenhar(Graphics2D g2) {
-        if (pawnImg == null) return;
+    public boolean isMoving() {
+        return isMoving;
+    }
 
-        // Ativa suavização para o redimensionamento da imagem ficar bonito
-        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+    public void setMoving(boolean moving) {
+        this.isMoving = moving;
+    }
 
-        int x = coordenadaVisual.x;
-        int y = coordenadaVisual.y;
-        
-        // Como as casas do seu BoardScreen medem 40x40 pixels:
-        int larguraPeao = 26; 
-        int alturaPeao = 32;  // Um pouco mais alto para dar efeito de peça em pé
-        
-        // Centraliza horizontalmente o peão dentro do quadrado de 40px
-        int xCentralizado = x + ((40 - larguraPeao) / 2);
-        // Posiciona verticalmente (deixando uma pequena margem na base da casa)
-        int yCentralizado = y + ((40 - alturaPeao) / 2);
+    // Método para inciar a animação de pulo do peão
+    public void startBoardPawnShake() {
+        // Trave de segurança - se o peão estiver se movendo não permite que ele "pule"
+        if (isMoving) return;
 
-        // Desenha a imagem do peão na tela
-        g2.drawImage(pawnImg, xCentralizado, yCentralizado, larguraPeao, alturaPeao, null);
+        // Se já estiver pulando, não faz nada para evitar sobreposição de Timers
+        if (hoverTimer != null && hoverTimer.isRunning()) return; 
+
+        // Guarda a posição Y atual (o local onde o peão está) antes de começar a saltar
+        this.originalY = this.getY(); // "getY()" é um método nativo do Swing 
+
+        // Cria uma classe anônima "hoverTimer" que "escuta" quando o mouse está sobre o peão para executar a ação de pular
+        // Cria um timer que roda a cada 150 milissegundos
+        hoverTimer = new javax.swing.Timer(150, new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                int currentX = PlayerPawn.this.getX();// "getX()" é um método nativo do Swing 
+                
+                // Se o peão está se movendo impede que impede que "pule"
+                if (isMoving) {
+                    stopBoardPawnShake();
+                    return;
+                }
+
+                if (isJumpingUp) {
+                    // Se o peão deve "pular" então sobe 8 pixeis
+                    PlayerPawn.this.setLocation(currentX, originalY - 8); 
+                } else {
+                    // Volta o peão para a posição original
+                    PlayerPawn.this.setLocation(currentX, originalY); 
+                }
+                
+                // Inverte a direção para o próximo ciclo
+                isJumpingUp = !isJumpingUp;
+            }
+        });
+        hoverTimer.start(); // Liga o motor do salto
+    }
+
+    // Método para o peão parar de "pular"
+    public void stopBoardPawnShake() {
+        if (hoverTimer != null) {
+            // Se o mouse não está em cima de peão, então para de "pular"
+            hoverTimer.stop();
+            // Volta o peão para posição original
+            PlayerPawn.this.setLocation(getX(), originalY);
+        }
     }
 
     // --- GETTERS E SETTERS ---
-    public int getPosicaoLogicaAtual() { 
-        return posicaoLogicaAtual; 
+    public int getPawnCurrentPos() { 
+        return pawnCurrentPos; 
     }
     
-    public void setPosicaoLogicaAtual(int posicao) { 
-        this.posicaoLogicaAtual = posicao; 
-    }
-
-    public Point getCoordenadaVisual() { 
-        return coordenadaVisual; 
+    public void setPawnCurrentPos(int pawnPosition) { 
+        this.pawnCurrentPos = pawnPosition; 
     }
     
-    public void setCoordenadaVisual(Point coordenada) { 
-        this.coordenadaVisual = coordenada; 
+    public void setPawnVisualCoordinates(Point visualCoordinates) { 
+        if (visualCoordinates != null) {
+            // Cria um ponto totalmente novo na memória com os mesmos valores de X e Y
+            this.setLocation(visualCoordinates.x, visualCoordinates.y);
+            this.originalY = visualCoordinates.y;
+        }
     }
     
     public String getPlayerName() { 
