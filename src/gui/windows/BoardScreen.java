@@ -4,6 +4,7 @@
 package gui.windows;
 
 import gui.components.PlayerPawn;
+import gui.components.ReferencePawn;
 // Imports internos
 import gui.windows.GameContainer;
 
@@ -37,8 +38,7 @@ public class BoardScreen extends JPanel {
         (int)(600 * SCALE), 
         (int)(600 * SCALE)
     );
-    private PlayerPawn pawn1P1, pawn2P1, pawn3P1, pawn4P1;
-    private PlayerPawn[] player1Pawns = {pawn1P1, pawn2P1, pawn3P1, pawn4P1};
+    private PlayerPawn[] player1Pawn;
     private java.awt.Point[] player1Path, player2Path, player3Path, player4Path;
 
     
@@ -77,10 +77,11 @@ public class BoardScreen extends JPanel {
 
         String player1PawnImg = "/assets/peaoAzul_90x90.png"; // Substitua pelo nome real dos seus arquivos PNG
         
-        
+        this.player1Pawn = new PlayerPawn[4];
+
         // Loop para instanciar os peões do jogador 1 (peão 1, 2, 3 e 4)
-        for (int i = 0; i < player1Pawns.length; i++) {
-            player1Pawns[i] =  new PlayerPawn(
+        for (int i = 0; i < 4; i++) {
+            player1Pawn[i] =  new PlayerPawn(
                 player1Name,
                 player1PawnImg
             );
@@ -89,7 +90,7 @@ public class BoardScreen extends JPanel {
             final int PAWN_INDEX = i;
            
             
-            player1Pawns[i].addMouseListener(new java.awt.event.MouseAdapter() {
+            player1Pawn[i].addMouseListener(new java.awt.event.MouseAdapter() {
                 // Sobrescreve o método nativo de "MouseListener"
                 // Métodos para que o peão do tabuleiro posso ser "sensível" ao hover
                 @Override
@@ -102,7 +103,7 @@ public class BoardScreen extends JPanel {
                         );
 
                         /*
-                        * Avisa a classe "PawnControlManager" para que peão de referência ("ReferencePawn") possa executar a funcionalidade wobble através do método "startReferencePawnWobble" que está na classe "ReferencePawn". O método "onBoardPawnHoverEntered" é uma espécie de telefone que escuta quando o mouse passa por cima do peão do tabuleiro
+                        * Avisa a classe "PawnControlManager" para dar a ordem direta ao "ReferencePawn" para que esta classe possa executar a funcionalidade wobble através do método "startReferencePawnWobble" que está na classe "ReferencePawn". O método "onBoardPawnHoverEntered" é uma espécie de telefone que escuta quando o mouse passa por cima do peão do tabuleiro
                         */
                         pawnControlManager.onBoardPawnHoverEntered(PAWN_INDEX);
                     }
@@ -117,7 +118,7 @@ public class BoardScreen extends JPanel {
                         );
 
                         /*
-                        * Avisa a classe "PawnControlManager" para que peão de referência ("ReferencePawn") possa parar de executar a funcionalidade wobble através do método "stopReferencePawnWobble"
+                        * Avisa a classe "PawnControlManager" para dar ordem direta ao "ReferencePawn" para que esta classe possa parar de executar a funcionalidade wobble através do método "stopReferencePawnWobble"
                         */
                         pawnControlManager.onBoardPawnHoverExit(PAWN_INDEX);
                     }
@@ -128,7 +129,7 @@ public class BoardScreen extends JPanel {
         
         int j = 0;
         //Loop para atribuir a coordenada inicial dos pões do jogador 1
-        for (int i = 0; i < player1Pawns.length; i++) {
+        for (int i = 0; i < 4; i++) {
             System.out.println(
                 "Atribuindo coordenada visual para o peão " + (i+1) + " do Jogador 1 na casa " + j
             );
@@ -143,13 +144,13 @@ public class BoardScreen extends JPanel {
 
                 // Cria uma nova coordenada para os peões da base, permitindo assim que eles nasçam na posição correta dentro do círculo
                 Point pawnCurrentCoord = new java.awt.Point(baseCoord.x + offsetX, baseCoord.y + offsetY);
-                player1Pawns[i].setPawnVisualCoordinates(pawnCurrentCoord);
-                player1Pawns[i].setPawnCurrentPos(j);
+                player1Pawn[i].setPawnVisualCoordinates(pawnCurrentCoord);
+                player1Pawn[i].setPawnCurrentPos(j);
 
                 // Adiciona o peão ao tabuleiro
-                this.add(player1Pawns[i]);
+                this.add(player1Pawn[i]);
                 System.out.println(
-                    "-> Peão " + (i+1) + " adicionado. Coordenadas: X=" + pawnCurrentCoord.x + ", Y=" + pawnCurrentCoord.y + " | Tamanho: " + player1Pawns[i].getSize()
+                    "-> Peão " + (i+1) + " adicionado. Coordenadas: X=" + pawnCurrentCoord.x + ", Y=" + pawnCurrentCoord.y + " | Tamanho: " + player1Pawn[i].getSize()
                 );
             };
             j++;
@@ -274,6 +275,40 @@ public class BoardScreen extends JPanel {
         // player3Path = new java.awt.Point[] { ... };
         // player4Path = new java.awt.Point[] { ... };
     }
+
+    public PlayerPawn getPlayerPawn(int pawnIndex) {
+        if (pawnIndex >= 0 && pawnIndex < 4) {
+            return player1Pawn[pawnIndex];
+        }
+        return null;
+    }
+
+    public void startBoardPawnShake(int pawnIndex) {
+        if (pawnIndex >= 0 && pawnIndex < 4) {
+            // Se o índice do peão ("pawnIndex") for maior ou igual a 0 E menor ou igual a 4, armazena o índice do peão do tabuleiro do jogador
+            PlayerPawn playerPawn = player1Pawn[pawnIndex]; // Aqui não está sendo criado um objeto novo, e sim uma referência com o "molde" da classe "PlayerPawn"
+            
+            // A "BoardScreen" aplica o shake no peão do tabuleiro do jogador
+            if (playerPawn != null) {
+                // Se o peão do tabuleiro do jogador não for nulo, executa o método do shake
+                playerPawn.startBoardPawnShake();
+            }
+        }
+    }
+
+    public void stopBoardPawnShake(int pawnIndex) {
+        if (pawnIndex >= 0 && pawnIndex < 4) {
+            // Se o índice do peão ("pawnIndex") for maior ou igual a 0 E menor ou igual a 4, armazena o índice do peão do tabuleiro do jogador
+            PlayerPawn playerPawn = player1Pawn[pawnIndex]; // Aqui não está sendo criado um objeto novo, e sim uma referência com o "molde" da classe "PlayerPawn"
+            
+            // A "BoardScreen" deixa de aplicar o shake no peão do tabuleiro do jogador
+            if (playerPawn != null) {
+                // Se o peão do tabuleiro do jogador não for nulo, deixa de executar o método do shake
+                playerPawn.stopBoardPawnShake();
+            }
+        }
+    }
+
 
     // Método para desenhar o tabuleiro do jogo
     // @Override indica que o método "paintComponent" está sendo sobrescrito da classe pai (JPanel). Serve como uma espécie de "guarda-costas" para garantir que estamos realmente sobrescrevendo um método existente e não criando um novo método por engano.
@@ -607,8 +642,8 @@ public class BoardScreen extends JPanel {
     * @return O peão selecionado 
     */
     public PlayerPawn getPlayer1Pawn(int index) {
-        if (index >= 0 && index < player1Pawns.length) {
-            return this.player1Pawns[index];
+        if (index >= 0 && index < player1Pawn.length) {
+            return this.player1Pawn[index];
         }
         return null;
     }

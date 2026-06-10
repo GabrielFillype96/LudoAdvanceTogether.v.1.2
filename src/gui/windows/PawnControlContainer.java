@@ -142,11 +142,41 @@ public class PawnControlContainer extends JPanel {
         repaint();
     } 
     
-    public ReferencePawn getReferencePawn(int index) {
-    if (index >= 0 && index < 4) {
-        return pawnLabels[index];
+    public ReferencePawn getReferencePawn(int pawnIndex) {
+        if (pawnIndex >= 0 && pawnIndex < 4) {
+            return pawnLabels[pawnIndex];
+        }
+        return null;
     }
-    return null;
-}
+
+    /*
+    * Método para que essa classe "PawnControlContainer" pegue o peão com o índice certo e chame o método "startReferencePawnWobble()" declarado na classe "ReferencePawn". O fluxo de comunicação funciona assim: Quando o mouse passa em cima do peão do tabuleiro a classe "BoardScreen" executa o método "pawnControlManager.onBoardPawnHoverEntered(PAWN_INDEX)" --> Esse método da classe "PawnControlManager" executa "onBoardPawnHoverEntered" que por sua vez chama o método "startReferencePawnWobble()" presente aqui na classe "PawnControlContainer" --> A classe "PawnControlContainer" executa o método "startReferencePawnWobble()" que é capaz de utilizar o método "startReferencePawnWobble" contido na classe "ReferencePawn" para fazê-lo aplicar o wobble
+    */
+    public void startReferencePawnWobble(int pawnIndex) {
+        if (pawnIndex >= 0 && pawnIndex < 4) {
+            // Se o índice do peão ("pawnIndex") for maior ou igual a 0 E menor ou igual a 4, armazena o índice do peão de referência
+            ReferencePawn referencePawn = pawnLabels[pawnIndex]; // Aqui não está sendo criado um objeto novo, e sim uma referência com o "molde" da classe "ReferencePawn"
+            
+            // A "PawnControlContainer" aplica o wobble no peão de referência
+            if (referencePawn != null) {
+                // Se o peão de referência não for nulo, executa o método do wobble
+                referencePawn.startReferencePawnWobble();
+            }
+        }
+    }
+
+    // Possui a mesma lógica do método "startReferencePawnWobble" presente nesta classe, mas para que a funcionalidade pare
+    public void stopReferencePawnWobble(int pawnIndex) {
+        if (pawnIndex >= 0 && pawnIndex < 4) {
+            // Se o índice do peão ("pawnIndex") for maior ou igual a 0 E menor ou igual a 4, armazena o índice do peão de referência
+            ReferencePawn referencePawn = pawnLabels[pawnIndex]; // Aqui não está sendo criado um objeto novo, e sim uma referência com o "molde" da classe "ReferencePawn"
+            
+            // O "PawnControlContainer" deixa de aplicar o wobble no peão de referência
+            if (referencePawn != null) {
+                // Se o peão de referência não for nulo, deixa de executar o método do wobble
+                referencePawn.stopReferencePawnWobble();
+            }
+        }
+    }   
 
 }

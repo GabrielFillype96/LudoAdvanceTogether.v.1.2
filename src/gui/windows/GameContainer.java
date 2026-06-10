@@ -111,7 +111,7 @@ public class GameContainer extends JPanel {
         cardsArea.repaint();
         this.boardScreen.revalidate();
         this.boardScreen.repaint();
-        
+    
         // Adiciona os componentes ao container do jogo
         add(cardsArea);
         add(this.boardScreen);
@@ -129,6 +129,9 @@ public class GameContainer extends JPanel {
         // Perguntar porque o log não está aparacendo os prints quando o mouse passa por cima do peão do tabuleiro na funcionalidade wobble
         // Perguntar sobre classe anonima no PlayerPawn
         // Perguntar pq o método timer é diferente no PlayerPawn do ReferencePawn
+        // Perguntar sobre o implements
+        // Perguntar sobre o super
+        // Perguntar a ordem certa do "add" entre o BoardScreen e PawnControlContainer
     }
 
     // Método getter para acessar as dimensões do GameContainer

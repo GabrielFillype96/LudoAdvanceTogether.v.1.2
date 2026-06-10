@@ -13,7 +13,7 @@ import javax.swing.JLabel;
 
 public class PlayerPawn extends JLabel {
     // VARIÁVEIS DE INSTÂNCIA
-    private javax.swing.Timer hoverTimer;
+    private javax.swing.Timer shakeTimer;
     private boolean isJumpingUp = true; // Controla se o próximo movimento é para cima ou para baixo
     private int originalY; // Guarda a posição original para o peão não se perder no ar
     private String playerName;
@@ -74,14 +74,14 @@ public class PlayerPawn extends JLabel {
         if (isMoving) return;
 
         // Se já estiver pulando, não faz nada para evitar sobreposição de Timers
-        if (hoverTimer != null && hoverTimer.isRunning()) return; 
+        if (shakeTimer != null && shakeTimer.isRunning()) return; 
 
         // Guarda a posição Y atual (o local onde o peão está) antes de começar a saltar
         this.originalY = this.getY(); // "getY()" é um método nativo do Swing 
 
         // Cria uma classe anônima "hoverTimer" que "escuta" quando o mouse está sobre o peão para executar a ação de pular
         // Cria um timer que roda a cada 150 milissegundos
-        hoverTimer = new javax.swing.Timer(150, new java.awt.event.ActionListener() {
+        shakeTimer = new javax.swing.Timer(150, new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 int currentX = PlayerPawn.this.getX();// "getX()" é um método nativo do Swing 
@@ -104,14 +104,14 @@ public class PlayerPawn extends JLabel {
                 isJumpingUp = !isJumpingUp;
             }
         });
-        hoverTimer.start(); // Liga o motor do salto
+        shakeTimer.start(); // Liga o motor do salto
     }
 
     // Método para o peão parar de "pular"
     public void stopBoardPawnShake() {
-        if (hoverTimer != null) {
+        if (shakeTimer != null) {
             // Se o mouse não está em cima de peão, então para de "pular"
-            hoverTimer.stop();
+            shakeTimer.stop();
             // Volta o peão para posição original
             PlayerPawn.this.setLocation(getX(), originalY);
         }
@@ -132,6 +132,10 @@ public class PlayerPawn extends JLabel {
             this.setLocation(visualCoordinates.x, visualCoordinates.y);
             this.originalY = visualCoordinates.y;
         }
+    }
+
+    public boolean isJumpingUp() {
+        return isJumpingUp;
     }
     
     public String getPlayerName() { 

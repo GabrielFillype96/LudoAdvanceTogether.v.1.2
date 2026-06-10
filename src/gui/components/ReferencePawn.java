@@ -4,7 +4,8 @@
 package gui.components;
 
 // Imports internos
-import control.ImageLoaderManager; 
+import control.ImageLoaderManager;
+import gui.events.WobbleListener;
 
 //Imports externos
 import javax.swing.ImageIcon;
@@ -13,8 +14,6 @@ import javax.swing.Timer;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 
 public class ReferencePawn extends JLabel {
@@ -61,6 +60,10 @@ public class ReferencePawn extends JLabel {
             referencePawnWidth, 
             referencePawnHeight
         );
+
+        // Instancia um novo objeto da classe "WobbleListener" para que possa ser utilizada a funcionalidade wobble
+        WobbleListener myWobbleListener = new WobbleListener(this); // "this" passa o próprio peão
+        this.wobbleTimer = new Timer(50, myWobbleListener);
     }
 
 
@@ -84,28 +87,16 @@ public class ReferencePawn extends JLabel {
     }
 
     /* 
-    * Método para que o peão de referência execute a funcionalidade wobble (tremer). O método é criado aqui para permitir que o peão possua essa capacidade
+    * Método para que o peão de referência execute a funcionalidade wobble (tremer). Este método apenas dá o "play" no timer para que a funcionalidade inicie. A construção e operacionalidade do wobble foi construída na classe "WobbleListener"
     */ 
     public void startReferencePawnWobble() {
         if (wobbleTimer != null && wobbleTimer.isRunning()) return;
-
-        wobbleTimer = new Timer(30, new ActionListener() {
-            
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (isInclinedToRight) {
-                    actualAngle += 4;
-                    if (actualAngle >= 15) isInclinedToRight = false;
-                } else {
-                    actualAngle -= 4;
-                    if (actualAngle <= -15) isInclinedToRight = true;
-                }
-                repaint();
-            }
-        });
         wobbleTimer.start();
     }
 
+    /* 
+    * Método para que o peão de referência execute a funcionalidade wobble (tremer). Este método apenas dá o "stop" no timer para que a funcionalidade pare. A construção e operacionalidade do wobble foi construída na classe "WobbleListener"
+    */ 
     public void stopReferencePawnWobble() {
         if (wobbleTimer != null) {
             wobbleTimer.stop();
@@ -141,4 +132,27 @@ public class ReferencePawn extends JLabel {
         super.paintComponent(g2);
         g2.dispose();
     }
+
+    // Método getter para acessar a variável privada "actualAngle" e pegar o seu valor
+    public double getActualAngle() {
+        return this.actualAngle;
+    }
+
+    // Método setter para que outras classes consigam acessar a variável privada "actualAngle" e modifiquem seu valor
+    public void setActualAngle(double actualAngle) {
+        this.actualAngle = actualAngle;
+    }
+
+    // Método getter para acessar a variável privada "isInclinedToRight" e pegar o valor
+    public boolean isInclinedToRight() {
+        return this.isInclinedToRight;
+    }
+
+    // Método setter para que outras classes consigam acessar a variável privada "isInclinedToRight" e modifiquem seu valor
+    public void setInclinedToRight(boolean isInclinedToRight) {
+        this.isInclinedToRight = isInclinedToRight; 
+    }
+
+
+
 }
