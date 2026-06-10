@@ -18,32 +18,32 @@ public class ShakeListener implements ActionListener {
         this.playerPawnTarget = playerPawnTarget;
     }
     
-     @Override
+    // Sobrescreve o método nativo de "actionPerformed"
+    // Método para que o peão faça o movimento shake
+    @Override
     public void actionPerformed(ActionEvent e) {
-        boolean isMoving = playerPawnTarget.isMoving();
-        boolean isJumpingUp = playerPawnTarget.isMoving();
-        int currentX = playerPawnTarget.getPawnCurrentPos.x(); // perguntar se o "isMoving" vai aqui dentro pois é um mecanismo para impedir que o bug ao se mexer
-        int originalY = playerPawnTarget.getPawnCurrentPos.y();
+        int currentX = playerPawnTarget.getX();
+        int originalY = playerPawnTarget.getOriginalY();    
 
-        // Se o peão está se movendo impede que impede que "pule"
-        if (isMoving) {
+        // Se o peão está se movendo impede que "pule"
+        if (playerPawnTarget.isMoving()) {
             playerPawnTarget.stopBoardPawnShake();
             return;
         }
 
-        if (isJumpingUp) {
-                    // Se o peão deve "pular" então sobe 8 pixeis
-                    PlayerPawn.this.setLocation(currentX, originalY - 8); 
-                } else {
-                    // Volta o peão para a posição original
-                    PlayerPawn.this.setLocation(currentX, originalY); 
-                }
-                
-                // Inverte a direção para o próximo ciclo
-                isJumpingUp = !isJumpingUp;
+        if (playerPawnTarget.isJumpingUp()) {
+            // Se o peão deve "pular" então sobe 8 pixeis
+            playerPawnTarget.setLocation(currentX, originalY - 8); 
+        } else {
+            // Volta o peão para a posição original
+            playerPawnTarget.setLocation(currentX, originalY); 
+        }
 
-
-
-
+        // Inverte a direção para o próximo ciclo
+        boolean nextStage = !playerPawnTarget.isJumpingUp();
+        playerPawnTarget.setJumpingUp(nextStage);
+        
     }
+
+        
 }

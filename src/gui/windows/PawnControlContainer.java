@@ -55,9 +55,9 @@ public class PawnControlContainer extends JPanel {
 
             final int PAWN_INDEX = i;
             
-           
+            // "MouseAdapter" é uma classe abstrata nativa do Java
             pawnLabels[i].addMouseListener(new java.awt.event.MouseAdapter() {
-                // Sobrescreve o método nativo de "MouseListener"
+                // Sobrescreve o método nativo de "mouseEntered" da classe "MouseAdapter"
                 @Override
                 // Métodos para que o peão do tabuleiro posso ser "sensível" ao hover e ao clique
                 public void mouseEntered(java.awt.event.MouseEvent e) {
@@ -76,6 +76,7 @@ public class PawnControlContainer extends JPanel {
                     }
                 }
                 @Override
+                // Sobrescreve o método nativo de "mouseExited" da classe "MouseAdapter"
                 // Quando o mouse sai de cima do peão do tabuleiro chama o método para fazer o peão do tabuleiro pular
                 public void mouseExited(java.awt.event.MouseEvent e) {
                     if ("NORMAL".equals(pawnControlManager.getPawnState(PAWN_INDEX)) || 

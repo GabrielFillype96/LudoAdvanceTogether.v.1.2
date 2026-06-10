@@ -2,7 +2,6 @@
 // Packages
 package gui.components.buttons;
 // Imports
-import javax.swing.ImageIcon;
 
 // Cria a classe "ConnectionButton" que irá herdar métodos da classe "CustomButton"
 public class ConnectionButton extends CustomButton {

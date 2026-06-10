@@ -3,10 +3,10 @@
 // Packages
 package gui.windows;
 
-import gui.components.PlayerPawn;
-import gui.components.ReferencePawn;
 // Imports internos
-import gui.windows.GameContainer;
+import gui.components.PlayerPawn;
+import control.PawnControlManager;
+import gui.events.BoardPawnMouseListener;
 
 // Imports externos
 import java.awt.Color;
@@ -16,9 +16,6 @@ import java.awt.RenderingHints;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-
-import control.PawnControlManager;
-
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
@@ -77,7 +74,12 @@ public class BoardScreen extends JPanel {
 
         String player1PawnImg = "/assets/peaoAzul_90x90.png"; // Substitua pelo nome real dos seus arquivos PNG
         
-        this.player1Pawn = new PlayerPawn[4];
+
+        /*
+        * Instancia um array de tamanho 4 para armazenar objetos do tipo "PlayerPawn"
+        * O array nasce vazio (null) e só serão ocupados pelos peões após o loop "for" abaixo
+        */
+        this.player1Pawn = new PlayerPawn[4]; 
 
         // Loop para instanciar os peões do jogador 1 (peão 1, 2, 3 e 4)
         for (int i = 0; i < 4; i++) {
@@ -87,44 +89,9 @@ public class BoardScreen extends JPanel {
             );
             System.out.println("Instanciando peão " + (i+1) + " do Jogador 1 com a imagem: " + player1PawnImg);
 
-            final int PAWN_INDEX = i;
-           
-            
-            player1Pawn[i].addMouseListener(new java.awt.event.MouseAdapter() {
-                // Sobrescreve o método nativo de "MouseListener"
-                // Métodos para que o peão do tabuleiro posso ser "sensível" ao hover
-                @Override
-                // Quando o mouse está sobre o peão do tabuleiro chama o método para fazer o peão de referência tremer
-                public void mouseEntered(java.awt.event.MouseEvent e) {
-                    if (pawnControlManager != null) {
-                        // Se o "pawnControlManager" não for nulo executa a chamada do método (espécie de trava de segurança)
-                        System.out.println(
-                            "Mouse ENTROU no peão do tabuleiro " + PAWN_INDEX + " - Iniciar wobble!"
-                        );
-
-                        /*
-                        * Avisa a classe "PawnControlManager" para dar a ordem direta ao "ReferencePawn" para que esta classe possa executar a funcionalidade wobble através do método "startReferencePawnWobble" que está na classe "ReferencePawn". O método "onBoardPawnHoverEntered" é uma espécie de telefone que escuta quando o mouse passa por cima do peão do tabuleiro
-                        */
-                        pawnControlManager.onBoardPawnHoverEntered(PAWN_INDEX);
-                    }
-                }
-                @Override
-                // Quando o mouse sai de cima do peão do tabuleiro chama o método para fazer o peão de referência parar tremer
-                public void mouseExited(java.awt.event.MouseEvent e) {
-                    if (pawnControlManager != null) {
-                        // Se o "pawnControlManager" não for nulo executa a chamada do método (espécie de trava de segurança)
-                        System.out.println(
-                            "Mouse SAIU do peão do tabuleiro" + PAWN_INDEX + " - Parar wobble."
-                        );
-
-                        /*
-                        * Avisa a classe "PawnControlManager" para dar ordem direta ao "ReferencePawn" para que esta classe possa parar de executar a funcionalidade wobble através do método "stopReferencePawnWobble"
-                        */
-                        pawnControlManager.onBoardPawnHoverExit(PAWN_INDEX);
-                    }
-                }
-
-            });
+            // Instancia um objeto da classe "BoardPawnMouseListener"
+            // "MouseAdapter" é uma classe abstrata nativa do Java
+            player1Pawn[i].addMouseListener(new BoardPawnMouseListener(pawnControlManager, i));
         }
         
         int j = 0;

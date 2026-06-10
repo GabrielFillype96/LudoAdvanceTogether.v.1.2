@@ -62,8 +62,8 @@ public class ReferencePawn extends JLabel {
         );
 
         // Instancia um novo objeto da classe "WobbleListener" para que possa ser utilizada a funcionalidade wobble
-        WobbleListener myWobbleListener = new WobbleListener(this); // "this" passa o próprio peão
-        this.wobbleTimer = new Timer(50, myWobbleListener);
+        WobbleListener wobbleListener = new WobbleListener(this); // "this" passa o próprio peão
+        this.wobbleTimer = new Timer(50, wobbleListener);
     }
 
 
@@ -95,7 +95,7 @@ public class ReferencePawn extends JLabel {
     }
 
     /* 
-    * Método para que o peão de referência execute a funcionalidade wobble (tremer). Este método apenas dá o "stop" no timer para que a funcionalidade pare. A construção e operacionalidade do wobble foi construída na classe "WobbleListener"
+    * Método para que o peão de referência pare de executar a funcionalidade wobble (tremer). Este método apenas dá o "stop" no timer para que a funcionalidade pare. A construção e operacionalidade do wobble foi construída na classe "WobbleListener"
     */ 
     public void stopReferencePawnWobble() {
         if (wobbleTimer != null) {
@@ -133,7 +133,7 @@ public class ReferencePawn extends JLabel {
         g2.dispose();
     }
 
-    // Método getter para acessar a variável privada "actualAngle" e pegar o seu valor
+    // Método getter para que outras classes consigam acessar a variável privada "actualAngle" e pegar o seu valor
     public double getActualAngle() {
         return this.actualAngle;
     }
@@ -143,7 +143,7 @@ public class ReferencePawn extends JLabel {
         this.actualAngle = actualAngle;
     }
 
-    // Método getter para acessar a variável privada "isInclinedToRight" e pegar o valor
+    // Método getter para que outras classes consigam acessar a variável privada "isInclinedToRight" e pegar o valor
     public boolean isInclinedToRight() {
         return this.isInclinedToRight;
     }
@@ -152,7 +152,4 @@ public class ReferencePawn extends JLabel {
     public void setInclinedToRight(boolean isInclinedToRight) {
         this.isInclinedToRight = isInclinedToRight; 
     }
-
-
-
 }

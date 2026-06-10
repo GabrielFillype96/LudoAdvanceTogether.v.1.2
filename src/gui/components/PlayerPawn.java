@@ -1,15 +1,17 @@
-// Classe responsável por criar os peões
+// Classe responsável por criar os peões do tabuleiro do jogador
+
 // Packages
 package gui.components;
 
 //Imports internos
 import control.ImageLoaderManager;
+import gui.events.ShakeListener;
 
 // Imports externos
-
 import java.awt.Point;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.Timer;
 
 public class PlayerPawn extends JLabel {
     // VARIÁVEIS DE INSTÂNCIA
@@ -58,6 +60,10 @@ public class PlayerPawn extends JLabel {
                 (int) (25 * SCALE)
             ); 
         }
+
+        // Instancia um novo objeto da classe "ShakeListener" para que possa ser utilizada a funcionalidade shake
+        ShakeListener shakeListener = new ShakeListener(this); // "this" passa o próprio peão
+        this.shakeTimer = new Timer(150, shakeListener); // Cria um timer que roda a cada 150 milissegundos
     }
 
     public boolean isMoving() {
@@ -68,7 +74,9 @@ public class PlayerPawn extends JLabel {
         this.isMoving = moving;
     }
 
-    // Método para inciar a animação de pulo do peão
+    /* 
+    * Método para que o peão do tabuleiro do jogador execute a funcionalidade shake (pular). Este método apenas dá o "play" no timer para que a funcionalidade inicie. A construção e operacionalidade do shake foi construída na classe "ShakeListener"
+    */ 
     public void startBoardPawnShake() {
         // Trave de segurança - se o peão estiver se movendo não permite que ele "pule"
         if (isMoving) return;
@@ -76,38 +84,13 @@ public class PlayerPawn extends JLabel {
         // Se já estiver pulando, não faz nada para evitar sobreposição de Timers
         if (shakeTimer != null && shakeTimer.isRunning()) return; 
 
-        // Guarda a posição Y atual (o local onde o peão está) antes de começar a saltar
-        this.originalY = this.getY(); // "getY()" é um método nativo do Swing 
-
-        // Cria uma classe anônima "hoverTimer" que "escuta" quando o mouse está sobre o peão para executar a ação de pular
-        // Cria um timer que roda a cada 150 milissegundos
-        shakeTimer = new javax.swing.Timer(150, new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-                int currentX = PlayerPawn.this.getX();// "getX()" é um método nativo do Swing 
-                
-                // Se o peão está se movendo impede que impede que "pule"
-                if (isMoving) {
-                    stopBoardPawnShake();
-                    return;
-                }
-
-                if (isJumpingUp) {
-                    // Se o peão deve "pular" então sobe 8 pixeis
-                    PlayerPawn.this.setLocation(currentX, originalY - 8); 
-                } else {
-                    // Volta o peão para a posição original
-                    PlayerPawn.this.setLocation(currentX, originalY); 
-                }
-                
-                // Inverte a direção para o próximo ciclo
-                isJumpingUp = !isJumpingUp;
-            }
-        });
-        shakeTimer.start(); // Liga o motor do salto
+        // Liga o motor do salto
+        shakeTimer.start(); 
     }
 
-    // Método para o peão parar de "pular"
+    /* 
+    * Método para que o peão de referência pare de executar a funcionalidade shake (pular). Este método apenas dá o "stop" no timer para que a funcionalidade pare. A construção e operacionalidade do shake foi construída na classe "ShakeListener"
+    */
     public void stopBoardPawnShake() {
         if (shakeTimer != null) {
             // Se o mouse não está em cima de peão, então para de "pular"
@@ -117,15 +100,18 @@ public class PlayerPawn extends JLabel {
         }
     }
 
-    // --- GETTERS E SETTERS ---
+    // Métodos Getters and Setters
+    // Método getter para que outras classes consigam acessar a variável privada "getPawnCurrentPos" e pegar o seu valor
     public int getPawnCurrentPos() { 
         return pawnCurrentPos; 
     }
     
+    // Método setter para que outras classes consigam acessar a variável privada "setPawnCurrentPos" e modifiquem seu valor
     public void setPawnCurrentPos(int pawnPosition) { 
         this.pawnCurrentPos = pawnPosition; 
     }
     
+    // Método setter para que outras classes consigam acessar a variável privada "setPawnVisualCoordinates" e modifiquem seu valor
     public void setPawnVisualCoordinates(Point visualCoordinates) { 
         if (visualCoordinates != null) {
             // Cria um ponto totalmente novo na memória com os mesmos valores de X e Y
@@ -134,10 +120,22 @@ public class PlayerPawn extends JLabel {
         }
     }
 
+    // Método getter para que outras classes consigam acessar a variável privada "getOriginalY" e pegar o seu valor
+    public int getOriginalY() {
+        return originalY;
+    }
+
+    // Método getter para que outras classes consigam acessar a variável privada "isJumpingUp" e pegar o seu valor
     public boolean isJumpingUp() {
         return isJumpingUp;
     }
+
+    // Método setter para que outras classes consigam acessar a variável privada "isJumpingUp" e modifiquem seu valor
+    public void setJumpingUp(boolean jumpingUp) {
+        this.isJumpingUp = jumpingUp;
+    }
     
+    // Método getter para que outras classes consigam acessar a variável privada "getPlayerName" e pegar o seu valor
     public String getPlayerName() { 
         return playerName; 
     }

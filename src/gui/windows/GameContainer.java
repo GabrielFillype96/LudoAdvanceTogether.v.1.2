@@ -132,6 +132,7 @@ public class GameContainer extends JPanel {
         // Perguntar sobre o implements
         // Perguntar sobre o super
         // Perguntar a ordem certa do "add" entre o BoardScreen e PawnControlContainer
+        
     }
 
     // Método getter para acessar as dimensões do GameContainer
