@@ -6,6 +6,7 @@ package gui.windows;
 // Imports internos
 import control.PawnControlManager;
 import gui.components.ReferencePawn;
+import gui.events.ReferencePawnMouseListener;
 
 // Imports externos
 import javax.swing.JPanel;
@@ -53,61 +54,12 @@ public class PawnControlContainer extends JPanel {
             // Adiciona o JLabel ao PawnControlContainer
             add(pawnLabels[i]);
 
-            final int PAWN_INDEX = i;
-            
-            // "MouseAdapter" é uma classe abstrata nativa do Java
-            pawnLabels[i].addMouseListener(new java.awt.event.MouseAdapter() {
-                // Sobrescreve o método nativo de "mouseEntered" da classe "MouseAdapter"
-                @Override
-                // Métodos para que o peão do tabuleiro posso ser "sensível" ao hover e ao clique
-                public void mouseEntered(java.awt.event.MouseEvent e) {
-                    // Quando o mouse está sobre o peão do tabuleiro chama o método para fazer o peão do tabuleiro pular
-                    if ("NORMAL".equals(pawnControlManager.getPawnState(PAWN_INDEX)) || 
-                        "DESABILITADO".equals(pawnControlManager.getPawnState(PAWN_INDEX))) {
-                        // Se o estado do peão do tabuleiro/referência é "NORMAL" OU "DESABILITADO" chama o método para fazer o peão do tabuleiro pular
-                        System.out.println(
-                            "Mouse ENTROU no peão de referência " + PAWN_INDEX + " - Iniciar tremor!"
-                        );
-
-                        /*
-                        * Avisa a classe "PawnControlManager" para que peão do tabuleiro ("PlayerPawn") possa executar a funcionalidade de pulo através do método "startBoardPawnShake" que está na classe "PlayerPawn". O método "onReferencePawnHoverEntered" é uma espécie de telefone que escuta quando o mouse passa por cima do peão de referência
-                        */
-                        pawnControlManager.onReferencePawnHoverEntered(PAWN_INDEX);
-                    }
-                }
-                @Override
-                // Sobrescreve o método nativo de "mouseExited" da classe "MouseAdapter"
-                // Quando o mouse sai de cima do peão do tabuleiro chama o método para fazer o peão do tabuleiro pular
-                public void mouseExited(java.awt.event.MouseEvent e) {
-                    if ("NORMAL".equals(pawnControlManager.getPawnState(PAWN_INDEX)) || 
-                        "DESABILITADO".equals(pawnControlManager.getPawnState(PAWN_INDEX))) {
-                        // Se o estado do peão do tabuleiro/referência é "NORMAL" OU "DESABILITADO" chama o método para fazer o peão do tabuleiro parar pular    
-                        System.out.println(
-                            "Mouse SAIU do peão de referência " + PAWN_INDEX + " - Parar tremor."
-                        );
-
-                        /*
-                        * Avisa a classe "PawnControlManager" para que peão do tabuleiro ("PlayerPawn") possa executar a funcionalidade de parar pulo através do método "stopBoardPawnShake" que está na classe "PlayerPawn". O método "onReferencePawnHoverExited" é uma espécie de telefone que escuta quando o mouse sai de cima do peão de referência
-                        */
-                        pawnControlManager.onReferencePawnHoverExited(PAWN_INDEX);
-                    }
-                }
-                @Override
-                // Quando o peão de referência é clicado, chama o método para que o peão do tabuleiro seja selecionado para realizar sua ação
-                public void mouseClicked(java.awt.event.MouseEvent e) {
-                    if ("NORMAL".equals(pawnControlManager.getPawnState(PAWN_INDEX))) {
-                        // Se o estado do peão do tabuleiro/referência é "NORMAL" chama o método para fazer o peão do tabuleiro executar sua ação (avançar, retroceder, etc)
-                        System.out.println(
-                            "Peão de referência " + PAWN_INDEX + " foi CLICADO! Avisar o GameManager!"
-                        );
-
-                        /*
-                        * Avisa a classe "PawnControlManager" para que peão do tabuleiro ("PlayerPawn") possa executar sua ação de avanço ou retroação. O método "onReferencePawnClicked" é uma espécie de telefone que escuta quando o peão de referência é clicado
-                        */
-                        pawnControlManager.onReferencePawnClicked(PAWN_INDEX);
-                    }
-                }
-            });
+            /*
+            * Instancia um objeto da classe "ReferencePawnMouseListener"
+            * Diferente do que acontece com a classe "BoardScreen", como a criação dos elementos na classe "GameContainer" possui uma ordem, não há necessidade de um método setter, pois o "PawnControlContainer" nasce depois do "PawnControlManager"
+            */
+            pawnLabels[i].addMouseListener(new ReferencePawnMouseListener(pawnControlManager, i));
+    
         }
         
         // Define as posições e o tamanho dos peões
@@ -122,7 +74,7 @@ public class PawnControlContainer extends JPanel {
         pawnVisualState(2, "NORMAL");
         pawnVisualState(3, "DESABILITADO");
 
-        
+        // Chama o método setter da classe "PawnControlManager" e entrega o próprio (this) "PawnControlContainer"
         this.pawnControlManager.setPawnControlContainer(this);
     }
 
@@ -135,14 +87,17 @@ public class PawnControlContainer extends JPanel {
         // Trava de segurança para não quebrar o código se o índice for inválido
         if (pawnIndex < 0 || pawnIndex >= 4) return;
         
+        // Método setter para modificar a variável "pawnStates" na classe "PawnControlManager".
         pawnControlManager.setPawnState(pawnIndex, pawnState);
 
+        // Método setter para que peão de referência na classe "ReferencePawns" assuma o estado de acordo com a condição
         pawnLabels[pawnIndex].setVisualState(pawnState);
         
         // Atualiza a tela para mostrar a nova imagem
         repaint();
     } 
     
+    // Método getter para retornar o índice do peão de referência
     public ReferencePawn getReferencePawn(int pawnIndex) {
         if (pawnIndex >= 0 && pawnIndex < 4) {
             return pawnLabels[pawnIndex];

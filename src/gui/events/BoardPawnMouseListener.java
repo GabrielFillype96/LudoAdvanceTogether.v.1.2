@@ -1,4 +1,4 @@
-// Classe responsável por construir o listener do peão do tabuleiro, permitindo assim a comunicação com a classe "PawnControlManager" para que a funcionalidade wobble da classe "WobbleListener" seja executada
+// Classe responsável por construir o listener do peão do tabuleiro, permitindo assim a comunicação com a classe "PawnControlManager" para que a funcionalidade wobble da classe "WobbleListener" seja executada. Funciona como uma espécie de telefone, assim ao instanciar um objeto dessa classe permite que ele seja capaz de se comunicar com essa funcionalidade
 
 // Packages
 package gui.events;
@@ -22,7 +22,7 @@ public class BoardPawnMouseListener extends MouseAdapter {
         this.pawnControlManager = pawnControlManager;
     }
 
-    // Sobrescreve o método nativo "mouseEntered" da classe "MouseAdapter"
+    // Sobrescreve o método nativo "mouseEntered" da classe abstrata "MouseAdapter"
     // Métodos para que o peão do tabuleiro posso ser "sensível" ao hover
     @Override
     // Quando o mouse está sobre o peão do tabuleiro chama o método para fazer o peão de referência iniciar o wobble

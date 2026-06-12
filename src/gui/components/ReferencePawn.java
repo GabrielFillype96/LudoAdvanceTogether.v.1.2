@@ -68,8 +68,8 @@ public class ReferencePawn extends JLabel {
 
 
     /**
-     *  Método com switch para controlar os estados que o peão pode assumir
-     *  @param pawnState "NORMAL", "DESABILITADO" ou "DOURADO"
+     *  Método setter com switch para controlar os estados que o peão pode assumir
+     *  @param pawnState O estado visual: "NORMAL", "DESABILITADO" ou "DOURADO"
      */
     public void setVisualState(String pawnState) {
         switch (pawnState) {
@@ -138,7 +138,7 @@ public class ReferencePawn extends JLabel {
         return this.actualAngle;
     }
 
-    // Método setter para que outras classes consigam acessar a variável privada "actualAngle" e modifiquem seu valor
+    // Método setter para que outras classes consigam alterar a variável privada "actualAngle" e modifiquem seu valor
     public void setActualAngle(double actualAngle) {
         this.actualAngle = actualAngle;
     }
@@ -148,7 +148,7 @@ public class ReferencePawn extends JLabel {
         return this.isInclinedToRight;
     }
 
-    // Método setter para que outras classes consigam acessar a variável privada "isInclinedToRight" e modifiquem seu valor
+    // Método setter para que outras classes consigam alterar a variável privada "isInclinedToRight" e modifiquem seu valor
     public void setInclinedToRight(boolean isInclinedToRight) {
         this.isInclinedToRight = isInclinedToRight; 
     }

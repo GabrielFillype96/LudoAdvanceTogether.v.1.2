@@ -81,6 +81,7 @@ public class BoardScreen extends JPanel {
         */
         this.player1Pawn = new PlayerPawn[4]; 
 
+        int j = 0;
         // Loop para instanciar os peões do jogador 1 (peão 1, 2, 3 e 4)
         for (int i = 0; i < 4; i++) {
             player1Pawn[i] =  new PlayerPawn(
@@ -88,13 +89,9 @@ public class BoardScreen extends JPanel {
                 player1PawnImg
             );
             System.out.println("Instanciando peão " + (i+1) + " do Jogador 1 com a imagem: " + player1PawnImg);
-
-            // Instancia um objeto da classe "BoardPawnMouseListener"
-            // "MouseAdapter" é uma classe abstrata nativa do Java
-            player1Pawn[i].addMouseListener(new BoardPawnMouseListener(pawnControlManager, i));
         }
         
-        int j = 0;
+        
         //Loop para atribuir a coordenada inicial dos pões do jogador 1
         for (int i = 0; i < 4; i++) {
             System.out.println(
@@ -621,7 +618,21 @@ public class BoardScreen extends JPanel {
         return this.player1Path;
     }
 
+    /*
+    * Método setter para a classe "GameContainer" possa acessar a variável privada "pawnControlManager" aqui e alterar o seu valor
+    * Como a classe "BoardScreen" é o primeiro elemento a "nascer" na classe "GameContainer", ela ainda não "conhece" a classe "PawnControlManager". Com isso, o método "setPawnControlManager" permite que a "BoardScreen" conheça a "PawnControlManager" depois
+    */
     public void setPawnControlManager(PawnControlManager pawnControlManager) {
-    this.pawnControlManager = pawnControlManager;
+        this.pawnControlManager = pawnControlManager;
+
+        if (this.player1Pawn != null) {
+            for (int i = 0; i < player1Pawn.length; i++) {
+                if (player1Pawn[i] != null) {
+                    // Instancia um objeto da classe "BoardPawnMouseListener"
+                    // "MouseAdapter" é uma classe abstrata nativa do Java
+                    player1Pawn[i].addMouseListener(new BoardPawnMouseListener(pawnControlManager, i));
+                }
+            }
+        }
     }
 }

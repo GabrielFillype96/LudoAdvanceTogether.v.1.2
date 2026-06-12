@@ -3,10 +3,8 @@
 // Package
 package gui.windows;
 
-import gui.components.PlayerPawn;
+
 // Imports internos
-import gui.windows.BoardScreen;
-import gui.windows.PawnControlContainer;
 import control.PawnControlManager;
 
 // Imports externos
@@ -91,7 +89,6 @@ public class GameContainer extends JPanel {
         pawnControlArea.setBackground(new Color(18, 50, 25)); // Tom amadeirado escuro
         pawnControlArea.setLayout(null);
 
-
         // Instancia o "PawnControlManager" para servir de parâmetro na instância do "PawnControlContainer"
         this.pawnControlManager = new PawnControlManager(this.boardScreen);
 
@@ -122,8 +119,7 @@ public class GameContainer extends JPanel {
         */
         boardScreen.setPawnControlManager(pawnControlManager);
       
-        // Perguntar sobre chamar diretamente (o Gemini sugeriu isso)
-        // Perguntar sobre o que o método setter faz realmente
+
         // Perguntar sobre os outros setters and getters que foram criados ao tentar fazer o método wobble
         // perguntar sobre isso no BoardScreen  "control.GameManager.setBoardGame(this);"
         // Perguntar porque o log não está aparacendo os prints quando o mouse passa por cima do peão do tabuleiro na funcionalidade wobble
@@ -132,7 +128,7 @@ public class GameContainer extends JPanel {
         // Perguntar sobre o implements
         // Perguntar sobre o super
         // Perguntar a ordem certa do "add" entre o BoardScreen e PawnControlContainer
-        
+            
     }
 
     // Método getter para acessar as dimensões do GameContainer

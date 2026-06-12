@@ -10,7 +10,7 @@ import gui.windows.BoardScreen;
 
 public class PawnControlManager {
     // VARIÁVEIS DE INSTÂNCIA
-    private String[] pawnStates = new String[4];
+    private String[] pawnState = new String[4];
     private BoardScreen boardScreen;
     private PawnControlContainer pawnControlContainer;
 
@@ -18,33 +18,41 @@ public class PawnControlManager {
         this.boardScreen = boardScreen;
         // Inicializa todos como NORMAL no começo do jogo, por exemplo
         for(int i = 0; i < 4; i++) {
-            pawnStates[i] = "NORMAL";
+            pawnState[i] = "NORMAL";
         }
     }
 
     /**
-     * Retorna o estado atual de um peão específico.
+     * Método getter que retorna o estado atual de um peão específico.
      * @param pawnIndex O índice do peão (0 a 3).
      * @return O estado ("NORMAL", "DESABILITADO", "DOURADO") ou "INVALIDO".
      */
     public String getPawnState(int pawnIndex) {
         // Trava de segurança para evitar erro de ArrayOutOfBounds
         if (pawnIndex < 0 || pawnIndex >= 4) {
+            // se o índice do peão é menor que 0 OU igual ou maior a 4, retorna "INVÁLIDO"
             return "INVÁLIDO"; 
         }
         
-        // Retorna o estado guardado na memória do Manager
-        return pawnStates[pawnIndex];
+        // Retorna o estado que o peão está ("NORMAL", "DESABILITADO" e "DOURADO")
+        return pawnState[pawnIndex];
     }
 
+    /**
+    ** Método setter para que a classe "PawnControlContainer" permita alterar a variável privada "pawnState" e possa mudar seu valor de "NORMAL" para outro estado ("DESABILITADO" ou "DOURADO")
+    ** Lógica: a variável "pawnState" nasce com o estado "NORMAL" --> Quando algum evento ocorre no jogo, o método "pawnVisualState" da classe "PawnControlContainer" é acionado e o estado do peão muda --> Esse novo estado entra no setter "pawnControlManager.setPawnState(pawnIndex, pawnState)" alterando o parâmetro "pawnState" referente ao "newPawnState" --> Assim a variável "pawnState" deixa de ser "NORMAL" para assumir outro estado
+    * @param pawnIndex O índice do peão (0 a 3)
+    * @param newPawnState O novo estado que peão assumiu
+    */
     public void setPawnState(int pawnIndex, String newPawnState) {
         if (pawnIndex >= 0 && pawnIndex < 4) {
-            pawnStates[pawnIndex] = newPawnState;
+            pawnState[pawnIndex] = newPawnState;
         }
     }
 
-    public void setPawnControlContainer(PawnControlContainer container) {
-        this.pawnControlContainer = container;
+    // Método setter para que a classe "PawnControlContainer" permita alterar a variável "pawnControlContainer" e possa passar a si mesmo para ela
+    public void setPawnControlContainer(PawnControlContainer pawnControlContainer) {
+        this.pawnControlContainer = pawnControlContainer;
     }
     
     public void onReferencePawnHoverEntered(int pawnIndex) {
