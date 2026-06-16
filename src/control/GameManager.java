@@ -27,11 +27,11 @@ public class GameManager {
             return;
         }
 
-        // Se uma animação já estiver ocorrendo, ignora cliques repetidos por segurança
+        // Se uma animação já estiver ocorrendo, ignora cliques repetidos por segurança 
         if (timerAnimation != null && timerAnimation.isRunning()) {
             return;
         }
-
+ 
         // Instância o player 1 passando o index do peão (para testes)
         PlayerPawn p1 = boardGame.getPlayer1Pawn(0);
 
@@ -146,7 +146,7 @@ public class GameManager {
         }
 
         /*
-        * Classes internas como o "Timer" só conseguem acessar variáveis fora dela se essas variáveis forem do tipo "final", ou seja, que não pode ser alterada, mas a função "Timer" precisa somar a velocidade definida para movimentação ocorrer. Assim ao criar um lista "final" seu endereço na memória permanece fixa, mas é possível alterar o seu conteúdo interno (itens da lista877777777777777777777774)
+        * Classes internas como o "Timer" só conseguem acessar variáveis fora dela se essas variáveis forem do tipo "final", ou seja, que não pode ser alterada, mas a função "Timer" precisa somar a velocidade definida para movimentação ocorrer. Assim ao criar um lista "final" seu endereço na memória permanece fixa, mas é possível alterar o seu conteúdo interno (itens da lista)
         */
 
         final int[] STEP_INDEX = {0}; // Lista que armazena o número de casas que o peão já percorreu.

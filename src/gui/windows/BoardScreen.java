@@ -613,7 +613,7 @@ public class BoardScreen extends JPanel {
     }
 
 
-     // Permite que o GameManager consulte o vetor de coordenadas das casas do circuito. 
+    // Permite que o GameManager consulte o vetor de coordenadas das casas do circuito. 
     public java.awt.Point[] getCaminhoCasas() {
         return this.player1Path;
     }
