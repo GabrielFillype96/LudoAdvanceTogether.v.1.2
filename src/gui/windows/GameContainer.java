@@ -128,7 +128,8 @@ public class GameContainer extends JPanel {
         // Perguntar sobre o implements
         // Perguntar sobre o super
         // Perguntar a ordem certa do "add" entre o BoardScreen e PawnControlContainer
-            
+        // Perguntar a diferenca da classe CardAnswerValidation e a GameManager, especificamente no metodo cardResultVerification do GameManager
+        // Perguntar a diferenca entre fazer um GameManager gameManager = new GameManger(boardScreen), sem declarar 'private GameManager gameManager' em cima.
     }
 
     // Método getter para acessar as dimensões do GameContainer
