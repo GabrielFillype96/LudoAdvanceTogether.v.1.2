@@ -1,25 +1,35 @@
+// Classe responsável por gerenciar as regras de movimentação dos peões de acordo com as cartas
+
+// Packages
 package control;
 
+// Imports interno
 import gui.windows.BoardScreen;
 import gui.components.PlayerPawn;
+
+// Imports externos
 import java.awt.Point;
 import javax.swing.Timer;
 import javax.swing.JOptionPane;
 
 public class GameManager {
     // VARIÁVEIS DE INSTÂNCIA
-    private static BoardScreen boardGame;
-    private static Timer timerAnimation; // Variável para armazenar o método Timer
-    private static boolean isAtBase = true; // Controle se o peão ainda não saiu para o circuito
+    private BoardScreen boardScreen;
+    private Timer timerAnimation; // Variável para armazenar o método Timer
+    private boolean isAtBase = true; // Controle se o peão ainda não saiu para o circuito
 
-    public static void setBoardGame(BoardScreen boardScreen) {
-        boardGame = boardScreen;
-    }
+    /** 
+    ** Construtor da classe "GameManager" que passa como parâmetro o tabuleiro do jogo
+    * @param BoardScreen Tabuleiro do jogo
+    */
+    public GameManager(BoardScreen boardScreen) {
+        this.boardScreen = boardScreen;
+    }   
 
     // Método para processar o resultado das cartas
-    public static void cardResultVerification(boolean correct, String cardValue, String cardEffect) {
+    public void cardResultVerification(boolean correct, String cardValue, String cardEffect) {
         
-        if (boardGame == null) {
+        if (boardScreen == null) {
         // Se o tabuleiro for nulo encerra a aplicação
             System.err.println(
                 "[GameManager] Erro: O tabuleiro não foi registrado!"
@@ -33,10 +43,10 @@ public class GameManager {
         }
  
         // Instância o player 1 passando o index do peão (para testes)
-        PlayerPawn p1 = boardGame.getPlayer1Pawn(0);
+        PlayerPawn p1 = boardScreen.getPlayer1Pawn(0);
 
         // Array que armazena as coordenadas do path das casas dos peões
-        Point[] mapaCasas = boardGame.getCaminhoCasas();
+        Point[] mapaCasas = boardScreen.getCaminhoCasas();
 
         // Se o peão do jogador ou o track do seu caminho for nulo, encerra a aplicação 
         if (p1 == null || mapaCasas == null) {
@@ -126,7 +136,7 @@ public class GameManager {
     * @param toWhere índice da casa para onde o peão vai
     * 
     */
-    private static void pawnMovement(PlayerPawn playerPawn, int fromWhere, int toWhere, Point[] mapaCasas, boolean ganhouTurnoExtra, boolean baseExit) {
+    private void pawnMovement(PlayerPawn playerPawn, int fromWhere, int toWhere, Point[] mapaCasas, boolean ganhouTurnoExtra, boolean baseExit) {
         java.util.List<Point> pawnPathList = new java.util.ArrayList<>(); // Lista que armazena a casa que o peão irá avançar/retroceder até o seu destino final. Inclui a casa que ele se contra atualmente. Evita que o método tenha que olha para o path inteiro do jogador
         
         // Condicional para evitar que o peão percorra os caminhos intermediários enquanto estiver na base
@@ -204,7 +214,7 @@ public class GameManager {
                     playerPawn.setMoving(false);
 
                     // Redesenha o tabuleiro
-                    boardGame.repaint();
+                    boardScreen.repaint();
 
                     // Ao somar mais 1 o peão sabe que conclui essa etapa. Assim quando passar pelo "indiceEtapa[0] + 1" ele sabe para qual casa irá em direção
                     STEP_INDEX[0]++;  // Contador é permanentemente somado +1
@@ -224,9 +234,9 @@ public class GameManager {
         timerAnimation.start();
     }
 
-    private static void verificarCondicoesFinais(PlayerPawn peao, int posicaoAlcancada, boolean ganhouTurnoExtra) {
-        if (posicaoAlcancada >= boardGame.getCaminhoCasas().length - 1) {
-            JOptionPane.showMessageDialog(boardGame, 
+    private void verificarCondicoesFinais(PlayerPawn peao, int posicaoAlcancada, boolean ganhouTurnoExtra) {
+        if (posicaoAlcancada >= boardScreen.getCaminhoCasas().length - 1) {
+            JOptionPane.showMessageDialog(boardScreen, 
                 "🏆 VITÓRIA! O peão de " + peao.getPlayerName() + " alcançou o Centro do Tabuleiro!\nVocê venceu o jogo!", 
                 "Fim de Partida", 
                 JOptionPane.INFORMATION_MESSAGE);
@@ -234,7 +244,7 @@ public class GameManager {
         }
 
         if (ganhouTurnoExtra) {
-            JOptionPane.showMessageDialog(boardGame, 
+            JOptionPane.showMessageDialog(boardScreen, 
                 "Incrível! Você tirou um efeito de valor '6'!\nVocê ganhou o direito de jogar novamente.", 
                 "Turno Bônus", 
                 JOptionPane.INFORMATION_MESSAGE);

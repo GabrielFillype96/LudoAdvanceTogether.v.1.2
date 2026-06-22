@@ -6,8 +6,18 @@ import gui.windows.CardsContainer;
 import control.GameManager; // Certifique-se de importar o GameManager
 
 public class CardAnswerValidation {
+    // VARIÁVEIS DE INSTÂNCIA
+    private GameManager gameManager;
 
-    public static void validar(String opcaoEscolhida, CustomCards carta, CardsContainer painelPai) {
+    /**
+    ** Construtor da classe "CardAnswerValidation" que passa como parâmetro o gerenciador do jogo
+    * @param gameManager Gerente do jogo
+    */
+    public CardAnswerValidation(GameManager gameManager) {
+        this.gameManager = gameManager;
+    }
+
+    public void validar(String opcaoEscolhida, CustomCards carta, CardsContainer painelPai) {
         if (carta == null || painelPai == null) return;
 
        boolean acertou = opcaoEscolhida.trim().equalsIgnoreCase(carta.getCardAnswer().trim());
@@ -19,7 +29,7 @@ public class CardAnswerValidation {
                 JOptionPane.INFORMATION_MESSAGE);
                 
             // CHAMADA REAL: Aciona as regras do peão e o movimento deslizante
-            GameManager.cardResultVerification(true, carta.getCardValueText(), carta.getCardEffect());
+            this.gameManager.cardResultVerification(true, carta.getCardValueText(), carta.getCardEffect());
 
         } else {
             JOptionPane.showMessageDialog(painelPai, 
@@ -28,7 +38,7 @@ public class CardAnswerValidation {
                 JOptionPane.ERROR_MESSAGE);
                 
             // Passa falso para a regra de negócio processar a punição ou retenção
-            GameManager.cardResultVerification(false, carta.getCardValueText(), carta.getCardEffect());
+            this.gameManager.cardResultVerification(false, carta.getCardValueText(), carta.getCardEffect());
         }
 
         // --- MECÂNICA DE AVANÇAR DE CARTA ---

@@ -3,9 +3,12 @@
 // Package
 package gui.windows;
 
-
+import control.GameManager;
 // Imports internos
 import control.PawnControlManager;
+import gui.components.PlayerPawn;
+import gui.events.BoardPawnMouseListener;
+
 
 // Imports externos
 import java.awt.Color;
@@ -71,6 +74,9 @@ public class GameContainer extends JPanel {
         this.boardScreen = new BoardScreen("Gabriel", "Azul", "Fernanda", "Roxo", "Raimunda", "Rosa", "Paulo", "Amarelo");
         this.boardScreen.setBounds(BOARD_SCREEN_BOUNDS); // Tamanho e posição do tabuleiro (0, 0) (900x900)
 
+        // Instancia o manager global do jogo
+        GameManager globalGameManager = new GameManager(this.boardScreen);
+
         // Área reservada ao layout das cartas, controles e informações de jogador (450x600)
         JPanel cardsArea = new JPanel(); // Instancia o painel completo que irá conter as cartas, controles e informações do jogador
         cardsArea.setBounds(CARDS_AREA_BOUNDS); // Tamanho e posição da área das cartas (900, 0) (450x600)
@@ -79,7 +85,7 @@ public class GameContainer extends JPanel {
 
         // Instancia o "CardsContainer" que será responsável por conter e renderizar as cartas do jogo
         // Ele mesmo vai carregar o JSON e inicializar a primeira carta.
-        CardsContainer cardsContainer = new CardsContainer("FÁCIL");
+        CardsContainer cardsContainer = new CardsContainer("FÁCIL", globalGameManager);
         cardsContainer.setBounds(CARDS_CONTAINER_BOUNDS); // Tamanho e posição do container das cartas (60, 165) (330x510)
         cardsArea.add(cardsContainer);
 
@@ -115,9 +121,18 @@ public class GameContainer extends JPanel {
         add(pawnControlArea);
 
         /*
-        * Chama o método setter "setPawnControlManager" da classe "BoardScreen". É preciso chamar esse método pela forma como código é estruturado e os componentes são criados. Como o tabuleiro ("BoardScreen") "nasce" primeiro ele não sabe quem é o "PawnControlManager". Assim é preciso que o tabuleiro tenha acesso ao "PawnControlManager" de alguma forma para poder realizar a funcionalidade wobble
-        */
-        boardScreen.setPawnControlManager(pawnControlManager);
+         * O GameContainer atua como orquestrador para unir a interface visual e as regras de jogo.
+         * Como a classe "BoardScreen" é puramente visual, ela não deve gerenciar dependências. 
+         * Portanto, extraímos cada peão do tabuleiro e injetamos o "PawnControlManager" diretamente 
+         * nos seus respectivos ouvintes de evento (BoardPawnMouseListener). 
+         * Isso elimina dependências circulares (antigo setter) e habilita a funcionalidade wobble perfeitamente.
+         */
+        for (int i = 0; i < 4; i++) {
+            PlayerPawn playerPawn = boardScreen.getPlayer1Pawn(i);
+            if (playerPawn != null) {
+                playerPawn.addMouseListener(new BoardPawnMouseListener(pawnControlManager, i));
+            }
+        }   
       
 
         // Perguntar sobre os outros setters and getters que foram criados ao tentar fazer o método wobble
@@ -129,7 +144,7 @@ public class GameContainer extends JPanel {
         // Perguntar sobre o super
         // Perguntar a ordem certa do "add" entre o BoardScreen e PawnControlContainer
         // Perguntar a diferenca da classe CardAnswerValidation e a GameManager, especificamente no metodo cardResultVerification do GameManager
-        // Perguntar a diferenca entre fazer um GameManager gameManager = new GameManger(boardScreen), sem declarar 'private GameManager gameManager' em cima.
+       
     }
 
     // Método getter para acessar as dimensões do GameContainer

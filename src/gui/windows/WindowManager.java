@@ -7,7 +7,10 @@ public class WindowManager {
     // VARIÁVEIS DE INSTÂNCIA
     private MainScreenContainer mainPanel; // variável para armazenar a referência ao painel de fundo principal do jogo, onde as telas serão adicionadas ("MainScreenContainer")
 
-    // Construtor que recebe a tela de fundo real para podermos adicionar coisas nela
+    /**
+    * @param MainScreenContainer Tela principal do jogo
+    * Construtor da classe "WindowManager" que recebe a "MainScreenContainer" para podermos adicionar coisas nela
+    */
     public WindowManager(MainScreenContainer mainPanel) {
         this.mainPanel = mainPanel;
     }

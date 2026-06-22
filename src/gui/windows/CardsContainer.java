@@ -6,6 +6,7 @@ package gui.windows;
 // Import interno
 import cards.CardManager;
 import cards.CustomCards;
+import control.GameManager;
 
 // Import externo
 import java.awt.Dimension;
@@ -17,6 +18,8 @@ import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
+import actions.CardAnswerValidation;
+
 /**
  * Painel base responsável por carregar, posicionar e gerenciar 
  * a exibição visual das novas cartas dinâmicas vindas do JSON.
@@ -27,6 +30,7 @@ public class CardsContainer extends JPanel {
     private List<CustomCards> cardList;
     private CustomCards activeCard;
     private Image deckImg; // Imagem do baralho para mostrar atrás das cartas
+    private GameManager gameManager;
     private static final String DECK_IMG_URL = "/assets/deckCardImage_220x340.png"; // Caminho da imagem do baralho
     private static final double SCALE = 1.5; // Fator de escala para ajustar as dimensões do painel e das cartas
     //private static final Dimension CARD_DIMENSION = Dimension((int) (200 * SCALE), (int) (320 * SCALE));
@@ -36,7 +40,9 @@ public class CardsContainer extends JPanel {
      * Construtor atualizado: agora ele mesmo carrega as cartas do tipo solicitado
      * @param difficultyOrType Tipo da carta Ex: "FÁCIL", "SORTE", "AZAR"
      */
-    public CardsContainer(String difficultyOrType) {
+    public CardsContainer(String difficultyOrType, GameManager gameManager) {
+        this.gameManager = gameManager;
+
         // Mantém as dimensões de 200x340 definidas no layout
         Dimension cardDimension = new Dimension( // Define as dimensões do painel que conterá as cartas
             200, 
@@ -63,8 +69,11 @@ public class CardsContainer extends JPanel {
             );
         }
 
+        // Instancia a ferramenta de validação da resposta
+        CardAnswerValidation cardAnswerValidation = new CardAnswerValidation(this.gameManager);
+
         // O próprio painel faz a chamada ao CardManager para buscar as informações das cartas do JSON de acordo com o filtro de dificuldade (fácil, médio, difícil) ou tipo (azar, sorte, etc)
-        this.cardList = CardManager.loadCard(difficultyOrType);
+        this.cardList = CardManager.loadCard(difficultyOrType, cardAnswerValidation);
 
         // Se encontrou cartas no JSON, exibe a primeira da lista por padrão
         if (cardList != null && !cardList.isEmpty()) {

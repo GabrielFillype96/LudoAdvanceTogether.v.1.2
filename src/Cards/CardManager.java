@@ -4,6 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+
+import actions.CardAnswerValidation;
+
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
@@ -19,7 +22,7 @@ public class CardManager {
      * @param filtro Categoria de filtragem (Ex: "FÁCIL", "MÉDIO", "DIFÍCIL", "SORTE", "AZAR")
      * @return Lista de objetos CustomCards prontos para uso.
      */
-    public static List<CustomCards> loadCard(String filtro) {
+    public static List<CustomCards> loadCard(String filtro, CardAnswerValidation cardAnswerValidation) {
         List<CustomCards> cartasFiltradas = new ArrayList<>();
         Gson gson = new Gson();
 
@@ -28,7 +31,7 @@ public class CardManager {
             var inputStream = CardManager.class.getResourceAsStream(CAMINHO_JSON);
             if (inputStream == null) {
                 System.err.println("[CardManager] Erro: Arquivo JSON não encontrado em: " + CAMINHO_JSON);
-                return cartasFiltradas;
+                return cartasFiltradas; 
             }
 
             // Lê o arquivo garantindo suporte a acentos (UTF-8)
@@ -61,22 +64,22 @@ public class CardManager {
                     // Decide qual Construtor da carta chamar com base no tipo
                     if (tipoGeral.equals("PERGUNTA")) {
                         if (tipoPergunta.equals("SIM_NAO")) {
-                            // Construtor 2: Pergunta Sim / Não
-                            novaCarta = new CustomCards(id, tipoGeral, enunciado, efeito, valorEfeito, iconePeao, dificuldade, respostaCorreta);
+                            // Construtor 2: Pergunta Sim / Não (Adicionado cardAnswerValidation no final)
+                            novaCarta = new CustomCards(id, tipoGeral, enunciado, efeito, valorEfeito, iconePeao, dificuldade, respostaCorreta, cardAnswerValidation);
                         } else {
                             // Construtor 3: Múltipla Escolha
-                            // Converte o array de alternativas do JSON para String[] do Java
                             JsonArray arrayAlternativas = obj.getAsJsonArray("alternativas");
                             String[] alternativas = new String[arrayAlternativas.size()];
                             for (int i = 0; i < arrayAlternativas.size(); i++) {
                                 alternativas[i] = arrayAlternativas.get(i).getAsString();
                             }
                             
-                            novaCarta = new CustomCards(id, tipoGeral, enunciado, efeito, valorEfeito, iconePeao, dificuldade, alternativas, respostaCorreta);
+                            // Construtor 3 (Adicionado cardAnswerValidation no final)
+                            novaCarta = new CustomCards(id, tipoGeral, enunciado, efeito, valorEfeito, iconePeao, dificuldade, alternativas, respostaCorreta, cardAnswerValidation);
                         }
                     } else {
-                        // Construtor 1: Cartas Especiais (Sorte, Azar, Sacanear)
-                        novaCarta = new CustomCards(id, tipoGeral, enunciado, efeito, valorEfeito, iconePeao);
+                        // Construtor 1: Cartas Especiais (Adicionado cardAnswerValidation no final)
+                        novaCarta = new CustomCards(id, tipoGeral, enunciado, efeito, valorEfeito, iconePeao, cardAnswerValidation);
                     }
 
                     // Adiciona a carta gerada à nossa lista de retorno

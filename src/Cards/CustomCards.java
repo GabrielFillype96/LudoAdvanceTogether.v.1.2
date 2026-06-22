@@ -42,6 +42,8 @@ public class CustomCards extends JPanel {
     private Image frontImgCard;
     private boolean displayBackImgCard = false;
 
+    private CardAnswerValidation cardAnswerValidation;
+
     private static final String backImgCardURL = "/assets/backImgCard_220x340.png"; // Caminho da imagem de fundo da carta (verso)
     
     
@@ -53,7 +55,7 @@ public class CustomCards extends JPanel {
     // =========================================================================
     
     // Construtor 1: Cartas Especiais (Sorte, Azar, Sacanear)
-    public CustomCards(int cardID, String cardType, String mainTxt, String cardEffect, String cardValue, String nomeIconePeao) {
+    public CustomCards(int cardID, String cardType, String mainTxt, String cardEffect, String cardValue, String nomeIconePeao, CardAnswerValidation cardAnswerValidation) {
         this.cardID = cardID;
         this.cardType = cardType.toUpperCase();
         this.mainTxt = mainTxt;
@@ -63,6 +65,7 @@ public class CustomCards extends JPanel {
         this.tipoPergunta = "";
         this.alternativas = null;
         this.cardAnswer = "";
+        this.cardAnswerValidation = cardAnswerValidation;
         
         carregarIcones(nomeIconePeao);
         configurarComponente();
@@ -86,7 +89,7 @@ public class CustomCards extends JPanel {
     }
 
     // Construtor 2: Pergunta SIM / NÃO
-    public CustomCards(int cardID, String cardType, String mainTxt, String cardEffect, String cardValue, String nomeIconePeao, String dificuldade, String cardAnswer) {
+    public CustomCards(int cardID, String cardType, String mainTxt, String cardEffect, String cardValue, String nomeIconePeao, String dificuldade, String cardAnswer, CardAnswerValidation cardAnswerValidation) {
         this.cardID = cardID;
         this.cardType = cardType.toUpperCase();
         this.mainTxt = mainTxt;
@@ -96,6 +99,7 @@ public class CustomCards extends JPanel {
         this.tipoPergunta = "SIM_NAO";
         this.cardAnswer = cardAnswer;
         this.alternativas = new String[]{"Sim", "Não"}; // Inicializa automaticamente as duas opções
+        this.cardAnswerValidation = cardAnswerValidation;
         inicializarBotoesAlternativas();
         carregarIcones(nomeIconePeao);
         configurarComponente();
@@ -117,7 +121,7 @@ public class CustomCards extends JPanel {
 
 
     // Construtor 3: Pergunta de MÚLTIPLA ESCOLHA
-    public CustomCards(int cardID, String cardType, String mainTxt, String cardEffect, String cardValue, String nomeIconePeao, String dificuldade, String[] alternativas, String cardAnswer) {
+    public CustomCards(int cardID, String cardType, String mainTxt, String cardEffect, String cardValue, String nomeIconePeao, String dificuldade, String[] alternativas, String cardAnswer, CardAnswerValidation cardAnswerValidation) {
         this.cardID = cardID;
         this.cardType = cardType.toUpperCase();
         this.mainTxt = mainTxt;
@@ -127,6 +131,7 @@ public class CustomCards extends JPanel {
         this.tipoPergunta = "MULTIPLA_ESCHLE";
         this.alternativas = alternativas;
         this.cardAnswer = cardAnswer;
+        this.cardAnswerValidation = cardAnswerValidation;
         inicializarBotoesAlternativas();
         carregarIcones(nomeIconePeao);
         configurarComponente();
@@ -175,7 +180,7 @@ private void inicializarBotoesAlternativas() {
     }
 
     for (int i = 0; i < alternativas.length; i++) {
-        CardOptionButton btn = new CardOptionButton(alternativas[i], this.tipoPergunta, corInterna);
+        CardOptionButton btn = new CardOptionButton(alternativas[i], this.tipoPergunta, corInterna, this.cardAnswerValidation);
         int yBotao = yInicial + (i * (alturaBotao + espacamento));
         btn.setBounds(xCentralizado, yBotao, larguraBotao, alturaBotao);
 

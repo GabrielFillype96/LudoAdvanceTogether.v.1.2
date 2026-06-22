@@ -27,7 +27,10 @@ public class PawnControlContainer extends JPanel {
         (int) (100 * SCALE)
     );
     
-    
+    /**
+    * @param PawnControlManager Gerenciador das funcionalidades do peão (wobble, shake, seleção para andar)
+    * Construtor da classe "PawnControlContainer" que recebe como parâmetro o gerenciador de movimento dos peões "PawnControlManager"
+    */
     public PawnControlContainer(PawnControlManager pawnControlManager) {
         this.pawnControlManager = pawnControlManager;
         setBounds(PAWN_CONTROL_CONTAINER_BOUNDS); // Tamanho e posição do painel de controle dos peões (0, 0) (330x180)

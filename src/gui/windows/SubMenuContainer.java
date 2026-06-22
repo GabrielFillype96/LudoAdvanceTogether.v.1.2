@@ -11,13 +11,16 @@ public class SubMenuContainer extends JPanel {
     // VARIÁVEIS DE INSTÂNCIA
     private static final double SCALE = 1.5;   
     private static final Rectangle SUB_MENU_CONTAINER_BOUNDS = new Rectangle( // Dimensões fixas para o painel de opções do menu principal onde os mini-menu's são exibidos
-        0, 
-        0, 
-        (int) (520 * SCALE), 
+        (int) (0 * SCALE), 
+        (int) (0 * SCALE), 
+        (int) (520 * SCALE),
         (int) (420 * SCALE)
-    ); 
+    );
 
-    // Construtor da classe SubMenuContainer, que recebe o WindowManager para poder acessar e realizar a troca de telas
+    /**
+    * @param WindowManager Gerenciador da troca de telas
+    * Construtor da classe "SubMenuContainer" que recebe o "WindowManager" para poder acessar e realizar a troca de telas
+    */ 
     public SubMenuContainer(WindowManager windowManager) {
         // Configurações iniciais do painel que irá receber os mini-menu's de opções do menu principal
         setOpaque(false); // Deixa o layer transparente para mostrar o fundo

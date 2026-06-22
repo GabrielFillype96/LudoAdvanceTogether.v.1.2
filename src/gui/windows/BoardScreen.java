@@ -25,7 +25,6 @@ import java.awt.Point;
 public class BoardScreen extends JPanel {
 
     // VARIÁVEIS DE INSTÂNCIA
-    private PawnControlManager pawnControlManager;
     private String player1Name, player2Name, player3Name, player4Name;
     private String player1Color, player2Color, player3Color, player4Color;
     private static final double SCALE = 1.5;
@@ -92,7 +91,7 @@ public class BoardScreen extends JPanel {
         }
         
         
-        //Loop para atribuir a coordenada inicial dos pões do jogador 1
+        // Loop para atribuir a coordenada inicial dos pões do jogador 1
         for (int i = 0; i < 4; i++) {
             System.out.println(
                 "Atribuindo coordenada visual para o peão " + (i+1) + " do Jogador 1 na casa " + j
@@ -120,7 +119,7 @@ public class BoardScreen extends JPanel {
             j++;
         }
 
-        control.GameManager.setBoardGame(this);
+       
     }
 
     private Color colorName(String colorName) {
@@ -135,7 +134,7 @@ public class BoardScreen extends JPanel {
         }
     }
 
-    /**
+    /*
     * Mapeia as coordenadas físicas (X, Y) do centro de cada casa do circuito 
     * a partir do ponto de partida do Jogador 1 (Azul, Canto Inferior Esquerdo).
     */
@@ -274,11 +273,13 @@ public class BoardScreen extends JPanel {
     }
 
 
-    // Método para desenhar o tabuleiro do jogo
-    // @Override indica que o método "paintComponent" está sendo sobrescrito da classe pai (JPanel). Serve como uma espécie de "guarda-costas" para garantir que estamos realmente sobrescrevendo um método existente e não criando um novo método por engano.
+    /**
+    ** Método para desenhar o tabuleiro do jogo
+    ** O método "paintComponent" é chamado sempre que o painel precisa ser redesenhado, permitindo que personalizemos a aparência do tabuleiro
+    ** Visibilidade "protected" para que apenas classes dentro do mesmo pacote ou subclasses possam acessar este método
+    * @Override indica que o método "paintComponent" está sendo sobrescrito da classe pai (JPanel). Serve como uma espécie de "guarda-costas" para garantir que estamos realmente sobrescrevendo um método existente e não criando um novo método por engano.
+    */
     @Override
-    // O método "paintComponent" é chamado sempre que o painel precisa ser redesenhado, permitindo que personalizemos a aparência do tabuleiro
-    // Visibilidade "protected" para que apenas classes dentro do mesmo pacote ou subclasses possam acessar este método
     protected void paintComponent(Graphics g) {
         // Estrutura padrão do "paintComponent" para garantir que o fundo seja desenhado corretamente
         super.paintComponent(g);
@@ -601,7 +602,7 @@ public class BoardScreen extends JPanel {
 
     // Métodos getters
     /**
-    * Retorna o peão específico do jogador 1 baseado no índice (0 a 3).
+    ** Retorna o peão específico do jogador 1 baseado no índice (0 a 3).
     * @param index Índice do peão do jogador
     * @return O peão selecionado 
     */
@@ -622,17 +623,5 @@ public class BoardScreen extends JPanel {
     * Método setter para a classe "GameContainer" possa acessar a variável privada "pawnControlManager" aqui e alterar o seu valor
     * Como a classe "BoardScreen" é o primeiro elemento a "nascer" na classe "GameContainer", ela ainda não "conhece" a classe "PawnControlManager". Com isso, o método "setPawnControlManager" permite que a "BoardScreen" conheça a "PawnControlManager" depois
     */
-    public void setPawnControlManager(PawnControlManager pawnControlManager) {
-        this.pawnControlManager = pawnControlManager;
-
-        if (this.player1Pawn != null) {
-            for (int i = 0; i < player1Pawn.length; i++) {
-                if (player1Pawn[i] != null) {
-                    // Instancia um objeto da classe "BoardPawnMouseListener"
-                    // "MouseAdapter" é uma classe abstrata nativa do Java
-                    player1Pawn[i].addMouseListener(new BoardPawnMouseListener(pawnControlManager, i));
-                }
-            }
-        }
-    }
+    
 }

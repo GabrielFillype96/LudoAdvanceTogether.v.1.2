@@ -21,7 +21,7 @@ public class MainScreenContainer extends JPanel {
     private final static Rectangle MAIN_SCREEN_BOUNDS = new Rectangle( // Dimensões fixas para o painel da tela principal
         0,
         0, 
-        900, 
+        900,
         600
     ); 
 

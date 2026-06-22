@@ -27,16 +27,23 @@ public class NewGameMenuScreen extends JPanel {
     private static final double SCALE = 1.5; // Fator de escala para ajustar o tamanho dos componentes (pode ser ajustado conforme necessário)
 
     // Instancia (cria o objeto) da classe Dimension do Java Awt com as dimensões do menu offline
-    private static final Dimension OFFLINE_MENU_DIMENSION = new Dimension(520, 420); // Dimensões fixas para o menu offline
+    private static final Dimension OFFLINE_MENU_DIMENSION = new Dimension( // Dimensões fixas para o menu offline
+        (int) (520 * SCALE), 
+        (int) (420 * SCALE)
+    );
 
     // Variáveis para os componentes interativos do menu offline
     private JRadioButton rbEasy, rbMedium, rbHard; // Botões do tipo radio para a dificuldade
     // Depois irá precisar de um método getter para pegar o nome dos demais players 
     private JTextField txtP1, txtCPU1, txtCPU2, txtCPU3; // Campos de texto para os nomes dos jogadores
-        
+    
+    
+    /** 
+    * @param WindowManager Gerenciador responsável pela troca de tela
+    * @param SubMenuContainer Container que irá guardar o subMenu
+    */
     // Construtor que recebe o WindowManager para poder chamar as transições de tela
     public NewGameMenuScreen(WindowManager windowManager, SubMenuContainer subMenuContainer) {
-
         this.windowManager = windowManager;
         this.subMenuContainer = subMenuContainer;
         // Dimensões exatas para o GridBagLayout centralizar perfeitamente
