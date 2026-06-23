@@ -613,15 +613,11 @@ public class BoardScreen extends JPanel {
         return null;
     }
 
-
     // Permite que o GameManager consulte o vetor de coordenadas das casas do circuito. 
     public java.awt.Point[] getCaminhoCasas() {
         return this.player1Path;
     }
 
-    /*
-    * Método setter para a classe "GameContainer" possa acessar a variável privada "pawnControlManager" aqui e alterar o seu valor
-    * Como a classe "BoardScreen" é o primeiro elemento a "nascer" na classe "GameContainer", ela ainda não "conhece" a classe "PawnControlManager". Com isso, o método "setPawnControlManager" permite que a "BoardScreen" conheça a "PawnControlManager" depois
-    */
+    
     
 }

@@ -25,7 +25,6 @@ public class ReferencePawn extends JLabel {
     private boolean isInclinedToRight = true;
     private Timer wobbleTimer;
     
-
     /**
      * Construtor do Peão de Referência
      */

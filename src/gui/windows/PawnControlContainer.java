@@ -66,10 +66,30 @@ public class PawnControlContainer extends JPanel {
         }
         
         // Define as posições e o tamanho dos peões
-        pawnLabels[0].setBounds((int) (50 * SCALE), (int) (10 * SCALE), labelWidth, labelHeight);
-        pawnLabels[1].setBounds((int) (130 * SCALE), (int) (10 * SCALE), labelWidth, labelHeight);
-        pawnLabels[2].setBounds((int) (50 * SCALE), (int) (60 * SCALE), labelWidth, labelHeight);
-        pawnLabels[3].setBounds((int) (130 * SCALE), (int) (60 * SCALE), labelWidth, labelHeight);
+        pawnLabels[0].setBounds(
+            (int) (50 * SCALE), 
+            (int) (10 * SCALE), 
+            labelWidth, 
+            labelHeight
+        );
+        pawnLabels[1].setBounds(
+            (int) (130 * SCALE), 
+            (int) (10 * SCALE), 
+            labelWidth, 
+            labelHeight
+        );
+        pawnLabels[2].setBounds(
+            (int) (50 * SCALE), 
+            (int) (60 * SCALE), 
+            labelWidth, 
+            labelHeight
+        );
+        pawnLabels[3].setBounds(
+            (int) (130 * SCALE),
+            (int) (60 * SCALE), 
+            labelWidth, 
+            labelHeight
+        );
 
         // Chama o método "pawnVisualState"
         pawnVisualState(0, "NORMAL");
@@ -98,7 +118,7 @@ public class PawnControlContainer extends JPanel {
         
         // Atualiza a tela para mostrar a nova imagem
         repaint();
-    } 
+    }
     
     // Método getter para retornar o índice do peão de referência
     public ReferencePawn getReferencePawn(int pawnIndex) {

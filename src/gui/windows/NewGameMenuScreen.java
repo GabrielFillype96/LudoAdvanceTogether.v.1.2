@@ -9,6 +9,7 @@ import gui.components.PlayerIdentifier;
 import gui.components.SlotsName;
 import gui.components.buttons.CustomButton;
 import gui.components.buttons.PlayButton;
+import gui.components.buttons.DifficultyRadioButton;
 import actions.StartGameAction;
 import gui.theme.GameColors;
 
@@ -100,7 +101,7 @@ public class NewGameMenuScreen extends JPanel {
         add(lblDif); // Adiciona o label de dificuldade ao painel
 
         // Instancia os botões de rádio para as opções de dificuldade e define a posição e tamanho
-        rbEasy = gui.components.buttons.DifficultyRadioButton.goldenBtnRd("Fácil");
+        rbEasy = DifficultyRadioButton.goldenBtnRd("Fácil");
         rbEasy.setBounds(
             (int) (180 * SCALE), 
             (int) (70 * SCALE), 

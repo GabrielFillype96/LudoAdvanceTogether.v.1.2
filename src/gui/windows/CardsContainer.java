@@ -102,6 +102,8 @@ public class CardsContainer extends JPanel {
             this.getWidth(), 
             this.getHeight()
         ); 
+
+        activeCard.setPainelPai(this);
         
         this.add(this.activeCard); // Adiciona o JPanel da carta dentro deste CardsPanel
 

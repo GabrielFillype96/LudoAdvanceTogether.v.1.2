@@ -18,7 +18,6 @@ import cards.CustomCards;
 
 public class CardOptionButton extends JButton {
     // VARIÁVEIS DE INSTÂNCIA
-    private CardAnswerValidation cardAnswerValidation;
     
     private final String CARD_QUESTION_TYPE;
     private String cardAnswerLetter = "";  
@@ -39,9 +38,8 @@ public class CardOptionButton extends JButton {
     private final static String CARD_BTN_BG_IMG_PATH = "/assets/cardBtnImg_160x40.png"; // Caminho da imagem de fundo dos botões das alternativas
 
     // Construtor para instanciar os botões de resposta
-    public CardOptionButton(String cardAnswerCompleteTxt, String cardQuestionType, Color cardColor, CardAnswerValidation cardAnswerValidation) {
+    public CardOptionButton(String cardAnswerCompleteTxt, String cardQuestionType, Color cardColor, String tipoPergunta) {
         super(cardAnswerCompleteTxt);
-        this.cardAnswerValidation = cardAnswerValidation;
         this.CARD_QUESTION_TYPE = cardQuestionType;
         this.CARD_COLOR = cardColor;
         
@@ -84,38 +82,6 @@ public class CardOptionButton extends JButton {
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 isHovered = false;
                 repaint();
-            }
-        });
-
-        // Dentro do construtor de CardOptionButton:
-        // Armadilha do clique (Versão Definitiva):
-        this.addActionListener(e -> {
-            
-            // 1. Vasculha a tela para achar a carta pai
-            java.awt.Component pai = getParent();
-            while (pai != null && !(pai instanceof CustomCards)) {
-                pai = pai.getParent();
-            }
-        
-            // 2. Vasculha a tela para achar o painel gerenciador
-            java.awt.Component painelGerenciador = getParent();
-            while (painelGerenciador != null && !(painelGerenciador instanceof gui.windows.CardsContainer)) {
-                painelGerenciador = painelGerenciador.getParent();
-            }
-            
-            // 3. Se achou os dois, converte e prepara a validação!
-            if (pai instanceof CustomCards && painelGerenciador instanceof gui.windows.CardsContainer) {
-                CustomCards cartaAtual = (CustomCards) pai;
-                gui.windows.CardsContainer painelPai = (gui.windows.CardsContainer) painelGerenciador;
-                
-                String respostaFornecida = getText().trim();
-                
-                // 4. A NOVA ARQUITETURA AQUI: Usa a ferramenta que está no bolso do botão!
-                if (this.cardAnswerValidation != null) {
-                    this.cardAnswerValidation.validar(respostaFornecida, cartaAtual, painelPai);
-                } else {
-                    System.err.println("[ERRO] O validador se perdeu e chegou nulo no botão!");
-                }
             }
         });
 
