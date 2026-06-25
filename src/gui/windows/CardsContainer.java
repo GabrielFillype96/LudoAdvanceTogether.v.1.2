@@ -7,6 +7,8 @@ package gui.windows;
 import cards.CardManager;
 import cards.CustomCards;
 import control.GameManager;
+import gui.components.CardDeckBackground;
+import gui.components.buttons.cardsButton.CardOptionButton;
 
 // Import externo
 import java.awt.Dimension;
@@ -14,99 +16,109 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
+import java.awt.event.ActionListener;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import actions.CardAnswerValidation;
 
-/**
- * Painel base responsável por carregar, posicionar e gerenciar 
+/*
+ * Painel base responsável por carregar e posicionar
  * a exibição visual das novas cartas dinâmicas vindas do JSON.
  */
 public class CardsContainer extends JPanel {
-
     // VARIÁVEIS DE INSTÂNCIA
     private List<CustomCards> cardList;
     private CustomCards activeCard;
-    private Image deckImg; // Imagem do baralho para mostrar atrás das cartas
+    private CardDeckBackground cardDeckBackground;
     private GameManager gameManager;
-    private static final String DECK_IMG_URL = "/assets/deckCardImage_220x340.png"; // Caminho da imagem do baralho
+    private CardAnswerValidation cardAnswerValidation;
     private static final double SCALE = 1.5; // Fator de escala para ajustar as dimensões do painel e das cartas
     //private static final Dimension CARD_DIMENSION = Dimension((int) (200 * SCALE), (int) (320 * SCALE));
-    
 
     /**
-     * Construtor atualizado: agora ele mesmo carrega as cartas do tipo solicitado
-     * @param difficultyOrType Tipo da carta Ex: "FÁCIL", "SORTE", "AZAR"
+     ** Construtor atualizado: agora ele mesmo carrega as cartas do tipo solicitado
+     * @param gameManager Gerenciador do jogo
+     * @param cardAnswerValidation Validação das respostas
      */
-    public CardsContainer(String difficultyOrType, GameManager gameManager) {
+    public CardsContainer(GameManager gameManager, CardAnswerValidation cardAnswerValidation) {
         this.gameManager = gameManager;
+        this.cardAnswerValidation = cardAnswerValidation;
+        setOpaque(false); // Mantém transparente para o fundo amadeirado aparecer atrás
+        setLayout(null); // Layout nulo para posicionamento absoluto dos componentes filhos
+        
+        // Instancia o deck das cartas
+        this.cardDeckBackground = new CardDeckBackground("/assets/deckCardImage_220x340.png");
+        // Perguntar sobre a diferença do "Dimension" para o "setBounds"
+        this.cardDeckBackground.setBounds(
+            0, 
+            0, 
+            (int) (300 * SCALE), 
+            (int) (400 * SCALE)
+        );
 
-        // Mantém as dimensões de 200x340 definidas no layout
-        Dimension cardDimension = new Dimension( // Define as dimensões do painel que conterá as cartas
-            200, 
-            320
-        ); 
-        setPreferredSize(cardDimension);
-        setSize(cardDimension); 
-        setOpaque(false);   // Mantém transparente para o fundo amadeirado aparecer atrás
-        setLayout(null);    // Permite que a CustomCards ocupe o espaço absoluto interno
+        // Adiciona o deck das cartas ao container
+        this.add(cardDeckBackground);
 
-        // Poderia ser utilizado o método "try/catch" para tratamento de erros, mas o if/else é mais sútil e simples
-        // Carrega a imagem do baralho para usar como fundo das cartas
-        java.net.URL deckImagePath = getClass().getResource(DECK_IMG_URL);
-        if (deckImagePath != null) {
-            // Se encontrou a imagem, carrega e armazena na variável deckImg
-            System.out.println(
-                "[CardsContainer] Imagem do baralho encontrada em: " + DECK_IMG_URL
-            );
-            this.deckImg = new ImageIcon(deckImagePath).getImage();
-        } else {
-            // Se não encontrou a imagem, imprime um erro no console
-            System.err.println(
-                "[CardsContainer] Erro: Imagem do baralho não encontrada em /assets/images/deckCardImage_220x340.png"
-            );
-        }
+        CardManager cardManager = new CardManager();
+        this.cardList = cardManager.loadCard("FÁCIL");
 
-        // Instancia a ferramenta de validação da resposta
-        CardAnswerValidation cardAnswerValidation = new CardAnswerValidation(this.gameManager);
-
-        // O próprio painel faz a chamada ao CardManager para buscar as informações das cartas do JSON de acordo com o filtro de dificuldade (fácil, médio, difícil) ou tipo (azar, sorte, etc)
-        this.cardList = CardManager.loadCard(difficultyOrType, cardAnswerValidation);
-
-        // Se encontrou cartas no JSON, exibe a primeira da lista por padrão
-        if (cardList != null && !cardList.isEmpty()) {
-            displayCard(0);
+        if (this.cardList != null && !this.cardList.isEmpty()) {
+            displayActiveCard(this.cardList.get(0));
         }
     }
 
     /**
-     * Método auxiliar para alternar a carta ativa dentro do painel
+     ** Método auxiliar para alternar a carta ativa dentro do painel
+     * @param cardDrawn Carta sorteada para aparacer
      */
-    public void displayCard(int index) {
-        // Verifica se o índice é válido antes de tentar exibir a carta
-        if (cardList == null || index < 0 || index >= cardList.size()) return;
+    public void displayActiveCard(CustomCards cardDrawn) {
+        // Trava de segurança para caso a carta sorteada seja "null", o jogo não travar
+        if (cardDrawn == null) return;
+        
         // Se já existia uma carta visual na tela, remove antes de colocar a nova
         if (this.activeCard != null) {
             this.remove(this.activeCard);
         }
 
-        // Pega a nova carta da lista
-        this.activeCard = this.cardList.get(index);
+        // Passa a carta corteada ("cardDrawn") para a variável "activeCard"
+        this.activeCard = cardDrawn;
 
-        // Garante que a carta comece posicionada no canto superior esquerdo do painel
-        this.activeCard.setBounds( // Faz a carta ocupar todo o espaço do CardsPanel
-            0, 
-            0, 
-            this.getWidth(), 
-            this.getHeight()
-        ); 
+        // Ajuste de posição para a carta se encaixar em cima do baralho
+        this.activeCard.setBounds(
+            20, 
+            20, 
+            (int)(200 * SCALE), 
+            (int)(320 * SCALE)
+        );
 
-        activeCard.setPainelPai(this);
+        if (this.activeCard.getBotoesOpcao() != null) {
+            for (CardOptionButton btn : this.activeCard.getBotoesOpcao()) {
+                
+                // Remove listeners antigos anexados para evitar execuções duplicadas na mesma carta
+                for (ActionListener al : btn.getActionListeners()) {
+                    btn.removeActionListener(al);
+                }
+                
+                // Validação da opção escolhida pelo jogador através do clique
+                btn.addActionListener(e -> {
+                    String respostaEscolhida = btn.getCardAnswerTxt().trim();
+                    System.out.println("[CardsContainer] O jogador clicou na resposta: " + respostaEscolhida);
+                    
+                    if (this.cardAnswerValidation != null) {
+                        this.cardAnswerValidation.validar(respostaEscolhida, this.activeCard, this);
+                    }
+                });
+            }
+        }
         
         this.add(this.activeCard); // Adiciona o JPanel da carta dentro deste CardsPanel
-
+        
+        // Colocamos a carta na tela (ZOrder 0 = na frente de tudo, ZOrder 1 = atrás da carta)
+        this.setComponentZOrder(this.activeCard, 0);
+        this.setComponentZOrder(this.cardDeckBackground, 1);
+        
         this.revalidate(); // Atualiza o layout para acomodar a nova carta
         this.repaint(); // Redesenha o painel para mostrar a nova carta
         System.out.println(
@@ -114,65 +126,29 @@ public class CardsContainer extends JPanel {
         );
     }
 
-    // Sobrescreve o método de pintura para desenhar o fundo do baralho atrás das cartas
-    @Override
-    protected void paintComponent(Graphics g) {
-        // Estrutura padrão do "paintComponent" para garantir que o fundo seja desenhado corretamente
-        super.paintComponent(g);
-
-        // Cria um contexto gráfico 2D para aplicar renderizações avançadas (como anti-aliasing)
-        Graphics2D g2 = (Graphics2D) g.create(); 
-
-        // Habilita o anti-aliasing para suavizar as bordas das imagens desenhadas
-        g2.setRenderingHint(
-            RenderingHints.KEY_ANTIALIASING, 
-            RenderingHints.VALUE_ANTIALIAS_ON
-        );
-
-        // Se a imagem do baralho foi carregada com sucesso, desenha ela como plano de fundo do painel
-        if (deckImg != null) {
-            // Desenha a imagem do baralho no container do "CardsPanel", escalando para preencher todo o painel
-            g2.drawImage(
-                deckImg, 
-                0, 
-                0, 
-                this.getWidth(), 
-                this.getHeight(), 
-                this
-            );
-
-            System.out.println(
-                "[CardsPanel] Imagem do baralho desenhada com sucesso."
-            );
-
-        } else {
-            
-            // Fallback: fundo cinza caso a imagem do baralho falhe, e imprime um erro no console
-            g.setColor(gui.theme.GameColors.PURPLE_BG);
-
-            g.fillRect(
-                0, 
-                0, 
-                this.getWidth(), 
-                this.getHeight()
-            );
-            
-            // Se a imagem do baralho não foi carregada, imprime um erro no console
-            System.err.println(
-                "[CardsPanel] Erro: A imagem do baralho não foi carregada."
-            );
-        }
-
-        // Libera os recursos gráficos usados para desenhar o fundo, garantindo que não haja vazamentos de memória
-        g2.dispose();
-    }
-
     // Métodos getters
     /**
-    * Retorna a lista de cartas carregadas no painel.
-    * @return List de CustomCards
+     ** Retorna a lista de cartas carregadas no painel.
+     * @return Card list da classe "CustomCards"
     */
     public List<CustomCards> getCardList() {
         return this.cardList;
+    }
+    
+    /**
+     ** Retorna a carta ativa no momento.
+     * @return Carta ativa
+    */
+    public CustomCards getActiveCard() {
+        return activeCard;
+    }
+
+    // Métodos setters
+    public void setCardList(List<CustomCards> cardList) {
+        this.cardList = cardList;
+    }
+
+    public void setActiveCard(CustomCards activeCard) {
+        this.activeCard = activeCard;
     }
 }

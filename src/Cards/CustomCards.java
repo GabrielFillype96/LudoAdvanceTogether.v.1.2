@@ -42,8 +42,9 @@ public class CustomCards extends JPanel {
     private Image backImgCard;
     private Image frontImgCard;
     private boolean displayBackImgCard = false;
+    private CardOptionButton[] botoesOpcao;
 
-    private CardAnswerValidation cardAnswerValidation;
+
     private CardsContainer painelPai;
 
     private static final String backImgCardURL = "/assets/backImgCard_220x340.png"; // Caminho da imagem de fundo da carta (verso)
@@ -57,7 +58,7 @@ public class CustomCards extends JPanel {
     // =========================================================================
     
     // Construtor 1: Cartas Especiais (Sorte, Azar, Sacanear)
-    public CustomCards(int cardID, String cardType, String mainTxt, String cardEffect, String cardValue, String nomeIconePeao, CardAnswerValidation cardAnswerValidation) {
+    public CustomCards(int cardID, String cardType, String mainTxt, String cardEffect, String cardValue, String nomeIconePeao) {
         this.cardID = cardID;
         this.cardType = cardType.toUpperCase();
         this.mainTxt = mainTxt;
@@ -67,7 +68,7 @@ public class CustomCards extends JPanel {
         this.tipoPergunta = "";
         this.alternativas = null;
         this.cardAnswer = "";
-        this.cardAnswerValidation = cardAnswerValidation;
+        
         
         carregarIcones(nomeIconePeao);
         configurarComponente();
@@ -91,7 +92,7 @@ public class CustomCards extends JPanel {
     }
 
     // Construtor 2: Pergunta SIM / NÃO
-    public CustomCards(int cardID, String cardType, String mainTxt, String cardEffect, String cardValue, String nomeIconePeao, String dificuldade, String cardAnswer, CardAnswerValidation cardAnswerValidation) {
+    public CustomCards(int cardID, String cardType, String mainTxt, String cardEffect, String cardValue, String nomeIconePeao, String dificuldade, String cardAnswer) {
         this.cardID = cardID;
         this.cardType = cardType.toUpperCase();
         this.mainTxt = mainTxt;
@@ -101,7 +102,6 @@ public class CustomCards extends JPanel {
         this.tipoPergunta = "SIM_NAO";
         this.cardAnswer = cardAnswer;
         this.alternativas = new String[]{"Sim", "Não"}; // Inicializa automaticamente as duas opções
-        this.cardAnswerValidation = cardAnswerValidation;
         inicializarBotoesAlternativas();
         carregarIcones(nomeIconePeao);
         configurarComponente();
@@ -123,7 +123,7 @@ public class CustomCards extends JPanel {
 
 
     // Construtor 3: Pergunta de MÚLTIPLA ESCOLHA
-    public CustomCards(int cardID, String cardType, String mainTxt, String cardEffect, String cardValue, String nomeIconePeao, String dificuldade, String[] alternativas, String cardAnswer, CardAnswerValidation cardAnswerValidation) {
+    public CustomCards(int cardID, String cardType, String mainTxt, String cardEffect, String cardValue, String nomeIconePeao, String dificuldade, String[] alternativas, String cardAnswer) {
         this.cardID = cardID;
         this.cardType = cardType.toUpperCase();
         this.mainTxt = mainTxt;
@@ -133,7 +133,6 @@ public class CustomCards extends JPanel {
         this.tipoPergunta = "MULTIPLA_ESCHLE";
         this.alternativas = alternativas;
         this.cardAnswer = cardAnswer;
-        this.cardAnswerValidation = cardAnswerValidation;
         inicializarBotoesAlternativas();
         carregarIcones(nomeIconePeao);
         configurarComponente();
@@ -164,60 +163,43 @@ public class CustomCards extends JPanel {
         setLayout(null); // Ativa o posicionamento absoluto para podermos alinhar os botões via código
     }
 
+   
     /**
-     * Instancia e adiciona os componentes reais de botão dentro do painel da carta
+     * Instancia e adiciona os componentes reais de botão centralizados
+     * de forma reta (sem inclinação/skew).
      */
-    /**
- * Instancia e adiciona os componentes reais de botão centralizados
- * de forma reta (sem inclinação/skew).
- */
-private void inicializarBotoesAlternativas() {
-        if (this.alternativas == null || this.alternativas.length == 0) return;
+    private void inicializarBotoesAlternativas() {
+            if (this.alternativas == null || this.alternativas.length == 0) return;
 
-        int larguraBotao = 152; 
-        int alturaBotao = 32;
-        int espacamento = 6;
-        int yInicial = 165; 
-        int xCentralizado = 29; 
+            // 1. Inicializa o array com o tamanho exato da quantidade de alternativas
+            this.botoesOpcao = new CardOptionButton[alternativas.length];
 
-        Color corInterna = new Color(255, 255, 255, 195);
-        if (this.cardType.equals("PERGUNTA") && this.dificuldade.equals("FÁCIL")) {
-            corInterna = Color.decode("#99AD7A"); 
-        }
+            int larguraBotao = 152; 
+            int alturaBotao = 32;
+            int espacamento = 6;
+            int yInicial = 165; 
+            int xCentralizado = 29; 
 
-        // Letras dinâmicas de A a D
-        String[] letras = {"A", "B", "C", "D"};
+            Color corInterna = new Color(255, 255, 255, 195);
+            if (this.cardType.equals("PERGUNTA") && this.dificuldade.equals("FÁCIL")) {
+                corInterna = Color.decode("#99AD7A"); 
+            }
 
-        for (int i = 0; i < alternativas.length; i++) {
-            // 1. Cria o botão
-            CardOptionButton btn = new CardOptionButton(alternativas[i], letras[i], corInterna, this.tipoPergunta);
-            
-            int yBotao = yInicial + (i * (alturaBotao + espacamento));
-            btn.setBounds(xCentralizado, yBotao, larguraBotao, alturaBotao);
+            // Letras dinâmicas de A a D
+            String[] letras = {"A", "B", "C", "D"};
 
-            // 2. Cria a variável final para usar na Lambda
-            final CardOptionButton botaoAlvo = btn;
-
-            // 3. A MÁGICA DA LAMBDA AQUI DENTRO (Injeta o comportamento no botão)
-            btn.addActionListener(e -> {
-                String respostaEscolhida = botaoAlvo.getCardAnswerTxt();
-
-                System.out.println("=== DEBUG DE VALIDAÇÃO ===");
-                System.out.println("Texto que o botão enviou: [" + respostaEscolhida + "]");
-                System.out.println("Texto correto da carta:   [" + CustomCards.this.cardAnswer + "]");
-                System.out.println("==========================");
+            for (int i = 0; i < alternativas.length; i++) {
+                // 1. Cria o botão
+                CardOptionButton btn = new CardOptionButton(alternativas[i], letras[i], corInterna, this.tipoPergunta);
                 
-                // Usa a variável que foi injetada!
-                if (this.cardAnswerValidation != null && this.painelPai != null) {
-                    this.cardAnswerValidation.validar(respostaEscolhida, CustomCards.this, this.painelPai);
-                } else {
-                    System.err.println("[CustomCards] Erro: Validador ou Painel Pai estão nulos!");
-                }
-            });
+                int yBotao = yInicial + (i * (alturaBotao + espacamento));
+                btn.setBounds(xCentralizado, yBotao, larguraBotao, alturaBotao);
 
-            this.add(btn); // Adiciona o botão à carta
+                this.botoesOpcao[i] = btn;
+
+                this.add(btn); // Adiciona o botão à carta
+            }
         }
-    }
 
    
 
@@ -355,6 +337,11 @@ private void inicializarBotoesAlternativas() {
     public void setDisplayingBackImgCard(boolean displayingBackImgCard) { 
         this.displayBackImgCard = displayingBackImgCard;
         this.repaint(); // Força a repintura imediata ao mudar de estado
+    }
+
+    // Método para o CardsContainer conseguir acessar os botões
+    public CardOptionButton[] getBotoesOpcao() {
+        return this.botoesOpcao;
     }
 
     // Método para selecionar a frente da carta de acordo com o tipo (pergunta/efeito)

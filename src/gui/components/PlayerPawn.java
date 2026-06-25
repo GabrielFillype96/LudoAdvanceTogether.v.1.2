@@ -88,8 +88,8 @@ public class PlayerPawn extends JLabel {
         shakeTimer.start(); 
     }
 
-    /* 
-    * Método para que o peão de referência pare de executar a funcionalidade shake (pular). Este método apenas dá o "stop" no timer para que a funcionalidade pare. A construção e operacionalidade do shake foi construída na classe "ShakeListener"
+    /**
+     ** Método para que o peão de referência pare de executar a funcionalidade shake (pular). Este método apenas dá o "stop" no timer para que a funcionalidade pare. A construção e operacionalidade do shake foi construída na classe "ShakeListener"
     */
     public void stopBoardPawnShake() {
         if (shakeTimer != null) {

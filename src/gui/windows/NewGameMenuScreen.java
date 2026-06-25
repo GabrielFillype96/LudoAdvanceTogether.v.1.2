@@ -17,14 +17,14 @@ import gui.theme.GameColors;
 import java.awt.*;
 import javax.swing.*;
 
+// Cria uma classe "NewGameMenuScreen" que irá herdar métodos da classe JPanel (nativa do Java Swing)
 public class NewGameMenuScreen extends JPanel {
     // VARIÁVEIS DE INSTÂNCIA
     // Variável para armazenar a referência ao WindowManager, que é o responsável por controlar as telas do jogo
     private WindowManager windowManager;
+
     // Variável para armazenar a referência ao painel de opções do menu principal, onde os mini-menu's são exibidos
     private SubMenuContainer subMenuContainer;
-
-    // Variável de escala para qualquer medida
     private static final double SCALE = 1.5; // Fator de escala para ajustar o tamanho dos componentes (pode ser ajustado conforme necessário)
 
     // Instancia (cria o objeto) da classe Dimension do Java Awt com as dimensões do menu offline
@@ -34,7 +34,8 @@ public class NewGameMenuScreen extends JPanel {
     );
 
     // Variáveis para os componentes interativos do menu offline
-    private JRadioButton rbEasy, rbMedium, rbHard; // Botões do tipo radio para a dificuldade
+    private JRadioButton rbEasy, rbMedium, rbHard; // Botões do tipo radio para a dificuldade7
+
     // Depois irá precisar de um método getter para pegar o nome dos demais players 
     private JTextField txtP1, txtCPU1, txtCPU2, txtCPU3; // Campos de texto para os nomes dos jogadores
     
@@ -71,7 +72,7 @@ public class NewGameMenuScreen extends JPanel {
         ));
         title.setForeground(GameColors.GOLD_ACCENT); // Cor do título em dourado fosco
         title.setBounds(
-            0, 
+            (int) (0 * SCALE), 
             (int) (25 * SCALE), 
             (int) (520 * SCALE), 
             (int) (30 * SCALE)
@@ -136,8 +137,10 @@ public class NewGameMenuScreen extends JPanel {
         add(rbHard);
 
         // Seção de slots para os nomes dos jogadores
-        // Slots para os nomes dos jogadores (Preparados para receber imagens e com espaçamento adequado)
-        JLabel subTitle = new JLabel("INSERIR NOMES DOS JOGADORES", SwingConstants.CENTER);
+        JLabel subTitle = new JLabel(
+            "INSERIR NOMES DOS JOGADORES", 
+            SwingConstants.CENTER
+        );
         subTitle.setFont(new Font(
             "SansSerif", // Fonte SansSerif
             Font.BOLD, // Estilo da fonte em negrito
@@ -152,7 +155,8 @@ public class NewGameMenuScreen extends JPanel {
         );
         add(subTitle);
 
-        /* * EXPLICAÇÃO DOS ESPAÇAMENTOS (X):
+        /* 
+         * Explicação dos espaçamentos dos slots (X):
          * Número começa em X. Mede 35px de largura.
          * Damos +8px de espaço vazio (respiro para sua arte).
          * Campo de texto começa em X + 35 + 8.
@@ -173,31 +177,31 @@ public class NewGameMenuScreen extends JPanel {
         // Cria o campo de texto para os jogadores utilizando a classe "SlotsName" e armazena a referência na variável.
         // Não é preciso criar um novo objeto pois a classe "SlotsName" já tem um método estático que retorna o JTextField pronto para uso.
         txtP1 = SlotsName.slotName( // 45 + 35 + 8 = 88 --> P1
-            68, 
-            155, 
-            155, 
-            35, 
+            (int) (68 * SCALE), 
+            (int) (155 * SCALE), 
+            (int) (155 * SCALE), 
+            (int) (35 * SCALE), 
             true
         );
         txtCPU1 = SlotsName.slotName( // 305 + 35 + 8 = 348 --> CPU 1
-            328,
-            155, 
-            155, 
-            35, 
+            (int) (328 * SCALE),
+            (int) (155 * SCALE), 
+            (int) (155 * SCALE), 
+            (int) (35 * SCALE), 
             false
         ); 
         txtCPU2 = SlotsName.slotName( // 45 + 35 + 8 = 88 --> CPU 2
-            68, 
-            210, 
-            155, 
-            35, 
+            (int) (68 * SCALE), 
+            (int) (210 * SCALE), 
+            (int) (155 * SCALE), 
+            (int) (35 * SCALE), 
             false
         ); 
         txtCPU3 = SlotsName.slotName( // 305 + 35 + 8 = 348 --> CPU 3
-            328, 
-            210, 
-            155, 
-            35, 
+            (int) (328 * SCALE), 
+            (int) (210 * SCALE), 
+            (int) (155 * SCALE), 
+            (int) (35 * SCALE), 
             false
         ); 
         
@@ -216,32 +220,32 @@ public class NewGameMenuScreen extends JPanel {
         // Adiciona os ícones laterais
         add(SlotsIcon.slotIconLabel( 
             "👤", 
-            225, 
-            155
+            (int) (225 * SCALE), 
+            (int) (155 * SCALE)
         )); 
         add(SlotsIcon.slotIconLabel(
             "💻", 
-            485, 
-            155
+            (int) (485 * SCALE), 
+            (int) (155 * SCALE)
         )); 
         add(SlotsIcon.slotIconLabel(
             "💻", 
-            225, 
-            210
+            (int) (225 * SCALE), 
+            (int) (210 * SCALE)
         ));
         add(SlotsIcon.slotIconLabel(
             "💻", 
-            485, 
-            210
+            (int) (485 * SCALE), 
+            (int) (210 * SCALE)
         ));
 
         // Cria o botão de iniciar o jogo utilizando a classe "PlayButton" e armazena a referência na variável "playBtn"
         CustomButton playBtn = new PlayButton();
         playBtn.setBounds(
-            180, 
-            300, 
-            200, 
-            45
+            (int) (180 * SCALE), 
+            (int) (300 * SCALE), 
+            (int) (200 * SCALE), 
+            (int) (45 * SCALE)
         ); // Define a posição e o tamanho do botão
         
         // Cria a ação de iniciar o jogo
@@ -269,24 +273,24 @@ public class NewGameMenuScreen extends JPanel {
         // Placa roxa de fundo
         g2.setColor(GameColors.PURPLE_BG);
         g2.fillRoundRect(
-            0, 
-            0, 
-            getWidth(), 
-            getHeight(), 
-            24, 
-            24
+            (int) (0 * SCALE), 
+            (int) (0 * SCALE), 
+            (int) (getWidth() * SCALE), 
+            (int) (getHeight() * SCALE), 
+            (int) (24 * SCALE), 
+            (int) (24 * SCALE)
         );
         
         // Moldura dourada externa
         g2.setColor(GameColors.GOLD_ACCENT);
         g2.setStroke(new BasicStroke(3));
         g2.drawRoundRect(
-            2, 
-            2, 
-            getWidth() - 5, 
-            getHeight() - 5, 
-            24, 
-            24
+            (int) (2 * SCALE), 
+            (int) (2 * SCALE), 
+            (int) ((getWidth() - 5) * SCALE), 
+            (int) ((getHeight() - 5) * SCALE), 
+            (int) (24 * SCALE), 
+            (int)(24 * SCALE)
         );
     }
 

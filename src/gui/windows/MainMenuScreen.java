@@ -17,12 +17,13 @@ import javax.swing.JPanel;
 public class MainMenuScreen extends JPanel {
     // VARIÁVEIS DE INSTÂNCIA
     private SubMenuContainer subMenuContainer; // Painel para conter os mini-menu's abertos pelos botões do menu principal
+    private static final double SCALE = 1.5; // Fator de escala para ajustar o tamanho dos componentes (pode ser ajustado conforme necessário)
     private static final Rectangle BUTTON_NAVIGATION_CONTAINER_BOUNDS = new Rectangle( 
         // Dimensões fixas para o painel dos botões do menu principal
-        20, 
-        35, 
-        300, 
-        280
+        (int) (20 * SCALE), 
+        (int) (35 * SCALE), 
+        (int) (300 * SCALE), 
+        (int) (280 * SCALE)
     ); 
 
 
@@ -45,10 +46,10 @@ public class MainMenuScreen extends JPanel {
         gbc.gridy = GridBagConstraints.RELATIVE; // O Java joga o próximo botão automaticamente na linha de baixo
         gbc.fill = GridBagConstraints.NONE; // Não estica a imagem do botão
         gbc.insets = new Insets( // Espaçamento de 7 pixels acima e abaixo de cada botão
-            7, 
-            0, 
-            7, 
-            0
+            (int) (7 * SCALE), 
+            (int) (0 * SCALE), 
+            (int) (7 * SCALE), 
+            (int) (0 * SCALE)
         ); 
 
         // Criação dos botões
@@ -75,10 +76,10 @@ public class MainMenuScreen extends JPanel {
         subMenuContainer = new SubMenuContainer(windowManager);
         // Define a posição e o tamanho do painel de mini-menu's (SubMenuContainer) para que ele apareça ao lado direito dos botões do menu principal
         subMenuContainer.setBounds(
-            320, 
-            50, 
-            SubMenuContainer.getSubMenuContainerBounds().width, 
-            SubMenuContainer.getSubMenuContainerBounds().height
+            (int) (320 * SCALE), 
+            (int) (50 * SCALE), 
+            (int) (SubMenuContainer.getSubMenuContainerBounds().width * SCALE), 
+            (int) (SubMenuContainer.getSubMenuContainerBounds().height * SCALE)
         );
         
         add(subMenuContainer); // Adiciona o painel de mini-menu's ao painel principal do menu

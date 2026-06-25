@@ -15,14 +15,14 @@ import java.util.List;
 
 public class CardManager {
 
-    private static final String CAMINHO_JSON = "/assets/data/cardsContent.json";
+    private final String CAMINHO_JSON = "/assets/data/cardsContent.json";
 
     /**
      * Carrega todas as cartas do arquivo JSON e filtra pela categoria ou tipo solicitado.
      * @param filtro Categoria de filtragem (Ex: "FÁCIL", "MÉDIO", "DIFÍCIL", "SORTE", "AZAR")
-     * @return Lista de objetos CustomCards prontos para uso.
+     * @return Lista das cartas filtradas
      */
-    public static List<CustomCards> loadCard(String filtro, CardAnswerValidation cardAnswerValidation) {
+    public List<CustomCards> loadCard(String filtro) {
         List<CustomCards> cartasFiltradas = new ArrayList<>();
         Gson gson = new Gson();
 
@@ -65,7 +65,7 @@ public class CardManager {
                     if (tipoGeral.equals("PERGUNTA")) {
                         if (tipoPergunta.equals("SIM_NAO")) {
                             // Construtor 2: Pergunta Sim / Não (Adicionado cardAnswerValidation no final)
-                            novaCarta = new CustomCards(id, tipoGeral, enunciado, efeito, valorEfeito, iconePeao, dificuldade, respostaCorreta, cardAnswerValidation);
+                            novaCarta = new CustomCards(id, tipoGeral, enunciado, efeito, valorEfeito, iconePeao, dificuldade, respostaCorreta);
                         } else {
                             // Construtor 3: Múltipla Escolha
                             JsonArray arrayAlternativas = obj.getAsJsonArray("alternativas");
@@ -75,11 +75,11 @@ public class CardManager {
                             }
                             
                             // Construtor 3 (Adicionado cardAnswerValidation no final)
-                            novaCarta = new CustomCards(id, tipoGeral, enunciado, efeito, valorEfeito, iconePeao, dificuldade, alternativas, respostaCorreta, cardAnswerValidation);
+                            novaCarta = new CustomCards(id, tipoGeral, enunciado, efeito, valorEfeito, iconePeao, dificuldade, alternativas, respostaCorreta);
                         }
                     } else {
                         // Construtor 1: Cartas Especiais (Adicionado cardAnswerValidation no final)
-                        novaCarta = new CustomCards(id, tipoGeral, enunciado, efeito, valorEfeito, iconePeao, cardAnswerValidation);
+                        novaCarta = new CustomCards(id, tipoGeral, enunciado, efeito, valorEfeito, iconePeao);
                     }
 
                     // Adiciona a carta gerada à nossa lista de retorno

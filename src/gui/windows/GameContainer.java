@@ -15,6 +15,8 @@ import java.awt.Color;
 import java.awt.Rectangle;
 import javax.swing.JPanel;
 
+import actions.CardAnswerValidation;
+
 public class GameContainer extends JPanel {
     // VARIÁVEIS DE INSTÂNCIA
     private String playerName;
@@ -75,7 +77,7 @@ public class GameContainer extends JPanel {
         this.boardScreen.setBounds(BOARD_SCREEN_BOUNDS); // Tamanho e posição do tabuleiro (0, 0) (900x900)
 
         // Instancia o manager global do jogo
-        GameManager globalGameManager = new GameManager(this.boardScreen);
+        GameManager gameManager = new GameManager(this.boardScreen);
 
         // Área reservada ao layout das cartas, controles e informações de jogador (450x600)
         JPanel cardsArea = new JPanel(); // Instancia o painel completo que irá conter as cartas, controles e informações do jogador
@@ -83,9 +85,12 @@ public class GameContainer extends JPanel {
         cardsArea.setBackground(new Color(38, 24, 16)); // Tom amadeirado escuro
         cardsArea.setLayout(null);
 
+        // Instancia a validação das respostas através do clique do jogador
+        CardAnswerValidation cardAnswerValidation = new CardAnswerValidation(gameManager);
+
         // Instancia o "CardsContainer" que será responsável por conter e renderizar as cartas do jogo
         // Ele mesmo vai carregar o JSON e inicializar a primeira carta.
-        CardsContainer cardsContainer = new CardsContainer("FÁCIL", globalGameManager);
+        CardsContainer cardsContainer = new CardsContainer(gameManager, cardAnswerValidation);
         cardsContainer.setBounds(CARDS_CONTAINER_BOUNDS); // Tamanho e posição do container das cartas (60, 165) (330x510)
         cardsArea.add(cardsContainer);
 
@@ -135,9 +140,9 @@ public class GameContainer extends JPanel {
         }   
       
 
-        // Perguntar sobre os outros setters and getters que foram criados ao tentar fazer o método wobble
-        // perguntar sobre isso no BoardScreen  "control.GameManager.setBoardGame(this);"
-        // Perguntar porque o log não está aparacendo os prints quando o mouse passa por cima do peão do tabuleiro na funcionalidade wobble
+        
+        
+        
         // Perguntar sobre classe anonima no PlayerPawn
         // Perguntar pq o método timer é diferente no PlayerPawn do ReferencePawn
         // Perguntar sobre o implements

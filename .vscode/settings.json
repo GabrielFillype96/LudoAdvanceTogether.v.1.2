@@ -6,5 +6,8 @@
     ],
     "files.exclude": {
     "**/*.class": true
-}
+},
+"cSpell.words": [
+    "hitbox"
+]
 }

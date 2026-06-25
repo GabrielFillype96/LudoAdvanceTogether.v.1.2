@@ -15,7 +15,9 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 
-
+/*
+ * Utilizamos um "JLabel" para que as interações de mouse ("hitbox" e "hover") pudessem ser feitas de forma segura, já que essa classe permite definir os limites do "label".
+*/
 public class ReferencePawn extends JLabel {
     // VARIÁVEIS DE INSTÂNCIA
     private ImageIcon stdReferencePawnIcon; // Imagem padrão do peão para permitir
@@ -26,8 +28,9 @@ public class ReferencePawn extends JLabel {
     private Timer wobbleTimer;
     
     /**
-     * Construtor do Peão de Referência
-     */
+     ** Construtor do Peão de Referência
+     * @param stdReferencePawnImgPath Path da imagem padrão do peão
+    */
     public ReferencePawn(String stdReferencePawnImgPath, String disabledReferencePawnImgPath, String goldenReferencePawnImgPath, double scale) {
         // Define o tamanho dos peões de referência com base no JLabel criado no "PawnControlContainer"
         int referencePawnWidth = (int) (30 * scale);

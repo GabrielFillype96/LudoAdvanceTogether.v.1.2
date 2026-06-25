@@ -11,7 +11,7 @@ public class CardAnswerValidation {
 
     /**
     ** Construtor da classe "CardAnswerValidation" que passa como parâmetro o gerenciador do jogo
-    * @param gameManager Gerente do jogo
+    * @param gameManager Gerenciador do jogo
     */
     public CardAnswerValidation(GameManager gameManager) {
         this.gameManager = gameManager;
@@ -42,14 +42,22 @@ public class CardAnswerValidation {
         }
 
         // --- MECÂNICA DE AVANÇAR DE CARTA ---
-        int indiceAtual = painelPai.getCardList().indexOf(carta);
-        int proximoIndice = indiceAtual + 1;
+        int actualIndex = painelPai.getCardList().indexOf(carta);
+        int nextIndex = actualIndex + 1;
 
-        if (proximoIndice < painelPai.getCardList().size()) {
-            painelPai.displayCard(proximoIndice);
+        if (nextIndex < painelPai.getCardList().size()) {
+            // Se ainda tem cartas, avança normalmente
+            CustomCards nextCard = painelPai.getCardList().get(nextIndex);
+            painelPai.displayActiveCard(nextCard);
         } else {
-            JOptionPane.showMessageDialog(painelPai, "Fim das cartas do monte! Reiniciando...", "Baralho", JOptionPane.WARNING_MESSAGE);
-            painelPai.displayCard(0);
+            // Se as cartas acabaram, avisa o jogador...
+            JOptionPane.showMessageDialog(painelPai, "Fim das cartas do monte! O baralho será reiniciado.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            
+            // ...e dá o "reset" voltando para a carta de índice 0!
+            if (painelPai.getCardList() != null && !painelPai.getCardList().isEmpty()) {
+                CustomCards primeiraCarta = painelPai.getCardList().get(0);
+                painelPai.displayActiveCard(primeiraCarta);
+            }
         }
     }
 }

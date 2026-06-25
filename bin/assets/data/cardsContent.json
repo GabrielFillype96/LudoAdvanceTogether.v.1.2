@@ -8,7 +8,7 @@
     "alternativas": [],
     "respostaCorreta": "Não",
     "efeito": "AVANÇAR",
-    "valorEfeito": "6/6",
+    "valorEfeito": "2/6",
     "iconePeao": "peao_azul.png"
   },
   {
@@ -24,7 +24,7 @@
     ],
     "respostaCorreta": "180",
     "efeito": "AVANÇAR",
-    "valorEfeito": "3/6",
+    "valorEfeito": "6/6",
     "iconePeao": "peao_verde.png"
   },
   {

@@ -14,15 +14,15 @@ import javax.swing.JPanel;
 
 // Cria uma classe "MainScreenContainer" que irá herdar métodos da classe JPanel (nativa do Java Swing)
 public class MainScreenContainer extends JPanel {
-
     // VARIÁVEIS DE INSTÂNCIA
     private Image mainScreenImage; // Variável para armazenar a imagem de fundo da tela principal
+    private static final double SCALE = 1.5; // Fator de escala para ajustar o tamanho dos componentes (pode ser ajustado conforme necessário)
     private final static String MAIN_SCREEN_IMAGE_PATH = "/assets/mainScreenBackground_900x600.jpeg"; // Caminho da imagem de fundo da tela principal
     private final static Rectangle MAIN_SCREEN_BOUNDS = new Rectangle( // Dimensões fixas para o painel da tela principal
-        0,
-        0, 
-        900,
-        600
+        (int) (0 * SCALE),
+        (int) (0 * SCALE), 
+        (int) (900 * SCALE),
+        (int) (600 * SCALE)
     ); 
 
     // Construtor da classe "MainScreenContainer"
@@ -69,8 +69,8 @@ public class MainScreenContainer extends JPanel {
             // Desenha a imagem de fundo da tela principal no container do "MainScreenContainer", escalando para preencher todo o painel
             g2.drawImage(
                 mainScreenImage, 
-                0, 
-                0, 
+                (int) (0 * SCALE), 
+                (int) (0 * SCALE), 
                 this.getWidth(), 
                 this.getHeight(), 
                 this
@@ -82,8 +82,8 @@ public class MainScreenContainer extends JPanel {
             // Fallback: fundo cinza caso a imagem de fundo da tela principal falhe, e imprime um erro no console
             g.setColor(java.awt.Color.GRAY);
             g.fillRect(
-                0, 
-                0, 
+                (int) (0 * SCALE), 
+                (int) (0 * SCALE), 
                 this.getWidth(), 
                 this.getHeight()
             );
