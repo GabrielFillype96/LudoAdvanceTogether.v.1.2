@@ -135,8 +135,8 @@ public class BoardScreen extends JPanel {
     }
 
     /*
-    * Mapeia as coordenadas físicas (X, Y) do centro de cada casa do circuito 
-    * a partir do ponto de partida do Jogador 1 (Azul, Canto Inferior Esquerdo).
+     * Mapeia as coordenadas físicas (X, Y) do centro de cada casa do circuito 
+     * a partir do ponto de partida do Jogador 1 (Azul, Canto Inferior Esquerdo).
     */
     private void pawnPath() {
         
@@ -327,7 +327,7 @@ public class BoardScreen extends JPanel {
         for (int x = 0; x <= 360; x += 360) {
             for (int y = 0; y <= 360; y += 360) {
                 // Print no terminal para controle
-                System.out.println("x: " + x + " | y: " + y + " color: " + colors[i]);
+                //System.out.println("x: " + x + " | y: " + y + " color: " + colors[i]);
 
                 // Desenha e atribui a cor para cada base
                 g2.setColor(colors[i]);
@@ -362,7 +362,7 @@ public class BoardScreen extends JPanel {
                 if (x >= 240 && x <= 320) continue; // Salta uma etapa da repetição não preencher o centro do tabuleiro
 
                 // Print no terminal para controle
-                System.out.println("x: " + x + " | y: " + y);
+                //System.out.println("x: " + x + " | y: " + y);
 
                 // Desenha os quadrados das casas horizontais
                 g2.drawRect(
@@ -380,7 +380,7 @@ public class BoardScreen extends JPanel {
                 if (y >= 240 && y <= 320) continue; // Salta uma etapa da repetição não preencher o centro do tabuleiro
 
                 // Print no terminal para controle
-                System.out.println("x: " + x + " | y: " + y);
+                //System.out.println("x: " + x + " | y: " + y);
 
                 // Desenha os quadrados das casas verticais
                 g2.drawRect(

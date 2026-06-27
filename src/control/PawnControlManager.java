@@ -13,9 +13,15 @@ public class PawnControlManager {
     private String[] pawnState = new String[4];
     private BoardScreen boardScreen;
     private PawnControlContainer pawnControlContainer;
+    private int pendingSteps = 0;
+    private String pendingEffect = "";
+    private boolean awaitingPawnSelection = false;
+    private GameManager gameManager;
 
-    public PawnControlManager(BoardScreen boardScreen) {
+
+    public PawnControlManager(BoardScreen boardScreen, GameManager gameManager) {
         this.boardScreen = boardScreen;
+        this.gameManager = gameManager;
         // Inicializa todos como NORMAL no começo do jogo, por exemplo
         for(int i = 0; i < 4; i++) {
             pawnState[i] = "NORMAL";
@@ -75,13 +81,48 @@ public class PawnControlManager {
         }
     }
 
+    /**
+     ** Método acionado quando o jogador clica em um peão de referência na lateral da tela.
+    */
     public void onReferencePawnClicked(int pawnIndex) {
         System.out.println(
-            "[Manager] O peão " + pawnIndex + " foi escolhido para jogar!"
+            "[PawnControlManager] O peão " + pawnIndex + " foi escolhido para jogar!"
         );
-        // FUTURO CÓDIGO AQUI:
-        // Travar a tela de escolhas
-        // Passar o peão para o GameManager iniciar a animação de andar pelas casas
+
+        if (!awaitingPawnSelection) {
+            System.out.println(
+                "[PawnControlManager] Clique recusado: Você precisa responder uma carta corretamente primeiro.");
+            return;
+        }
+
+        System.out.println(
+            "[PawnControlManager] SUCESSO! O jogador escolheu mover o peão índice: " + pawnIndex
+        );
+        System.out.println(
+            "[PawnControlManager] Movendo " + this.pendingSteps + " casas com o efeito: " + this.pendingEffect
+        );
+
+        if (this.gameManager != null) {
+            // Vamos pedir ao GameManager para mover o peão estratégico correspondente
+            this.gameManager.moveChosenPawn(pawnIndex, this.pendingSteps, this.pendingEffect);
+        }
+
+        // Após aplicar o movimento, limpamos a memória para o peão não andar duas vezes
+        this.awaitingPawnSelection = false;
+        this.pendingSteps = 0;
+        this.pendingEffect = "";
+    }
+
+    /**
+     ** Prepara o gerenciador de peões dizendo que há uma certa quantidade de casas na memória aguardando o jogador escolher quem vai andar
+    */
+    public void preparePendingMovement(int steps, String effect) {
+        this.pendingSteps = steps;
+        this.pendingEffect = effect;
+        this.awaitingPawnSelection = true;
+        System.out.println(
+            "[PawnControlManager] Movimento guardado: " + steps + " casas. Aguardando seleção do peão..."
+        );
     }
 
 
@@ -91,7 +132,7 @@ public class PawnControlManager {
     */
     public void onBoardPawnHoverEntered(int pawnIndex) {
         System.out.println(
-            "[Manager] Iniciando wobble no peão de referência " + pawnIndex
+            "[PawnControlManager] Iniciando wobble no peão de referência " + pawnIndex
         );
         if (pawnControlContainer != null) { 
             // Se o container do peão de referência não for nulo, determina que a classe "PawnControlContainer" execute a funcionalidade wobble

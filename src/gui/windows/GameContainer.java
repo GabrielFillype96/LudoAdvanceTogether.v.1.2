@@ -101,8 +101,12 @@ public class GameContainer extends JPanel {
         pawnControlArea.setLayout(null);
 
         // Instancia o "PawnControlManager" para servir de parâmetro na instância do "PawnControlContainer"
-        this.pawnControlManager = new PawnControlManager(this.boardScreen);
+        this.pawnControlManager = new PawnControlManager(this.boardScreen, gameManager);
 
+        // Faz o GameManager "conhecer" o PawnControlManager
+        gameManager.setPawnControlManager(this.pawnControlManager);
+        
+        
         // Instancia o "PawnControlContainer" que será responsável por conter e renderizar os peões de controle do jogo
         PawnControlContainer pawnControlContainer = new PawnControlContainer(pawnControlManager);
         pawnControlContainer.setBounds(PAWN_CONTROL_CONTAINER_BOUNDS); // Tamanho e posição do container de controle dos peões (60, 22.5) (330x150)

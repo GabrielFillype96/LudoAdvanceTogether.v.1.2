@@ -16,15 +16,24 @@ public class GameManager {
     // VARIÁVEIS DE INSTÂNCIA
     private BoardScreen boardScreen;
     private Timer timerAnimation; // Variável para armazenar o método Timer
-    private boolean isAtBase = true; // Controle se o peão ainda não saiu para o circuito
+    //private boolean isAtBase = true; // Controle se o peão ainda não saiu para o circuito
+    private PawnControlManager pawnControlManager;
 
     /** 
     ** Construtor da classe "GameManager" que passa como parâmetro o tabuleiro do jogo
-    * @param BoardScreen Tabuleiro do jogo
+    * @param boardScreen Tabuleiro do jogo
     */
     public GameManager(BoardScreen boardScreen) {
         this.boardScreen = boardScreen;
-    }   
+    }
+
+    /** 
+    ** Método setter para que a classe "GameManager" conheça a classe "PawnControlManager"
+    * @param pawnControlManager Gerenciador de controle dos peões
+    */
+    public void setPawnControlManager(PawnControlManager pawnControlManager) {
+        this.pawnControlManager = pawnControlManager;
+    }
 
     // Método para processar o resultado das cartas
     public void cardResultVerification(boolean correct, String cardValue, String cardEffect) {
@@ -77,50 +86,20 @@ public class GameManager {
                 }
 
                 int valorDado = Integer.parseInt(cardValueTreated);
-                int posicaoAtual = p1.getPawnCurrentPos();
 
-                // Caso especial: O peão está saindo da base neste turno
-                if (isAtBase) {
-                    if (valorDado == 1 || valorDado == 6) {
-                        isAtBase = false;
-                        System.out.println(
-                            "[GameManager] " + p1.getPlayerName() + " tirou " + valorDado + " e SAIU DA BASE!"
-                        );
-
-                        int startHouse = 4; // Define o índice da coordenada da casa de saída presente na lista de paths da classe "BoardScreen"
-                        int novaPosicaoLogica = startHouse; 
-
-                        
-                        System.out.println("Nova posição logica: " + novaPosicaoLogica);
-                        
-                        // tentar utilizar um switch case para as diferentes saídas de casas
-                        
-                        if (novaPosicaoLogica >= mapaCasas.length) {
-                            novaPosicaoLogica = mapaCasas.length - 1;
-                        }
-                        
-                        p1.setPawnCurrentPos(novaPosicaoLogica);
-                        
-                        // CORREÇÃO: Força o ponto inicial visual como -1 de forma abstrata 
-                        // para que o primeiro passo intermediário seja obrigatoriamente a Casa [0]
-                        pawnMovement(p1, posicaoAtual, novaPosicaoLogica, mapaCasas, valorDado == 6, true);
-                        return;
-                        
-                    } else {
-                        System.out.println("[GameManager] " + p1.getPlayerName() + " tirou " + valorDado + ", mas precisa de 1 ou 6 para sair da base.");
-                        return;
-                    }
+                // ETAPA 2: Interceptando o movimento!
+                // Em vez de andar o peão 0 automaticamente, guardamos o valor na memória.
+                if (this.pawnControlManager != null) {
+                    System.out.println(
+                        "[GameManager] Interceptado! Mandando " + valorDado + " passos para a memória..."
+                    );
+                    this.pawnControlManager.preparePendingMovement(valorDado, cardEffect);
+                } else {
+                    System.err.println(
+                        "[GameManager] Erro: PawnControlManager não foi injetado no GameManager!"
+                    );
                 }
-
-                // Movimentação normal quando já está no circuito
-                int novaPosicaoLogica = posicaoAtual + valorDado;
-
-                if (novaPosicaoLogica >= mapaCasas.length) {
-                    novaPosicaoLogica = mapaCasas.length - 1;
-                }
-
-                p1.setPawnCurrentPos(novaPosicaoLogica);
-                pawnMovement(p1, posicaoAtual, novaPosicaoLogica, mapaCasas, valorDado == 6, false);
+                
 
             } catch (NumberFormatException e) {
                 System.err.println("[GameManager] Erro: O valor do efeito não pôde ser convertido: " + cardValue);
@@ -232,6 +211,86 @@ public class GameManager {
         });
 
         timerAnimation.start();
+    }
+
+    /**
+     ** Método acionado pelo PawnControlManager quando o jogador clica em um peão de referência, calculando a lógica de movimentação
+    */
+    public void moveChosenPawn(int pawnIndex, int cardValue, String cardEffect) {
+        // Pega o peão exato que o jogador escolheu
+        PlayerPawn chosenPawn = boardScreen.getPlayer1Pawn(pawnIndex);
+        
+        // Trava de segurança caso o peão seja nulo
+        if (chosenPawn == null) {
+            // Se o peão escolhido for nulo, interrompe a execução
+            System.err.println(
+                "[GameManager] Erro: Peão índice " + pawnIndex + " não encontrado no tabuleiro!"
+            );
+            return;
+        }
+
+        Point[] pawnPath = boardScreen.getCaminhoCasas();
+        int pawnActualPosition = chosenPawn.getPawnCurrentPos();
+        
+        System.out.println(
+            "[GameManager] Iniciando cálculo para o Peão " + pawnIndex + ". Posição Atual Lógica: " + pawnActualPosition
+        );
+
+        // 2. Trata os efeitos da carta
+        boolean isBackwards = "VOLTAR".equalsIgnoreCase(cardEffect) || "RETRÓGRADO".equalsIgnoreCase(cardEffect);
+        if (isBackwards && cardValue > 0) {
+            cardValue = -cardValue; // Garante que o valor fique negativo se for para trás
+        }
+        
+        boolean ganhouTurnoExtra = (Math.abs(cardValue) == 6);
+        boolean exitBase = false;
+
+        // 3. Regra de Saída da Base INDIVIDUAL:
+        // Se a posição atual for menor que 4, ele AINDA está no quadrante da base (índices 0, 1, 2 ou 3)
+        if (pawnActualPosition < 4) {
+            if (Math.abs(cardValue) == 1 || Math.abs(cardValue) == 6) {
+                // Índice 4 é a primeira casa real do circuito externo
+                int pawnStarterPath = 4; 
+                
+                chosenPawn.setPawnCurrentPos(pawnStarterPath);
+                exitBase = true; // Saiu da base!
+                
+                System.out.println("[GameManager] Peão " + pawnIndex + " AUTORIZADO a sair da base. Indo para a casa " + pawnStarterPath);
+                
+                // Chama a sua animação
+                pawnMovement(chosenPawn, pawnActualPosition, pawnStarterPath, pawnPath, ganhouTurnoExtra, exitBase);
+                return;
+            } else {
+                System.out.println(
+                    "[GameManager] Peão " + pawnIndex + " não pode sair da base (tirou " + Math.abs(cardValue) + ")."
+                );
+                JOptionPane.showMessageDialog(boardScreen, 
+                    "Este peão específico precisa de um 1 ou 6 para sair da base!", 
+                    "Movimento Inválido", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+        }
+
+        // 4. Movimentação normal pelo tabuleiro (para peões que já estão da casa 4 em diante)
+        
+        // CORRIGIDO: Agora soma a posição atual com o valor da carta (antes somava posição com posição)
+        int pawnStarterPath = pawnActualPosition + cardValue; 
+
+        // Trava de segurança para não ultrapassar a chegada (final do array)
+        if (pawnStarterPath >= pawnPath.length) {
+            pawnStarterPath = pawnPath.length - 1;
+        }
+        
+        // Trava de segurança para não voltar para dentro da base (antes da casa 4) se o efeito for negativo
+        if (pawnStarterPath < 4) {
+            pawnStarterPath = 4;
+        }
+
+        System.out.println("[GameManager] Peão " + pawnIndex + " movendo no circuito. Indo de " + pawnActualPosition + " para " + pawnStarterPath);
+
+        // Atualiza a posição lógica e chama a animação
+        chosenPawn.setPawnCurrentPos(pawnStarterPath);
+        pawnMovement(chosenPawn, pawnActualPosition, pawnStarterPath, pawnPath, ganhouTurnoExtra, exitBase);
     }
 
     private void verificarCondicoesFinais(PlayerPawn peao, int posicaoAlcancada, boolean ganhouTurnoExtra) {
