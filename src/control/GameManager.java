@@ -216,17 +216,17 @@ public class GameManager {
     /**
      ** Método acionado pelo PawnControlManager quando o jogador clica em um peão de referência, calculando a lógica de movimentação
     */
-    public void moveChosenPawn(int pawnIndex, int cardValue, String cardEffect) {
+    public boolean moveChosenPawn(int pawnIndex, int cardValue, String cardEffect) {
         // Pega o peão exato que o jogador escolheu
         PlayerPawn chosenPawn = boardScreen.getPlayer1Pawn(pawnIndex);
         
         // Trava de segurança caso o peão seja nulo
         if (chosenPawn == null) {
-            // Se o peão escolhido for nulo, interrompe a execução
+            // Se o peão escolhido for nulo, interrompe a execução e avisa que falhou
             System.err.println(
                 "[GameManager] Erro: Peão índice " + pawnIndex + " não encontrado no tabuleiro!"
             );
-            return;
+            return false;
         }
 
         Point[] pawnPath = boardScreen.getCaminhoCasas();
@@ -259,7 +259,7 @@ public class GameManager {
                 
                 // Chama a sua animação
                 pawnMovement(chosenPawn, pawnActualPosition, pawnStarterPath, pawnPath, ganhouTurnoExtra, exitBase);
-                return;
+                return true; // SUCESSO! O peão vai andar.
             } else {
                 System.out.println(
                     "[GameManager] Peão " + pawnIndex + " não pode sair da base (tirou " + Math.abs(cardValue) + ")."
@@ -267,13 +267,13 @@ public class GameManager {
                 JOptionPane.showMessageDialog(boardScreen, 
                     "Este peão específico precisa de um 1 ou 6 para sair da base!", 
                     "Movimento Inválido", JOptionPane.WARNING_MESSAGE);
-                return;
+                return false; // FALHOU! A regra impediu. O PawnControlManager NÃO vai limpar a memória.
             }
         }
 
         // 4. Movimentação normal pelo tabuleiro (para peões que já estão da casa 4 em diante)
         
-        // CORRIGIDO: Agora soma a posição atual com o valor da carta (antes somava posição com posição)
+        // Soma a posição atual com o valor da carta
         int pawnStarterPath = pawnActualPosition + cardValue; 
 
         // Trava de segurança para não ultrapassar a chegada (final do array)
@@ -291,6 +291,8 @@ public class GameManager {
         // Atualiza a posição lógica e chama a animação
         chosenPawn.setPawnCurrentPos(pawnStarterPath);
         pawnMovement(chosenPawn, pawnActualPosition, pawnStarterPath, pawnPath, ganhouTurnoExtra, exitBase);
+        
+        return true; // SUCESSO! O peão vai andar.
     }
 
     private void verificarCondicoesFinais(PlayerPawn peao, int posicaoAlcancada, boolean ganhouTurnoExtra) {

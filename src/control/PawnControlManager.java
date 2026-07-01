@@ -103,14 +103,21 @@ public class PawnControlManager {
         );
 
         if (this.gameManager != null) {
-            // Vamos pedir ao GameManager para mover o peão estratégico correspondente
-            this.gameManager.moveChosenPawn(pawnIndex, this.pendingSteps, this.pendingEffect);
-        }
+            // Guardamos a resposta do GameManager (true ou false)
+            boolean movimentoRealizado = this.gameManager.moveChosenPawn(pawnIndex, this.pendingSteps, this.pendingEffect);
 
-        // Após aplicar o movimento, limpamos a memória para o peão não andar duas vezes
-        this.awaitingPawnSelection = false;
-        this.pendingSteps = 0;
-        this.pendingEffect = "";
+            if (movimentoRealizado) {
+                // SUCESSO: O GameManager aceitou a jogada. Podemos limpar a memória e encerrar o turno.
+                this.awaitingPawnSelection = false;
+                this.pendingSteps = 0;
+                this.pendingEffect = "";
+                System.out.println("[PawnControlManager] Jogada concluída com sucesso.");
+            } else {
+                // FALHA: O jogador tentou um movimento inválido (ex: sair da base sem tirar 1 ou 6).
+                // A memória NÃO é apagada, permitindo que ele clique em outro peão!
+                System.out.println("[PawnControlManager] Movimento inválido. Aguardando escolha de outro peão...");
+            }
+        }
     }
 
     /**
