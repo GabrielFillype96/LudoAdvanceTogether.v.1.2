@@ -14,6 +14,7 @@ public class PawnControlManager {
     private BoardScreen boardScreen;
     private PawnControlContainer pawnControlContainer;
     private int pendingSteps = 0;
+    private int selectedPawnIndex = -1; // -1 significa que nenhum peão está selecionado
     private String pendingEffect = "";
     private boolean awaitingPawnSelection = false;
     private GameManager gameManager;
@@ -85,37 +86,41 @@ public class PawnControlManager {
      ** Método acionado quando o jogador clica em um peão de referência na lateral da tela.
     */
     public void onReferencePawnClicked(int pawnIndex) {
-        System.out.println(
-            "[PawnControlManager] O peão " + pawnIndex + " foi escolhido para jogar!"
-        );
-
+        // Se não estamos esperando jogada, ignora.
         if (!awaitingPawnSelection) {
-            System.out.println(
-                "[PawnControlManager] Clique recusado: Você precisa responder uma carta corretamente primeiro.");
             return;
         }
 
-        System.out.println(
-            "[PawnControlManager] SUCESSO! O jogador escolheu mover o peão índice: " + pawnIndex
-        );
-        System.out.println(
-            "[PawnControlManager] Movendo " + this.pendingSteps + " casas com o efeito: " + this.pendingEffect
-        );
+        // CENÁRIO 1: O jogador clicou num peão novo (Primeiro clique / Seleção)
+        if (this.selectedPawnIndex != pawnIndex) {
+            this.selectedPawnIndex = pawnIndex; // Guarda quem foi o escolhido
+            System.out.println("[PawnControlManager] Peão " + pawnIndex + " SELECIONADO. Clique nele novamente para confirmar!");
+            
+            // Aqui na Etapa 2 é onde chamaremos o método para desenhar a sombra/previsão no tabuleiro!
+            return; // Interrompe a execução aqui. O peão AINDA NÃO ANDA.
+        }
 
-        if (this.gameManager != null) {
-            // Guardamos a resposta do GameManager (true ou false)
-            boolean movimentoRealizado = this.gameManager.moveChosenPawn(pawnIndex, this.pendingSteps, this.pendingEffect);
+        // CENÁRIO 2: O jogador clicou no MESMO peão que já estava selecionado (Segundo clique / Confirmação)
+        if (this.selectedPawnIndex == pawnIndex) {
+            System.out.println("[PawnControlManager] Jogada CONFIRMADA para o peão " + pawnIndex + "!");
 
-            if (movimentoRealizado) {
-                // SUCESSO: O GameManager aceitou a jogada. Podemos limpar a memória e encerrar o turno.
-                this.awaitingPawnSelection = false;
-                this.pendingSteps = 0;
-                this.pendingEffect = "";
-                System.out.println("[PawnControlManager] Jogada concluída com sucesso.");
-            } else {
-                // FALHA: O jogador tentou um movimento inválido (ex: sair da base sem tirar 1 ou 6).
-                // A memória NÃO é apagada, permitindo que ele clique em outro peão!
-                System.out.println("[PawnControlManager] Movimento inválido. Aguardando escolha de outro peão...");
+            if (this.gameManager != null) {
+                // Tenta fazer o movimento
+                boolean movimentoRealizado = this.gameManager.moveChosenPawn(pawnIndex, this.pendingSteps, this.pendingEffect);
+
+                if (movimentoRealizado) {
+                    // SUCESSO: Limpa a memória toda para o próximo turno
+                    this.awaitingPawnSelection = false;
+                    this.pendingSteps = 0;
+                    this.pendingEffect = "";
+                    this.selectedPawnIndex = -1; // Reseta a seleção
+                    System.out.println("[PawnControlManager] Turno encerrado com sucesso.");
+                } else {
+                    // FALHA (Ex: tentou sair da base sem um 6).
+                    // Desfaz a seleção para o jogador poder escolher outro peão do zero.
+                    this.selectedPawnIndex = -1;
+                    System.out.println("[PawnControlManager] Movimento inválido. Seleção cancelada. Escolha outro peão.");
+                }
             }
         }
     }
