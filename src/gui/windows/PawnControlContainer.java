@@ -28,7 +28,7 @@ public class PawnControlContainer extends JPanel {
     );
     
     /**
-    * @param PawnControlManager Gerenciador das funcionalidades do peão (wobble, shake, seleção para andar)
+    * @param pawnControlManager Gerenciador das funcionalidades do peão (wobble, shake, seleção para andar)
     * Construtor da classe "PawnControlContainer" que recebe como parâmetro o gerenciador de movimento dos peões "PawnControlManager"
     */
     public PawnControlContainer(PawnControlManager pawnControlManager) {
@@ -44,58 +44,33 @@ public class PawnControlContainer extends JPanel {
         int labelWidth = (int) (30 * SCALE);
         int labelHeight = (int) (30 * SCALE);
 
-        // Loop para instanciar os peões de referência passando como parâmetro o path das imagens dos peões e a escala desejada para eles dentro dos "JLabels"
-        // Cria os 4 JLabels e os posiciona lado a lado
+        // CORREÇÃO: O loop agora instancia corretamente usando o construtor real do ReferencePawn
         for (int i = 0; i < 4; i++) {
             pawnLabels[i] = new ReferencePawn(
-                STD_PAWN_IMG_PATH,
-                DISABLED_PAWN_IMG_PATH,
-                GOLDEN_PAWN_IMG_PATH,
-                1.5
+                STD_PAWN_IMG_PATH, 
+                DISABLED_PAWN_IMG_PATH, 
+                GOLDEN_PAWN_IMG_PATH, 
+                SCALE
             );
 
             // Adiciona o JLabel ao PawnControlContainer
             add(pawnLabels[i]);
 
-            /*
-            * Instancia um objeto da classe "ReferencePawnMouseListener"
-            * Diferente do que acontece com a classe "BoardScreen", como a criação dos elementos na classe "GameContainer" possui uma ordem, não há necessidade de um método setter, pois o "PawnControlContainer" nasce depois do "PawnControlManager"
-            */
+            // Configura o ouvinte de cliques do mouse
             pawnLabels[i].addMouseListener(new ReferencePawnMouseListener(pawnControlManager, i));
-    
         }
         
         // Define as posições e o tamanho dos peões
-        pawnLabels[0].setBounds(
-            (int) (50 * SCALE), 
-            (int) (10 * SCALE), 
-            labelWidth, 
-            labelHeight
-        );
-        pawnLabels[1].setBounds(
-            (int) (130 * SCALE), 
-            (int) (10 * SCALE), 
-            labelWidth, 
-            labelHeight
-        );
-        pawnLabels[2].setBounds(
-            (int) (50 * SCALE), 
-            (int) (60 * SCALE), 
-            labelWidth, 
-            labelHeight
-        );
-        pawnLabels[3].setBounds(
-            (int) (130 * SCALE),
-            (int) (60 * SCALE), 
-            labelWidth, 
-            labelHeight
-        );
+        pawnLabels[0].setBounds((int) (50 * SCALE), (int) (10 * SCALE), labelWidth, labelHeight);
+        pawnLabels[1].setBounds((int) (130 * SCALE), (int) (10 * SCALE), labelWidth, labelHeight);
+        pawnLabels[2].setBounds((int) (50 * SCALE), (int) (60 * SCALE), labelWidth, labelHeight);
+        pawnLabels[3].setBounds((int) (130 * SCALE), (int) (60 * SCALE), labelWidth, labelHeight);
 
-        // Chama o método "pawnVisualState"
+        // DINÂMICO: Agora todos os 4 peões nascem como "NORMAL" (cor padrão)
         pawnVisualState(0, "NORMAL");
-        pawnVisualState(1, "DOURADO");
+        pawnVisualState(1, "NORMAL");
         pawnVisualState(2, "NORMAL");
-        pawnVisualState(3, "DESABILITADO");
+        pawnVisualState(3, "NORMAL");
 
         // Chama o método setter da classe "PawnControlManager" e entrega o próprio (this) "PawnControlContainer"
         this.pawnControlManager.setPawnControlContainer(this);
@@ -113,7 +88,7 @@ public class PawnControlContainer extends JPanel {
         // Método setter para modificar a variável "pawnStates" na classe "PawnControlManager".
         pawnControlManager.setPawnState(pawnIndex, pawnState);
 
-        // Método setter para que peão de referência na classe "ReferencePawns" assuma o estado de acordo com a condição
+        // Utiliza o método perfeito que você já tinha criado no ReferencePawn!
         pawnLabels[pawnIndex].setVisualState(pawnState);
         
         // Atualiza a tela para mostrar a nova imagem
@@ -128,34 +103,21 @@ public class PawnControlContainer extends JPanel {
         return null;
     }
 
-    /*
-    * Método para que essa classe "PawnControlContainer" pegue o peão com o índice certo e chame o método "startReferencePawnWobble()" declarado na classe "ReferencePawn". O fluxo de comunicação funciona assim: Quando o mouse passa em cima do peão do tabuleiro a classe "BoardScreen" executa o método "pawnControlManager.onBoardPawnHoverEntered(PAWN_INDEX)" --> Esse método da classe "PawnControlManager" executa "onBoardPawnHoverEntered" que por sua vez chama o método "startReferencePawnWobble()" presente aqui na classe "PawnControlContainer" --> A classe "PawnControlContainer" executa o método "startReferencePawnWobble()" que é capaz de utilizar o método "startReferencePawnWobble" contido na classe "ReferencePawn" para fazê-lo aplicar o wobble
-    */
     public void startReferencePawnWobble(int pawnIndex) {
         if (pawnIndex >= 0 && pawnIndex < 4) {
-            // Se o índice do peão ("pawnIndex") for maior ou igual a 0 E menor ou igual a 4, armazena o índice do peão de referência
-            ReferencePawn referencePawn = pawnLabels[pawnIndex]; // Aqui não está sendo criado um objeto novo, e sim uma referência com o "molde" da classe "ReferencePawn"
-            
-            // A "PawnControlContainer" aplica o wobble no peão de referência
+            ReferencePawn referencePawn = pawnLabels[pawnIndex];
             if (referencePawn != null) {
-                // Se o peão de referência não for nulo, executa o método do wobble
                 referencePawn.startReferencePawnWobble();
             }
         }
     }
 
-    // Possui a mesma lógica do método "startReferencePawnWobble" presente nesta classe, mas para que a funcionalidade pare
     public void stopReferencePawnWobble(int pawnIndex) {
         if (pawnIndex >= 0 && pawnIndex < 4) {
-            // Se o índice do peão ("pawnIndex") for maior ou igual a 0 E menor ou igual a 4, armazena o índice do peão de referência
-            ReferencePawn referencePawn = pawnLabels[pawnIndex]; // Aqui não está sendo criado um objeto novo, e sim uma referência com o "molde" da classe "ReferencePawn"
-            
-            // O "PawnControlContainer" deixa de aplicar o wobble no peão de referência
+            ReferencePawn referencePawn = pawnLabels[pawnIndex];
             if (referencePawn != null) {
-                // Se o peão de referência não for nulo, deixa de executar o método do wobble
                 referencePawn.stopReferencePawnWobble();
             }
         }
-    }   
-
+    }
 }

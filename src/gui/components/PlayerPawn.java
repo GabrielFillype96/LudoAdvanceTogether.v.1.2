@@ -160,4 +160,18 @@ public class PlayerPawn extends JLabel {
         
         return null;
     }
+
+    /**
+     * NOVO: Método para alterar dinamicamente a imagem do peão no tabuleiro
+     * @param newImgPath Caminho da nova imagem (Ex: "/assets/peaoAmarelo_90x90.png")
+     */
+    public void updatePawnVisual(String newImgPath) {
+        // Corrigido para usar o método correto: loadIcon
+        ImageIcon newIcon = ImageLoaderManager.loadIcon(newImgPath, (int) (12 * SCALE), (int) (17 * SCALE));
+        
+        if (newIcon != null) {
+            this.setIcon(newIcon);
+            this.repaint(); 
+        }
+    }
 }

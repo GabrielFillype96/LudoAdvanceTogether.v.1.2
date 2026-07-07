@@ -7,7 +7,6 @@ package control;
 import gui.windows.PawnControlContainer;
 import gui.windows.BoardScreen;
 
-
 public class PawnControlManager {
     // VARIÁVEIS DE INSTÂNCIA
     private String[] pawnState = new String[4];
@@ -20,7 +19,6 @@ public class PawnControlManager {
     
     // Memória do peão selecionado (-1 significa nenhum)
     private int selectedPawnIndex = -1; 
-
 
     public PawnControlManager(BoardScreen boardScreen, GameManager gameManager) {
         this.boardScreen = boardScreen;
@@ -48,8 +46,24 @@ public class PawnControlManager {
         this.pawnControlContainer = pawnControlContainer;
     }
     
-    // --- MÉTODOS DE HOVER (Agora apenas tremem o peão, sem previsão) ---
+    /**
+     * NOVO: Método ponte para permitir que o GameManager mude o estado visual e lógico de um peão
+     */
+    public void updatePawnVisualState(int pawnIndex, String state) {
+        if (pawnControlContainer != null) {
+            pawnControlContainer.pawnVisualState(pawnIndex, state);
+        } else {
+            setPawnState(pawnIndex, state);
+        }
+    }
+    
+    // --- MÉTODOS DE HOVER (Permitem peões desabilitados, bloqueiam APENAS os dourados) ---
     public void onReferencePawnHoverEntered(int pawnIndex) {
+        String state = getPawnState(pawnIndex);
+        if ("DOURADO".equalsIgnoreCase(state)) {
+            return;
+        }
+        
         if (boardScreen != null) {
             boardScreen.startBoardPawnShake(pawnIndex);
         }
@@ -62,6 +76,11 @@ public class PawnControlManager {
     }
 
     public void onBoardPawnHoverEntered(int pawnIndex) {
+        String state = getPawnState(pawnIndex);
+        if ("DOURADO".equalsIgnoreCase(state)) {
+            return;
+        }
+        
         if (pawnControlContainer != null) { 
             pawnControlContainer.startReferencePawnWobble(pawnIndex);
         }
@@ -73,11 +92,18 @@ public class PawnControlManager {
         }
     }
 
-    // --- LÓGICA DE CLIQUE (Pré-seleção e Confirmação) ---
+    // --- LÓGICA DE CLIQUE (Com bloqueio total para peões inativos/finalizados) ---
     public void onReferencePawnClicked(int pawnIndex) {
         
         if (!awaitingPawnSelection) {
             System.out.println("[PawnControlManager] Clique recusado: Você precisa responder uma carta corretamente primeiro.");
+            return;
+        }
+
+        // TRAVA JOGABILIDADE: Impede que o jogador selecione ou mova um peão desabilitado ou dourado
+        String state = getPawnState(pawnIndex);
+        if ("DESABILITADO".equalsIgnoreCase(state) || "DOURADO".equalsIgnoreCase(state)) {
+            System.out.println("[PawnControlManager] Clique recusado: O peão " + pawnIndex + " está " + state + " e não pode jogar!");
             return;
         }
 
@@ -90,7 +116,7 @@ public class PawnControlManager {
             if (gameManager != null) {
                 gameManager.showMovementPreview(pawnIndex, pendingSteps, pendingEffect);
             }
-            return; // Interrompe a execução aqui. O peão AINDA NÃO ANDA.
+            return; 
         }
 
         // CENÁRIO 2: O jogador clicou no MESMO peão que já estava selecionado (Segundo clique / Confirmação)
@@ -108,18 +134,13 @@ public class PawnControlManager {
                     this.pendingEffect = "";
                     this.selectedPawnIndex = -1; // Reseta a seleção
                     
-                    // Apaga o fantasma do tabuleiro
-                    // if (this.boardScreen != null) {
-                    //     this.boardScreen.clearPreview();
-                    // }
+                   
                     
                     System.out.println("[PawnControlManager] Turno encerrado com sucesso.");
                 } else {
-                    // FALHA (Ex: tentou sair da base sem um 6).
-                    // Desfaz a seleção para o jogador poder escolher outro peão do zero.
+                    // FALHA
                     this.selectedPawnIndex = -1;
                     
-                    // Apaga o fantasma que pudesse estar na tela
                     if (this.boardScreen != null) {
                         this.boardScreen.clearPreview();
                     }
@@ -134,7 +155,7 @@ public class PawnControlManager {
         this.pendingSteps = steps;
         this.pendingEffect = effect;
         this.awaitingPawnSelection = true;
-        this.selectedPawnIndex = -1; // Garante que começa o turno sem nada selecionado
+        this.selectedPawnIndex = -1; 
         System.out.println(
             "[PawnControlManager] Movimento guardado: " + steps + " casas. Aguardando seleção do peão..."
         );

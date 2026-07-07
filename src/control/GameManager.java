@@ -15,19 +15,16 @@ import javax.swing.JOptionPane;
 public class GameManager {
     // VARIÁVEIS DE INSTÂNCIA
     private BoardScreen boardScreen;
-    private Timer timerAnimation; // Variável para armazenar o método Timer
-    //private boolean isAtBase = true; // Controle se o peão ainda não saiu para o circuito
+    private Timer timerAnimation; 
     private PawnControlManager pawnControlManager;
 
-    /** ** Construtor da classe "GameManager" que passa como parâmetro o tabuleiro do jogo
-    * @param boardScreen Tabuleiro do jogo
+    /** ** Construtor da classe "GameManager"
     */
     public GameManager(BoardScreen boardScreen) {
         this.boardScreen = boardScreen;
     }
 
-    /** ** Método setter para que a classe "GameManager" conheça a classe "PawnControlManager"
-    * @param pawnControlManager Gerenciador de controle dos peões
+    /** ** Método setter para vinculação
     */
     public void setPawnControlManager(PawnControlManager pawnControlManager) {
         this.pawnControlManager = pawnControlManager;
@@ -35,183 +32,144 @@ public class GameManager {
 
     // Método para processar o resultado das cartas
     public void cardResultVerification(boolean correct, String cardValue, String cardEffect) {
-        
         if (boardScreen == null) {
-        // Se o tabuleiro for nulo encerra a aplicação
-            System.err.println(
-                "[GameManager] Erro: O tabuleiro não foi registrado!"
-            );
+            System.err.println("[GameManager] Erro: O tabuleiro não foi registrado!");
             return;
         }
 
-        // Se uma animação já estiver ocorrendo, ignora cliques repetidos por segurança 
         if (timerAnimation != null && timerAnimation.isRunning()) {
             return;
         }
  
-        // Instância o player 1 passando o index do peão (para testes)
         PlayerPawn p1 = boardScreen.getPlayer1Pawn(0);
-
-        // Array que armazena as coordenadas do path das casas dos peões
         Point[] mapaCasas = boardScreen.getCaminhoCasas();
 
-        // Se o peão do jogador ou o track do seu caminho for nulo, encerra a aplicação 
         if (p1 == null || mapaCasas == null) {
-            System.err.println(
-                "[GameManager] Erro: Componentes do tabuleiro não inicializados."
-            );
+            System.err.println("[GameManager] Erro: Componentes do tabuleiro não inicializados.");
             return;
         }
 
-        // Se o jogador errou a carta (diferente de "correct"), não acontece nada
         if (!correct) {
-            System.out.println(
-                "[GameManager] Resposta incorreta. O peão " + p1.getPlayerName() + " permaneceu na casa " + p1.getPawnCurrentPos()
-            );
+            System.out.println("[GameManager] Resposta incorreta. O peão permaneceu na casa " + p1.getPawnCurrentPos());
             return;
         }
 
         if ("AVANÇAR".equalsIgnoreCase(cardEffect)) {
-
-            // Se acertou e o efeito da carta for avançar, processa esse avanço
             try {
-                // Realiza um tratamento no valor do carta para pegar o número de casas que ele precisa andar
-                String cardValueTreated = cardValue.trim(); // Remove os espaços em branco no início e fim da string
-                
+                String cardValueTreated = cardValue.trim();
                 if (cardValueTreated.contains("/")) {
-                    // Se a string do valor da carta possuí o caractere "/", retira da string e elimina os espaços em branco
                     cardValueTreated = cardValueTreated.split("/")[0].trim();
                 }
 
                 int valorDado = Integer.parseInt(cardValueTreated);
 
-                // ETAPA 2: Interceptando o movimento!
-                // Em vez de andar o peão 0 automaticamente, guardamos o valor na memória.
                 if (this.pawnControlManager != null) {
-                    System.out.println(
-                        "[GameManager] Interceptado! Mandando " + valorDado + " passos para a memória..."
-                    );
+                    System.out.println("[GameManager] Interceptado! Mandando " + valorDado + " passos para a memória...");
+                    updatePlayablePawns(valorDado);
                     this.pawnControlManager.preparePendingMovement(valorDado, cardEffect);
                 } else {
-                    System.err.println(
-                        "[GameManager] Erro: PawnControlManager não foi injetado no GameManager!"
-                    );
+                    System.err.println("[GameManager] Erro: PawnControlManager não injetado!");
                 }
-                
 
             } catch (NumberFormatException e) {
-                System.err.println("[GameManager] Erro: O valor do efeito não pôde ser convertido: " + cardValue);
+                System.err.println("[GameManager] Erro de conversão: " + cardValue);
+            }
+        }
+    }
+
+    /**
+     * Avalia todos os peões a cada turno para decidir quem fica NORMAL ou DESABILITADO
+     */
+    private void updatePlayablePawns(int cardValue) {
+        for (int i = 0; i < 4; i++) {
+            PlayerPawn pawn = boardScreen.getPlayer1Pawn(i);
+            if (pawn == null) continue;
+            
+            String currentState = this.pawnControlManager.getPawnState(i);
+            
+            // Ignora peões que já venceram (DOURADOS nunca mudam de estado)
+            if ("DOURADO".equalsIgnoreCase(currentState)) {
+                continue;
+            }
+            
+            int pos = pawn.getPawnCurrentPos();
+            
+            // Regra da Base (Posições 0, 1, 2 e 3 correspondem aos 4 peões na base)
+            if (pos < 4) {
+                if (Math.abs(cardValue) == 1 || Math.abs(cardValue) == 6) {
+                    this.pawnControlManager.updatePawnVisualState(i, "NORMAL");
+                } else {
+                    this.pawnControlManager.updatePawnVisualState(i, "DESABILITADO"); // Fica rosa!
+                }
+            } else {
+                // Peões que já estão no tabuleiro estão sempre habilitados para andar
+                this.pawnControlManager.updatePawnVisualState(i, "NORMAL");
             }
         }
     }
     
 
     /**
-    * Método responsável por realizar movimentação do peão pelo tabuleiro, de forma que seja realizada progressivamente
-    * @param mapaCasas Vetor que guarda cada posição (x, y) do tabuleiro.
-    * @param fromWhere Índice da casa onde o peão se encontra
-    * @param toWhere índice da casa para onde o peão vai
+    * Animação do peão, agora controlando qual índice exato está se movendo para virar DOURADO no fim
     * */
-    private void pawnMovement(PlayerPawn playerPawn, int fromWhere, int toWhere, Point[] mapaCasas, boolean ganhouTurnoExtra, boolean baseExit) {
-        java.util.List<Point> pawnPathList = new java.util.ArrayList<>(); // Lista que armazena a casa que o peão irá avançar/retroceder até o seu destino final. Inclui a casa que ele se contra atualmente. Evita que o método tenha que olha para o path inteiro do jogador
+    private void pawnMovement(PlayerPawn playerPawn, final int pawnIndex, int fromWhere, int toWhere, Point[] mapaCasas, boolean ganhouTurnoExtra, boolean baseExit) {
+        java.util.List<Point> pawnPathList = new java.util.ArrayList<>(); 
         
-        // Condicional para evitar que o peão percorra os caminhos intermediários enquanto estiver na base
         if (baseExit) {
-            // Se está saindo da base, ignora o loop sequencial e vai direito para casa de saída [4]
-            pawnPathList.add(mapaCasas[fromWhere]); // Adiciona a lista a casa onde peão estão ([0], [1], [2], [3])
-            
-            // Loop que adiciona as casas sequenciais a partir do índice [4] até o destino final. Assim evita que ele tenha que passar pelos outros índices até chegar na sua casa de destino
+            pawnPathList.add(mapaCasas[fromWhere]); 
             for (int i = 4; i <= toWhere; i++) {
                 pawnPathList.add(mapaCasas[i]);
             }
         } else {
-            // Loop de movimentação normal pelo tabuleiro (casa por casa)
             for (int i = fromWhere; i <= toWhere; i++) {
-                pawnPathList.add(mapaCasas[i]); // Pega o índice ("i") do path (vetor que corresponde a casa) e vai adicionando ao lista "pontosDoCaminho" que servirá de guia para a movimentação do peão
+                pawnPathList.add(mapaCasas[i]); 
             }
         }
 
-        /*
-        * Classes internas como o "Timer" só conseguem acessar variáveis fora dela se essas variáveis forem do tipo "final", ou seja, que não pode ser alterada, mas a função "Timer" precisa somar a velocidade definida para movimentação ocorrer. Assim ao criar um lista "final" seu endereço na memória permanece fixa, mas é possível alterar o seu conteúdo interno (itens da lista)
-        */
+        final int[] STEP_INDEX = {0}; 
+        final double[] VISUAL_POS_X = {playerPawn.getX()}; 
+        final double[] VISUAL_POS_Y = {playerPawn.getY()};
+        final int SPEED = 8; 
 
-        final int[] STEP_INDEX = {0}; // Lista que armazena o número de casas que o peão já percorreu.
-
-        // Capturam a posição real em pixels onde o peão está no exato momento.
-        final double[] VISUAL_POS_X = {playerPawn.getX()}; // Pega a coordenada "x" do peão no momento exato que ele está desenhado na tela e adiciona a lista "VISUAL_POS_X"
-        final double[] VISUAL_POS_Y = {playerPawn.getY()};// Pega a coordenada "y" do peão no momento exato que ele está desenhado na tela a lista "VISUAL_POS_Y"
-        final int SPEED = 8; // Quantos pixels o peão irá andar em 0.015seg
-
-        // Ativa a trava na classe "PlayerPawn" para impedir que o peão bug ao "pular" enquanto se movimenta
         playerPawn.setMoving(true);
-
-        // Força o peão a parar de pular se o mouse estiver em cima dele
         playerPawn.stopBoardPawnShake();
 
-        // Cria uma classe anônima
         timerAnimation = new Timer(15, new java.awt.event.ActionListener() {
             @Override
-            // Método para executar uma ação repetidamente a cada intervalo de tempo determinado (0.015seg)
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 
-                // Verifica se o caminho já chegou ao fim
                 if (STEP_INDEX[0] >= pawnPathList.size() - 1) {
-                    // Se o índice da etapa que ele está agora for maior ou igual a quantidade de paradas (tamanho da lista menos 1)  que o peão precisa fazer, irá parar a animação de movimentação
                     timerAnimation.stop();
                     System.out.println("[Animação] Movimento concluído suavemente.");
                     
-                    // Limpa totalmente a previsão (as bolinhas restantes e qualquer fantasma residual)
                     if (boardScreen != null) {
                         boardScreen.clearPreview();
                     }
 
-                    // Verifica as condições finais que o peão o jogador está submetido (final do tabuleiro, turno extra, etc)
-                    verificarCondicoesFinais(playerPawn, toWhere, ganhouTurnoExtra);
+                    // Repassa o índice correto para avaliar as condições dinâmicas e ver se virou Dourado
+                    verificarCondicoesFinais(playerPawn, pawnIndex, toWhere, ganhouTurnoExtra);
                     return;
                 }
 
-                // Caso o caminho que o peão precisa percorrer ainda não chegou ao fim, ele precisará descobrir qual a casa ele precisa ir para conseguir chegar ao destino.
-                // Quando o peão anda uma casa, soma 1 ao índice. A variável "pontosDoCaminho" pega a coordenada da casa referente ao índice e o armazena na variável "destinoIntermediário". Assim o peão se move até essa coordenada. 
-                Point intermediateSteps = pawnPathList.get(STEP_INDEX[0] + 1); // Contador se mantém o mesmo após toda a operation("0")
-                
-                // Realiza uma subtração entre a coordenada onde o peão quer ir ("destinoIntermediario") e a coordenada que ele está ("posVisual")
+                Point intermediateSteps = pawnPathList.get(STEP_INDEX[0] + 1); 
                 double dx = intermediateSteps.getX() - VISUAL_POS_X[0];
                 double dy = intermediateSteps.getY() - VISUAL_POS_Y[0];
-
-                // Calcula por Pitágoras a distância restante que o peão precisa percorrer em linha reta
-                // O calculo é feito por Pitágoras para quando o peão precisar se mover na diagonal, ele não anadar "x" e "y" ao mesmo tempo. Isso faria o peão se mover mais rápido (a diagonal do triângulo)
                 double remainingDistance = Math.sqrt(dx * dx + dy * dy);
 
-                // Espécie de trava para impedir que o peão acabe passando do centro da casa que ele precisa percorrer
                 if (remainingDistance <= SPEED) {
-                    // Se a distância que falta para o peão chegar a próxima casa for menor ou igual que a velocidade, ele ignora a quantidade de pixels que deveria andar por frame (velocidade) e vai direto para o centro da casa
                     VISUAL_POS_X[0] = intermediateSteps.getX();
                     VISUAL_POS_Y[0] = intermediateSteps.getY();
-
-                    // "Seta" o peão para a coordenada do destino
                     playerPawn.setPawnVisualCoordinates(intermediateSteps);
-                    
-                    // Permite que o peão possa "pular" novamente
                     playerPawn.setMoving(false);
                     
-                    // EFEITO PAC-MAN: "Come" a primeira bolinha da lista a cada casa que chega!
                     if (boardScreen != null) {
                         boardScreen.consumePreviewDot();
                     }
-
-                    // Redesenha o tabuleiro
                     boardScreen.repaint();
-
-                    // Ao somar mais 1 o peão sabe que conclui essa etapa. Assim quando passar pelo "indiceEtapa[0] + 1" ele sabe para qual casa irá em direção
-                    STEP_INDEX[0]++;  // Contador é permanentemente somado +1
+                    STEP_INDEX[0]++;  
                 } else {
-                    // Soma a velocidade de pixels que o peão precisa andar a posição que ele se encontra
-                    // Realiza uma divisão entre a distância que ele precisa percorrer pela distância total restante. Assim será possível definir em qual direção ele irá se movimentar de acordo com o sinal (cima, baixo, direita, esquerda)
-                    // Multiplica a proporção, encontrada com a divisão, pela velocidade e soma da posição o peão se encontra.
                     VISUAL_POS_X[0] += (dx / remainingDistance) * SPEED; 
                     VISUAL_POS_Y[0] += (dy / remainingDistance) * SPEED;
-                    
-                    // A cada frame é inserida essa nova posição somada e o paintComponent "repinta" o peão nela
                     playerPawn.setPawnVisualCoordinates(new Point((int) VISUAL_POS_X[0], (int) VISUAL_POS_Y[0]));
                 }
             }
@@ -221,59 +179,40 @@ public class GameManager {
     }
 
     /**
-     ** Método acionado pelo PawnControlManager quando o jogador clica em um peão de referência, calculando a lógica de movimentação
+     ** Método acionado pelo PawnControlManager 
     */
     public boolean moveChosenPawn(int pawnIndex, int cardValue, String cardEffect) {
-        // Pega o peão exato que o jogador escolheu
         PlayerPawn chosenPawn = boardScreen.getPlayer1Pawn(pawnIndex);
         
-        // Trava de segurança caso o peão seja nulo
         if (chosenPawn == null) {
-            // Se o peão escolhido for nulo, interrompe a execução e avisa que falhou
-            System.err.println(
-                "[GameManager] Erro: Peão índice " + pawnIndex + " não encontrado no tabuleiro!"
-            );
+            System.err.println("[GameManager] Erro: Peão índice " + pawnIndex + " não encontrado!");
             return false;
         }
 
         Point[] pawnPath = boardScreen.getCaminhoCasas();
         int pawnActualPosition = chosenPawn.getPawnCurrentPos();
         
-        System.out.println(
-            "[GameManager] Iniciando cálculo para o Peão " + pawnIndex + ". Posição Atual Lógica: " + pawnActualPosition
-        );
-
-        // 2. Trata os efeitos da carta
         boolean isBackwards = "VOLTAR".equalsIgnoreCase(cardEffect) || "RETRÓGRADO".equalsIgnoreCase(cardEffect);
         if (isBackwards && cardValue > 0) {
-            cardValue = -cardValue; // Garante que o valor fique negativo se for para trás
+            cardValue = -cardValue; 
         }
         
         boolean ganhouTurnoExtra = (Math.abs(cardValue) == 6);
         boolean exitBase = false;
 
-        // 3. Regra de Saída da Base INDIVIDUAL:
+        // Regra de Saída da Base
         if (pawnActualPosition < 4) {
             if (Math.abs(cardValue) == 1 || Math.abs(cardValue) == 6) {
                 int pawnStarterPath = 4; 
-                
                 chosenPawn.setPawnCurrentPos(pawnStarterPath);
-                exitBase = true; // Saiu da base!
+                exitBase = true; 
                 
-                System.out.println("[GameManager] Peão " + pawnIndex + " AUTORIZADO a sair da base. Indo para a casa " + pawnStarterPath);
+               
                 
-                // Oculta o fantasma, mas mantém o rastro de bolinhas para o peão comer
-                // if (boardScreen != null) {
-                //     boardScreen.hidePreviewGhost(); 
-                // }
-                
-                // Chama a sua animação
-                pawnMovement(chosenPawn, pawnActualPosition, pawnStarterPath, pawnPath, ganhouTurnoExtra, exitBase);
+                // Animação repassando o Index
+                pawnMovement(chosenPawn, pawnIndex, pawnActualPosition, pawnStarterPath, pawnPath, ganhouTurnoExtra, exitBase);
                 return true; 
             } else {
-                System.out.println(
-                    "[GameManager] Peão " + pawnIndex + " não pode sair da base (tirou " + Math.abs(cardValue) + ")."
-                );
                 JOptionPane.showMessageDialog(boardScreen, 
                     "Este peão específico precisa de um 1 ou 6 para sair da base!", 
                     "Movimento Inválido", JOptionPane.WARNING_MESSAGE);
@@ -281,35 +220,24 @@ public class GameManager {
             }
         }
 
-        // 4. Movimentação normal pelo tabuleiro
+        // Movimentação normal pelo tabuleiro
         int pawnStarterPath = pawnActualPosition + cardValue; 
 
         if (pawnStarterPath >= pawnPath.length) {
             pawnStarterPath = pawnPath.length - 1;
         }
-        
         if (pawnStarterPath < 4) {
             pawnStarterPath = 4;
         }
 
-        System.out.println("[GameManager] Peão " + pawnIndex + " movendo no circuito. Indo de " + pawnActualPosition + " para " + pawnStarterPath);
-
-        // Atribui a posição lógica final e chama a animação suave
         chosenPawn.setPawnCurrentPos(pawnStarterPath);
         
-        // Oculta o fantasma, mas mantém o rastro de bolinhas para o peão comer
-        // if (boardScreen != null) {
-        //     boardScreen.hidePreviewGhost(); 
-        // }
         
-        pawnMovement(chosenPawn, pawnActualPosition, pawnStarterPath, pawnPath, ganhouTurnoExtra, exitBase);
-        
+        // Animação repassando o Index
+        pawnMovement(chosenPawn, pawnIndex, pawnActualPosition, pawnStarterPath, pawnPath, ganhouTurnoExtra, exitBase);
         return true; 
     }
 
-    /**
-     * NOVO MÉTODO: Calcula e envia os dados de pré-visualização para o ecrã do tabuleiro sem alterar nada no jogo real.
-     */
     public void showMovementPreview(int pawnIndex, int cardValue, String cardEffect) {
         PlayerPawn chosenPawn = boardScreen.getPlayer1Pawn(pawnIndex);
         if (chosenPawn == null) return;
@@ -317,7 +245,6 @@ public class GameManager {
         Point[] pawnPath = boardScreen.getCaminhoCasas();
         int pawnActualPosition = chosenPawn.getPawnCurrentPos();
 
-        // 1. Trata os efeitos da carta localmente
         boolean isBackwards = "VOLTAR".equalsIgnoreCase(cardEffect) || "RETRÓGRADO".equalsIgnoreCase(cardEffect);
         int localCardValue = cardValue;
         if (isBackwards && localCardValue > 0) {
@@ -327,19 +254,16 @@ public class GameManager {
         int destIndex = pawnActualPosition + localCardValue;
         boolean exitBase = false;
 
-        // 2. Simulação da regra de Base
         if (pawnActualPosition < 4) {
             if (Math.abs(localCardValue) == 1 || Math.abs(localCardValue) == 6) {
                 destIndex = 4;
                 exitBase = true;
             } else {
-                // Se não pode sair da base, limpa qualquer previsão ativa e sai
                 boardScreen.clearPreview();
                 return;
             }
         }
 
-        // 3. Travas de segurança matemáticas
         if (destIndex >= pawnPath.length) {
             destIndex = pawnPath.length - 1;
         }
@@ -347,34 +271,42 @@ public class GameManager {
             destIndex = 4;
         }
 
-        // 4. Construção da lista de pontos que formam a linha pontilhada da previsão
         java.util.List<Point> previewPathList = new java.util.ArrayList<>();
         if (exitBase) {
-            // Se está a sair da base, a única bolinha de caminho é a própria casa 4
             previewPathList.add(pawnPath[4]);
         } else {
             if (pawnActualPosition < destIndex) {
-                // Se está a andar para a frente, o caminho começa na PRÓXIMA casa (+ 1)
                 for (int i = pawnActualPosition + 1; i <= destIndex; i++) {
                     previewPathList.add(pawnPath[i]);
                 }
             } else if (pawnActualPosition > destIndex) {
-                // Se está a andar para trás (efeito Voltar), o caminho começa na casa ANTERIOR (- 1)
                 for (int i = pawnActualPosition - 1; i >= destIndex; i--) {
                     previewPathList.add(pawnPath[i]);
                 }
             }
         }
 
-        // Envia os dados calculados para o painel desenhar por cima de tudo
         boardScreen.setPreviewData(pawnIndex, destIndex, previewPathList);
     }
 
-    private void verificarCondicoesFinais(PlayerPawn peao, int posicaoAlcancada, boolean ganhouTurnoExtra) {
+    /**
+     * DINÂMICO: Modificado para receber o índice do peão e transformá-lo em DOURADO automaticamente
+     */
+    private void verificarCondicoesFinais(PlayerPawn peao, int pawnIndex, int posicaoAlcancada, boolean ganhouTurnoExtra) {
+        // Se a posição alcançada for a última casa do array (o centro do tabuleiro)
         if (posicaoAlcancada >= boardScreen.getCaminhoCasas().length - 1) {
+            
+            // TRANSFORMAÇÃO DINÂMICA: Comunica a mudança ao painel lateral e tabuleiro
+            if (this.pawnControlManager != null) {
+                this.pawnControlManager.updatePawnVisualState(pawnIndex, "DOURADO");
+            }
+
+            // NOVA LINHA: TRANSFORMAÇÃO DINÂMICA (No Tabuleiro!)
+            peao.updatePawnVisual("/assets/peaoAmarelo_90x90.png");
+
             JOptionPane.showMessageDialog(boardScreen, 
-                "🏆 VITÓRIA! O peão de " + peao.getPlayerName() + " alcançou o Centro do Tabuleiro!\nVocê venceu o jogo!", 
-                "Fim de Partida", 
+                "🏆 INCRÍVEL! O peão " + (pawnIndex + 1) + " de " + peao.getPlayerName() + " alcançou o Centro do Tabuleiro e tornou-se DOURADO!", 
+                "Peão Vitorioso", 
                 JOptionPane.INFORMATION_MESSAGE);
             return;
         }
