@@ -19,16 +19,14 @@ public class GameManager {
     //private boolean isAtBase = true; // Controle se o peão ainda não saiu para o circuito
     private PawnControlManager pawnControlManager;
 
-    /** 
-    ** Construtor da classe "GameManager" que passa como parâmetro o tabuleiro do jogo
+    /** ** Construtor da classe "GameManager" que passa como parâmetro o tabuleiro do jogo
     * @param boardScreen Tabuleiro do jogo
     */
     public GameManager(BoardScreen boardScreen) {
         this.boardScreen = boardScreen;
     }
 
-    /** 
-    ** Método setter para que a classe "GameManager" conheça a classe "PawnControlManager"
+    /** ** Método setter para que a classe "GameManager" conheça a classe "PawnControlManager"
     * @param pawnControlManager Gerenciador de controle dos peões
     */
     public void setPawnControlManager(PawnControlManager pawnControlManager) {
@@ -113,8 +111,7 @@ public class GameManager {
     * @param mapaCasas Vetor que guarda cada posição (x, y) do tabuleiro.
     * @param fromWhere Índice da casa onde o peão se encontra
     * @param toWhere índice da casa para onde o peão vai
-    * 
-    */
+    * */
     private void pawnMovement(PlayerPawn playerPawn, int fromWhere, int toWhere, Point[] mapaCasas, boolean ganhouTurnoExtra, boolean baseExit) {
         java.util.List<Point> pawnPathList = new java.util.ArrayList<>(); // Lista que armazena a casa que o peão irá avançar/retroceder até o seu destino final. Inclui a casa que ele se contra atualmente. Evita que o método tenha que olha para o path inteiro do jogador
         
@@ -162,6 +159,11 @@ public class GameManager {
                     // Se o índice da etapa que ele está agora for maior ou igual a quantidade de paradas (tamanho da lista menos 1)  que o peão precisa fazer, irá parar a animação de movimentação
                     timerAnimation.stop();
                     System.out.println("[Animação] Movimento concluído suavemente.");
+                    
+                    // Limpa totalmente a previsão (as bolinhas restantes e qualquer fantasma residual)
+                    if (boardScreen != null) {
+                        boardScreen.clearPreview();
+                    }
 
                     // Verifica as condições finais que o peão o jogador está submetido (final do tabuleiro, turno extra, etc)
                     verificarCondicoesFinais(playerPawn, toWhere, ganhouTurnoExtra);
@@ -170,7 +172,7 @@ public class GameManager {
 
                 // Caso o caminho que o peão precisa percorrer ainda não chegou ao fim, ele precisará descobrir qual a casa ele precisa ir para conseguir chegar ao destino.
                 // Quando o peão anda uma casa, soma 1 ao índice. A variável "pontosDoCaminho" pega a coordenada da casa referente ao índice e o armazena na variável "destinoIntermediário". Assim o peão se move até essa coordenada. 
-                Point intermediateSteps = pawnPathList.get(STEP_INDEX[0] + 1); // Contador se mantém o mesmo após toda a operação("0")
+                Point intermediateSteps = pawnPathList.get(STEP_INDEX[0] + 1); // Contador se mantém o mesmo após toda a operation("0")
                 
                 // Realiza uma subtração entre a coordenada onde o peão quer ir ("destinoIntermediario") e a coordenada que ele está ("posVisual")
                 double dx = intermediateSteps.getX() - VISUAL_POS_X[0];
@@ -191,6 +193,11 @@ public class GameManager {
                     
                     // Permite que o peão possa "pular" novamente
                     playerPawn.setMoving(false);
+                    
+                    // EFEITO PAC-MAN: "Come" a primeira bolinha da lista a cada casa que chega!
+                    if (boardScreen != null) {
+                        boardScreen.consumePreviewDot();
+                    }
 
                     // Redesenha o tabuleiro
                     boardScreen.repaint();
@@ -246,10 +253,8 @@ public class GameManager {
         boolean exitBase = false;
 
         // 3. Regra de Saída da Base INDIVIDUAL:
-        // Se a posição atual for menor que 4, ele AINDA está no quadrante da base (índices 0, 1, 2 ou 3)
         if (pawnActualPosition < 4) {
             if (Math.abs(cardValue) == 1 || Math.abs(cardValue) == 6) {
-                // Índice 4 é a primeira casa real do circuito externo
                 int pawnStarterPath = 4; 
                 
                 chosenPawn.setPawnCurrentPos(pawnStarterPath);
@@ -257,9 +262,14 @@ public class GameManager {
                 
                 System.out.println("[GameManager] Peão " + pawnIndex + " AUTORIZADO a sair da base. Indo para a casa " + pawnStarterPath);
                 
+                // Oculta o fantasma, mas mantém o rastro de bolinhas para o peão comer
+                // if (boardScreen != null) {
+                //     boardScreen.hidePreviewGhost(); 
+                // }
+                
                 // Chama a sua animação
                 pawnMovement(chosenPawn, pawnActualPosition, pawnStarterPath, pawnPath, ganhouTurnoExtra, exitBase);
-                return true; // SUCESSO! O peão vai andar.
+                return true; 
             } else {
                 System.out.println(
                     "[GameManager] Peão " + pawnIndex + " não pode sair da base (tirou " + Math.abs(cardValue) + ")."
@@ -267,32 +277,97 @@ public class GameManager {
                 JOptionPane.showMessageDialog(boardScreen, 
                     "Este peão específico precisa de um 1 ou 6 para sair da base!", 
                     "Movimento Inválido", JOptionPane.WARNING_MESSAGE);
-                return false; // FALHOU! A regra impediu. O PawnControlManager NÃO vai limpar a memória.
+                return false; 
             }
         }
 
-        // 4. Movimentação normal pelo tabuleiro (para peões que já estão da casa 4 em diante)
-        
-        // Soma a posição atual com o valor da carta
+        // 4. Movimentação normal pelo tabuleiro
         int pawnStarterPath = pawnActualPosition + cardValue; 
 
-        // Trava de segurança para não ultrapassar a chegada (final do array)
         if (pawnStarterPath >= pawnPath.length) {
             pawnStarterPath = pawnPath.length - 1;
         }
         
-        // Trava de segurança para não voltar para dentro da base (antes da casa 4) se o efeito for negativo
         if (pawnStarterPath < 4) {
             pawnStarterPath = 4;
         }
 
         System.out.println("[GameManager] Peão " + pawnIndex + " movendo no circuito. Indo de " + pawnActualPosition + " para " + pawnStarterPath);
 
-        // Atualiza a posição lógica e chama a animação
+        // Atribui a posição lógica final e chama a animação suave
         chosenPawn.setPawnCurrentPos(pawnStarterPath);
+        
+        // Oculta o fantasma, mas mantém o rastro de bolinhas para o peão comer
+        // if (boardScreen != null) {
+        //     boardScreen.hidePreviewGhost(); 
+        // }
+        
         pawnMovement(chosenPawn, pawnActualPosition, pawnStarterPath, pawnPath, ganhouTurnoExtra, exitBase);
         
-        return true; // SUCESSO! O peão vai andar.
+        return true; 
+    }
+
+    /**
+     * NOVO MÉTODO: Calcula e envia os dados de pré-visualização para o ecrã do tabuleiro sem alterar nada no jogo real.
+     */
+    public void showMovementPreview(int pawnIndex, int cardValue, String cardEffect) {
+        PlayerPawn chosenPawn = boardScreen.getPlayer1Pawn(pawnIndex);
+        if (chosenPawn == null) return;
+
+        Point[] pawnPath = boardScreen.getCaminhoCasas();
+        int pawnActualPosition = chosenPawn.getPawnCurrentPos();
+
+        // 1. Trata os efeitos da carta localmente
+        boolean isBackwards = "VOLTAR".equalsIgnoreCase(cardEffect) || "RETRÓGRADO".equalsIgnoreCase(cardEffect);
+        int localCardValue = cardValue;
+        if (isBackwards && localCardValue > 0) {
+            localCardValue = -localCardValue;
+        }
+
+        int destIndex = pawnActualPosition + localCardValue;
+        boolean exitBase = false;
+
+        // 2. Simulação da regra de Base
+        if (pawnActualPosition < 4) {
+            if (Math.abs(localCardValue) == 1 || Math.abs(localCardValue) == 6) {
+                destIndex = 4;
+                exitBase = true;
+            } else {
+                // Se não pode sair da base, limpa qualquer previsão ativa e sai
+                boardScreen.clearPreview();
+                return;
+            }
+        }
+
+        // 3. Travas de segurança matemáticas
+        if (destIndex >= pawnPath.length) {
+            destIndex = pawnPath.length - 1;
+        }
+        if (destIndex < 4 && !exitBase) {
+            destIndex = 4;
+        }
+
+        // 4. Construção da lista de pontos que formam a linha pontilhada da previsão
+        java.util.List<Point> previewPathList = new java.util.ArrayList<>();
+        if (exitBase) {
+            // Se está a sair da base, a única bolinha de caminho é a própria casa 4
+            previewPathList.add(pawnPath[4]);
+        } else {
+            if (pawnActualPosition < destIndex) {
+                // Se está a andar para a frente, o caminho começa na PRÓXIMA casa (+ 1)
+                for (int i = pawnActualPosition + 1; i <= destIndex; i++) {
+                    previewPathList.add(pawnPath[i]);
+                }
+            } else if (pawnActualPosition > destIndex) {
+                // Se está a andar para trás (efeito Voltar), o caminho começa na casa ANTERIOR (- 1)
+                for (int i = pawnActualPosition - 1; i >= destIndex; i--) {
+                    previewPathList.add(pawnPath[i]);
+                }
+            }
+        }
+
+        // Envia os dados calculados para o painel desenhar por cima de tudo
+        boardScreen.setPreviewData(pawnIndex, destIndex, previewPathList);
     }
 
     private void verificarCondicoesFinais(PlayerPawn peao, int posicaoAlcancada, boolean ganhouTurnoExtra) {
@@ -312,5 +387,3 @@ public class GameManager {
         }
     }
 }
-
-

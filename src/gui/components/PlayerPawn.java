@@ -46,19 +46,19 @@ public class PlayerPawn extends JLabel {
 
         // Poderia ser utilizado o método "try/catch" para tratamento de erros, mas o if/else é mais sútil e simples
         if (boardPawnIcon != null) {
-            // Se a imagem carregada não for nula, então insere ela
-            // Aplica a imagem redimensionada ao "JLabel"
             this.setIcon(boardPawnIcon);
-            // Define o tamanho da imagem 
-            this.setSize(
-                boardPawnWidth, 
-                boardPawnHeight
-            );
+            
+            // O JLabel agora tem o tamanho exato de uma casa do tabuleiro (40 * 1.5 = 60)
+            int tileSize = (int) (40 * SCALE);
+            this.setSize(tileSize, tileSize);
+            
+            // Pede ao Java para centralizar a imagem perfeitamente dentro desse quadrado
+            this.setHorizontalAlignment(JLabel.CENTER);
+            this.setVerticalAlignment(JLabel.CENTER);
         } else {
-            this.setSize( // Tamanho de segurança caso a imagem falhe
-                (int) (20 * SCALE),
-                (int) (25 * SCALE)
-            ); 
+            // Tamanho de segurança caso a imagem falhe
+            int tileSize = (int) (40 * SCALE);
+            this.setSize(tileSize, tileSize); 
         }
 
         // Instancia um novo objeto da classe "ShakeListener" para que possa ser utilizada a funcionalidade shake
@@ -112,11 +112,17 @@ public class PlayerPawn extends JLabel {
     }
     
     // Método setter para que outras classes consigam acessar a variável privada "setPawnVisualCoordinates" e modifiquem seu valor
-    public void setPawnVisualCoordinates(Point visualCoordinates) { 
-        if (visualCoordinates != null) {
-            // Cria um ponto totalmente novo na memória com os mesmos valores de X e Y
-            this.setLocation(visualCoordinates.x, visualCoordinates.y);
-            this.originalY = visualCoordinates.y;
+    public void setPawnVisualCoordinates(Point tileTopLeft) { 
+        if (tileTopLeft != null) {
+            // O tamanho padrão de uma casa do seu tabuleiro (40 * 1.5 = 60 pixels)
+            int tileSize = (int) (40 * SCALE); 
+            
+            // Calcula o centro da casa e subtrai metade do tamanho do peão para alinhar o meio
+            int centeredX = tileTopLeft.x + (tileSize / 2) - (this.getWidth() / 2);
+            int centeredY = tileTopLeft.y + (tileSize / 2) - (this.getHeight() / 2);
+            
+            this.setLocation(centeredX, centeredY);
+            this.originalY = centeredY;
         }
     }
 
@@ -138,5 +144,20 @@ public class PlayerPawn extends JLabel {
     // Método getter para que outras classes consigam acessar a variável privada "getPlayerName" e pegar o seu valor
     public String getPlayerName() { 
         return playerName; 
+    }
+
+    /**
+     * Método que recupera a imagem do peão para ser usada na pré-visualização (fantasma)
+     * @return A imagem (java.awt.Image) do peão, ou null se não houver imagem
+     */
+    public java.awt.Image getPawnImage() {
+        javax.swing.Icon currentIcon = this.getIcon();
+        
+        // Verifica se o ícone atual é uma instância de ImageIcon (que é o que usamos no construtor)
+        if (currentIcon instanceof javax.swing.ImageIcon) {
+            return ((javax.swing.ImageIcon) currentIcon).getImage();
+        }
+        
+        return null;
     }
 }
