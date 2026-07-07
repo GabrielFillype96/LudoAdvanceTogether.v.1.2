@@ -64,9 +64,57 @@ public class GameManager {
                 int valorDado = Integer.parseInt(cardValueTreated);
 
                 if (this.pawnControlManager != null) {
-                    System.out.println("[GameManager] Interceptado! Mandando " + valorDado + " passos para a memória...");
-                    updatePlayablePawns(valorDado);
-                    this.pawnControlManager.preparePendingMovement(valorDado, cardEffect);
+                    
+                    // 1. Descobre quem pode jogar com esta carta
+                    java.util.List<Integer> peoesDisponiveis = updatePlayablePawns(valorDado);
+                    
+                    if (peoesDisponiveis.size() == 1) {
+                        // ==== JOGADA AUTOMÁTICA ====
+                        final int peaoAutomatico = peoesDisponiveis.get(0);
+                        
+                        // [FUTURO LABEL]
+                        System.out.println("[Status Label] Jogada Automática: Apenas um peão disponível!");
+                        
+                        // Prepara a memória para aceitar o movimento
+                        this.pawnControlManager.preparePendingMovement(valorDado, cardEffect);
+                        
+                        // OPÇÃO 3 (ANIMAÇÃO DE DESTAQUE): 
+                        // Liga o Shake e o Wobble forçadamente para chamar a atenção do jogador!
+                        this.pawnControlManager.onReferencePawnHoverEntered(peaoAutomatico);
+                        this.pawnControlManager.onBoardPawnHoverEntered(peaoAutomatico);
+                        
+                        // Mostra o caminho de bolinhas imediatamente (Pac-Man)
+                        showMovementPreview(peaoAutomatico, valorDado, cardEffect);
+                        
+                        // Aumentei o "Atraso Dramático" para 1.5 segundos (1500ms) para dar tempo de ver a animação bem
+                        Timer atrasoDramatico = new Timer(1500, new java.awt.event.ActionListener() {
+                            @Override
+                            public void actionPerformed(java.awt.event.ActionEvent e) {
+                                // [FUTURO ÁUDIO AQUI]
+                                
+                                // PARA AS ANIMAÇÕES DE DESTAQUE antes de o peão começar a andar
+                                pawnControlManager.onReferencePawnHoverExited(peaoAutomatico);
+                                pawnControlManager.onBoardPawnHoverExit(peaoAutomatico);
+                                
+                                // Simula o clique duplo do jogador para executar o movimento
+                                pawnControlManager.onReferencePawnClicked(peaoAutomatico); 
+                                pawnControlManager.onReferencePawnClicked(peaoAutomatico); 
+                            }
+                        });
+                        atrasoDramatico.setRepeats(false); 
+                        atrasoDramatico.start();
+                        
+                    } else if (peoesDisponiveis.size() > 1) {
+                        // ==== JOGADA MANUAL ====
+                        System.out.println("[Status Label] Escolha qual peão deseja mover.");
+                        this.pawnControlManager.preparePendingMovement(valorDado, cardEffect);
+                        
+                    } else {
+                        // ==== NENHUMA OPÇÃO ====
+                        System.out.println("[Status Label] Nenhum peão pode se mover com este número.");
+                        // Aqui no futuro adicionaremos a lógica de passar o turno para a CPU
+                    }
+
                 } else {
                     System.err.println("[GameManager] Erro: PawnControlManager não injetado!");
                 }
@@ -77,35 +125,39 @@ public class GameManager {
         }
     }
 
-    /**
-     * Avalia todos os peões a cada turno para decidir quem fica NORMAL ou DESABILITADO
+   /**
+     * Avalia todos os peões e retorna uma Lista com os índices dos peões que podem jogar.
      */
-    private void updatePlayablePawns(int cardValue) {
+    private java.util.List<Integer> updatePlayablePawns(int cardValue) {
+        java.util.List<Integer> peoesValidos = new java.util.ArrayList<>();
+        
         for (int i = 0; i < 4; i++) {
             PlayerPawn pawn = boardScreen.getPlayer1Pawn(i);
             if (pawn == null) continue;
             
             String currentState = this.pawnControlManager.getPawnState(i);
             
-            // Ignora peões que já venceram (DOURADOS nunca mudam de estado)
             if ("DOURADO".equalsIgnoreCase(currentState)) {
-                continue;
+                continue; // Ignora os que já venceram
             }
             
             int pos = pawn.getPawnCurrentPos();
             
-            // Regra da Base (Posições 0, 1, 2 e 3 correspondem aos 4 peões na base)
             if (pos < 4) {
+                // Na base: precisa de 1 ou 6
                 if (Math.abs(cardValue) == 1 || Math.abs(cardValue) == 6) {
                     this.pawnControlManager.updatePawnVisualState(i, "NORMAL");
+                    peoesValidos.add(i);
                 } else {
-                    this.pawnControlManager.updatePawnVisualState(i, "DESABILITADO"); // Fica rosa!
+                    this.pawnControlManager.updatePawnVisualState(i, "DESABILITADO");
                 }
             } else {
-                // Peões que já estão no tabuleiro estão sempre habilitados para andar
+                // No tabuleiro: sempre pode andar
                 this.pawnControlManager.updatePawnVisualState(i, "NORMAL");
+                peoesValidos.add(i);
             }
         }
+        return peoesValidos;
     }
     
 
