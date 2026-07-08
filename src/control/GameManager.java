@@ -41,7 +41,7 @@ public class GameManager {
             return;
         }
  
-        PlayerPawn p1 = boardScreen.getPlayer1Pawn(0);
+        PlayerPawn p1 = boardScreen.getPlayerPawn(0, 0);
         Point[] mapaCasas = boardScreen.getCaminhoCasas();
 
         if (p1 == null || mapaCasas == null) {
@@ -132,7 +132,7 @@ public class GameManager {
         java.util.List<Integer> peoesValidos = new java.util.ArrayList<>();
         
         for (int i = 0; i < 4; i++) {
-            PlayerPawn pawn = boardScreen.getPlayer1Pawn(i);
+            PlayerPawn pawn = boardScreen.getPlayerPawn(0, 0);
             if (pawn == null) continue;
             
             String currentState = this.pawnControlManager.getPawnState(i);
@@ -234,7 +234,7 @@ public class GameManager {
      ** Método acionado pelo PawnControlManager 
     */
     public boolean moveChosenPawn(int pawnIndex, int cardValue, String cardEffect) {
-        PlayerPawn chosenPawn = boardScreen.getPlayer1Pawn(pawnIndex);
+        PlayerPawn chosenPawn = boardScreen.getPlayerPawn(0, pawnIndex);
         
         if (chosenPawn == null) {
             System.err.println("[GameManager] Erro: Peão índice " + pawnIndex + " não encontrado!");
@@ -291,7 +291,7 @@ public class GameManager {
     }
 
     public void showMovementPreview(int pawnIndex, int cardValue, String cardEffect) {
-        PlayerPawn chosenPawn = boardScreen.getPlayer1Pawn(pawnIndex);
+        PlayerPawn chosenPawn = boardScreen.getPlayerPawn(0, pawnIndex);
         if (chosenPawn == null) return;
 
         Point[] pawnPath = boardScreen.getCaminhoCasas();

@@ -35,7 +35,7 @@ public class BoardScreen extends JPanel {
         (int)(600 * SCALE), 
         (int)(600 * SCALE)
     );
-    private PlayerPawn[] player1Pawn;
+    private PlayerPawn[][] playersPawns;
     private java.awt.Point[] player1Path, player2Path, player3Path, player4Path;
     
     // Variáveis da Pré-visualização
@@ -83,45 +83,41 @@ public class BoardScreen extends JPanel {
              22
         ));
 
-        String player1PawnImg = "/assets/peaoAzul_90x90.png"; // Substitua pelo nome real dos seus arquivos PNG
+        // Instancia a matriz para 4 jogadores, cada um com 4 peões
+        this.playersPawns = new PlayerPawn[4][4]; 
         
-        /*
-        * Instancia um array de tamanho 4 para armazenar objetos do tipo "PlayerPawn"
-        * O array nasce vazio (null) e só serão ocupados pelos peões após o loop "for" abaixo
-        */
-        this.player1Pawn = new PlayerPawn[4]; 
-
-        int j = 0;
-        // Loop para instanciar os peões do jogador 1 (peão 1, 2, 3 e 4)
-        for (int i = 0; i < 4; i++) {
-            player1Pawn[i] =  new PlayerPawn(
-                player1Name,
-                player1PawnImg
-            );
-            System.out.println("Instanciando peão " + (i+1) + " do Jogador 1 com a imagem: " + player1PawnImg);
-        }
+        String[] playerNames = {player1Name, player2Name, player3Name, player4Name};
         
-        // Loop para atribuir a coordenada inicial dos pões do jogador 1
-        for (int i = 0; i < 4; i++) {
-            System.out.println(
-                "Atribuindo coordenada visual para o peão " + (i+1) + " do Jogador 1 na casa " + j
-            );
-            if (player1Path != null && player1Path.length > 0) {
+        // ATENÇÃO: Substitua os nomes dos arquivos PNG de acordo com as cores reais que tem na sua pasta assets!
+        String[] pawnImages = {
+            "/assets/peaoAzul_90x90.png",    // Jogador 1
+            "/assets/peaoRoxo_90x90.png", // Jogador 2 (CPU 1)
+            "/assets/peaoRosa_90x90.png",    // Jogador 3 (CPU 2)
+            "/assets/peaoAmarelo_90x90.png"   // Jogador 4 (CPU 3)
+        };
+        
+        // Array com os caminhos (paths) de todos os jogadores para facilitar a leitura no loop
+        java.awt.Point[][] allPaths = {player1Path, player2Path, player3Path, player4Path};
 
-                // Coordenadas originais do path (sem offset)
-                Point baseCoord = player1Path[j];
-                Point pawnCurrentCoord = new java.awt.Point(baseCoord.x, baseCoord.y);
+        // Loop Duplo: Cria os 16 peões e coloca-os no ecrã
+        for (int p = 0; p < 4; p++) { // 'p' é o ID do Jogador (0 a 3)
+            for (int i = 0; i < 4; i++) { // 'i' é o ID do Peão (0 a 3)
                 
-                player1Pawn[i].setPawnVisualCoordinates(pawnCurrentCoord);
-                player1Pawn[i].setPawnCurrentPos(j);
-
-                // Adiciona o peão ao tabuleiro
-                this.add(player1Pawn[i]);
-                System.out.println(
-                    "-> Peão " + (i+1) + " adicionado. Coordenadas: X=" + pawnCurrentCoord.x + ", Y=" + pawnCurrentCoord.y + " | Tamanho: " + player1Pawn[i].getSize()
-                );
-            };
-            j++;
+                // 1. Instancia o peão com o nome e imagem correta
+                playersPawns[p][i] = new PlayerPawn(playerNames[p], pawnImages[p]);
+                
+                // 2. Coloca o peão na coordenada da sua respectiva base (se o path já existir)
+                if (allPaths[p] != null && allPaths[p].length > 0) {
+                    Point baseCoord = allPaths[p][i]; // As posições 0, 1, 2 e 3 do path são a base
+                    Point pawnCurrentCoord = new java.awt.Point(baseCoord.x, baseCoord.y);
+                    
+                    playersPawns[p][i].setPawnVisualCoordinates(pawnCurrentCoord);
+                    playersPawns[p][i].setPawnCurrentPos(i); // Casa 0, 1, 2 ou 3 da base
+                }
+                
+                // 3. Adiciona o peão ao painel
+                this.add(playersPawns[p][i]);
+            }
         }
     }
 
@@ -273,19 +269,41 @@ public class BoardScreen extends JPanel {
             new java.awt.Point((int)(280 * SCALE), (int)(400 * SCALE)), // [58]
             new java.awt.Point((int)(280 * SCALE), (int)(360 * SCALE)), // [59]
             new java.awt.Point((int)(280 * SCALE), (int)(320 * SCALE))  // [60] Casa final (centro)
-        };
-    }
+        }; 
 
-    public PlayerPawn getPlayerPawn(int pawnIndex) {
-        if (pawnIndex >= 0 && pawnIndex < 4) {
-            return player1Pawn[pawnIndex];
+       // =========================================================================
+        // AUTOMAÇÃO DOS CAMINHOS DAS CPUS (Com correção de alinhamento pelo centro)
+        // =========================================================================
+        int centroTabuleiro = (int) (300 * SCALE); 
+        int offsetCentroCasa = (int) (20 * SCALE); // A casa tem 40, então o centro é 20
+        
+        this.player2Path = new Point[player1Path.length];
+        this.player3Path = new Point[player1Path.length];
+        this.player4Path = new Point[player1Path.length];
+
+        for (int i = 0; i < player1Path.length; i++) {
+            Point p1 = player1Path[i];
+            if (p1 == null) continue;
+
+            // 1. Acha o centro exato da casa do Jogador 1
+            int centroX = p1.x + offsetCentroCasa;
+            int centroY = p1.y + offsetCentroCasa;
+
+            // 2. Calcula a distância do centro da casa até o centro do tabuleiro
+            int dx = centroX - centroTabuleiro;
+            int dy = centroY - centroTabuleiro;
+
+            // 3. Rotaciona e subtrai o offset para devolver ao canto superior esquerdo
+            this.player2Path[i] = new Point((centroTabuleiro - dy) - offsetCentroCasa, (centroTabuleiro + dx) - offsetCentroCasa);
+            this.player3Path[i] = new Point((centroTabuleiro - dx) - offsetCentroCasa, (centroTabuleiro - dy) - offsetCentroCasa);
+            this.player4Path[i] = new Point((centroTabuleiro + dy) - offsetCentroCasa, (centroTabuleiro - dx) - offsetCentroCasa);
         }
-        return null;
-    }
+    } 
 
     public void startBoardPawnShake(int pawnIndex) {
         if (pawnIndex >= 0 && pawnIndex < 4) {
-            PlayerPawn playerPawn = player1Pawn[pawnIndex]; 
+            // Usa o ID 0 para pegar o peão do Jogador 1 na matriz
+            PlayerPawn playerPawn = playersPawns[0][pawnIndex]; 
             if (playerPawn != null) {
                 playerPawn.startBoardPawnShake();
             }
@@ -294,7 +312,8 @@ public class BoardScreen extends JPanel {
 
     public void stopBoardPawnShake(int pawnIndex) {
         if (pawnIndex >= 0 && pawnIndex < 4) {
-            PlayerPawn playerPawn = player1Pawn[pawnIndex]; 
+            // Usa o ID 0 para pegar o peão do Jogador 1 na matriz
+            PlayerPawn playerPawn = playersPawns[0][pawnIndex]; 
             if (playerPawn != null) {
                 playerPawn.stopBoardPawnShake();
             }
@@ -450,31 +469,43 @@ public class BoardScreen extends JPanel {
 
         g2.setColor(Color.WHITE); 
        
-        g2.setColor(Color.WHITE); 
-       
-        if (this.player1Path != null) {
-            int tileSize = (int) (40 * SCALE);
-            int diametroCirculo = (int) (65 * SCALE); 
-            
-            for (i = 0; i <= 3; i++) {
-                java.awt.Point pontoSpawn = this.player1Path[i];
-                if (pontoSpawn != null) {
-                    // O centro da casa é a ponta (X/Y) + metade do tamanho da casa
-                    int centerX = pontoSpawn.x + (tileSize / 2);
-                    int centerY = pontoSpawn.y + (tileSize / 2);
+        // Junta os caminhos de todos os jogadores num array para facilitar
+        java.awt.Point[][] todosCaminhos = {
+            this.player1Path, 
+            this.player2Path, 
+            this.player3Path, 
+            this.player4Path
+        };
+        
+        int tileSize = (int) (40 * SCALE);
+        int diametroCirculo = (int) (65 * SCALE); 
+        
+        // Loop pelos 4 jogadores
+        for (int p = 0; p < 4; p++) {
+            if (todosCaminhos[p] != null) {
+                // Loop pelas 4 bases de cada jogador (posições 0, 1, 2, 3)
+                for (i = 0; i <= 3; i++) {
+                    java.awt.Point pontoSpawn = todosCaminhos[p][i];
+                    
+                    if (pontoSpawn != null) {
+                        // O centro da casa é a ponta (X/Y) + metade do tamanho da casa
+                        int centerX = pontoSpawn.x + (tileSize / 2);
+                        int centerY = pontoSpawn.y + (tileSize / 2);
 
-                    int xCirculo = centerX - (diametroCirculo / 2);
-                    int yCirculo = centerY - (diametroCirculo / 2);
+                        int xCirculo = centerX - (diametroCirculo / 2);
+                        int yCirculo = centerY - (diametroCirculo / 2);
 
-                    g2.fillOval(xCirculo, yCirculo, diametroCirculo, diametroCirculo);
-                    g2.setColor(Color.BLACK);
-                    g2.setStroke(new java.awt.BasicStroke(1));
-                    g2.drawOval(xCirculo, yCirculo, diametroCirculo, diametroCirculo);
-                    g2.setColor(Color.WHITE); 
+                        g2.setColor(Color.WHITE);
+                        g2.fillOval(xCirculo, yCirculo, diametroCirculo, diametroCirculo);
+                        
+                        g2.setColor(Color.BLACK);
+                        g2.setStroke(new java.awt.BasicStroke(1));
+                        g2.drawOval(xCirculo, yCirculo, diametroCirculo, diametroCirculo);
+                    }
                 }
             }
         }
-
+        
         // --- NOVO BLOCO: DESENHAR A PRÉ-VISUALIZAÇÃO (SE ESTIVER ATIVA) ---
         java.awt.Graphics2D g2dPreview = (java.awt.Graphics2D) g.create();
         int tamanhoCasa = (int) (40 * SCALE);
@@ -501,7 +532,7 @@ public class BoardScreen extends JPanel {
         // 2. Desenhar o Peão Fantasma (Apenas se o índice dele não tiver sido apagado)
         if (previewPawnIndex != -1 && previewDestinationIndex != -1) {
             Point destinationPoint = getCaminhoCasas()[previewDestinationIndex];
-            PlayerPawn pawnToClone = getPlayer1Pawn(previewPawnIndex);
+            PlayerPawn pawnToClone = getPlayerPawn(0, previewPawnIndex);
             
             if (pawnToClone != null && destinationPoint != null) {
                 g2dPreview.setComposite(java.awt.AlphaComposite.getInstance(java.awt.AlphaComposite.SRC_OVER, 0.5f));
@@ -519,9 +550,14 @@ public class BoardScreen extends JPanel {
         g2dPreview.dispose();
     }
 
-    public PlayerPawn getPlayer1Pawn(int index) {
-        if (index >= 0 && index < player1Pawn.length) {
-            return this.player1Pawn[index];
+    /**
+     * Método universal para aceder a qualquer peão de qualquer jogador.
+     * @param playerId O índice do jogador (0 = J1, 1 = J2, 2 = J3, 3 = J4)
+     * @param pawnIndex O índice do peão (0 a 3)
+     */
+    public PlayerPawn getPlayerPawn(int playerId, int pawnIndex) {
+        if (playerId >= 0 && playerId < 4 && pawnIndex >= 0 && pawnIndex < 4) {
+            return this.playersPawns[playerId][pawnIndex];
         }
         return null;
     }

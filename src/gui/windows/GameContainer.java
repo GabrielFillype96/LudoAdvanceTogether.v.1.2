@@ -137,7 +137,7 @@ public class GameContainer extends JPanel {
          * Isso elimina dependências circulares (antigo setter) e habilita a funcionalidade wobble perfeitamente.
          */
         for (int i = 0; i < 4; i++) {
-            PlayerPawn playerPawn = boardScreen.getPlayer1Pawn(i);
+            PlayerPawn playerPawn = boardScreen.getPlayerPawn(0, i);
             if (playerPawn != null) {
                 playerPawn.addMouseListener(new BoardPawnMouseListener(pawnControlManager, i));
             }
