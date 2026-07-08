@@ -531,7 +531,7 @@ public class BoardScreen extends JPanel {
 
         // 2. Desenhar o Peão Fantasma (Apenas se o índice dele não tiver sido apagado)
         if (previewPawnIndex != -1 && previewDestinationIndex != -1) {
-            Point destinationPoint = getCaminhoCasas()[previewDestinationIndex];
+            Point destinationPoint = getCaminhoCasas(0)[previewDestinationIndex];
             PlayerPawn pawnToClone = getPlayerPawn(0, previewPawnIndex);
             
             if (pawnToClone != null && destinationPoint != null) {
@@ -562,7 +562,17 @@ public class BoardScreen extends JPanel {
         return null;
     }
 
-    public java.awt.Point[] getCaminhoCasas() {
-        return this.player1Path;
+    /**
+     * Retorna o caminho de casas (rota) específico para cada jogador.
+     * @param playerId O índice do jogador (0 = Azul/J1, 1 = Roxo/CPU1, 2 = Rosa/CPU2, 3 = Amarelo/CPU3)
+     */
+    public java.awt.Point[] getCaminhoCasas(int playerId) {
+        switch (playerId) {
+            case 0: return this.player1Path;
+            case 1: return this.player2Path;
+            case 2: return this.player3Path;
+            case 3: return this.player4Path;
+            default: return this.player1Path; // Retorno de segurança
+        }
     }
 }

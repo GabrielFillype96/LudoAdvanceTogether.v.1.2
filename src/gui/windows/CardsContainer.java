@@ -103,6 +103,14 @@ public class CardsContainer extends JPanel {
                 
                 // Validação da opção escolhida pelo jogador através do clique
                 btn.addActionListener(e -> {
+                    // 🛡️ ESCUDO DE TURNO: Se não for a vez do humano (Jogador 0), ignora o clique!
+                    if (this.gameManager != null && this.gameManager.getTurnManager() != null) {
+                        if (!this.gameManager.getTurnManager().isHumanTurn()) {
+                            System.out.println("[CardsContainer] Clique bloqueado! Não é o turno do jogador humano (A vez é do Jogador " + this.gameManager.getTurnManager().getCurrentTurn() + ").");
+                            return; // Interrompe a execução aqui, impedindo a validação da resposta
+                        }
+                    }
+
                     String respostaEscolhida = btn.getCardAnswerTxt().trim();
                     System.out.println("[CardsContainer] O jogador clicou na resposta: " + respostaEscolhida);
                     

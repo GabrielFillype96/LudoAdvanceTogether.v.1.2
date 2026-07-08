@@ -3,6 +3,7 @@
 // Package
 package gui.windows;
 
+import control.CPUIManager;
 import control.GameManager;
 // Imports internos
 import control.PawnControlManager;
@@ -80,6 +81,9 @@ public class GameContainer extends JPanel {
         // Instancia o manager global do jogo
         GameManager gameManager = new GameManager(this.boardScreen);
 
+        CPUIManager cpuManager = new CPUIManager(gameManager);
+        gameManager.setCPUIManager(cpuManager);
+
         TurnManager turnManager = new TurnManager(gameManager);
         gameManager.setTurnManager(turnManager);
 
@@ -97,6 +101,8 @@ public class GameContainer extends JPanel {
         CardsContainer cardsContainer = new CardsContainer(gameManager, cardAnswerValidation);
         cardsContainer.setBounds(CARDS_CONTAINER_BOUNDS); // Tamanho e posição do container das cartas (60, 165) (330x510)
         cardsArea.add(cardsContainer);
+
+        gameManager.getTurnManager().setCardsContainer(cardsContainer);
 
         // Área reservada ao layout do controle dos peões
         JPanel pawnControlArea = new JPanel();
