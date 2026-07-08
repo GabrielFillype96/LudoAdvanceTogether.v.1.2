@@ -17,6 +17,7 @@ public class PawnControlManager {
     private boolean awaitingPawnSelection = false;
     private GameManager gameManager;
     
+    
     // Memória do peão selecionado (-1 significa nenhum)
     private int selectedPawnIndex = -1; 
 

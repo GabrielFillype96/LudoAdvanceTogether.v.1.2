@@ -17,11 +17,17 @@ public class GameManager {
     private BoardScreen boardScreen;
     private Timer timerAnimation; 
     private PawnControlManager pawnControlManager;
+    private TurnManager turnManager;
 
-    /** ** Construtor da classe "GameManager"
+    /** 
+     ** Construtor da classe "GameManager"
     */
     public GameManager(BoardScreen boardScreen) {
         this.boardScreen = boardScreen;
+    }
+
+    public void setTurnManager(TurnManager turnManager) {
+        this.turnManager = turnManager;
     }
 
     /** ** Método setter para vinculação
@@ -51,6 +57,10 @@ public class GameManager {
 
         if (!correct) {
             System.out.println("[GameManager] Resposta incorreta. O peão permaneceu na casa " + p1.getPawnCurrentPos());
+            // GATILHO 1: Errou a resposta, passa o turno
+            if (this.turnManager != null) {
+                this.turnManager.nextTurn();
+            }
             return;
         }
 
@@ -112,7 +122,10 @@ public class GameManager {
                     } else {
                         // ==== NENHUMA OPÇÃO ====
                         System.out.println("[Status Label] Nenhum peão pode se mover com este número.");
-                        // Aqui no futuro adicionaremos a lógica de passar o turno para a CPU
+                        // GATILHO 2: Acertou mas ficou travado, passa o turno
+                        if (this.turnManager != null) {
+                            this.turnManager.nextTurn();
+                        }
                     }
 
                 } else {
@@ -342,9 +355,11 @@ public class GameManager {
     }
 
     /**
-     * DINÂMICO: Modificado para receber o índice do peão e transformá-lo em DOURADO automaticamente
+     * DINÂMICO: Modificado para receber o índice do peão, transformá-lo em DOURADO e gerenciar fim de turno
      */
     private void verificarCondicoesFinais(PlayerPawn peao, int pawnIndex, int posicaoAlcancada, boolean ganhouTurnoExtra) {
+        boolean passarVez = true;
+
         // Se a posição alcançada for a última casa do array (o centro do tabuleiro)
         if (posicaoAlcancada >= boardScreen.getCaminhoCasas().length - 1) {
             
@@ -360,7 +375,6 @@ public class GameManager {
                 "🏆 INCRÍVEL! O peão " + (pawnIndex + 1) + " de " + peao.getPlayerName() + " alcançou o Centro do Tabuleiro e tornou-se DOURADO!", 
                 "Peão Vitorioso", 
                 JOptionPane.INFORMATION_MESSAGE);
-            return;
         }
 
         if (ganhouTurnoExtra) {
@@ -368,6 +382,12 @@ public class GameManager {
                 "Incrível! Você tirou um efeito de valor '6'!\nVocê ganhou o direito de jogar novamente.", 
                 "Turno Bônus", 
                 JOptionPane.INFORMATION_MESSAGE);
+            passarVez = false; // GATILHO EXTRA: Se tirou 6, não passa a vez!
+        }
+
+        // GATILHO 3: Fim do movimento regular. Passa o turno se aplicável.
+        if (passarVez && this.turnManager != null) {
+            this.turnManager.nextTurn();
         }
     }
 }

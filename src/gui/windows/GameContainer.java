@@ -6,6 +6,7 @@ package gui.windows;
 import control.GameManager;
 // Imports internos
 import control.PawnControlManager;
+import control.TurnManager;
 import gui.components.PlayerPawn;
 import gui.events.BoardPawnMouseListener;
 
@@ -78,6 +79,9 @@ public class GameContainer extends JPanel {
 
         // Instancia o manager global do jogo
         GameManager gameManager = new GameManager(this.boardScreen);
+
+        TurnManager turnManager = new TurnManager(gameManager);
+        gameManager.setTurnManager(turnManager);
 
         // Área reservada ao layout das cartas, controles e informações de jogador (450x600)
         JPanel cardsArea = new JPanel(); // Instancia o painel completo que irá conter as cartas, controles e informações do jogador
