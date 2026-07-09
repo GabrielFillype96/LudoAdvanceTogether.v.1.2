@@ -18,6 +18,9 @@ public class GameManager {
     
     // Rastreador de 6s consecutivos para cada um dos 4 jogadores (0 a 3)
     private int[] consecutiveSixesCounters = new int[4]; 
+    
+    // Flag para congelar o jogo quando alguém vencer
+    private boolean jogoFinalizado = false;
 
     // =========================================================================
     // CONFIGURAÇÕES DINÂMICAS 
@@ -47,7 +50,7 @@ public class GameManager {
     }
 
     public void cardResultVerification(boolean correct, String cardValue, String cardEffect) {
-        if (boardScreen == null) return;
+        if (boardScreen == null || jogoFinalizado) return;
         if (timerAnimation != null && timerAnimation.isRunning()) return;
 
         int activePlayerId = (this.turnManager != null) ? this.turnManager.getCurrentTurn() : 0;
@@ -59,7 +62,7 @@ public class GameManager {
 
         if (!correct) {
             System.out.println("[GameManager] Resposta incorreta. Passando o turno.");
-            consecutiveSixesCounters[activePlayerId] = 0; // Errou a resposta, zera o combo de 6
+            consecutiveSixesCounters[activePlayerId] = 0; 
             if (this.turnManager != null) {
                 this.turnManager.nextTurn();
             }
@@ -75,11 +78,11 @@ public class GameManager {
 
                 int valorDado = Integer.parseInt(cardValueTreated);
 
-                // PENALIDADE DOS TRÊS 6 CONSECUTIVOS:
+                // PENALIDADE DOS TRÊS 6 CONSECUTIVOS
                 if (Math.abs(valorDado) == 6) {
                     consecutiveSixesCounters[activePlayerId]++;
                     if (consecutiveSixesCounters[activePlayerId] == 3) {
-                        consecutiveSixesCounters[activePlayerId] = 0; // Reseta o combo
+                        consecutiveSixesCounters[activePlayerId] = 0; 
                         
                         if (activePlayerId == 0) {
                             JOptionPane.showMessageDialog(boardScreen, 
@@ -92,10 +95,10 @@ public class GameManager {
                         if (this.turnManager != null) {
                             this.turnManager.nextTurn();
                         }
-                        return; // Encerra o método sem realizar nenhum movimento
+                        return; 
                     }
                 } else {
-                    consecutiveSixesCounters[activePlayerId] = 0; // Qualquer outro número limpa o combo
+                    consecutiveSixesCounters[activePlayerId] = 0; 
                 }
 
                 if (this.pawnControlManager != null) {
@@ -104,7 +107,7 @@ public class GameManager {
                     
                     if (peoesDisponiveis.isEmpty()) {
                         System.out.println("[Status Label] Nenhum peão do Jogador " + activePlayerId + " pode se mover.");
-                        consecutiveSixesCounters[activePlayerId] = 0; // Preso sem movimentos, quebra o combo
+                        consecutiveSixesCounters[activePlayerId] = 0; 
                         if (activePlayerId == 0) {
                             JOptionPane.showMessageDialog(boardScreen, 
                                 "Nenhum peão pode se mover. Caminho totalmente bloqueado!", 
@@ -156,7 +159,7 @@ public class GameManager {
     private java.util.List<Integer> updatePlayablePawns(int cardValue, String cardEffect, int activePlayerId) {
         java.util.List<Integer> peoesValidos = new java.util.ArrayList<>();
         Point[] pawnPath = boardScreen.getCaminhoCasas(activePlayerId);
-        if (pawnPath == null) return peoesValidos;
+        if (pawnPath == null || jogoFinalizado) return peoesValidos;
 
         boolean isBackwards = "VOLTAR".equalsIgnoreCase(cardEffect) || "RETRÓGRADO".equalsIgnoreCase(cardEffect);
         int localCardValue = isBackwards ? -cardValue : cardValue;
@@ -340,6 +343,8 @@ public class GameManager {
     }
 
     public boolean moveChosenPawn(int pawnIndex, int cardValue, String cardEffect) {
+        if (jogoFinalizado) return false;
+        
         int activePlayerId = (this.turnManager != null) ? this.turnManager.getCurrentTurn() : 0;
         
         PlayerPawn chosenPawn = boardScreen.getPlayerPawn(activePlayerId, pawnIndex);
@@ -391,6 +396,8 @@ public class GameManager {
     }
 
     public void showMovementPreview(int pawnIndex, int cardValue, String cardEffect) {
+        if (jogoFinalizado) return;
+        
         int activePlayerId = (this.turnManager != null) ? this.turnManager.getCurrentTurn() : 0;
         
         PlayerPawn chosenPawn = boardScreen.getPlayerPawn(activePlayerId, pawnIndex);
@@ -453,10 +460,13 @@ public class GameManager {
     }
 
     private void verificarCondicoesFinais(PlayerPawn peao, int pawnIndex, int posicaoAlcancada, boolean ganhouTurnoExtra) {
+        if (jogoFinalizado) return;
+        
         boolean passarVez = true;
         int activePlayerId = (this.turnManager != null) ? this.turnManager.getCurrentTurn() : 0;
+        Point[] caminhoJogador = boardScreen.getCaminhoCasas(activePlayerId);
 
-        if (posicaoAlcancada >= boardScreen.getCaminhoCasas(activePlayerId).length - 1) {
+        if (posicaoAlcancada >= caminhoJogador.length - 1) {
             if (this.pawnControlManager != null && activePlayerId == 0) {
                 this.pawnControlManager.updatePawnVisualState(pawnIndex, "DOURADO");
             }
@@ -465,6 +475,27 @@ public class GameManager {
             JOptionPane.showMessageDialog(boardScreen, 
                 "🏆 INCRÍVEL! O peão " + (pawnIndex + 1) + " de " + peao.getPlayerName() + " alcançou o Centro!", 
                 "Peão Vitorioso", JOptionPane.INFORMATION_MESSAGE);
+                
+            // === NOVO: VERIFICAÇÃO DA CONDIÇÃO DE VITÓRIA ===
+            int peoesNoCentro = 0;
+            for (int i = 0; i < 4; i++) {
+                PlayerPawn p = boardScreen.getPlayerPawn(activePlayerId, i);
+                if (p != null && p.getPawnCurrentPos() >= caminhoJogador.length - 1) {
+                    peoesNoCentro++;
+                }
+            }
+            
+            // Se todos os 4 peões deste jogador chegaram ao centro, temos um vencedor!
+            if (peoesNoCentro == 4) {
+                jogoFinalizado = true; // Bloqueia novas jogadas
+                
+                String mensagemVitoria = (activePlayerId == 0) ? 
+                    "🎉👑 PARABÉNS! Você levou todos os 4 peões ao Centro e VENCEU O JOGO!" :
+                    "🤖 FIM DE JOGO! A " + peao.getPlayerName() + " levou todos os peões ao Centro e venceu a partida.";
+                
+                JOptionPane.showMessageDialog(boardScreen, mensagemVitoria, "👑 Temos um Campeão!", JOptionPane.INFORMATION_MESSAGE);
+                return; // Encerra o método e não passa o turno
+            }
         }
 
         if (ganhouTurnoExtra) {
@@ -479,14 +510,20 @@ public class GameManager {
         }
 
         if (passarVez && this.turnManager != null) {
-            consecutiveSixesCounters[activePlayerId] = 0; // Turno mudando de forma normal, limpa o combo
+            consecutiveSixesCounters[activePlayerId] = 0; 
             this.turnManager.nextTurn();
         } else if (!passarVez && this.turnManager != null && activePlayerId > 0) {
             this.turnManager.processExtraTurn();
         }
     }
 
+    private void verificarCapture(int activePlayerId, int destIndex) {
+        verificarCaptura(activePlayerId, destIndex);
+    }
+
     private void verificarCaptura(int activePlayerId, int destIndex) {
+        if (jogoFinalizado) return;
+        
         Point destPoint = boardScreen.getCaminhoCasas(activePlayerId)[destIndex];
 
         if (isZonaSegura(destPoint)) {
