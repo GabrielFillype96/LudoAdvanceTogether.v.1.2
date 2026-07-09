@@ -31,7 +31,7 @@ public class Main {
             
             // 4. Adiciona o menu principal à tela de fundo
             telaFundo.add(menuPrincipal);
-
+            
             // 5. Adiciona a tela de fundo à janela
             janela.add(telaFundo);
             
