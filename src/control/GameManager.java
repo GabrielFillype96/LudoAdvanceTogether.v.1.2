@@ -15,6 +15,9 @@ public class GameManager {
     private PawnControlManager pawnControlManager;
     private TurnManager turnManager;
     private CPUIManager cpuIManager;
+    
+    // Rastreador de 6s consecutivos para cada um dos 4 jogadores (0 a 3)
+    private int[] consecutiveSixesCounters = new int[4]; 
 
     // =========================================================================
     // CONFIGURAÇÕES DINÂMICAS 
@@ -56,6 +59,7 @@ public class GameManager {
 
         if (!correct) {
             System.out.println("[GameManager] Resposta incorreta. Passando o turno.");
+            consecutiveSixesCounters[activePlayerId] = 0; // Errou a resposta, zera o combo de 6
             if (this.turnManager != null) {
                 this.turnManager.nextTurn();
             }
@@ -71,12 +75,36 @@ public class GameManager {
 
                 int valorDado = Integer.parseInt(cardValueTreated);
 
+                // PENALIDADE DOS TRÊS 6 CONSECUTIVOS:
+                if (Math.abs(valorDado) == 6) {
+                    consecutiveSixesCounters[activePlayerId]++;
+                    if (consecutiveSixesCounters[activePlayerId] == 3) {
+                        consecutiveSixesCounters[activePlayerId] = 0; // Reseta o combo
+                        
+                        if (activePlayerId == 0) {
+                            JOptionPane.showMessageDialog(boardScreen, 
+                                "🚨 PENALIDADE!\nVocê tirou o número '6' três vezes seguidas.\nSua jogada foi cancelada e você perdeu a vez!", 
+                                "Três 6s Consecutivos", JOptionPane.ERROR_MESSAGE);
+                        } else {
+                            System.out.println("[GameManager] CPU " + activePlayerId + " tirou o terceiro '6' seguido e perdeu a vez.");
+                        }
+                        
+                        if (this.turnManager != null) {
+                            this.turnManager.nextTurn();
+                        }
+                        return; // Encerra o método sem realizar nenhum movimento
+                    }
+                } else {
+                    consecutiveSixesCounters[activePlayerId] = 0; // Qualquer outro número limpa o combo
+                }
+
                 if (this.pawnControlManager != null) {
                     
                     java.util.List<Integer> peoesDisponiveis = updatePlayablePawns(valorDado, cardEffect, activePlayerId);
                     
                     if (peoesDisponiveis.isEmpty()) {
                         System.out.println("[Status Label] Nenhum peão do Jogador " + activePlayerId + " pode se mover.");
+                        consecutiveSixesCounters[activePlayerId] = 0; // Preso sem movimentos, quebra o combo
                         if (activePlayerId == 0) {
                             JOptionPane.showMessageDialog(boardScreen, 
                                 "Nenhum peão pode se mover. Caminho totalmente bloqueado!", 
@@ -139,8 +167,6 @@ public class GameManager {
             
             int pos = pawn.getPawnCurrentPos();
             
-            // CORREÇÃO: Se o peão já está na última casa (Centro), ele encerrou a sua jornada.
-            // Bloqueia Humano e CPU de moverem peças que já venceram.
             if (pos >= pawnPath.length - 1) {
                 if (activePlayerId == 0) this.pawnControlManager.updatePawnVisualState(i, "DESABILITADO");
                 continue;
@@ -322,7 +348,6 @@ public class GameManager {
         Point[] pawnPath = boardScreen.getCaminhoCasas(activePlayerId);
         int pawnActualPosition = chosenPawn.getPawnCurrentPos();
         
-        // SALVAGUARDA: Se por algum motivo tentar forçar o movimento de um peão no centro, bloqueia.
         if (pawnActualPosition >= pawnPath.length - 1) return false;
 
         boolean isBackwards = "VOLTAR".equalsIgnoreCase(cardEffect) || "RETRÓGRADO".equalsIgnoreCase(cardEffect);
@@ -454,6 +479,7 @@ public class GameManager {
         }
 
         if (passarVez && this.turnManager != null) {
+            consecutiveSixesCounters[activePlayerId] = 0; // Turno mudando de forma normal, limpa o combo
             this.turnManager.nextTurn();
         } else if (!passarVez && this.turnManager != null && activePlayerId > 0) {
             this.turnManager.processExtraTurn();
