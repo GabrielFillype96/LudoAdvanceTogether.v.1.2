@@ -87,6 +87,28 @@ public class CardOptionButton extends JButton {
 
     }
 
+    /**
+     * CONSTRUTOR SOBRECARREGADO: 
+     * Usado apenas para botões simples (como o botão "OK" das cartas de Sorte/Azar).
+     */
+    public CardOptionButton(String text) {
+        // Preenchemos as variáveis obrigatórias com valores neutros/vazios
+        this.CARD_QUESTION_TYPE = "ESPECIAL";
+        this.cardAnswerLetter = ""; // Deixamos vazio pois não tem letra (A, B, C...)
+        this.cardAnswerTxt = text;  // Aqui entra o "OK"
+        this.CARD_COLOR = new Color(200, 200, 200); // Uma cor cinza neutra 
+        
+        // Configurações visuais básicas do Swing (mantenha igual ao seu construtor original)
+        this.setContentAreaFilled(false);
+        this.setFocusPainted(false);
+        this.setBorderPainted(false);
+        this.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        this.isHovered = false;
+
+        // Nota: Se você tiver um MouseListener para efeito de Hover no construtor original, 
+        // você pode copiá-lo e colá-lo aqui também!
+    }
+
     // Método para separar a alternativa do texto da carta
     private void cardAnswerTxtConfig(String cardAnswerCompleteTxt) {
         if (cardAnswerCompleteTxt == null) return;

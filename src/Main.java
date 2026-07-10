@@ -13,7 +13,7 @@ public class Main {
         System.setProperty("sun.java2d.uiScale", "1");
             
         SwingUtilities.invokeLater(() -> {
-            // Instancia a janela principal do jogo
+            // Instancia a janela principal do jogo 
             JFrame janela = new JFrame("Jogo de Ludo - Advance Together");
             janela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             janela.setResizable(false); // Mantido false para o usuário não distorcer o layout nulo

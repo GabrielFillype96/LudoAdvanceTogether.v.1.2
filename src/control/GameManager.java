@@ -69,7 +69,7 @@ public class GameManager {
             return;
         }
 
-       if ("AVANÇAR".equalsIgnoreCase(cardEffect) || "VOLTAR".equalsIgnoreCase(cardEffect) || "RETRÓGRADO".equalsIgnoreCase(cardEffect)) {
+       if ("AVANÇAR".equalsIgnoreCase(cardEffect) || "VOLTAR".equalsIgnoreCase(cardEffect) || "RETROCEDER".equalsIgnoreCase(cardEffect)) {
             try {
                 String cardValueTreated = cardValue.trim();
                 if (cardValueTreated.contains("/")) {
@@ -564,4 +564,6 @@ public class GameManager {
             }
         }
     }
+
+    
 }

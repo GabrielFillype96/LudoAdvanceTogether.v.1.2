@@ -43,6 +43,7 @@ public class CustomCards extends JPanel {
     private Image frontImgCard;
     private boolean displayBackImgCard = false;
     private CardOptionButton[] botoesOpcao;
+    private CardOptionButton botaoConfirmar;
 
 
     private CardsContainer painelPai;
@@ -89,6 +90,8 @@ public class CustomCards extends JPanel {
         
         // Chama o método que irá carregar a imagem da frente da carta certa (Nesse construtor deve ser de carta especial)
         selectFrontCardImage();
+        
+        inicializarBotaoConfirmar();
     }
 
     // Construtor 2: Pergunta SIM / NÃO
@@ -200,6 +203,19 @@ public class CustomCards extends JPanel {
                 this.add(btn); // Adiciona o botão à carta
             }
         }
+
+        /**
+     * Método responsável por inicializar e posicionar o botão "OK"
+     * para as cartas do tipo SORTE, AZAR ou SACANEAR.
+     */
+    private void inicializarBotaoConfirmar() {
+        this.botaoConfirmar = new CardOptionButton("OK"); 
+        
+        // Ajuste o x, y, largura e altura conforme o design da sua carta
+        this.botaoConfirmar.setBounds(60, 280, 100, 35); 
+        
+        this.add(this.botaoConfirmar);
+    }
 
    
 
@@ -342,6 +358,10 @@ public class CustomCards extends JPanel {
     // Método para o CardsContainer conseguir acessar os botões
     public CardOptionButton[] getBotoesOpcao() {
         return this.botoesOpcao;
+    }
+
+    public CardOptionButton getConfirmButton() {
+        return this.botaoConfirmar;
     }
 
     // Método para selecionar a frente da carta de acordo com o tipo (pergunta/efeito)

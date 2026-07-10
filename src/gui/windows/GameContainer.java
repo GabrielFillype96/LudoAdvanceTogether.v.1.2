@@ -4,6 +4,7 @@
 package gui.windows;
 
 import control.CPUIManager;
+import control.DeckManager;
 import control.GameManager;
 // Imports internos
 import control.PawnControlManager;
@@ -24,6 +25,7 @@ public class GameContainer extends JPanel {
     private String playerName;
     private String cpuDifficulty;
     private PawnControlManager pawnControlManager;
+    private DeckManager deckManager;
     private BoardScreen boardScreen;
     private static final double SCALE = 1.5;
     private static final Rectangle GAME_CONTAINER_BOUNDS = new Rectangle(
@@ -82,10 +84,17 @@ public class GameContainer extends JPanel {
         GameManager gameManager = new GameManager(this.boardScreen);
 
         CPUIManager cpuManager = new CPUIManager(gameManager);
-        gameManager.setCPUIManager(cpuManager);
+        gameManager.setCPUIManager(cpuManager); 
 
         TurnManager turnManager = new TurnManager(gameManager);
         gameManager.setTurnManager(turnManager);
+
+        cards.CardManager cardManager = new cards.CardManager();
+        this.deckManager = new DeckManager(cardManager);
+        this.deckManager.initializeDecks();
+
+        cpuManager.setDeckManager(this.deckManager);
+        turnManager.setCPUIManager(cpuManager);
 
         // Área reservada ao layout das cartas, controles e informações de jogador (450x600)
         JPanel cardsArea = new JPanel(); // Instancia o painel completo que irá conter as cartas, controles e informações do jogador
@@ -102,7 +111,8 @@ public class GameContainer extends JPanel {
         cardsContainer.setBounds(CARDS_CONTAINER_BOUNDS); // Tamanho e posição do container das cartas (60, 165) (330x510)
         cardsArea.add(cardsContainer);
 
-        gameManager.getTurnManager().setCardsContainer(cardsContainer);
+        cardsContainer.setDeckManager(this.deckManager); // Aquele mesmo que criamos antes!
+        cardsContainer.setTurnManager(turnManager);
 
         // Área reservada ao layout do controle dos peões
         JPanel pawnControlArea = new JPanel();
