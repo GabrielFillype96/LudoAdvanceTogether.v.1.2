@@ -275,8 +275,8 @@ public class NewGameMenuScreen extends JPanel {
         g2.fillRoundRect(
             (int) (0 * SCALE), 
             (int) (0 * SCALE), 
-            (int) (getWidth() * SCALE), 
-            (int) (getHeight() * SCALE), 
+            (int) (getWidth()), 
+            (int) (getHeight()), 
             (int) (24 * SCALE), 
             (int) (24 * SCALE)
         );
@@ -287,8 +287,8 @@ public class NewGameMenuScreen extends JPanel {
         g2.drawRoundRect(
             (int) (2 * SCALE), 
             (int) (2 * SCALE), 
-            (int) ((getWidth() - 5) * SCALE), 
-            (int) ((getHeight() - 5) * SCALE), 
+            getWidth() - (int) (5 * SCALE), 
+            getHeight() - (int) (5 * SCALE), 
             (int) (24 * SCALE), 
             (int)(24 * SCALE)
         );

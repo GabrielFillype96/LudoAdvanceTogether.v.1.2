@@ -8,8 +8,8 @@
     "alternativas": [],
     "respostaCorreta": "Não",
     "efeito": "AVANÇAR",
-    "valorEfeito": "6/6",
-    "iconePeao": "peao_azul.png"
+    "valorEfeito": "1/6",
+    "iconePeao": "peao_verde.png"
   },
   {
     "id": 2,
@@ -24,7 +24,7 @@
     ],
     "respostaCorreta": "180",
     "efeito": "AVANÇAR",
-    "valorEfeito": "6/6",
+    "valorEfeito": "2/6",
     "iconePeao": "peao_verde.png"
   },
   {
@@ -36,7 +36,7 @@
     "alternativas": [],
     "respostaCorreta": "",
     "efeito": "AVANÇAR",
-    "valorEfeito": "4",
+    "valorEfeito": "4/6",
     "iconePeao": "peao_amarelo.png"
   },
   {
@@ -48,37 +48,38 @@
     "alternativas": [],
     "respostaCorreta": "",
     "efeito": "RETROCEDER",
-    "valorEfeito": "3",
+    "valorEfeito": "3/6",
     "iconePeao": "peao_vermelho.png"
   },
-{
+  {
     "id": 5,
     "tipoGeral": "PERGUNTA",
-    "tipoPergunta":"SIM_NAO",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "SIM_NAO",
     "enunciado": "A Lei Maria da Penha é conhecida pelo número 11.340. Isso é correto?",
     "alternativas": [],
     "respostaCorreta": "Sim",
-    "dificuldade": "FÁCIL",
-    "efeito":"AVANÇAR",
-    "valorEfeito":"2/6",
-    "iconePeao":"peao_vermelho.png"
-},
-{
+    "efeito": "AVANÇAR",
+    "valorEfeito": "2/6",
+    "iconePeao": "peao_vermelho.png"
+  },
+  {
     "id": 6,
     "tipoGeral": "PERGUNTA",
-    "tipoPergunta":"SIM_NAO",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "SIM_NAO",
     "enunciado": "O canal de denúncia de violência contra a mulher no Brasil é o Ligue 180. Isso é verdade?",
     "alternativas": [],
     "respostaCorreta": "Sim",
-    "dificuldade": "Fácil",
-    "efeito":"AVANÇAR",
-    "valorEfeito":"2/6",
-    "iconePeao":"peao_vermelho.png"
-},
-{
+    "efeito": "AVANÇAR",
+    "valorEfeito": "2/6",
+    "iconePeao": "peao_vermelho.png"
+  },
+  {
     "id": 7,
     "tipoGeral": "PERGUNTA",
-    "tipoPergunta":"MULTIPLA_ESCOLHA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das opções abaixo melhor descreve a violência patrimonial contra a mulher?",
     "alternativas": [
       "Retenção, subtração ou destruição de documentos, bens e recursos financeiros da mulher",
@@ -86,9 +87,3888 @@
       "Ameaças verbais e isolamento social imposto pelo agressor"
     ],
     "respostaCorreta": "Retenção, subtração ou destruição de documentos, bens e recursos financeiros da mulher",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "2/6",
+    "iconePeao": "peao_vermelho.png"
+  },
+  {
+    "id": 8,
+    "tipoGeral": "PERGUNTA",
     "dificuldade": "FÁCIL",
-    "efeito":"AVANÇAR",
-    "valorEfeito":"2/6",
-    "iconePeao":"peao_vermelho.png"
-}
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "A Lei Maria da Penha é conhecida pelo número 11.340. Isso é correto?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "1/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 9,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "O canal de denúncia de violência contra a mulher no Brasil é o Ligue 180. Isso é verdade?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "1/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 10,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "A violência doméstica ocorre apenas em relacionamentos de casamento formal. Isso é correto?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Não",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "1/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 11,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das opções abaixo melhor descreve a violência patrimonial contra a mulher?",
+    "alternativas": [
+      "Retenção, subtração ou destruição de documentos, bens e recursos financeiros da mulher",
+      "Agressão física que deixa marcas no corpo da mulher",
+      "Ameaças verbais e isolamento social imposto pelo agressor"
+    ],
+    "respostaCorreta": "Retenção, subtração ou destruição de documentos, bens e recursos financeiros da mulher",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "2/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 12,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo melhor descreve o ciclo da violência doméstica?",
+    "alternativas": [
+      "Um padrão que inclui fases de tensão, agressão, arrependimento e lua de mel que se repetem",
+      "Um ciclo de denúncias e arquivamento de processos judiciais",
+      "Um processo de separação gradual mediado pelo Estado"
+    ],
+    "respostaCorreta": "Um padrão que inclui fases de tensão, agressão, arrependimento e lua de mel que se repetem",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "2/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 13,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo é um recurso correto para mulheres em situação de violência buscarem ajuda no Brasil?",
+    "alternativas": [
+      "Ligar para o 180, que oferece orientação e encaminhamento para serviços de proteção",
+      "Ligar para o 190 exclusivamente, que é o único canal habilitado para esses casos",
+      "Procurar apenas hospitais, pois são os únicos autorizados a registrar violência"
+    ],
+    "respostaCorreta": "Ligar para o 180, que oferece orientação e encaminhamento para serviços de proteção",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "2/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 14,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "Crianças que presenciam violência doméstica também são consideradas vítimas pela legislação brasileira?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "3/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 15,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "A Convenção de Belém do Pará, tratado internacional sobre violência contra a mulher, foi adotada em 1994. Isso é correto?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "3/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 16,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "O CREAS é o equipamento público que atende famílias e indivíduos em situação de violação de direitos com vínculos fragilizados?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "3/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 17,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo melhor descreve o papel da Defensoria Pública no atendimento a mulheres vítimas de violência?",
+    "alternativas": [
+      "Presta assistência jurídica gratuita a mulheres sem condições de pagar advogado, ajudando na obtenção de medidas protetivas",
+      "Atua apenas como mediadora entre vítima e agressor para promover reconciliação",
+      "Representa exclusivamente o Estado em ações penais, sem contato direto com a vítima"
+    ],
+    "respostaCorreta": "Presta assistência jurídica gratuita a mulheres sem condições de pagar advogado, ajudando na obtenção de medidas protetivas",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "4/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 18,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente o que é a Rede de Enfrentamento à Violência contra a Mulher?",
+    "alternativas": [
+      "Conjunto articulado de serviços públicos e privados que atendem mulheres em situação de violência, incluindo saúde, assistência social, segurança e justiça",
+      "Organização não governamental criada exclusivamente para arrecadação de fundos para casas-abrigo",
+      "Programa de treinamento de policiais militares para atendimento de ocorrências domésticas"
+    ],
+    "respostaCorreta": "Conjunto articulado de serviços públicos e privados que atendem mulheres em situação de violência, incluindo saúde, assistência social, segurança e justiça",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "4/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 19,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo NÃO é uma atribuição das Delegacias Especializadas de Atendimento à Mulher (DEAMs)?",
+    "alternativas": [
+      "Realizar julgamentos e condenar agressores diretamente sem intervenção do Poder Judiciário",
+      "Receber denúncias e registrar boletins de ocorrência de violência doméstica",
+      "Investigar crimes e encaminhar inquéritos ao Ministério Público"
+    ],
+    "respostaCorreta": "Realizar julgamentos e condenar agressores diretamente sem intervenção do Poder Judiciário",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "3/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 20,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "O conceito de interseccionalidade aplicado à violência contra a mulher considera que raça, classe e gênero são fatores independentes que não se influenciam mutuamente. Isso é correto?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Não",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "5/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 21,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "A Recomendação Geral nº 19 do Comitê CEDAW, de 1992, foi o primeiro documento internacional a reconhecer a violência baseada em gênero como forma de discriminação?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 22,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "O Juizado Especial Criminal (JECRIM) é competente para julgar crimes de violência doméstica e familiar contra a mulher após a Lei Maria da Penha?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Não",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "5/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 23,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente o que o caso Maria da Penha Maia Fernandes na Comissão Interamericana de Direitos Humanos resultou para o Brasil?",
+    "alternativas": [
+      "Recomendação de reformas legislativas e reparação à vítima, o que impulsionou a criação da Lei 11.340/2006",
+      "Aplicação de sanções econômicas ao Brasil por descumprimento de tratados internacionais",
+      "Transferência do julgamento do agressor para o Tribunal Penal Internacional"
+    ],
+    "respostaCorreta": "Recomendação de reformas legislativas e reparação à vítima, o que impulsionou a criação da Lei 11.340/2006",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 24,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente o conceito de coercive control (controle coercitivo) no contexto da violência doméstica?",
+    "alternativas": [
+      "Padrão de comportamento que busca dominar e isolar a vítima por meio de intimidação e restrição de autonomia, muitas vezes sem agressão física aparente",
+      "Técnica policial de negociação usada em situações de crise em ocorrências domésticas",
+      "Mecanismo judicial que limita o contato do agressor com a vítima durante processos criminais"
+    ],
+    "respostaCorreta": "Padrão de comportamento que busca dominar e isolar a vítima por meio de intimidação e restrição de autonomia, muitas vezes sem agressão física aparente",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 25,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente a diferença entre violência de gênero e violência doméstica?",
+    "alternativas": [
+      "Violência de gênero é mais ampla e abarca qualquer violência motivada por gênero; violência doméstica é a que ocorre no ambiente familiar ou de convivência íntima",
+      "Violência de gênero e violência doméstica são sinônimos perfeitos e intercambiáveis em qualquer contexto jurídico",
+      "Violência doméstica é mais ampla por incluir homens e crianças sem distinção de motivação"
+    ],
+    "respostaCorreta": "Violência de gênero é mais ampla e abarca qualquer violência motivada por gênero; violência doméstica é a que ocorre no ambiente familiar ou de convivência íntima",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "5/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 26,
+    "tipoGeral": "AZAR",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você perpetuou a cultura do silêncio. Volte 6 casas.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "RETROCEDER",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 27,
+    "tipoGeral": "PEGADINHA",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você achou que estava ajudando, mas interrompeu a vítima. Fique uma rodada sem jogar.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "PROXIMO",
+    "valorEfeito": "0/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 28,
+    "tipoGeral": "PEGADINHA",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você compartilhou uma notícia sem verificar a fonte. Retorne ao início.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "INICIO",
+    "valorEfeito": "0/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 29,
+    "tipoGeral": "AZAR",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você não se posicionou contra a violência. Volte 4 casas.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "RETROCEDER",
+    "valorEfeito": "4/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 30,
+    "tipoGeral": "AZAR",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você ignorou a necessidade de acolhimento. Volte 3 casas.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "RETROCEDER",
+    "valorEfeito": "3/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 31,
+    "tipoGeral": "PEGADINHA",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você ofereceu ajuda, mas desistiu no meio. Fique parado.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "PROXIMO",
+    "valorEfeito": "0/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 32,
+    "tipoGeral": "SORTE",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você compartilhou informações sobre canais de ajuda. Avance 3 casas",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "3/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 33,
+    "tipoGeral": "SORTE",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você interrompeu uma situação de violência. Avance 9 casas.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 34,
+    "tipoGeral": "SORTE",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você participou de uma campanha de conscientização. Avance 4 casas.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "4/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 35,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "A Lei Maria da Penha foi promulgada em 2006. Isso é verdade?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "1/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 36,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "O serviço Ligue 180 funciona 24 horas por dia. Isso é verdade?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "1/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 37,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "A violência psicológica é reconhecida como forma de violência doméstica pela Lei Maria da Penha?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "2/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 38,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "Homens podem ser autores de violência doméstica contra mulheres segundo a Lei Maria da Penha?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "1/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 39,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "A violência sexual dentro do casamento é crime no Brasil?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "2/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 40,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "O agressor pode ser preso em flagrante caso descumpra medidas protetivas de urgência?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "2/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 41,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "A Lei do Feminicídio foi sancionada no ano de 2015. Isso é correto?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "2/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 42,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "Qualquer pessoa pode ligar para o 180 para denunciar violência contra a mulher, mesmo que não seja a vítima?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "1/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 43,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "A violência doméstica afeta somente mulheres de baixa renda. Isso é verdade?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Não",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "1/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 44,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "O CRAS oferece serviços de assistência social para mulheres em situação de vulnerabilidade?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "1/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 45,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "A Lei Maria da Penha permite que a própria vítima retire a queixa de violência doméstica sem necessidade de justificativa judicial?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Não",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "2/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 46,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "Ciúme excessivo e controle do parceiro sobre a mulher são sinais de alerta para violência doméstica?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "2/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 47,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "A violência moral contra a mulher inclui calúnia, difamação e injúria?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "2/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 48,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "O Ligue 180 também pode receber relatos de violência contra mulher ocorrida no exterior. Isso é correto?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "2/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 49,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo é o significado correto da sigla CRAS?",
+    "alternativas": [
+      "Centro de Referência de Assistência Social",
+      "Centro de Resgate e Apoio Social",
+      "Centro Regional de Atendimento Social"
+    ],
+    "respostaCorreta": "Centro de Referência de Assistência Social",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "2/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 50,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo NÃO é uma forma de violência doméstica reconhecida pela Lei Maria da Penha?",
+    "alternativas": [
+      "Violência ambiental",
+      "Violência física",
+      "Violência patrimonial"
+    ],
+    "respostaCorreta": "Violência ambiental",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "2/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 51,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente o objetivo das Casas-Abrigo para mulheres em situação de violência?",
+    "alternativas": [
+      "Oferecer acolhimento temporário e seguro para mulheres e seus filhos que estejam em risco de vida",
+      "Servir como presídio feminino para mulheres que cometem crimes",
+      "Oferecer apenas serviços jurídicos, sem acolhimento residencial"
+    ],
+    "respostaCorreta": "Oferecer acolhimento temporário e seguro para mulheres e seus filhos que estejam em risco de vida",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "2/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 52,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente uma medida protetiva de urgência prevista na Lei Maria da Penha?",
+    "alternativas": [
+      "Proibição do agressor de se aproximar da vítima, de seus familiares e de testemunhas",
+      "Prisão automática do agressor por 30 dias sem necessidade de investigação",
+      "Transferência compulsória da vítima para outro estado do país"
+    ],
+    "respostaCorreta": "Proibição do agressor de se aproximar da vítima, de seus familiares e de testemunhas",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "2/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 53,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo melhor define o conceito de feminicídio?",
+    "alternativas": [
+      "Homicídio de mulher motivado por razões da condição do sexo feminino, envolvendo violência de gênero",
+      "Qualquer morte de mulher ocorrida no ambiente doméstico",
+      "Homicídio de mulher praticado exclusivamente por parceiro íntimo com uso de arma branca"
+    ],
+    "respostaCorreta": "Homicídio de mulher motivado por razões da condição do sexo feminino, envolvendo violência de gênero",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "2/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 54,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual é o número correto para ligar e denunciar violência contra a mulher no Brasil?",
+    "alternativas": [
+      "180",
+      "190",
+      "197"
+    ],
+    "respostaCorreta": "180",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "1/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 55,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente o papel da Delegacia Especializada de Atendimento à Mulher (DEAM)?",
+    "alternativas": [
+      "Receber denúncias, registrar boletins de ocorrência e investigar crimes de violência doméstica contra mulheres",
+      "Realizar julgamentos e condenar agressores sem envolvimento do Poder Judiciário",
+      "Oferecer exclusivamente atendimento psicológico e assistência social às vítimas"
+    ],
+    "respostaCorreta": "Receber denúncias, registrar boletins de ocorrência e investigar crimes de violência doméstica contra mulheres",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "2/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 56,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo melhor descreve um sinal de alerta precoce de relacionamento abusivo?",
+    "alternativas": [
+      "O parceiro isola a mulher de amigos e familiares, monitora suas redes sociais e critica constantemente suas decisões",
+      "O casal discute eventualmente e depois resolve os conflitos com diálogo",
+      "A mulher opta voluntariamente por passar mais tempo em casa"
+    ],
+    "respostaCorreta": "O parceiro isola a mulher de amigos e familiares, monitora suas redes sociais e critica constantemente suas decisões",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "2/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 57,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "A Lei 14.132/2021 tipificou o crime de perseguição (stalking) no Código Penal brasileiro. Isso é correto?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "3/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 58,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "Mulheres negras são desproporcionalmente mais afetadas pela violência doméstica e feminicídio no Brasil segundo pesquisas do IPEA?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "3/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 59,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "A violência contra a mulher pode ocorrer em relacionamentos homoafetivos?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "3/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 60,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "O agressor condenado por violência doméstica pode ser obrigado pelo juiz a frequentar grupos de reabilitação?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "3/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 61,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "A violência digital ou cibernética contra a mulher passou a ser abrangida pela Lei Maria da Penha após alteração em 2021?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "3/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 62,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "A pena mínima para o crime de feminicídio no Brasil é de 12 anos de reclusão?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "4/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 63,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "O feminicídio é considerado crime hediondo no Brasil?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "4/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 64,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "Mulheres estrangeiras em situação de violência doméstica no Brasil têm direito às proteções da Lei Maria da Penha?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "4/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 65,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "Gaslighting é uma forma de violência psicológica em que o agressor manipula a vítima para questionar sua própria percepção da realidade?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "4/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 66,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "A Lei nº 11.340/2006 (Maria da Penha) permite aplicação de penas alternativas como pagamento de cesta básica para crimes de violência doméstica?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Não",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "4/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 67,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "O Brasil ratificou a Convenção sobre a Eliminação de Todas as Formas de Discriminação contra a Mulher (CEDAW)?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "4/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 68,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "O Brasil ocupa posição entre os países com maiores índices de feminicídio no mundo segundo relatórios internacionais?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "3/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 69,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "A omissão do poder público em proteger mulheres vítimas de violência pode gerar responsabilização internacional do Estado brasileiro?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "4/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 70,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "A violência psicológica pode causar traumas tão graves quanto a violência física?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "3/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 71,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente o que é stalking no contexto da violência contra a mulher?",
+    "alternativas": [
+      "Perseguição obsessiva e repetida que causa medo e constrangimento à vítima, podendo ser física, digital ou por terceiros",
+      "Tipo de violência exclusivamente física com agressões recorrentes",
+      "Prática de espionagem industrial que ocorre apenas no ambiente de trabalho"
+    ],
+    "respostaCorreta": "Perseguição obsessiva e repetida que causa medo e constrangimento à vítima, podendo ser física, digital ou por terceiros",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "3/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 72,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente o que é violência obstétrica?",
+    "alternativas": [
+      "Qualquer ato ou omissão de profissional de saúde que afete negativamente o processo de parturição, causando dano ou constrangimento à mulher",
+      "Violência praticada exclusivamente por parteiras não habilitadas em regiões rurais",
+      "Dificuldades naturais e inevitáveis que ocorrem durante o parto sem responsabilidade do profissional"
+    ],
+    "respostaCorreta": "Qualquer ato ou omissão de profissional de saúde que afete negativamente o processo de parturição, causando dano ou constrangimento à mulher",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "3/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 73,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente o papel do CRAS no enfrentamento à violência contra a mulher?",
+    "alternativas": [
+      "Oferece orientação, acompanhamento psicossocial e encaminhamento para a rede de proteção a mulheres em vulnerabilidade",
+      "Realiza prisão preventiva de agressores e aplica medidas protetivas de urgência",
+      "Atua exclusivamente como delegacia especializada no registro de boletins de ocorrência"
+    ],
+    "respostaCorreta": "Oferece orientação, acompanhamento psicossocial e encaminhamento para a rede de proteção a mulheres em vulnerabilidade",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "3/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 74,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente o papel do Ministério Público no contexto da Lei Maria da Penha?",
+    "alternativas": [
+      "Pode dar prosseguimento à ação penal mesmo que a vítima decida não representar contra o agressor em casos de lesão corporal dolosa",
+      "Só pode agir quando expressamente autorizado pela vítima em qualquer tipo de crime doméstico",
+      "Tem atuação limitada à fase de execução da pena, sem participar da investigação"
+    ],
+    "respostaCorreta": "Pode dar prosseguimento à ação penal mesmo que a vítima decida não representar contra o agressor em casos de lesão corporal dolosa",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "4/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 75,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente a importância do Boletim de Ocorrência (BO) para mulheres vítimas de violência?",
+    "alternativas": [
+      "Documento oficial que registra formalmente o crime, sendo fundamental para iniciar investigações e solicitar medidas protetivas",
+      "Documento elaborado exclusivamente por médicos que atestam lesões físicas",
+      "Relatório social emitido pelo CRAS que autoriza acesso a casas-abrigo"
+    ],
+    "respostaCorreta": "Documento oficial que registra formalmente o crime, sendo fundamental para iniciar investigações e solicitar medidas protetivas",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "3/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 76,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo melhor descreve o fenômeno da violência simbólica no contexto das relações de gênero?",
+    "alternativas": [
+      "Forma de dominação exercida por representações culturais e práticas sociais que naturalizam a submissão feminina",
+      "Violência praticada por meio de símbolos religiosos e rituais místicos",
+      "Agressão física que deixa marcas simbólicas mas sem lesões visíveis"
+    ],
+    "respostaCorreta": "Forma de dominação exercida por representações culturais e práticas sociais que naturalizam a submissão feminina",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "4/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 77,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente o canal de atendimento do Ligue 180?",
+    "alternativas": [
+      "Central de Atendimento à Mulher vinculada ao Ministério das Mulheres, disponível 24h para orientação e denúncias",
+      "Serviço exclusivo para registro de boletim de ocorrência online",
+      "Canal de atendimento do INSS para mulheres em situação de vulnerabilidade"
+    ],
+    "respostaCorreta": "Central de Atendimento à Mulher vinculada ao Ministério das Mulheres, disponível 24h para orientação e denúncias",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "3/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 78,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo melhor descreve o conceito de violência simbólica para Pierre Bourdieu aplicado ao contexto de gênero?",
+    "alternativas": [
+      "Dominação suave exercida pelo consentimento dos dominados, que internalizam a lógica de sua própria subordinação tornando a violência invisível",
+      "Forma explícita de agressão verbal que usa símbolos e metáforas para humilhar a mulher",
+      "Violência praticada em rituais públicos e cerimônias culturais tradicionais"
+    ],
+    "respostaCorreta": "Dominação suave exercida pelo consentimento dos dominados, que internalizam a lógica de sua própria subordinação tornando a violência invisível",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "5/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 79,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "A Lei Orgânica de Assistência Social (LOAS) estabelece a proteção social especial como nível voltado a famílias em situação de violação de direitos?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "5/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 80,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "A Súmula 588 do STJ estabelece que lesão corporal em contexto de violência doméstica é processada mediante ação penal pública incondicionada?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 81,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "O Protocolo de Palermo (2000) é o instrumento internacional mais relevante no combate ao tráfico de pessoas, incluindo mulheres?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 82,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "O STF declarou a constitucionalidade da Lei Maria da Penha em sede de Ação Declaratória de Constitucionalidade (ADC 19)?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 83,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "A Lei 13.641/2018 tipificou como crime autônomo o descumprimento de medidas protetivas de urgência da Lei Maria da Penha?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 84,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "A teoria da Síndrome da Mulher Batida, desenvolvida por Lenore Walker, descreve padrões psicológicos de mulheres em relacionamentos violentos?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 85,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "O tráfico de mulheres para exploração sexual é considerado uma forma de violência de gênero?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "5/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 86,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "Pesquisas indicam que a maioria dos feminicídios no Brasil é cometida por parceiros ou ex-parceiros íntimos das vítimas?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "5/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 87,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "A Lei 14.550/2023 ampliou a aplicação das medidas protetivas da Lei Maria da Penha para além do âmbito doméstico?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 88,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "Estudos mostram que a saída de um relacionamento abusivo é um processo gradual em que a mulher pode retornar ao agressor várias vezes antes de romper definitivamente?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "5/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 89,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "O Brasil é signatário da Agenda 2030 da ONU, que inclui a meta de eliminar todas as formas de violência contra mulheres e meninas?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "5/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 90,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "A Lei 14.823/2024 instituiu o Programa Sinal Vermelho contra a Violência Doméstica como política pública nacional?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 91,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "O sistema eletrônico de monitoramento (tornozeleira) do agressor é medida protetiva que rastreia sua localização para garantir que ele não viole a distância mínima em relação à vítima?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "5/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 92,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente o conceito de feminicídio íntimo conforme a literatura jurídica e criminológica?",
+    "alternativas": [
+      "Homicídio de mulher praticado por parceiro ou ex-parceiro íntimo, motivado por relações desiguais de poder de gênero",
+      "Morte de mulher provocada exclusivamente por desconhecidos em espaços públicos",
+      "Qualquer morte de mulher ocorrida no ambiente doméstico, independentemente da motivação"
+    ],
+    "respostaCorreta": "Homicídio de mulher praticado por parceiro ou ex-parceiro íntimo, motivado por relações desiguais de poder de gênero",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "5/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 93,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo melhor descreve o fenômeno da subnotificação da violência contra a mulher no Brasil?",
+    "alternativas": [
+      "Grande parte das ocorrências nunca é denunciada às autoridades por medo, dependência financeira, vergonha ou desconfiança nas instituições",
+      "Prática de registrar boletins de ocorrência com informações incompletas por parte das delegacias",
+      "Ausência de estatísticas nacionais sobre violência doméstica por falta de sistema de coleta de dados"
+    ],
+    "respostaCorreta": "Grande parte das ocorrências nunca é denunciada às autoridades por medo, dependência financeira, vergonha ou desconfiança nas instituições",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "5/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 94,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente o conceito de revitimização no atendimento a mulheres vítimas de violência?",
+    "alternativas": [
+      "Processo em que a vítima sofre novo sofrimento por atitudes inadequadas de profissionais ou familiares que questionam sua credibilidade ou culpabilizam sua conduta",
+      "Retorno da vítima ao relacionamento abusivo após período de separação",
+      "Prática de registrar múltiplos boletins de ocorrência para o mesmo caso de violência"
+    ],
+    "respostaCorreta": "Processo em que a vítima sofre novo sofrimento por atitudes inadequadas de profissionais ou familiares que questionam sua credibilidade ou culpabilizam sua conduta",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 95,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente a função do Juizado de Violência Doméstica e Familiar contra a Mulher criado pela Lei Maria da Penha?",
+    "alternativas": [
+      "Juízo especializado com competência civil e criminal para processar e julgar causas decorrentes de violência doméstica contra a mulher",
+      "Órgão administrativo vinculado à Secretaria de Segurança Pública para monitoramento de medidas protetivas",
+      "Tribunal de arbitragem para resolução extrajudicial de conflitos domésticos entre casais"
+    ],
+    "respostaCorreta": "Juízo especializado com competência civil e criminal para processar e julgar causas decorrentes de violência doméstica contra a mulher",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 96,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente o conceito de violência institucional contra a mulher?",
+    "alternativas": [
+      "Violência praticada por agentes do Estado ou instituições por meio de ações ou omissões que perpetuam discriminação, negligência ou maus-tratos a mulheres",
+      "Violência ocorrida exclusivamente dentro de hospitais e maternidades",
+      "Atos de violência praticados por grupos organizados contra mulheres em cargos públicos"
+    ],
+    "respostaCorreta": "Violência praticada por agentes do Estado ou instituições por meio de ações ou omissões que perpetuam discriminação, negligência ou maus-tratos a mulheres",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 97,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo melhor descreve o conceito de empoderamento feminino no contexto do enfrentamento à violência?",
+    "alternativas": [
+      "Processo pelo qual mulheres desenvolvem autonomia, autoestima e capacidade de tomar decisões sobre suas próprias vidas, reduzindo vulnerabilidade à violência",
+      "Programa governamental de concessão de benefícios financeiros exclusivamente para vítimas de violência",
+      "Movimento que defende a superioridade feminina como compensação histórica à opressão patriarcal"
+    ],
+    "respostaCorreta": "Processo pelo qual mulheres desenvolvem autonomia, autoestima e capacidade de tomar decisões sobre suas próprias vidas, reduzindo vulnerabilidade à violência",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "5/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 98,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente o protocolo de atendimento humanizado a vítimas de violência sexual nos serviços de saúde?",
+    "alternativas": [
+      "Diretrizes que orientam atenção integral à vítima, incluindo anticoncepção de emergência, profilaxia para ISTs/HIV e suporte psicológico",
+      "Protocolo restrito a hospitais universitários que exige notificação policial antes do atendimento médico",
+      "Manual que exige autorização judicial prévia para qualquer procedimento em vítimas de violência sexual"
+    ],
+    "respostaCorreta": "Diretrizes que orientam atenção integral à vítima, incluindo anticoncepção de emergência, profilaxia para ISTs/HIV e suporte psicológico",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 99,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo melhor descreve o impacto do isolamento social imposto pelo agressor sobre a vítima de violência doméstica?",
+    "alternativas": [
+      "Reduz a rede de apoio, aumenta dependência emocional e financeira do agressor e dificulta a percepção do abuso e o pedido de ajuda",
+      "Gera na vítima maior autonomia e capacidade de reflexão sobre o relacionamento",
+      "É uma medida de proteção da privacidade do casal que não configura violência"
+    ],
+    "respostaCorreta": "Reduz a rede de apoio, aumenta dependência emocional e financeira do agressor e dificulta a percepção do abuso e o pedido de ajuda",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "5/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 100,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo melhor descreve a perspectiva interseccional no desenvolvimento de políticas públicas de combate à violência contra a mulher?",
+    "alternativas": [
+      "Permite criar políticas mais eficazes ao reconhecer que raça, classe, orientação sexual e outros marcadores se combinam e geram diferentes vulnerabilidades à violência",
+      "Restringe políticas a grupos específicos, deixando de atender mulheres fora das categorias reconhecidas",
+      "É uma abordagem teórica sem aplicação prática nas políticas de segurança pública e assistência social"
+    ],
+    "respostaCorreta": "Permite criar políticas mais eficazes ao reconhecer que raça, classe, orientação sexual e outros marcadores se combinam e geram diferentes vulnerabilidades à violência",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 101,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente os critérios que configuram o feminicídio como qualificadora do homicídio no Código Penal?",
+    "alternativas": [
+      "Homicídio praticado contra mulher por razões da condição do sexo feminino, envolvendo violência doméstica ou menosprezo à condição de mulher",
+      "Todo homicídio de mulher praticado por homem, independentemente de motivação",
+      "Homicídio de mulher praticado com arma de fogo em ambiente público"
+    ],
+    "respostaCorreta": "Homicídio praticado contra mulher por razões da condição do sexo feminino, envolvendo violência doméstica ou menosprezo à condição de mulher",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 102,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente o papel dos Centros de Referência de Atendimento à Mulher em Situação de Violência (CRAMs)?",
+    "alternativas": [
+      "Serviços especializados que oferecem atendimento psicológico, social e jurídico a mulheres em situação de violência, articulando o acesso à rede de proteção",
+      "Órgãos policiais especializados no atendimento de ocorrências de violência doméstica em flagrante",
+      "Espaços residenciais de longa permanência para reintegração de mulheres egressas do sistema prisional"
+    ],
+    "respostaCorreta": "Serviços especializados que oferecem atendimento psicológico, social e jurídico a mulheres em situação de violência, articulando o acesso à rede de proteção",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "5/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 103,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente o que estabelece a Convenção de Istambul (Conselho da Europa, 2011) sobre violência contra mulheres?",
+    "alternativas": [
+      "Tratado europeu abrangente sobre prevenção e combate à violência contra mulheres e violência doméstica, com obrigações legais para os Estados signatários",
+      "Tratado que regulamenta exclusivamente o tráfico internacional de mulheres para exploração sexual",
+      "Acordo bilateral para extradição de agressores que cruzam fronteiras internacionais"
+    ],
+    "respostaCorreta": "Tratado europeu abrangente sobre prevenção e combate à violência contra mulheres e violência doméstica, com obrigações legais para os Estados signatários",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 104,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente a função da prisão preventiva no contexto da Lei Maria da Penha?",
+    "alternativas": [
+      "Pode ser decretada pelo juiz a qualquer momento para garantir a segurança da vítima, mesmo sem flagrante, quando houver risco de descumprimento de medidas protetivas",
+      "Só pode ser decretada após condenação definitiva do agressor em segunda instância",
+      "É vedada pela Lei Maria da Penha por se tratar de crimes de menor potencial ofensivo"
+    ],
+    "respostaCorreta": "Pode ser decretada pelo juiz a qualquer momento para garantir a segurança da vítima, mesmo sem flagrante, quando houver risco de descumprimento de medidas protetivas",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "5/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 105,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente o que é o depoimento especial de crianças e adolescentes vítimas de violência previsto na Lei 13.431/2017?",
+    "alternativas": [
+      "Técnica de escuta especializada conduzida por profissional capacitado em ambiente adequado, que visa proteger a criança da revitimização ao transmitir o depoimento ao juiz",
+      "Procedimento que permite à criança testemunhar em segredo de justiça sem que seus pais sejam informados",
+      "Método que substitui completamente a investigação policial em casos de violência infantil"
+    ],
+    "respostaCorreta": "Técnica de escuta especializada conduzida por profissional capacitado em ambiente adequado, que visa proteger a criança da revitimização ao transmitir o depoimento ao juiz",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 106,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo melhor descreve o conceito de patriarcado e sua relação com a violência contra a mulher?",
+    "alternativas": [
+      "Sistema social estrutural baseado na dominação masculina que naturaliza hierarquias de gênero e serve de base ideológica para práticas violentas contra mulheres",
+      "Prática religiosa restrita a certas culturas que legitima o controle do marido sobre a esposa",
+      "Conceito histórico superado nas sociedades modernas ocidentais"
+    ],
+    "respostaCorreta": "Sistema social estrutural baseado na dominação masculina que naturaliza hierarquias de gênero e serve de base ideológica para práticas violentas contra mulheres",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 107,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo melhor descreve o conceito de violência econômica contra a mulher?",
+    "alternativas": [
+      "Controle dos recursos financeiros da mulher pelo agressor, impedindo seu acesso a dinheiro, emprego ou educação para manter dominação e dificultar a saída do relacionamento",
+      "Crimes financeiros praticados por mulheres contra cônjuges em casos de divórcio litigioso",
+      "Discriminação salarial sofrida por mulheres no mercado de trabalho sem relação com violência doméstica"
+    ],
+    "respostaCorreta": "Controle dos recursos financeiros da mulher pelo agressor, impedindo seu acesso a dinheiro, emprego ou educação para manter dominação e dificultar a saída do relacionamento",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 108,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente a Lei Mariana Ferrer (Lei 14.245/2021) e sua finalidade?",
+    "alternativas": [
+      "Criada para coibir a humilhação e revitimização de vítimas de violência sexual durante audiências judiciais",
+      "Criada para proteger agressores com ficha criminal limpa de julgamento precipitado",
+      "Criada para vedar provas digitais em processos de violência doméstica"
+    ],
+    "respostaCorreta": "Criada para coibir a humilhação e revitimização de vítimas de violência sexual durante audiências judiciais",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "5/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 109,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo melhor descreve a síndrome de Estocolmo no contexto de violência doméstica?",
+    "alternativas": [
+      "Processo psicológico em que a vítima desenvolve vínculo emocional com o agressor, podendo defendê-lo como mecanismo de sobrevivência",
+      "Diagnóstico psiquiátrico exclusivo de reféns em sequestros que não se aplica ao contexto doméstico",
+      "Resposta fisiológica de paralisação que impede a vítima de reagir fisicamente às agressões"
+    ],
+    "respostaCorreta": "Processo psicológico em que a vítima desenvolve vínculo emocional com o agressor, podendo defendê-lo como mecanismo de sobrevivência",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 110,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo melhor descreve o princípio da não-revitimização obrigatório aos profissionais que atendem mulheres vítimas de violência?",
+    "alternativas": [
+      "Obriga profissionais a adotar postura não julgadora, evitando questionar a credibilidade da vítima ou atribuir responsabilidade a ela pelos abusos sofridos",
+      "Proíbe profissionais de registrar detalhes dos relatos das vítimas para proteger sua privacidade",
+      "Determina que apenas profissionais do sexo feminino podem atender mulheres vítimas de violência"
+    ],
+    "respostaCorreta": "Obriga profissionais a adotar postura não julgadora, evitando questionar a credibilidade da vítima ou atribuir responsabilidade a ela pelos abusos sofridos",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "5/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 111,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente o impacto da dependência econômica na manutenção de relacionamentos abusivos?",
+    "alternativas": [
+      "A dependência financeira é um dos principais fatores que dificultam a saída da vítima, pois ela teme não conseguir sustentar a si mesma e aos filhos",
+      "A dependência econômica é irrelevante para a permanência no relacionamento, sendo o medo físico o único fator determinante",
+      "Mulheres economicamente independentes nunca permanecem em relacionamentos abusivos"
+    ],
+    "respostaCorreta": "A dependência financeira é um dos principais fatores que dificultam a saída da vítima, pois ela teme não conseguir sustentar a si mesma e aos filhos",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "5/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 112,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente a perspectiva de gênero no atendimento a mulheres vítimas de violência?",
+    "alternativas": [
+      "Abordagem que reconhece desigualdades estruturais entre homens e mulheres, orientando o atendimento para evitar julgamentos e revitimização",
+      "Tratamento que oferece mais benefícios judiciais às mulheres em relação a homens em qualquer situação",
+      "Método terapêutico baseado exclusivamente em psicologia comportamental para tratar traumas de violência"
+    ],
+    "respostaCorreta": "Abordagem que reconhece desigualdades estruturais entre homens e mulheres, orientando o atendimento para evitar julgamentos e revitimização",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 113,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente o gaslighting como forma de violência psicológica?",
+    "alternativas": [
+      "Manipulação sistemática em que o agressor faz a vítima questionar sua própria percepção da realidade, memória e sanidade mental para mantê-la sob controle",
+      "Prática de gravar secretamente conversas da vítima para usar como ameaça em disputas judiciais",
+      "Forma de violência física que não deixa marcas visíveis mas provoca dor psicossomática"
+    ],
+    "respostaCorreta": "Manipulação sistemática em que o agressor faz a vítima questionar sua própria percepção da realidade, memória e sanidade mental para mantê-la sob controle",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "5/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 114,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo melhor descreve o papel da teoria feminista do direito no contexto da violência contra a mulher?",
+    "alternativas": [
+      "Questiona a pretensa neutralidade das normas jurídicas, argumentando que o direito pode reproduzir e legitimar desigualdades e violências de gênero",
+      "Defende que o sistema jurídico já é plenamente igualitário e que leis específicas para mulheres são desnecessárias",
+      "Propõe substituir o direito penal por mecanismos de mediação familiar em todos os casos de violência doméstica"
+    ],
+    "respostaCorreta": "Questiona a pretensa neutralidade das normas jurídicas, argumentando que o direito pode reproduzir e legitimar desigualdades e violências de gênero",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 115,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente a violência contra a mulher com deficiência como vulnerabilidade interseccional?",
+    "alternativas": [
+      "Mulheres com deficiência enfrentam dupla vulnerabilidade, pois a deficiência pode ser usada pelo agressor para aumentar o controle, o isolamento e a dependência da vítima",
+      "Mulheres com deficiência têm maior proteção legal e são raramente alvo de violência doméstica",
+      "A deficiência é fator neutro que não influencia a dinâmica ou a intensidade da violência doméstica sofrida"
+    ],
+    "respostaCorreta": "Mulheres com deficiência enfrentam dupla vulnerabilidade, pois a deficiência pode ser usada pelo agressor para aumentar o controle, o isolamento e a dependência da vítima",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 116,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente o conceito de violência de gênero segundo a Convenção de Belém do Pará?",
+    "alternativas": [
+      "Qualquer ação ou conduta baseada no gênero que cause morte, dano ou sofrimento físico, sexual ou psicológico à mulher, tanto no âmbito público como no privado",
+      "Apenas agressões físicas documentadas e registradas em delegacia no âmbito doméstico",
+      "Violência praticada exclusivamente por homens adultos contra mulheres em relacionamentos conjugais formalizados"
+    ],
+    "respostaCorreta": "Qualquer ação ou conduta baseada no gênero que cause morte, dano ou sofrimento físico, sexual ou psicológico à mulher, tanto no âmbito público como no privado",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 117,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "A pesquisa DataSenado realiza periodicamente levantamentos sobre percepção e experiência de violência doméstica entre mulheres brasileiras?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "5/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 118,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "O movimento #MeToo contribuiu globalmente para o debate sobre assédio sexual e violência de gênero?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "5/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 119,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "O Disque 100 é o canal destinado exclusivamente a denúncias de violações de direitos humanos, incluindo violência contra crianças e adolescentes?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "1/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 120,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "Controlar o celular e as redes sociais da parceira sem consentimento é uma forma de violência psicológica?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "1/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 121,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "A violência doméstica só pode ser cometida por marido ou namorado, nunca por um filho ou irmão. Isso é correto?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Não",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "1/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 122,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "Pedir dinheiro para a parceira de forma controladora e não deixá-la trabalhar pode ser considerado violência patrimonial?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "1/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 123,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "O Ligue 180 é um serviço gratuito de atendimento à mulher em situação de violência?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "1/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 124,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "Qualquer mulher pode ser vítima de violência doméstica, independentemente de sua escolaridade, religião ou situação financeira?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "2/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 125,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "A violência física é a única forma de violência doméstica prevista na Lei Maria da Penha?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Não",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "1/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 126,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "Mulheres idosas também podem ser protegidas pela Lei Maria da Penha em casos de violência doméstica?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "2/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 127,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "Xingar, humilhar e diminuir uma mulher constantemente configura violência moral?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "1/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 128,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "O agressor pode continuar morando na mesma casa que a vítima mesmo após medida protetiva, desde que não a agrida fisicamente?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Não",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "2/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 129,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "Em situações de perigo, a mulher pode ligar para o 190 (Polícia Militar) além do 180?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "1/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 130,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "A violência doméstica é considerada um problema de saúde pública no Brasil?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "1/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 131,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "Proibir a mulher de visitar amigos e familiares é uma forma de violência psicológica?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "2/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 132,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "Apenas lesões físicas visíveis podem ser usadas como prova em processos de violência doméstica?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Não",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "2/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 133,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "A Lei Maria da Penha protege a mulher mesmo quando o relacionamento não foi oficialmente registrado em cartório?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "2/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 134,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "Ameaças feitas pelo agressor por mensagens de texto ou WhatsApp podem ser usadas como prova de violência?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "2/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 135,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "O CRAS atende exclusivamente pessoas em extrema pobreza e não oferece suporte a mulheres em situação de violência?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Não",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "1/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 136,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "O que é o Ligue 180?",
+    "alternativas": [
+      "Central de Atendimento à Mulher que funciona 24h para orientação, denúncia e encaminhamento de casos de violência contra a mulher",
+      "Serviço de emergência da Polícia Militar para atendimento de ocorrências de violência doméstica",
+      "Canal exclusivo para advogados registrarem queixas em nome de mulheres vítimas de violência"
+    ],
+    "respostaCorreta": "Central de Atendimento à Mulher que funciona 24h para orientação, denúncia e encaminhamento de casos de violência contra a mulher",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "2/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 137,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo representa corretamente um tipo de violência doméstica prevista pela Lei Maria da Penha?",
+    "alternativas": [
+      "Violência psicológica, caracterizada por condutas que causam dano emocional, diminuição da autoestima ou prejudicam o desenvolvimento da mulher",
+      "Violência econômica nacional, que se refere à discriminação salarial no mercado formal de trabalho",
+      "Violência urbanística, praticada pelo Estado ao negar acesso a serviços públicos básicos"
+    ],
+    "respostaCorreta": "Violência psicológica, caracterizada por condutas que causam dano emocional, diminuição da autoestima ou prejudicam o desenvolvimento da mulher",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "2/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 138,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente o que um vizinho deve fazer ao testemunhar situação de violência doméstica?",
+    "alternativas": [
+      "Ligar para o 190 (Polícia Militar) ou para o 180 para acionar as autoridades e ajudar a vítima",
+      "Não interferir, pois violência doméstica é assunto privado do casal",
+      "Esperar a vítima tomar a iniciativa de pedir ajuda para não se meter em conflito alheio"
+    ],
+    "respostaCorreta": "Ligar para o 190 (Polícia Militar) ou para o 180 para acionar as autoridades e ajudar a vítima",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "2/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 139,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "O que caracteriza a violência sexual segundo a Lei Maria da Penha?",
+    "alternativas": [
+      "Qualquer conduta que constranja a mulher a presenciar, manter ou participar de relação sexual não desejada, mediante intimidação, ameaça ou uso de força",
+      "Apenas estupro com penetração praticado por desconhecido em via pública",
+      "Somente relações sexuais forçadas que resultam em lesões físicas documentadas por laudo médico"
+    ],
+    "respostaCorreta": "Qualquer conduta que constranja a mulher a presenciar, manter ou participar de relação sexual não desejada, mediante intimidação, ameaça ou uso de força",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "2/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 140,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "O que são medidas protetivas de urgência no contexto da Lei Maria da Penha?",
+    "alternativas": [
+      "Providências judiciais imediatas que visam proteger a integridade física e psicológica da vítima, como afastamento do agressor e proibição de contato",
+      "Punições definitivas aplicadas ao agressor logo após a denúncia, sem necessidade de processo judicial",
+      "Acordos firmados entre vítima e agressor para encerramento do conflito sem envolvimento do Judiciário"
+    ],
+    "respostaCorreta": "Providências judiciais imediatas que visam proteger a integridade física e psicológica da vítima, como afastamento do agressor e proibição de contato",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "2/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 141,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo é um exemplo de violência patrimonial contra a mulher?",
+    "alternativas": [
+      "O parceiro rasga os documentos pessoais da mulher e toma conta do dinheiro do salário dela sem autorização",
+      "O casal decide em conjunto abrir uma conta bancária compartilhada",
+      "A mulher transfere voluntariamente a gestão das finanças para o marido por preferência própria"
+    ],
+    "respostaCorreta": "O parceiro rasga os documentos pessoais da mulher e toma conta do dinheiro do salário dela sem autorização",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "2/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 142,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "O que significa dizer que o feminicídio é um crime de gênero?",
+    "alternativas": [
+      "Significa que a motivação do crime está relacionada à condição de ser mulher, a relações de poder desiguais e à discriminação de gênero",
+      "Significa que apenas homens podem ser autores desse tipo de crime",
+      "Significa que o crime ocorre exclusivamente dentro de residências e somente entre cônjuges"
+    ],
+    "respostaCorreta": "Significa que a motivação do crime está relacionada à condição de ser mulher, a relações de poder desiguais e à discriminação de gênero",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "2/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 143,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Para que serve a Casa-Abrigo para mulheres em situação de violência?",
+    "alternativas": [
+      "Para oferecer moradia temporária e sigilosa a mulheres e filhos em risco de vida, garantindo proteção enquanto se reorganizam",
+      "Para punir mulheres que cometem crimes domésticos, funcionando como alternativa ao sistema prisional",
+      "Para reeducar casais em conflito por meio de convivência supervisionada com mediadores sociais"
+    ],
+    "respostaCorreta": "Para oferecer moradia temporária e sigilosa a mulheres e filhos em risco de vida, garantindo proteção enquanto se reorganizam",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "2/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 144,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual dos comportamentos abaixo é um exemplo de violência moral?",
+    "alternativas": [
+      "O parceiro espalha rumores falsos sobre a mulher para amigos e colegas de trabalho visando prejudicá-la",
+      "O casal discute em voz alta durante uma discussão acalorada sobre finanças domésticas",
+      "A mulher recebe críticas construtivas do parceiro sobre seu comportamento em público"
+    ],
+    "respostaCorreta": "O parceiro espalha rumores falsos sobre a mulher para amigos e colegas de trabalho visando prejudicá-la",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "2/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 145,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "O que é o CREAS e qual sua função no atendimento a mulheres vítimas de violência?",
+    "alternativas": [
+      "Centro de Referência Especializado de Assistência Social que atende pessoas em situação de violação de direitos, oferecendo acompanhamento psicossocial e jurídico",
+      "Centro Residencial de Emergência para Atendimento Social, que oferece moradia permanente para mulheres em situação de rua",
+      "Centro Regional de Educação e Apoio Social, focado exclusivamente em cursos profissionalizantes para mulheres"
+    ],
+    "respostaCorreta": "Centro de Referência Especializado de Assistência Social que atende pessoas em situação de violação de direitos, oferecendo acompanhamento psicossocial e jurídico",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "2/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 146,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual a importância de a mulher guardar provas (fotos, prints, laudos) de situações de violência?",
+    "alternativas": [
+      "As provas são fundamentais para registrar o histórico de violência, dar suporte à investigação policial e fortalecer o pedido de medidas protetivas na Justiça",
+      "As provas só têm validade se forem coletadas exclusivamente pela polícia e não têm utilidade quando reunidas pela própria vítima",
+      "Guardar provas é opcional, pois a palavra da vítima sozinha é suficiente para qualquer processo judicial"
+    ],
+    "respostaCorreta": "As provas são fundamentais para registrar o histórico de violência, dar suporte à investigação policial e fortalecer o pedido de medidas protetivas na Justiça",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "2/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 147,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Por que é importante que amigos e familiares acolham sem julgamentos uma mulher que revela estar sofrendo violência doméstica?",
+    "alternativas": [
+      "Porque o apoio da rede afetiva fortalece a autoestima da vítima, reduz o isolamento imposto pelo agressor e aumenta as chances de ela buscar ajuda profissional",
+      "Porque somente amigos e família podem registrar denúncias em nome da vítima, substituindo a necessidade de acionamento policial",
+      "Porque o acolhimento informal dispensa a necessidade de atendimento especializado por serviços públicos de proteção"
+    ],
+    "respostaCorreta": "Porque o apoio da rede afetiva fortalece a autoestima da vítima, reduz o isolamento imposto pelo agressor e aumenta as chances de ela buscar ajuda profissional",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "2/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 148,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo melhor explica por que muitas mulheres não denunciam imediatamente a violência que sofrem?",
+    "alternativas": [
+      "Medo de represálias do agressor, dependência financeira, vergonha, falta de informação sobre seus direitos e temor de não serem acreditadas",
+      "Porque a violência doméstica não é crime no Brasil e, portanto, não há amparo legal para a denúncia",
+      "Porque o sistema de justiça brasileiro exige que a mulher aguarde pelo menos três episódios de agressão antes de registrar queixa"
+    ],
+    "respostaCorreta": "Medo de represálias do agressor, dependência financeira, vergonha, falta de informação sobre seus direitos e temor de não serem acreditadas",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "2/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 149,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente o que é violência doméstica segundo a Lei Maria da Penha?",
+    "alternativas": [
+      "Ação ou omissão baseada em relação doméstica, familiar ou afetiva que cause morte, lesão, sofrimento físico, sexual, psicológico, dano moral ou patrimonial à mulher",
+      "Apenas agressões físicas cometidas no interior de uma residência entre membros da mesma família",
+      "Conflitos verbais entre parceiros durante discussões conjugais que não resultam em lesões físicas"
+    ],
+    "respostaCorreta": "Ação ou omissão baseada em relação doméstica, familiar ou afetiva que cause morte, lesão, sofrimento físico, sexual, psicológico, dano moral ou patrimonial à mulher",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "2/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 150,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo é um exemplo claro de violência psicológica?",
+    "alternativas": [
+      "O parceiro ameaça constantemente tirar os filhos da mulher caso ela tente se separar, fazendo-a sentir que não tem saída",
+      "O casal decide separar as responsabilidades domésticas por meio de acordo mútuo",
+      "A mulher recebe crítica sobre seu estilo de vida de uma amiga próxima"
+    ],
+    "respostaCorreta": "O parceiro ameaça constantemente tirar os filhos da mulher caso ela tente se separar, fazendo-a sentir que não tem saída",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "2/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 151,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "O que significa a expressão 'violência invisível' no contexto do abuso doméstico?",
+    "alternativas": [
+      "Violências que não deixam marcas físicas visíveis, como a violência psicológica, patrimonial e moral, frequentemente ignoradas ou minimizadas pela sociedade",
+      "Crimes cometidos à noite ou sem testemunhas, nos quais não há evidências materiais do ocorrido",
+      "Agressões praticadas por pessoas desconhecidas que a vítima não consegue identificar"
+    ],
+    "respostaCorreta": "Violências que não deixam marcas físicas visíveis, como a violência psicológica, patrimonial e moral, frequentemente ignoradas ou minimizadas pela sociedade",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "2/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 152,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente o papel do Poder Judiciário no enfrentamento à violência doméstica?",
+    "alternativas": [
+      "Analisar pedidos de medidas protetivas, decretar prisões preventivas quando necessário e julgar os crimes de violência doméstica e familiar contra a mulher",
+      "Investigar crimes de violência doméstica diretamente, sem necessidade de delegacia ou Ministério Público",
+      "Realizar mediação entre vítima e agressor visando reconciliação do casal como solução prioritária"
+    ],
+    "respostaCorreta": "Analisar pedidos de medidas protetivas, decretar prisões preventivas quando necessário e julgar os crimes de violência doméstica e familiar contra a mulher",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "2/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 153,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo melhor explica o conceito de rede de proteção à mulher vítima de violência?",
+    "alternativas": [
+      "Conjunto de serviços interligados — saúde, assistência social, segurança pública, justiça e organizações da sociedade civil — que atuam de forma articulada para proteger e apoiar a mulher",
+      "Grupo de voluntários sem formação técnica que acompanham pessoalmente mulheres em situação de risco até delegacias",
+      "Sistema exclusivamente policial de monitoramento de agressores com histórico de violência doméstica"
+    ],
+    "respostaCorreta": "Conjunto de serviços interligados — saúde, assistência social, segurança pública, justiça e organizações da sociedade civil — que atuam de forma articulada para proteger e apoiar a mulher",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "2/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 154,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente o que é um relacionamento abusivo?",
+    "alternativas": [
+      "Relacionamento marcado por padrões de controle, manipulação, humilhação, isolamento e agressões que visam manter o domínio sobre a parceira",
+      "Relacionamento em que os parceiros discutem frequentemente por incompatibilidade de temperamentos",
+      "Relacionamento com dificuldades de comunicação que podem ser resolvidas com terapia de casal"
+    ],
+    "respostaCorreta": "Relacionamento marcado por padrões de controle, manipulação, humilhação, isolamento e agressões que visam manter o domínio sobre a parceira",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "2/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 155,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo explica por que campanhas de conscientização sobre violência contra a mulher são importantes?",
+    "alternativas": [
+      "Porque informam a população sobre os tipos de violência, os direitos das vítimas e os canais de denúncia, contribuindo para a prevenção e o combate ao problema",
+      "Porque substituem a necessidade de políticas públicas e serviços especializados de atendimento às vítimas",
+      "Porque servem exclusivamente para divulgar estatísticas criminais sem orientação prática para a população"
+    ],
+    "respostaCorreta": "Porque informam a população sobre os tipos de violência, os direitos das vítimas e os canais de denúncia, contribuindo para a prevenção e o combate ao problema",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "2/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 156,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente a violência obstétrica como uma forma de violência de gênero?",
+    "alternativas": [
+      "Trata-se de condutas de profissionais de saúde que desrespeitam a autonomia da mulher durante o parto, como procedimentos sem consentimento, julgamentos morais e negligência",
+      "É exclusivamente a violência física praticada por acompanhantes durante o trabalho de parto",
+      "É um termo técnico restrito a complicações médicas inevitáveis sem responsabilidade dos profissionais de saúde"
+    ],
+    "respostaCorreta": "Trata-se de condutas de profissionais de saúde que desrespeitam a autonomia da mulher durante o parto, como procedimentos sem consentimento, julgamentos morais e negligência",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "2/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 157,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "A violência doméstica cometida na presença de filhos menores de idade é considerada agravante pelo Código Penal brasileiro?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "3/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 158,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "O Ministério Público pode oferecer denúncia criminal por crimes de violência doméstica mesmo sem o consentimento da vítima nos casos de ação penal pública incondicionada?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "3/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 159,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "A violência doméstica pode ser praticada por uma mulher contra outra mulher em relacionamento homoafetivo?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "3/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 160,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "O stalking foi tipificado como crime no Brasil apenas em 2021, com a aprovação da Lei 14.132?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "3/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 161,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "A Lei Maria da Penha proíbe expressamente que crimes de violência doméstica sejam tratados como crimes de menor potencial ofensivo nos Juizados Especiais?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "4/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 162,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "A divulgação não autorizada de imagens íntimas de uma mulher na internet é considerada violência digital e pode ser punida criminalmente no Brasil?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "4/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 163,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "Mulheres trans em relacionamento íntimo podem ser protegidas pela Lei Maria da Penha quando vítimas de violência doméstica?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "4/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 164,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "A violência financeira praticada contra a mulher no término de um relacionamento, como ocultação de bens em ação de divórcio, pode ser enquadrada como violência patrimonial?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "3/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 165,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "O ciclo da violência doméstica descrito por Lenore Walker inclui uma fase chamada 'lua de mel', em que o agressor demonstra arrependimento e afeto?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "4/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 166,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "O Mapa da Violência é uma publicação de pesquisa que monitora indicadores de violência no Brasil, incluindo dados sobre homicídios de mulheres?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "3/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 167,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "A Política Nacional de Enfrentamento à Violência contra as Mulheres está prevista em lei federal e orienta a atuação integrada dos serviços públicos?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "3/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 168,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "Pesquisas mostram que mulheres com deficiência têm maior risco de sofrer violência doméstica em comparação com mulheres sem deficiência?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "4/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 169,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "A violência contra a mulher praticada no ambiente de trabalho, como assédio moral ou sexual por superior hierárquico, pode ser enquadrada como violência de gênero?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "3/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 170,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "O Brasil assinou a Convenção de Belém do Pará em 1994, comprometendo-se a adotar medidas legislativas e políticas para prevenir a violência contra a mulher?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "4/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 171,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "A violência doméstica pode deixar sequelas psicológicas permanentes, como transtorno de estresse pós-traumático (TEPT), ansiedade e depressão?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "3/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 172,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "O descumprimento de medida protetiva de urgência é crime tipificado no Código Penal brasileiro desde 2018?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "4/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 173,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "A expressão 'violência de baixa intensidade' pode ser usada para descrever agressões verbais e emocionais consideradas menos graves que a violência física?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Não",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "3/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 174,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente o que é gaslighting no contexto de relacionamentos abusivos?",
+    "alternativas": [
+      "Técnica de manipulação em que o agressor distorce fatos e nega situações vividas pela vítima, fazendo-a duvidar da própria memória, percepção e sanidade",
+      "Prática de gravar conversas da vítima sem consentimento para usar como chantagem",
+      "Tipo de violência física que não deixa marcas externas, mas causa danos internos ao organismo"
+    ],
+    "respostaCorreta": "Técnica de manipulação em que o agressor distorce fatos e nega situações vividas pela vítima, fazendo-a duvidar da própria memória, percepção e sanidade",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "4/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 175,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "O que é o SINAN no contexto da saúde pública e violência contra a mulher?",
+    "alternativas": [
+      "Sistema de Informação de Agravos de Notificação, utilizado para registrar casos de violência doméstica e sexual atendidos em serviços de saúde",
+      "Sistema Integrado de Notificação de Agressões Nacionais, usado para registrar boletins de ocorrência em delegacias de todo o Brasil",
+      "Serviço Integrado de Novos Atendimentos Nacionais, canal online de denúncia de violência administrado pelo governo federal"
+    ],
+    "respostaCorreta": "Sistema de Informação de Agravos de Notificação, utilizado para registrar casos de violência doméstica e sexual atendidos em serviços de saúde",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "4/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 176,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "O que é o Protocolo Sinal Vermelho e como funciona?",
+    "alternativas": [
+      "Sistema em que a mulher em situação de violência pode fazer um 'X' vermelho na palma da mão ao chegar em uma farmácia ou serviço de saúde para pedir socorro discretamente",
+      "Protocolo policial que determina o grau de urgência no atendimento de ocorrências de violência doméstica",
+      "Código secreto usado por mulheres nas redes sociais para identificar casos de violência em comunidades digitais"
+    ],
+    "respostaCorreta": "Sistema em que a mulher em situação de violência pode fazer um 'X' vermelho na palma da mão ao chegar em uma farmácia ou serviço de saúde para pedir socorro discretamente",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "3/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 177,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente o conceito de violência digital contra a mulher incluído na Lei Maria da Penha pela Lei 14.188/2021?",
+    "alternativas": [
+      "Violências praticadas por meio de tecnologias digitais, como exposição de imagens íntimas sem consentimento, cyberstalking e ameaças por aplicativos de mensagem",
+      "Apenas crimes cometidos exclusivamente em plataformas de redes sociais de grande alcance como Facebook e Instagram",
+      "Ataques hackers contra sistemas governamentais que comprometem dados pessoais de mulheres cadastradas em programas sociais"
+    ],
+    "respostaCorreta": "Violências praticadas por meio de tecnologias digitais, como exposição de imagens íntimas sem consentimento, cyberstalking e ameaças por aplicativos de mensagem",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "4/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 178,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "O que é o Programa Mulher Segura e Protegida e qual é seu objetivo?",
+    "alternativas": [
+      "Programa federal que integra ações de prevenção, atenção e enfrentamento à violência doméstica, fortalecendo a rede de proteção e ampliando o acesso das vítimas a serviços especializados",
+      "Programa de monitoramento eletrônico de agressores por tornozeleira realizado exclusivamente em grandes capitais brasileiras",
+      "Projeto de capacitação de policiais militares em técnicas de negociação para situações de crise doméstica"
+    ],
+    "respostaCorreta": "Programa federal que integra ações de prevenção, atenção e enfrentamento à violência doméstica, fortalecendo a rede de proteção e ampliando o acesso das vítimas a serviços especializados",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "3/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 179,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente o fenômeno do 'ciclo do abuso' e por que ele dificulta a saída da vítima do relacionamento?",
+    "alternativas": [
+      "O ciclo alterna fases de tensão, agressão e reconciliação, criando vínculos emocionais confusos que fazem a vítima acreditar que o agressor vai mudar",
+      "O ciclo é um processo linear em que a violência aumenta progressivamente até a vítima pedir ajuda ou o agressor ser preso",
+      "O ciclo se refere ao processo burocrático de registros de ocorrências e arquivamentos que desestimula a denúncia"
+    ],
+    "respostaCorreta": "O ciclo alterna fases de tensão, agressão e reconciliação, criando vínculos emocionais confusos que fazem a vítima acreditar que o agressor vai mudar",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "4/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 180,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente como a dependência financeira pode ser usada pelo agressor como instrumento de controle?",
+    "alternativas": [
+      "O agressor impede a mulher de trabalhar ou de ter acesso ao próprio dinheiro, tornando-a economicamente dependente e dificultando sua saída do relacionamento abusivo",
+      "O agressor solicita que a mulher economize recursos para que o casal possa viajar juntos no futuro",
+      "O agressor oferece presentes e dinheiro de forma espontânea como demonstração de afeto e cuidado com a parceira"
+    ],
+    "respostaCorreta": "O agressor impede a mulher de trabalhar ou de ter acesso ao próprio dinheiro, tornando-a economicamente dependente e dificultando sua saída do relacionamento abusivo",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "4/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 181,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente o que é o assédio sexual no ambiente de trabalho?",
+    "alternativas": [
+      "Constrangimento de pessoa com o objetivo de obter vantagem ou favorecimento sexual, prevalecendo-se o agente de sua condição de superior hierárquico ou ascendência",
+      "Elogios e comentários sobre a aparência entre colegas de trabalho considerados bem-humorados por ambas as partes",
+      "Conflitos interpessoais entre funcionários relacionados a diferenças de opinião sobre projetos e tarefas profissionais"
+    ],
+    "respostaCorreta": "Constrangimento de pessoa com o objetivo de obter vantagem ou favorecimento sexual, prevalecendo-se o agente de sua condição de superior hierárquico ou ascendência",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "3/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 182,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "O que é a notificação compulsória de violência contra a mulher e qual é sua importância para profissionais de saúde?",
+    "alternativas": [
+      "Obrigação legal dos profissionais de saúde de comunicar às autoridades competentes os casos suspeitos ou confirmados de violência contra a mulher atendidos nos serviços",
+      "Permissão opcional concedida a médicos para comunicar voluntariamente casos de violência sem responsabilidade legal",
+      "Procedimento restrito a hospitais de alta complexidade para registro de casos de violência com lesões graves"
+    ],
+    "respostaCorreta": "Obrigação legal dos profissionais de saúde de comunicar às autoridades competentes os casos suspeitos ou confirmados de violência contra a mulher atendidos nos serviços",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "4/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 183,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente como o isolamento social imposto pelo agressor afeta a vítima de violência doméstica?",
+    "alternativas": [
+      "Enfraquece os vínculos afetivos e sociais da vítima, aumenta sua dependência do agressor, dificulta a percepção do abuso e reduz as possibilidades de pedir ajuda",
+      "Oferece à vítima mais tempo para refletir sobre a relação e tomar decisões com maior tranquilidade",
+      "É uma medida de proteção da privacidade do casal sem implicações negativas para a saúde mental da mulher"
+    ],
+    "respostaCorreta": "Enfraquece os vínculos afetivos e sociais da vítima, aumenta sua dependência do agressor, dificulta a percepção do abuso e reduz as possibilidades de pedir ajuda",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "4/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 184,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente o papel do profissional de assistência social no atendimento a mulheres em situação de violência?",
+    "alternativas": [
+      "Realizar escuta qualificada, elaborar estudo social, articular a rede de proteção e acompanhar a mulher no acesso a serviços de saúde, justiça e habitação",
+      "Emitir laudos periciais para subsidiar ações criminais contra o agressor em substituição ao laudo médico",
+      "Aplicar medidas de proteção à vítima com força coercitiva similar às medidas protetivas judiciais"
+    ],
+    "respostaCorreta": "Realizar escuta qualificada, elaborar estudo social, articular a rede de proteção e acompanhar a mulher no acesso a serviços de saúde, justiça e habitação",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "3/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 185,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "O que é feminicídio não íntimo e como ele se distingue do feminicídio íntimo?",
+    "alternativas": [
+      "Feminicídio não íntimo é praticado por homem sem vínculo afetivo com a vítima, como clientes de prostituição ou aggressores desconhecidos, enquanto o íntimo é cometido por parceiro ou ex-parceiro",
+      "Feminicídio não íntimo é o cometido por mulheres contra outras mulheres por questões patrimoniais, enquanto o íntimo envolve sempre parceiros do sexo masculino",
+      "Feminicídio não íntimo se refere a mortes em contexto de guerra ou conflito político, sem relação com violência de gênero doméstica"
+    ],
+    "respostaCorreta": "Feminicídio não íntimo é praticado por homem sem vínculo afetivo com a vítima, como clientes de prostituição ou aggressores desconhecidos, enquanto o íntimo é cometido por parceiro ou ex-parceiro",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "4/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 186,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente o impacto da violência doméstica na saúde mental das mulheres?",
+    "alternativas": [
+      "Pode causar transtorno de estresse pós-traumático, depressão, ansiedade, ideação suicida e uso abusivo de substâncias, exigindo atendimento especializado em saúde mental",
+      "Os impactos psicológicos da violência doméstica são temporários e se resolvem naturalmente após o término do relacionamento abusivo",
+      "Afeta apenas a saúde física, sendo os danos psicológicos considerados subjetivos e sem reconhecimento clínico formal"
+    ],
+    "respostaCorreta": "Pode causar transtorno de estresse pós-traumático, depressão, ansiedade, ideação suicida e uso abusivo de substâncias, exigindo atendimento especializado em saúde mental",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "4/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 187,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente o conceito de masculinidades tóxicas e sua relação com a violência de gênero?",
+    "alternativas": [
+      "Padrões culturais que associam masculinidade a dominação, agressividade e controle, criando ambiente propício para naturalização da violência contra mulheres",
+      "Doenças mentais diagnosticadas exclusivamente em homens que praticam violência doméstica recorrente",
+      "Comportamentos biologicamente determinados que explicam a agressividade masculina como fenômeno inato e irreversível"
+    ],
+    "respostaCorreta": "Padrões culturais que associam masculinidade a dominação, agressividade e controle, criando ambiente propício para naturalização da violência contra mulheres",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "4/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 188,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente como as desigualdades de gênero contribuem para a perpetuação da violência contra a mulher?",
+    "alternativas": [
+      "Ao naturalizar a submissão feminina e a dominação masculina, as desigualdades de gênero legitimam práticas de controle e violência como parte das relações afetivas",
+      "As desigualdades de gênero se restringem ao mercado de trabalho e não têm relação com a violência doméstica ou familiar",
+      "As desigualdades de gênero geram mais violência contra homens do que contra mulheres, pois cobram deles um papel de provedores"
+    ],
+    "respostaCorreta": "Ao naturalizar a submissão feminina e a dominação masculina, as desigualdades de gênero legitimam práticas de controle e violência como parte das relações afetivas",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "4/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 189,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente o que é o abuso emocional em relacionamentos íntimos?",
+    "alternativas": [
+      "Padrão sistemático de condutas que inclui humilhações, críticas constantes, manipulação, ameaças e controle, visando destruir a autoestima e autonomia da vítima",
+      "Conflitos emocionais pontuais decorrentes de estresse e problemas externos ao relacionamento",
+      "Expressão de insatisfação emocional por parte de um dos parceiros que afeta temporariamente a dinâmica do casal"
+    ],
+    "respostaCorreta": "Padrão sistemático de condutas que inclui humilhações, críticas constantes, manipulação, ameaças e controle, visando destruir a autoestima e autonomia da vítima",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "3/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 190,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente o que é a Delegacia Online da Mulher e qual é sua função?",
+    "alternativas": [
+      "Plataforma digital que permite à mulher registrar boletim de ocorrência de violência doméstica pela internet, sem necessidade de ir presencialmente à delegacia",
+      "Sistema de monitoramento online de agressores com tornozeleira eletrônica acessado pelas vítimas por aplicativo",
+      "Portal exclusivo para advogados e defensores públicos protocolar pedidos de medidas protetivas em nome de clientes"
+    ],
+    "respostaCorreta": "Plataforma digital que permite à mulher registrar boletim de ocorrência de violência doméstica pela internet, sem necessidade de ir presencialmente à delegacia",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "3/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 191,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente o que são as Casas da Mulher Brasileira?",
+    "alternativas": [
+      "Equipamentos públicos que reúnem em um mesmo espaço serviços de atendimento integrado à mulher em situação de violência, como acolhimento, assistência social, defensoria, delegacia e vara judicial",
+      "Residências comunitárias mantidas por ONGs para abrigar mulheres em situação de rua sem histórico de violência doméstica",
+      "Centros culturais criados pelo governo federal para promover a autonomia econômica de mulheres em vulnerabilidade social"
+    ],
+    "respostaCorreta": "Equipamentos públicos que reúnem em um mesmo espaço serviços de atendimento integrado à mulher em situação de violência, como acolhimento, assistência social, defensoria, delegacia e vara judicial",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "4/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 192,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo melhor explica por que a impunidade do agressor contribui para a perpetuação da violência doméstica?",
+    "alternativas": [
+      "A ausência de consequências legais reforça a sensação de poder do agressor, enfraquece a confiança da vítima nas instituições e diminui a probabilidade de novas denúncias",
+      "A impunidade ocorre apenas nos casos em que a vítima não comparece ao fórum, sendo totalmente evitável por iniciativa da própria mulher",
+      "A impunidade é um problema exclusivo de pequenas cidades sem delegacia especializada e não ocorre nas grandes capitais brasileiras"
+    ],
+    "respostaCorreta": "A ausência de consequências legais reforça a sensação de poder do agressor, enfraquece a confiança da vítima nas instituições e diminui a probabilidade de novas denúncias",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "4/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 193,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente o crime de estupro de vulnerável no contexto de violência contra a mulher?",
+    "alternativas": [
+      "Prática de ato libidinoso com menor de 14 anos, pessoa com deficiência ou que por qualquer causa não possa oferecer resistência, sem necessidade de violência ou ameaça explícita",
+      "Crime que exige obrigatoriamente o uso de violência física para sua configuração, mesmo quando a vítima é menor de idade",
+      "Conduta que só se caracteriza quando há penetração vaginal, excluindo outras formas de violência sexual"
+    ],
+    "respostaCorreta": "Prática de ato libidinoso com menor de 14 anos, pessoa com deficiência ou que por qualquer causa não possa oferecer resistência, sem necessidade de violência ou ameaça explícita",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "4/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 194,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "A Recomendação Geral nº 35 do Comitê CEDAW, adotada em 2017, atualizou o reconhecimento da violência de gênero contra mulheres como violação de direitos humanos?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "5/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 195,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "A decisão do STF na ADI 4424 confirmou que a ação penal por lesão corporal leve no contexto da Lei Maria da Penha é pública incondicionada, ou seja, não depende de representação da vítima?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 196,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "A doutrina jurídica majoritária brasileira entende que a violência doméstica praticada por mulher contra outra mulher em relação homoafetiva é abrangida pela Lei Maria da Penha?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "5/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 197,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "A Convenção de Istambul, o tratado regional europeu mais completo sobre violência contra mulheres, entrou em vigor em 2014?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 198,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "O princípio da diligência devida (due diligence) impõe ao Estado obrigação de prevenir, investigar, punir e reparar atos de violência contra a mulher, mesmo quando praticados por particulares?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 199,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "O conceito de feminicídio foi introduzido academicamente pela socióloga Diana Russell na década de 1970, antes de ser incorporado a legislações nacionais?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 200,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "A Lei 14.245/2021 (Lei Mariana Ferrer) tipificou como crime a prática de atos que constrangem e revitimizam a vítima e a testemunha durante audiências judiciais?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "5/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 201,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "A teoria da interseccionalidade foi desenvolvida pela jurista Kimberlé Crenshaw para analisar como múltiplas formas de opressão — raça, gênero e classe — se articulam e se potencializam?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 202,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "O princípio da subsidiariedade na proteção internacional dos direitos humanos significa que os mecanismos internacionais só atuam quando os Estados falham na proteção de suas cidadãs?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "5/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 203,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "O Observatório da Mulher contra a Violência do Senado Federal tem como função monitorar e sistematizar dados estatísticos sobre violência contra a mulher no Brasil?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "5/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 204,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "A Lei 13.505/2017 incluiu na Lei Maria da Penha a previsão de que o depoimento da mulher em situação de violência deve ser colhido preferencialmente por policial ou servidor do mesmo gênero?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "5/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 205,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "O conceito de 'ondas do feminismo' descreve momentos históricos de organização política das mulheres, sendo que a primeira onda se concentrou principalmente no sufrágio feminino?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "5/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 206,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "A Resolução 1325 do Conselho de Segurança da ONU, adotada em 2000, reconhece o impacto desproporcional dos conflitos armados sobre mulheres e meninas?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 207,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "O Plano Nacional de Políticas para as Mulheres (PNPM) é instrumento de planejamento governamental que estabelece metas e prioridades para o enfrentamento da violência contra a mulher no Brasil?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "5/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 208,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "A natureza jurídica do crime de descumprimento de medida protetiva, criado pela Lei 13.641/2018, é de crime de desobediência qualificada, com pena de 3 meses a 2 anos de detenção?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 209,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente o papel da ONU Mulheres no contexto do combate à violência de gênero no Brasil?",
+    "alternativas": [
+      "Entidade da ONU que promove a igualdade de gênero e o empoderamento feminino, apoiando governos e a sociedade civil na formulação de políticas públicas de prevenção e enfrentamento à violência",
+      "Órgão internacional com poder de polícia que pode prender agressores de mulheres em território brasileiro por requisição direta",
+      "Tribunal internacional especializado no julgamento de feminicídios e crimes de violência sexual ao qual as vítimas brasileiras podem recorrer diretamente"
+    ],
+    "respostaCorreta": "Entidade da ONU que promove a igualdade de gênero e o empoderamento feminino, apoiando governos e a sociedade civil na formulação de políticas públicas de prevenção e enfrentamento à violência",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 210,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente a diferença entre ação penal pública condicionada e incondicionada no contexto da violência doméstica?",
+    "alternativas": [
+      "Na condicionada, o Ministério Público depende da representação da vítima para agir; na incondicionada, pode agir independentemente da vontade da vítima — sendo esta a regra nos crimes de lesão corporal em contexto doméstico",
+      "Nas duas modalidades, o Ministério Público precisa aguardar a vítima formalizar o desejo de processar o agressor em qualquer tipo de crime doméstico",
+      "A distinção não se aplica à violência doméstica, pois todos esses crimes exigem sempre queixa-crime apresentada pela própria vítima"
+    ],
+    "respostaCorreta": "Na condicionada, o Ministério Público depende da representação da vítima para agir; na incondicionada, pode agir independentemente da vontade da vítima — sendo esta a regra nos crimes de lesão corporal em contexto doméstico",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "5/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 211,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente o que é a perspectiva interseccional e por que ela é fundamental para políticas de enfrentamento à violência contra a mulher?",
+    "alternativas": [
+      "A perspectiva interseccional reconhece que raça, classe, gênero, deficiência e outros marcadores se combinam, produzindo experiências específicas de violência que exigem respostas diferenciadas das políticas públicas",
+      "A perspectiva interseccional defende que todas as formas de discriminação devem ser tratadas de forma separada e hierarquizada, priorizando o gênero sobre os demais fatores",
+      "A perspectiva interseccional é uma abordagem teórica sem impacto prático nas políticas de segurança pública e nas dinâmicas do atendimento à mulher em situação de violência"
+    ],
+    "respostaCorreta": "A perspectiva interseccional reconhece que raça, classe, gênero, deficiência e outros marcadores se combinam, produzindo experiências específicas de violência que exigem respostas diferenciadas das políticas públicas",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 212,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente a função do monitoramento eletrônico do agressor (tornozeleira) como instrumento de proteção da vítima?",
+    "alternativas": [
+      "Permite rastrear a localização do agressor em tempo real para garantir que ele respeite a distância mínima determinada pelo juiz em relação à vítima, acionando alerta em caso de violação",
+      "Dispositivo que restringe fisicamente os movimentos do agressor por meio de choque elétrico quando ele tenta se aproximar da vítima",
+      "Equipamento de uso voluntário pelo agressor como alternativa à prisão preventiva, sem monitoramento ativo por parte das autoridades"
+    ],
+    "respostaCorreta": "Permite rastrear a localização do agressor em tempo real para garantir que ele respeite a distância mínima determinada pelo juiz em relação à vítima, acionando alerta em caso de violação",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "5/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 213,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente o conceito jurídico de violência doméstica estrutural e sua relação com a responsabilidade do Estado?",
+    "alternativas": [
+      "Violência enraizada em estruturas sociais, culturais e institucionais que o Estado tem o dever de combater por meio de políticas públicas, legislação e educação, sendo responsabilizado internacionalmente pela sua omissão",
+      "Violência praticada por agentes públicos dentro de instalações do Estado, como presídios e hospitais, que gera responsabilidade civil objetiva",
+      "Modalidade de violência reconhecida apenas no direito internacional, sem correspondência na legislação brasileira vigente"
+    ],
+    "respostaCorreta": "Violência enraizada em estruturas sociais, culturais e institucionais que o Estado tem o dever de combater por meio de políticas públicas, legislação e educação, sendo responsabilizado internacionalmente pela sua omissão",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 214,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "DIFÍCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "A Lei 14.737/2023 que criou o programa Bem Querer Mulher foi sancionada com o objetivo de ampliar o acesso das mulheres em situação de violência a políticas de qualificação profissional e inserção no mercado de trabalho?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "5/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 215,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente a diferença entre violência doméstica e violência familiar segundo a Lei Maria da Penha?",
+    "alternativas": [
+      "Violência doméstica ocorre no âmbito da unidade doméstica; violência familiar ocorre entre pessoas com laços de parentesco, podendo acontecer fora do lar",
+      "São expressões completamente sinônimas e a lei não faz distinção entre elas em nenhum artigo",
+      "Violência familiar se restringe a agressões entre pais e filhos, excluindo cônjuges e companheiros"
+    ],
+    "respostaCorreta": "Violência doméstica ocorre no âmbito da unidade doméstica; violência familiar ocorre entre pessoas com laços de parentesco, podendo acontecer fora do lar",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "4/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 216,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo explica corretamente por que homens que presenciam violência doméstica na infância não estão 'condenados' a repetir esse comportamento?",
+    "alternativas": [
+      "A violência doméstica resulta de escolhas individuais e estruturas culturais, não de determinismo biológico, sendo possível romper o ciclo com apoio psicossocial, educação e responsabilização",
+      "Homens que presenciam violência na infância sempre se tornam agressores, pois o comportamento é transmitido geneticamente entre gerações",
+      "O histórico familiar de violência impede completamente qualquer intervenção terapêutica eficaz, tornando a reincidência inevitável"
+    ],
+    "respostaCorreta": "A violência doméstica resulta de escolhas individuais e estruturas culturais, não de determinismo biológico, sendo possível romper o ciclo com apoio psicossocial, educação e responsabilização",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "4/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 217,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente o que é o atendimento humanizado à mulher vítima de violência sexual nos serviços de saúde?",
+    "alternativas": [
+      "Acolhimento sem julgamento, oferta de anticoncepção de emergência, profilaxia para ISTs e HIV, acompanhamento psicológico e respeito à autonomia da vítima nas decisões sobre seu tratamento",
+      "Atendimento restrito ao registro fotográfico de lesões e encaminhamento imediato à delegacia, sem oferecimento de medicamentos ou suporte emocional",
+      "Procedimento que prioriza a coleta de provas periciais antes de qualquer cuidado com a saúde física ou psicológica da vítima"
+    ],
+    "respostaCorreta": "Acolhimento sem julgamento, oferta de anticoncepção de emergência, profilaxia para ISTs e HIV, acompanhamento psicológico e respeito à autonomia da vítima nas decisões sobre seu tratamento",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "4/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 218,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "MÉDIO",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
+    "enunciado": "Qual das alternativas abaixo descreve corretamente o papel das organizações da sociedade civil (ONGs feministas) no enfrentamento à violência contra a mulher?",
+    "alternativas": [
+      "Complementam os serviços públicos oferecendo atendimento especializado, advocacia política, monitoramento de políticas públicas e mobilização social para prevenção da violência",
+      "Substituem completamente os órgãos governamentais no atendimento a mulheres vítimas de violência, dispensando a necessidade de serviços públicos",
+      "Atuam exclusivamente como captadoras de recursos internacionais sem prestação direta de serviços ou influência em políticas públicas"
+    ],
+    "respostaCorreta": "Complementam os serviços públicos oferecendo atendimento especializado, advocacia política, monitoramento de políticas públicas e mobilização social para prevenção da violência",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "3/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 219,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "A educação é importante para combater o machismo?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "1/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 220,
+    "tipoGeral": "PERGUNTA",
+    "dificuldade": "FÁCIL",
+    "tipoPergunta": "SIM_NAO",
+    "enunciado": "Homens também podem ajudar no combate à violência contra a mulher?",
+    "alternativas": [
+      "Sim",
+      "Não"
+    ],
+    "respostaCorreta": "Sim",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "1/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 221,
+    "tipoGeral": "SORTE",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você apoiou uma vítima em sua denúncia. Avance 5 casas.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "5/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 222,
+    "tipoGeral": "SORTE",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você ouviu e acolheu uma vítima. Avance 6 casas.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 223,
+    "tipoGeral": "SORTE",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você denunciou uma agressão. Avance 10 casas",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 224,
+    "tipoGeral": "SORTE",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você promoveu respeito e igualdade. Avance 8 casas.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 225,
+    "tipoGeral": "SORTE",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você incentivou outras pessoas a se posicionarem. Avance 6 casas.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 226,
+    "tipoGeral": "SORTE",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você ofereceu apoio psicológico. Avance 10 casas.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 227,
+    "tipoGeral": "SORTE",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você ajudou a divulgar a Lei Maria da Penha. Avance 5 casas.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "5/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 228,
+    "tipoGeral": "SORTE",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você apoiou financeiramente uma campanha. Avance 4 casas.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "4/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 229,
+    "tipoGeral": "SORTE",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você deu voz às mulheres em espaços públicos. Avance 6 casas.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 230,
+    "tipoGeral": "SORTE",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você incentivou denúncias anônimas. Avance 4 casas.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "4/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 231,
+    "tipoGeral": "SORTE",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você promoveu debates sobre igualdade. Avance 5 casas.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "5/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 232,
+    "tipoGeral": "SORTE",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você ajudou a criar redes de apoio. Avance 9 casas.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 233,
+    "tipoGeral": "SORTE",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você ofereceu acolhimento imediato. Avance 10 casas.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 234,
+    "tipoGeral": "SORTE",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você compartilhou histórias de superação. Avance 5 casas.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "5/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 235,
+    "tipoGeral": "SORTE",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você apoiou políticas públicas de proteção. Avance 9 casas.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 236,
+    "tipoGeral": "SORTE",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você se posicionou contra comentários machistas. Avance 7 casas",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 237,
+    "tipoGeral": "SORTE",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você ajudou a fortalecer a luta contra a violência. Avance 10 casas.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "AVANÇAR",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 238,
+    "tipoGeral": "AZAR",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você ignorou um pedido de ajuda. Volte 4 casas.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "RETROCEDER",
+    "valorEfeito": "4/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 239,
+    "tipoGeral": "AZAR",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você fez uma piada machista. Volte 6 casas",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "RETROCEDER",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 240,
+    "tipoGeral": "AZAR",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você minimizou a dor de uma vítima. Volte 5 casas",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "RETROCEDER",
+    "valorEfeito": "5/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 241,
+    "tipoGeral": "AZAR",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você não denunciou uma agressão presenciada. Volte 6 casas.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "RETROCEDER",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 242,
+    "tipoGeral": "AZAR",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você culpou a vítima pela violência sofrida. Volte 6 casas.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "RETROCEDER",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 243,
+    "tipoGeral": "AZAR",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você não ofereceu apoio emocional. Volte 3 casas.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "RETROCEDER",
+    "valorEfeito": "3/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 244,
+    "tipoGeral": "AZAR",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você reforçou estereótipos prejudiciais. Volte 2 casas.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "RETROCEDER",
+    "valorEfeito": "2/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 245,
+    "tipoGeral": "AZAR",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você se calou diante de uma injustiça. Volte 4 casas.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "RETROCEDER",
+    "valorEfeito": "4/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 246,
+    "tipoGeral": "AZAR",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você desacreditou o relato de uma mulher. Volte 6 casas.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "RETROCEDER",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 247,
+    "tipoGeral": "AZAR",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você ignorou sinais de abuso. Volte 5 casas.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "RETROCEDER",
+    "valorEfeito": "5/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 248,
+    "tipoGeral": "AZAR",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você não respeitou o espaço de fala da vítima. Volte 3 casas.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "RETROCEDER",
+    "valorEfeito": "3/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 249,
+    "tipoGeral": "AZAR",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você fez comentários ofensivos. Volte 2 casas.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "RETROCEDER",
+    "valorEfeito": "2/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 250,
+    "tipoGeral": "AZAR",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você não apoiou campanhas de conscientização. Volte 4 casas.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "RETROCEDER",
+    "valorEfeito": "4/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 251,
+    "tipoGeral": "AZAR",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você normalizou comportamentos violentos. Volte 6 casas.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "RETROCEDER",
+    "valorEfeito": "6/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 252,
+    "tipoGeral": "AZAR",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você não ofereceu ajuda prática. Volte 3 casas.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "RETROCEDER",
+    "valorEfeito": "3/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 253,
+    "tipoGeral": "AZAR",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você desconsiderou a importância da denúncia. Volte 5 casas.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "RETROCEDER",
+    "valorEfeito": "5/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 254,
+    "tipoGeral": "AZAR",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você reforçou preconceitos de gênero. Volte 2 casas.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "RETROCEDER",
+    "valorEfeito": "2/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 255,
+    "tipoGeral": "PEGADINHA",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você tentou apoiar, mas usou palavras inadequadas. Não avance nesta rodada.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "PROXIMO",
+    "valorEfeito": "0/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 256,
+    "tipoGeral": "PEGADINHA",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você quis ajudar, mas não ouviu com atenção. Retorne ao início.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "INICIO",
+    "valorEfeito": "0/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 257,
+    "tipoGeral": "PEGADINHA",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você pensou que denunciar era suficiente, mas não acompanhou a vítima. Fique parado.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "PROXIMO",
+    "valorEfeito": "0/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 258,
+    "tipoGeral": "PEGADINHA",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você apoiou, mas não respeitou o tempo da vítima. Retorne ao início.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "INICIO",
+    "valorEfeito": "0/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 259,
+    "tipoGeral": "PEGADINHA",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você divulgou informações incorretas. Fique uma rodada sem jogar",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "PROXIMO",
+    "valorEfeito": "0/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 260,
+    "tipoGeral": "PEGADINHA",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você quis ajudar, mas não ofereceu segurança. Retorne ao início.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "INICIO",
+    "valorEfeito": "0/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 261,
+    "tipoGeral": "PEGADINHA",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você apoiou, mas não manteve sigilo. Retorne ao início.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "INICIO",
+    "valorEfeito": "0/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 262,
+    "tipoGeral": "PEGADINHA",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você tentou conscientizar, mas usou termos ofensivos. Retorne ao início.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "INICIO",
+    "valorEfeito": "0/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 263,
+    "tipoGeral": "PEGADINHA",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você compartilhou campanha, mas não se envolveu de verdade. Retorne ao inicio.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "INICIO",
+    "valorEfeito": "0/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 264,
+    "tipoGeral": "PEGADINHA",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você apoiou, mas não respeitou a autonomia da vítima. Retorne ao inicio.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "INICIO",
+    "valorEfeito": "0/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 265,
+    "tipoGeral": "PEGADINHA",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você quis ajudar, mas reforçou estereótipos. Fique uma rodada sem jogar.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "PROXIMO",
+    "valorEfeito": "0/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 266,
+    "tipoGeral": "PEGADINHA",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você divulgou números errados de denúncia. Retorne ao início.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "INICIO",
+    "valorEfeito": "0/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 267,
+    "tipoGeral": "PEGADINHA",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você apoiou, mas não manteve constância. Retorne ao início.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "INICIO",
+    "valorEfeito": "0/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 268,
+    "tipoGeral": "PEGADINHA",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você tentou ajudar, mas expôs a vítima. Retorne ao início.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "INICIO",
+    "valorEfeito": "0/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 269,
+    "tipoGeral": "PEGADINHA",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você participou de campanha, mas não mudou atitudes. Retorne ao início",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "INICO",
+    "valorEfeito": "0/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 270,
+    "tipoGeral": "PEGADINHA",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você apoiou, mas não se comprometeu a longo prazo. Fique parado.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "PROXIMO",
+    "valorEfeito": "0/6",
+    "iconePeao": ""
+  },
+  {
+    "id": 271,
+    "tipoGeral": "PEGADINHA",
+    "dificuldade": "",
+    "tipoPergunta": "",
+    "enunciado": "Você achou que estava certo, mas não ouviu a vítima. Retorne ao início.",
+    "alternativas": [],
+    "respostaCorreta": "",
+    "efeito": "INICIO",
+    "valorEfeito": "0/6",
+    "iconePeao": ""
+  }
 ]

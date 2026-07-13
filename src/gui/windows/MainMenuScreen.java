@@ -20,7 +20,7 @@ public class MainMenuScreen extends JPanel {
     private static final double SCALE = 1.5; // Fator de escala para ajustar o tamanho dos componentes (pode ser ajustado conforme necessário)
     private static final Rectangle BUTTON_NAVIGATION_CONTAINER_BOUNDS = new Rectangle( 
         // Dimensões fixas para o painel dos botões do menu principal
-        (int) (20 * SCALE), 
+        (int) (0 * SCALE), 
         (int) (35 * SCALE), 
         (int) (300 * SCALE), 
         (int) (280 * SCALE)

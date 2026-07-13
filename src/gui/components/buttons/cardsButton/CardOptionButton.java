@@ -18,6 +18,8 @@ import cards.CustomCards;
 
 public class CardOptionButton extends JButton {
     // VARIÁVEIS DE INSTÂNCIA
+
+    private static final double SCALE = 1.5;
     
     private final String CARD_QUESTION_TYPE;
     private String cardAnswerLetter = "";  
@@ -48,7 +50,7 @@ public class CardOptionButton extends JButton {
         
         // Configurações do JButton
         setText(cardAnswerTxt);
-        setFont(new Font("Tahoma", Font.BOLD, 12));
+        setFont(new Font("Tahoma", Font.BOLD, (int) (10 * SCALE)));
         setForeground(COR_TEXTO_ESCURO); // Texto escuro para contrastar no fundo claro
         
         setContentAreaFilled(false);
@@ -214,10 +216,25 @@ public class CardOptionButton extends JButton {
         // 5. DESENHA O TEXTO DA ALTERNATIVA
         g2.setFont(getFont());
         g2.setColor(getForeground());
-        
-        int xCardAnswerTxt = xBox + letterBoxSize + 10; 
+
+        int xCardAnswerTxt;
+
+        // Remove espaços em branco nas pontas por segurança
+        String textoTratado = cardAnswerTxt.trim();
+
+        // Verifica se o texto é exatamente "SIM" ou "NÃO" (ignorando maiúsculas e minúsculas)
+        if (textoTratado.equalsIgnoreCase("SIM") || textoTratado.equalsIgnoreCase("NÃO")) {
+            // Mede a largura exata que o texto ocupa em pixels na tela
+            int larguraTexto = g2.getFontMetrics().stringWidth(cardAnswerTxt);
+            // Centraliza horizontalmente: (Largura do botão - Largura do texto) / 2
+            xCardAnswerTxt = (getWidth() - larguraTexto) / 2;
+        } else {
+            // Se for uma frase ou alternativa longa, mantém alinhado mais próximo da borda esquerda
+            xCardAnswerTxt = xBox + letterBoxSize + 10;
+        }
+
         int yCardAnswerTxt = (getHeight() + g2.getFontMetrics().getAscent() - g2.getFontMetrics().getDescent()) / 2;
-        
+
         g2.drawString(cardAnswerTxt, xCardAnswerTxt, yCardAnswerTxt);
 
         // Libera os recursos do contexto gráfico 2D para evitar vazamentos de memória

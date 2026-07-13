@@ -355,13 +355,19 @@ public class GameManager {
         
         if (pawnActualPosition >= pawnPath.length - 1) return false;
 
-        boolean isBackwards = "VOLTAR".equalsIgnoreCase(cardEffect) || "RETRÓGRADO".equalsIgnoreCase(cardEffect);
+        boolean isBackwards = "VOLTAR".equalsIgnoreCase(cardEffect) || 
+                              "RETRÓGRADO".equalsIgnoreCase(cardEffect) || 
+                              "RETROCEDER".equalsIgnoreCase(cardEffect);
         if (isBackwards && cardValue > 0) cardValue = -cardValue; 
         
         boolean ganhouTurnoExtra = (Math.abs(cardValue) == 6);
         boolean exitBase = false;
 
         if (pawnActualPosition < 4) {
+            if (isBackwards) {
+                System.out.println("[GameManager] Peão na base não pode retroceder.");
+                return false;
+            }
             if (Math.abs(cardValue) == 1 || Math.abs(cardValue) == 6) {
                 int pawnStarterPath = 4; 
                 chosenPawn.setPawnCurrentPos(pawnStarterPath);
@@ -563,6 +569,98 @@ public class GameManager {
                 }
             }
         }
+    }
+
+    /**
+     * O "Oráculo" da Inteligência Artificial:
+     * Simula o movimento de todos os peões disponíveis, calcula uma pontuação
+     * baseada nas regras do tabuleiro e na personalidade da CPU, e devolve o melhor peão.
+     */
+    public int escolherMelhorPeaoParaCPU(int cpuId, java.util.List<Integer> peoesDisponiveis, int cardValue, String personalidade) {
+        int melhorPeao = -1;
+        int maiorPontuacao = -9999;
+
+        for (int peaoIndex : peoesDisponiveis) {
+            int pontuacaoAtual = 0;
+            
+            // 1. Pega no peão atual e descobre para onde ele iria
+            PlayerPawn pawn = this.boardScreen.getPlayerPawn(cpuId, peaoIndex);
+            if (pawn == null) continue;
+
+            int posAtual = pawn.getPawnCurrentPos();
+            int posDestino = posAtual + cardValue; 
+            
+            // Se o peão ultrapassar o centro, ignoramos ou damos pontuação mínima, dependendo da sua regra de rebote
+            if (posDestino >= this.boardScreen.getCaminhoCasas(cpuId).length) {
+                if (this.usarReboteCentro) {
+                    pontuacaoAtual -= 500; // Penaliza movimentos que causam rebote se houver opções melhores
+                }
+            } else {
+                // Descobre a coordenada (X,Y) exata no ecrã para onde o peão vai
+                Point destPoint = this.boardScreen.getCaminhoCasas(cpuId)[posDestino];
+                
+                // === AVALIAÇÃO 1: VITÓRIA (CHEGAR AO CENTRO) ===
+                if (posDestino == this.boardScreen.getCaminhoCasas(cpuId).length - 1) {
+                    pontuacaoAtual += 10000; // Prioridade absoluta! Se pode ganhar com este peão, ganha.
+                }
+                
+                // === AVALIAÇÃO 2: CAPTURA DE INIMIGOS ===
+                boolean temInimigo = false;
+                for (int p = 0; p < 4; p++) {
+                    if (p == cpuId) continue; // Ignora os próprios peões
+                    
+                    for (int i = 0; i < 4; i++) {
+                        PlayerPawn enemyPawn = this.boardScreen.getPlayerPawn(p, i);
+                        if (enemyPawn != null) {
+                            int enemyPos = enemyPawn.getPawnCurrentPos();
+                            // Se o inimigo estiver no tabuleiro (fora da base e antes do centro)
+                            if (enemyPos >= 4 && enemyPos < this.boardScreen.getCaminhoCasas(p).length - 1) {
+                                Point enemyPoint = this.boardScreen.getCaminhoCasas(p)[enemyPos];
+                                if (destPoint.x == enemyPoint.x && destPoint.y == enemyPoint.y) {
+                                    temInimigo = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                if (temInimigo) {
+                    pontuacaoAtual += 1000;
+                    if ("AGRESSIVA".equalsIgnoreCase(personalidade)) {
+                        pontuacaoAtual += 3000; // CPU Agressiva AMA capturar peões
+                    }
+                }
+                
+                // === AVALIAÇÃO 3: ZONAS SEGURAS (Assumindo que você tenha um método isZonaSegura) ===
+                /* Descomente este bloco caso o seu método isZonaSegura já esteja pronto:
+                if (this.usarZonasSeguras && isZonaSegura(destPoint)) {
+                    pontuacaoAtual += 500;
+                    if ("DEFENSIVA".equalsIgnoreCase(personalidade)) {
+                        pontuacaoAtual += 2000; // CPU Defensiva AMA zonas seguras
+                    }
+                }
+                */
+                
+                // === AVALIAÇÃO 4: CORRIDA (Avançar o máximo possível) ===
+                if ("CORREDORA".equalsIgnoreCase(personalidade)) {
+                    // Dá mais pontos aos peões que já estão mais perto do fim (posAtual alta)
+                    pontuacaoAtual += (posAtual * 50); 
+                }
+            }
+            
+            // Adiciona um fator mínimo de aleatoriedade (0 a 9) para que a IA não seja 100% robótica e previsível em empates
+            pontuacaoAtual += (int)(Math.random() * 10);
+
+            // Verifica se este peão é o novo vencedor
+            if (pontuacaoAtual > maiorPontuacao) {
+                maiorPontuacao = pontuacaoAtual;
+                melhorPeao = peaoIndex;
+            }
+        }
+        
+        // Retorna o melhor peão, ou o primeiro disponível como segurança caso algo falhe
+        return melhorPeao != -1 ? melhorPeao : peoesDisponiveis.get(0);
     }
 
     

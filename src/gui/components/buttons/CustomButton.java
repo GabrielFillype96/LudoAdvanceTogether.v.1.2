@@ -22,9 +22,12 @@ public class CustomButton extends JButton {
     protected boolean selecionadoFixado = false;
     protected boolean mousePorCima = false;
 
+    private static final double SCALE = 1.5;    
+
     // Dimensões do projeto (200x45)
-    private static final int btnWidth = 200;
-    private static final int btnHeight = 45;
+    private static final int btnWidth = (int) (200 * SCALE);
+    private static final int btnHeight = (int) (45 * SCALE);
+
 
     // --- CORES EXTRAÍDAS DO SEU DESIGN SYSTEM ---
     private final Color ROXO_TEMA = new Color(52, 34, 64);       // Roxo profundo extraído do menu
@@ -81,7 +84,7 @@ public class CustomButton extends JButton {
         int h = getHeight();
         int corte = 18; // Tamanho do chanfro diagonal em pixels
 
-        // --- CONSTRUÇÃO HISTÓRICA DO POLÍGONO ASSIMÉTRICO (IMAGEM 2) ---
+        
         GeneralPath formatoBotao = new GeneralPath();
         
         formatoBotao.moveTo(corte, 0);          // 1. Início do corte superior esquerdo
@@ -120,7 +123,7 @@ public class CustomButton extends JButton {
 
         // 3. Insere o texto perfeitamente centralizado
         g2.setColor(corTexto);
-        g2.setFont(new Font("Arial", Font.BOLD, 14));
+        g2.setFont(new Font("Arial", Font.BOLD, (int) (14 * SCALE)));
 
         FontMetrics fm = g2.getFontMetrics();
         int xTexto = (w - fm.stringWidth(labelTexto)) / 2;

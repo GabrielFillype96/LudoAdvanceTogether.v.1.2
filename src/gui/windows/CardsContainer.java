@@ -41,19 +41,19 @@ public class CardsContainer extends JPanel {
         this.gameManager = gameManager;
         this.cardAnswerValidation = cardAnswerValidation;
 
+        //this.setBackground(java.awt.Color.RED);
         this.setOpaque(false);
         this.setLayout(null);
         
         // =========================================================
         // RESTAURAÇÃO DO PATH DA IMAGEM DO BARALHO
-        // Substitua pelo seu path original caso seja diferente!
         // =========================================================
         this.cardDeckBackground = new CardDeckBackground("/assets/deckCardImage_220x340.png");
         this.cardDeckBackground.setBounds(
-            (int) (50 * SCALE),   // X (Posição horizontal)
-            (int) (20 * SCALE),   // Y (Posição vertical)
-            (int) (220 * SCALE),  // Largura (mesmo tamanho da carta)
-            (int) (340 * SCALE)   // Altura (mesmo tamanho da carta)
+            (int) (10 * SCALE),   // X (Posição horizontal)
+            (int) (10 * SCALE),   // Y (Posição vertical)
+            (int) (280 * SCALE),  // Largura (mesmo tamanho da carta)
+            (int) (420 * SCALE)   // Altura (mesmo tamanho da carta)
         );
         this.add(this.cardDeckBackground);
         
@@ -113,10 +113,10 @@ public class CardsContainer extends JPanel {
 
         // Reconfigura e reposiciona a nova carta usando os tamanhos fixos do seu CustomCards
         this.activeCard.setBounds(
-            (int) (50 * SCALE), 
-            (int) (20 * SCALE), 
-            (int) (220 * SCALE), // Largura real da carta
-            (int) (340 * SCALE)  // Altura real da carta
+            (int) (14 * SCALE), 
+            (int) (5 * SCALE), 
+            (int) (250 * SCALE), // Largura real da carta
+            (int) (395 * SCALE)  // Altura real da carta
         );
         
         // =========================================================

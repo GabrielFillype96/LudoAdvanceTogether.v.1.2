@@ -2,7 +2,7 @@
 // Packages
 package gui.components.buttons;
 // Imports
-import javax.swing.ImageIcon;
+
 
 // Cria uma classe "PlayButton" que irá herdar métodos da classe "CustomButton"
 public class PlayButton extends CustomButton {

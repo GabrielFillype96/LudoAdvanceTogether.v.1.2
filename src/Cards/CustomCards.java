@@ -44,7 +44,7 @@ public class CustomCards extends JPanel {
     private boolean displayBackImgCard = false;
     private CardOptionButton[] botoesOpcao;
     private CardOptionButton botaoConfirmar;
-
+    private static final double SCALE = 1.5;
 
     private CardsContainer painelPai;
 
@@ -177,10 +177,10 @@ public class CustomCards extends JPanel {
             // 1. Inicializa o array com o tamanho exato da quantidade de alternativas
             this.botoesOpcao = new CardOptionButton[alternativas.length];
 
-            int larguraBotao = 152; 
-            int alturaBotao = 32;
-            int espacamento = 6;
-            int yInicial = 165; 
+            int larguraBotao = (int) (215 * SCALE); 
+            int alturaBotao = (int) (32 * SCALE);
+            int espacamento = (int) (6 * SCALE);
+            int yInicial = (int) (195 * SCALE); 
             int xCentralizado = 29; 
 
             Color corInterna = new Color(255, 255, 255, 195);
@@ -204,7 +204,7 @@ public class CustomCards extends JPanel {
             }
         }
 
-        /**
+    /*
      * Método responsável por inicializar e posicionar o botão "OK"
      * para as cartas do tipo SORTE, AZAR ou SACANEAR.
      */
@@ -212,7 +212,12 @@ public class CustomCards extends JPanel {
         this.botaoConfirmar = new CardOptionButton("OK"); 
         
         // Ajuste o x, y, largura e altura conforme o design da sua carta
-        this.botaoConfirmar.setBounds(60, 280, 100, 35); 
+        this.botaoConfirmar.setBounds(
+            35, 
+            (int) (195 * SCALE), 
+            (int) (200 * SCALE), 
+            (int) (32 * SCALE)
+        ); 
         
         this.add(this.botaoConfirmar);
     }
@@ -242,7 +247,7 @@ public class CustomCards extends JPanel {
         if (mainTxt == null || mainTxt.trim().isEmpty()) return;
 
         // Configuração da Fonte (Ajuste o tamanho e estilo como preferir)
-        Font mainTxtFont = new Font("Arial", Font.BOLD, 14);
+        Font mainTxtFont = new Font("Arial", Font.BOLD, (int) (14 * SCALE));
         g2.setFont(mainTxtFont);
         g2.setColor(Color.WHITE); // Cor do texto
 
@@ -280,20 +285,20 @@ public class CustomCards extends JPanel {
         }
 
         // Configuração estética do texto do efeito
-        Font cardEffectValueFont = new Font("Arial", Font.BOLD, 14);
+        Font cardEffectValueFont = new Font("Arial", Font.BOLD, (int) (14 * SCALE));
         g2.setFont(cardEffectValueFont);
         g2.setColor(Color.WHITE);
 
         // Altere os valores abaixo de acordo com a posição real do seu ícone de casa
         float cardEffectValueSymbolX = 75;       // Posição X horizontal onde o seu símbolo começa
         float cardEffectValueSymbolWidth = 22; // Largura aproximada do seu desenho/ícone de casa
-        float margin = 6;     // Distância em pixels entre o símbolo e o início do texto
+        float margin = (int) (65 * SCALE);     // Distância em pixels entre o símbolo e o início do texto
         
         // O texto começará exatamente onde o símbolo termina + o espaçamento definido
         float cardEffectValueTxtX = cardEffectValueSymbolX + cardEffectValueSymbolWidth + margin;
         
         // Alinhamento vertical (Y). Mude para subir ou descer a linha do texto
-        float cardEffectValueTxtY = 302.5f; 
+        float cardEffectValueTxtY = (int) (372.5f * SCALE); 
 
         // Desenha o valor extraído do JSON (ex: +3) na posição horizontal calculada
         g2.drawString(this.cardValue, cardEffectValueTxtX, cardEffectValueTxtY);

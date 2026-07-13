@@ -36,15 +36,15 @@ public class GameContainer extends JPanel {
     );
     private static final Rectangle CARDS_AREA_BOUNDS = new Rectangle(
         (int) (600* SCALE), 
-        0, 
+        (int) (0 * SCALE), 
         (int) (300 * SCALE), 
-        (int) (400 * SCALE) // anteriormente estava em 600
+        (int) (440 * SCALE) // anteriormente estava em 600
     );
     private static final Rectangle CARDS_CONTAINER_BOUNDS = new Rectangle(
-        (int) (40 * SCALE), 
-        (int) (110 * SCALE), 
-        (int) (220 * SCALE), 
-        (int) (340 * SCALE)
+        (int) (0 * SCALE), 
+        (int) (0 * SCALE), 
+        (int) (300 * SCALE), 
+        (int) (500 * SCALE)
     );
     private static final Rectangle PAWN_CONTROL_AREA_BOUNDS = new Rectangle(
         (int) (600 * SCALE),
