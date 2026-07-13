@@ -382,9 +382,17 @@ public class GameManager {
                 }
                 return false; 
             }
+
+            
         }
 
         int pawnStarterPath = pawnActualPosition + cardValue; 
+
+
+        if (isBackwards && pawnStarterPath < 4) {
+            pawnStarterPath = 4; // Para na primeira casa do tabuleiro (casa de saída)
+        }
+
         int maxIndex = pawnPath.length - 1;
         boolean houveRebote = false;
 
@@ -661,6 +669,27 @@ public class GameManager {
         
         // Retorna o melhor peão, ou o primeiro disponível como segurança caso algo falhe
         return melhorPeao != -1 ? melhorPeao : peoesDisponiveis.get(0);
+    }
+
+    // NOVO MÉTODO: Encontra o peão do jogador que está mais avançado no tabuleiro
+    public int getFurthestPawnIndex(int playerId) {
+        int furthestPawn = -1;
+        int maxPosition = -1;
+
+        for (int i = 0; i < 4; i++) {
+            PlayerPawn pawn = boardScreen.getPlayerPawn(playerId, i);
+            if (pawn != null) {
+                int pos = pawn.getPawnCurrentPos();
+                // Queremos peões que já saíram da base (>= 4) e que ainda não chegaram ao centro
+                if (pos >= 4 && pos < boardScreen.getCaminhoCasas(playerId).length - 1) {
+                    if (pos > maxPosition) {
+                        maxPosition = pos;
+                        furthestPawn = i;
+                    }
+                }
+            }
+        }
+        return furthestPawn; // Retorna -1 se não houver nenhum peão no tabuleiro
     }
 
     

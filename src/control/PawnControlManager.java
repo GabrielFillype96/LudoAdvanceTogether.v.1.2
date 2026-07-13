@@ -152,7 +152,34 @@ public class PawnControlManager {
         }
     }
 
-    public void preparePendingMovement(int steps, String effect) {
+   public void preparePendingMovement(int steps, String effect) {
+        // SE A CARTA FOR DE RETROCEDER, APLICA AUTOMATICAMENTE NO PEÃO MAIS DISTANTE
+        if ("RETROCEDER".equalsIgnoreCase(effect) || "VOLTAR".equalsIgnoreCase(effect) || "RETRÓGRADO".equalsIgnoreCase(effect)) {
+            
+            int currentPlayerId = (this.gameManager.getTurnManager() != null) ? this.gameManager.getTurnManager().getCurrentTurn() : 0;
+            int furthestPawnIndex = this.gameManager.getFurthestPawnIndex(currentPlayerId);
+            
+            if (furthestPawnIndex != -1) {
+                System.out.println("[PawnControlManager] Aplicando penalização automaticamente no peão mais avançado (Índice " + furthestPawnIndex + ")");
+                // Move automaticamente e encerra a seleção
+                this.gameManager.moveChosenPawn(furthestPawnIndex, steps, effect);
+                this.awaitingPawnSelection = false;
+                
+                // Se for a vez do humano e a carta aplicou efeito direto, passa o turno
+                if (currentPlayerId == 0 && this.gameManager.getTurnManager() != null) {
+                    this.gameManager.getTurnManager().nextTurn();
+                }
+                return;
+            } else {
+                System.out.println("[PawnControlManager] Não há peões no tabuleiro para retroceder. Passando a vez.");
+                if (this.gameManager.getTurnManager() != null) {
+                    this.gameManager.getTurnManager().nextTurn();
+                }
+                return;
+            }
+        }
+        
+        // Lógica normal para as outras cartas (onde o jogador tem de escolher em qual clicar)
         this.pendingSteps = steps;
         this.pendingEffect = effect;
         this.awaitingPawnSelection = true;

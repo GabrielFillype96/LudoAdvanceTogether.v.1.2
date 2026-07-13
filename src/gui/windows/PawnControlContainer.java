@@ -34,7 +34,7 @@ public class PawnControlContainer extends JPanel {
     public PawnControlContainer(PawnControlManager pawnControlManager) {
         this.pawnControlManager = pawnControlManager;
         setBounds(PAWN_CONTROL_CONTAINER_BOUNDS); // Tamanho e posição do painel de controle dos peões (0, 0) (330x180)
-        setOpaque(true);   // Mantém o painel transparente 
+        setOpaque(false);   // Mantém o painel transparente 
         setLayout(null);    // Permite que a PawnControl ocupe o espaço absoluto interno
 
         // Instancia o array para conter 4 elementos

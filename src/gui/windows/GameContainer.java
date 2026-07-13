@@ -50,7 +50,7 @@ public class GameContainer extends JPanel {
         (int) (600 * SCALE),
         (int) (400 * SCALE),
         (int) (300 * SCALE),
-        (int) (150 * SCALE)
+        (int) (200 * SCALE)
     );
     private static final Rectangle PAWN_CONTROL_CONTAINER_BOUNDS = new Rectangle(
         (int) (40 * SCALE),
@@ -117,7 +117,7 @@ public class GameContainer extends JPanel {
         // Área reservada ao layout do controle dos peões
         JPanel pawnControlArea = new JPanel();
         pawnControlArea.setBounds(PAWN_CONTROL_AREA_BOUNDS); // Tamanho e posição da área do controle dos peões (0, 0) (450x225)
-        pawnControlArea.setBackground(new Color(18, 50, 25)); // Tom amadeirado escuro
+        pawnControlArea.setBackground(new Color(38, 24, 16)); // Tom amadeirado escuro
         pawnControlArea.setLayout(null);
 
         // Instancia o "PawnControlManager" para servir de parâmetro na instância do "PawnControlContainer"
