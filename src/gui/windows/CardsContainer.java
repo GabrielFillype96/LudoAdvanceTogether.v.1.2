@@ -116,7 +116,7 @@ public class CardsContainer extends JPanel {
             (int) (14 * SCALE), 
             (int) (5 * SCALE), 
             (int) (250 * SCALE), // Largura real da carta
-            (int) (395 * SCALE)  // Altura real da carta
+            (int) (375 * SCALE)  // Altura real da carta
         );
         
         // =========================================================

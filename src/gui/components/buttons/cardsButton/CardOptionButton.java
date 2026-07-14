@@ -10,6 +10,17 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
 
+// --- NOVOS IMPORTS PARA A QUEBRA DE LINHA AUTOMÁTICA ---
+import java.awt.font.FontRenderContext;
+import java.awt.font.LineBreakMeasurer;
+import java.awt.font.TextAttribute;
+import java.awt.font.TextLayout;
+import java.text.AttributedCharacterIterator;
+import java.text.AttributedString;
+import java.util.ArrayList;
+import java.util.List;
+// -------------------------------------------------------
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
@@ -26,12 +37,10 @@ public class CardOptionButton extends JButton {
     private String cardAnswerTxt = "";  
     private boolean isHovered = false;
     
-   
     private final Color CARD_COLOR; // Copia a cor de fundo da carta (Ex: Verde claro da pergunta fácil)
     private final Color COR_BORDA = new Color(35, 45, 35, 140); // Linha fina sutil ao redor da alternativa
     private final Color COR_TEXTO_ESCURO = new Color(35, 35, 35); // Fonte combinando com o enunciado
     
-   
     private final Color COR_BOX_LETRA = new Color(240, 240, 240, 200); // Fundo claro para a letra
     private final Color COR_BOX_HOVER = new Color(255, 255, 255); // Brilha um pouco mais no hover
     private final Color COR_TEXTO_LETRA = new Color(35, 35, 35);
@@ -106,9 +115,6 @@ public class CardOptionButton extends JButton {
         this.setBorderPainted(false);
         this.setCursor(new Cursor(Cursor.HAND_CURSOR));
         this.isHovered = false;
-
-        // Nota: Se você tiver um MouseListener para efeito de Hover no construtor original, 
-        // você pode copiá-lo e colá-lo aqui também!
     }
 
     // Método para separar a alternativa do texto da carta
@@ -124,128 +130,137 @@ public class CardOptionButton extends JButton {
         }
     }
 
-
-    // Sobrescreve o método paintComponent do JPanel para desenhar a imagem de fundo personalizada
-    // @Override indica que o método "paintComponent" está sendo sobrescrito da classe pai (JPanel). Serve como uma espécie de "guarda-costas" para garantir que estamos realmente sobrescrevendo um método existente e não criando um novo método por engano.
     @Override
-    // O método "paintComponent" é chamado sempre que o painel precisa ser redesenhado, permitindo que personalizemos a aparência do fundo do menu offline.
-    // Visibilidade "protected" para que apenas classes dentro do mesmo pacote ou subclasses possam acessar este método
     protected void paintComponent(Graphics g) {
-
-        // Estrutura padrão do "paintComponent" para garantir que o fundo seja desenhado corretamente
+        // NÃO chamamos o super.paintComponent(g) para evitar o botão padrão
         Graphics2D g2 = (Graphics2D) g.create();
 
-        // Cria um contexto gráfico 2D para aplicar renderizações avançadas (como anti-aliasing)
-        g2.setRenderingHint(
-            RenderingHints.KEY_ANTIALIASING, 
-            RenderingHints.VALUE_ANTIALIAS_ON
-        );
-        g2.setRenderingHint(
-            RenderingHints.KEY_TEXT_ANTIALIASING, 
-            RenderingHints.VALUE_TEXT_ANTIALIAS_ON
-        );
-        
+        // Ativa a suavização máxima (Antialiasing) para bordas e textos perfeitos
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
-        // Se a imagem de fundo foi carregada com sucesso, desenha ela como plano de fundo das alternativas
-        if (cardBtnBGImg != null) {
-            // Desenha a imagem de fundo da tela principal
-            g2.drawImage(
-                cardBtnBGImg, 
-                0, 
-                0, 
-                this.getWidth(), 
-                this.getHeight(), 
-                this
-            );
-            if (isHovered) {
-                g2.setColor(new Color(255, 255, 255, 30)); // Camada branca semi-transparente
-                int margemHover = 4; 
-                g2.fillRoundRect(
-                    margemHover, 
-                    margemHover, 
-                    getWidth() - (margemHover * 2), 
-                    getHeight() - (margemHover * 2), 
-                    10, 10
-                );
-            }
-            System.out.println(
-                "[CardOptionButton] Imagem de fundo das alternativas desenhada com sucesso."
-            );
+        int w = getWidth();
+        int h = getHeight();
+        int raioCurva = (int) (8 * SCALE); // Curvatura nos cantos do botão
+
+        // =========================================================================
+        // 0. CORREÇÃO DA LETRA DA ALTERNATIVA (Se vier número "1", muda para "A")
+        // =========================================================================
+        String letraExibicao = cardAnswerLetter != null ? cardAnswerLetter.trim() : "";
+        if (letraExibicao.equals("1")) letraExibicao = "A";
+        else if (letraExibicao.equals("2")) letraExibicao = "B";
+        else if (letraExibicao.equals("3")) letraExibicao = "C";
+        else if (letraExibicao.equals("4")) letraExibicao = "D";
+
+        // Garante o formato estético "A)"
+        if (!letraExibicao.isEmpty() && !letraExibicao.contains(")")) {
+            letraExibicao = letraExibicao + ")";
+        }
+
+        // =========================================================================
+        // 1. CORES DO FUNDO VETORIAL (Tom de Branco translúcido com Hover)
+        // =========================================================================
+        Color corFundoCima;
+        Color corFundoBaixo;
+        Color corBorda;
+
+        if (isHovered) {
+            // Estado Hover: Branco mais sólido e brilhante, borda destaca com a cor de tema da própria carta
+            corFundoCima  = new Color(255, 255, 255, 210); // Branco translúcido forte e nítido
+            corFundoBaixo = new Color(245, 245, 245, 210);
+            corBorda      = (CARD_COLOR != null) ? CARD_COLOR : new Color(255, 255, 255, 180); // Borda assume o tom da carta
         } else {
-            // Fallback: fundo cinza caso a imagem de fundo das alternativas falhe, e imprime um erro no console
-            Color corTopo = isHovered ? Color.WHITE : new Color(255, 255, 255, 220);
-            Color corBase = isHovered ? CARD_COLOR : new Color(
-                CARD_COLOR.getRed(), 
-                CARD_COLOR.getGreen(), 
-                CARD_COLOR.getBlue(), 
-                180
-            );
+            // Estado Normal: Branco bem suave/sutil (estilo vidro jateado)
+            corFundoCima  = new Color(255, 255, 255, 55);  // Branco transparente suave
+            corFundoBaixo = new Color(255, 255, 255, 35);  // Degradê sutil para baixo
+            corBorda      = new Color(255, 255, 255, 80);  // Borda branca suave transparente
+        }
+
+        // Desenha o fundo do botão com o gradiente esbranquiçado
+        java.awt.GradientPaint gradienteFundo = new java.awt.GradientPaint(0, 0, corFundoCima, 0, h, corFundoBaixo);
+        g2.setPaint(gradienteFundo);
+        g2.fillRoundRect(0, 0, w, h, raioCurva, raioCurva);
+
+        // Desenha a borda fina
+        g2.setColor(corBorda);
+        g2.setStroke(new BasicStroke((float) (1.2 * SCALE)));
+        g2.drawRoundRect(1, 1, w - 2, h - 2, raioCurva, raioCurva);
+
+        // =========================================================================
+        // 2. DESENHO DA LETRA DA ALTERNATIVA (Visível sobre o fundo claro do botão)
+        // =========================================================================
+        g2.setFont(new Font("Arial", Font.BOLD, (int) (14 * SCALE)));
+        
+        // No hover, quando o fundo fica muito branco, usamos a cor escura da sua classe para dar contraste
+        if (isHovered) {
+            g2.setColor(COR_TEXTO_ESCURO); 
+        } else {
+            // Em repouso, o botão é ligeiramente transparente, então podemos usar um tom branco/claro bem visível
+            g2.setColor(new Color(245, 245, 245)); 
+        }
+
+        int xLetter = (int) (12 * SCALE);
+        int yLetter = (int) ((h / 2) + (g2.getFontMetrics().getAscent() / 2f) - (2 * SCALE));
+        g2.drawString(letraExibicao, xLetter, yLetter);
+
+        // =========================================================================
+        // 3. DESENHO DO TEXTO DA RESPOSTA (Contraste adaptável)
+        // =========================================================================
+        Font fonteResposta = new Font("Arial", Font.BOLD, (int) (11.5 * SCALE));
+        g2.setFont(fonteResposta);
+        
+        // Define a cor do texto da resposta:
+        if (isHovered) {
+            g2.setColor(COR_TEXTO_ESCURO); // Fica escuro quando o fundo brilha
+        } else {
+            g2.setColor(new Color(245, 245, 245)); // Fica branco quando o botão está transparente
+        }
+
+        int xCardAnswerTxt = (int) (34 * SCALE); // Espaço seguro para não encavalar na letra
+        int larguraMaximaTexto = w - xCardAnswerTxt - (int) (12 * SCALE);
+
+        if (cardAnswerTxt != null && !cardAnswerTxt.isEmpty()) {
+            AttributedString attributedString = new AttributedString(cardAnswerTxt);
+            attributedString.addAttribute(TextAttribute.FONT, fonteResposta);
+            attributedString.addAttribute(TextAttribute.FOREGROUND, g2.getColor());
             
-            java.awt.GradientPaint gp = new java.awt.GradientPaint(0, 0, corTopo, 0, getHeight(), corBase);
-            g2.setPaint(gp);
-            g2.fillRoundRect(
-                0, 
-                0, 
-                getWidth(), 
-                getHeight(), 
-                12, 
-                12
-            );
+            AttributedCharacterIterator paragraph = attributedString.getIterator();
+            FontRenderContext frc = g2.getFontRenderContext();
+            LineBreakMeasurer lineMeasurer = new LineBreakMeasurer(paragraph, frc);
+            lineMeasurer.setPosition(paragraph.getBeginIndex());
 
-            // Borda sutil apenas no fallback
-            g2.setColor(COR_BORDA);
-            g2.setStroke(new BasicStroke(1.2f));
-            g2.drawRoundRect(
-                0, 
-                0, 
-                getWidth() - 1, 
-                getHeight() - 1, 
-                12, 
-                12
-            );
-            // Se a imagem de fundo das alternativas não foi carregada, imprime um erro no console
-            System.err.println(
-                "[CardOptionButton] Erro: Imagem de fundo das alternativas não carregada, usando fallback cinza."
-            );
-        }
-        
-        // 3. DESENHA O MINI BOX DA LETRA DO LADO ESQUERDO
-        int letterBoxSize = getHeight() - 6; 
-        int xBox = 3;
-    
-        // 5. DESENHA O TEXTO DA ALTERNATIVA
-        g2.setFont(getFont());
-        g2.setColor(getForeground());
+            List<TextLayout> linhas = new ArrayList<>();
+            float alturaTotal = 0;
+            
+            while (lineMeasurer.getPosition() < paragraph.getEndIndex()) {
+                TextLayout layout = lineMeasurer.nextLayout(larguraMaximaTexto);
+                linhas.add(layout);
+                alturaTotal += layout.getAscent() + layout.getDescent() + layout.getLeading();
+            }
 
-        int xCardAnswerTxt;
+            // Centraliza o bloco de texto verticalmente no espaço do botão
+            float yConstrucao = (h - alturaTotal) / 2f + linhas.get(0).getAscent();
 
-        // Remove espaços em branco nas pontas por segurança
-        String textoTratado = cardAnswerTxt.trim();
-
-        // Verifica se o texto é exatamente "SIM" ou "NÃO" (ignorando maiúsculas e minúsculas)
-        if (textoTratado.equalsIgnoreCase("SIM") || textoTratado.equalsIgnoreCase("NÃO")) {
-            // Mede a largura exata que o texto ocupa em pixels na tela
-            int larguraTexto = g2.getFontMetrics().stringWidth(cardAnswerTxt);
-            // Centraliza horizontalmente: (Largura do botão - Largura do texto) / 2
-            xCardAnswerTxt = (getWidth() - larguraTexto) / 2;
-        } else {
-            // Se for uma frase ou alternativa longa, mantém alinhado mais próximo da borda esquerda
-            xCardAnswerTxt = xBox + letterBoxSize + 10;
+            for (TextLayout layout : linhas) {
+                layout.draw(g2, xCardAnswerTxt, yConstrucao);
+                yConstrucao += layout.getDescent() + layout.getLeading() + layout.getAscent();
+            }
         }
 
-        int yCardAnswerTxt = (getHeight() + g2.getFontMetrics().getAscent() - g2.getFontMetrics().getDescent()) / 2;
-
-        g2.drawString(cardAnswerTxt, xCardAnswerTxt, yCardAnswerTxt);
-
-        // Libera os recursos do contexto gráfico 2D para evitar vazamentos de memória
         g2.dispose();
-        
+    }
+
+    // Método auxiliar para mesclar a cor da carta com o fundo escuro do botão
+    private Color mesclarCores(Color corCarta, Color corFundo, float proporcaoCarta) {
+        float r = (corCarta.getRed() * proporcaoCarta) + (corFundo.getRed() * (1 - proporcaoCarta));
+        float g = (corCarta.getGreen() * proporcaoCarta) + (corFundo.getGreen() * (1 - proporcaoCarta));
+        float b = (corCarta.getBlue() * proporcaoCarta) + (corFundo.getBlue() * (1 - proporcaoCarta));
+        return new Color((int) r, (int) g, (int) b, 235); // 235 de opacidade para um leve efeito acrílico
     }
 
     public String getCardAnswerCompleteTxt() {
         return cardAnswerLetter + ") " + cardAnswerTxt;
     }
-    
     
     public String getCardAnswerTxt() {
         return cardAnswerTxt;

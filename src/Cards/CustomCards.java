@@ -19,6 +19,10 @@ import javax.swing.JPanel;
 import gui.components.buttons.cardsButton.CardOptionButton;
 import actions.CardAnswerValidation;
 import gui.windows.CardsContainer;
+import java.awt.image.BufferedImage;
+import java.awt.LinearGradientPaint;
+import java.awt.geom.Point2D;
+
 
 
 public class CustomCards extends JPanel {
@@ -34,7 +38,7 @@ public class CustomCards extends JPanel {
     private String tipoPergunta;   
     private String[] alternativas; 
     private String cardAnswer;     
-    
+    private boolean isHovered = false; // Controla se o mouse está sobre a carta
    
     private Color corFundo;
     private Image imgPeao;
@@ -50,7 +54,7 @@ public class CustomCards extends JPanel {
 
     private static final String backImgCardURL = "/assets/backImgCard_220x340.png"; // Caminho da imagem de fundo da carta (verso)
     
-    
+    private static Font fontAwesomeSolid = null;
     
        
 
@@ -164,6 +168,29 @@ public class CustomCards extends JPanel {
         setBounds(0, 0, 200, 340);
         setOpaque(false);
         setLayout(null); // Ativa o posicionamento absoluto para podermos alinhar os botões via código
+
+        // Adiciona o efeito visual de "descolar da mesa" sem usar CPU
+        this.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent e) {
+                if (!isHovered) {
+                    isHovered = true;
+                    // Move a carta suavemente 8 pixels para cima e redesenha a sombra
+                    setLocation(getX(), getY() - 8);
+                    repaint();
+                }
+            }
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent e) {
+                if (isHovered) {
+                    isHovered = false;
+                    // Retorna a carta para a posição original no tabuleiro
+                    setLocation(getX(), getY() + 8);
+                    repaint();
+                }
+            }
+        });
     }
 
    
@@ -178,7 +205,7 @@ public class CustomCards extends JPanel {
             this.botoesOpcao = new CardOptionButton[alternativas.length];
 
             int larguraBotao = (int) (215 * SCALE); 
-            int alturaBotao = (int) (32 * SCALE);
+            int alturaBotao = (int) (30 * SCALE);
             int espacamento = (int) (6 * SCALE);
             int yInicial = (int) (195 * SCALE); 
             int xCentralizado = 29; 
@@ -242,38 +269,33 @@ public class CustomCards extends JPanel {
     }
 
     // Método para inserir o texto principal do card (conteúdo vem de um arquivo JSON)
+    // Método para inserir o texto principal do card alinhado à esquerda com margens seguras
     private void cardMainTxt(Graphics2D g2) {
-        // Se não houver texto, não faz nada
-        if (mainTxt == null || mainTxt.trim().isEmpty()) return;
-
-        // Configuração da Fonte (Ajuste o tamanho e estilo como preferir)
+        g2.setColor(new Color(245, 245, 245)); // Branco fosco elegante
         Font mainTxtFont = new Font("Arial", Font.BOLD, (int) (14 * SCALE));
         g2.setFont(mainTxtFont);
-        g2.setColor(Color.WHITE); // Cor do texto
 
-        // Configuração da área onde o texto pode ser escrito
-        float marginX = 25; // Distância da borda esquerda
-        float maxWidth = this.getWidth() - (marginX * 2); // Largura total menos as margens
-        float posY = 70; // Posição Y inicial (ajuste para descer ou subir o texto na sua arte)
+        // Define a margem esquerda e direita (isso centraliza o "bloco" de texto na carta)
+        float marginX = (int) (20 * SCALE);
+        float maxWidth = this.getWidth() - (marginX * 2);
+        float posY = (int) (60 * SCALE); // Altura onde o texto começa
 
-        // Prepara o texto para a quebra de linha automática
         AttributedString attributedString = new AttributedString(mainTxt);
         attributedString.addAttribute(TextAttribute.FONT, mainTxtFont);
         AttributedCharacterIterator paragraph = attributedString.getIterator();
-        int paragraphStart = paragraph.getBeginIndex();
-        int paragraphEnd = paragraph.getEndIndex();
-
-        FontRenderContext frc = new FontRenderContext(null, true, true);
+        
+        FontRenderContext frc = g2.getFontRenderContext();
         LineBreakMeasurer lineMeasurer = new LineBreakMeasurer(paragraph, frc);
-        lineMeasurer.setPosition(paragraphStart);
+        lineMeasurer.setPosition(paragraph.getBeginIndex());
            
-       // Loop que escreve linha por linha até o texto acabar
-        while (lineMeasurer.getPosition() < paragraphEnd) {
+        while (lineMeasurer.getPosition() < paragraph.getEndIndex()) {
+            // Divide o texto em linhas respeitando a largura máxima (maxWidth)
             TextLayout layout = lineMeasurer.nextLayout(maxWidth);
+            posY += layout.getAscent();
             
-            posY += layout.getAscent(); // Desce a altura da letra
-            layout.draw(g2, marginX, posY); // Desenha a linha atual
-            posY += layout.getDescent() + layout.getLeading(); // Prepara o Y para a próxima linha
+            // Desenha cada linha encostada na margem esquerda de forma natural
+            layout.draw(g2, marginX, posY);
+            posY += layout.getDescent() + layout.getLeading();
         }
     }
 
@@ -284,64 +306,114 @@ public class CustomCards extends JPanel {
             return;
         }
 
-        // Configuração estética do texto do efeito
-        Font cardEffectValueFont = new Font("Arial", Font.BOLD, (int) (14 * SCALE));
-        g2.setFont(cardEffectValueFont);
-        g2.setColor(Color.WHITE);
+        // Posição Y mantida exatamente como você já definiu
+        float posY = (int) (355 * SCALE); // Ajuste para 355 * SCALE ou o valor que preferir
 
-        // Altere os valores abaixo de acordo com a posição real do seu ícone de casa
-        float cardEffectValueSymbolX = 75;       // Posição X horizontal onde o seu símbolo começa
-        float cardEffectValueSymbolWidth = 22; // Largura aproximada do seu desenho/ícone de casa
-        float margin = (int) (65 * SCALE);     // Distância em pixels entre o símbolo e o início do texto
-        
-        // O texto começará exatamente onde o símbolo termina + o espaçamento definido
-        float cardEffectValueTxtX = cardEffectValueSymbolX + cardEffectValueSymbolWidth + margin;
-        
-        // Alinhamento vertical (Y). Mude para subir ou descer a linha do texto
-        float cardEffectValueTxtY = (int) (372.5f * SCALE); 
+        // 1. Prepara as fontes para medição
+        Font iconeFont = getFontAwesome();
+        Font textoFont = new Font("Arial", Font.BOLD, (int) (14 * SCALE));
 
-        // Desenha o valor extraído do JSON (ex: +3) na posição horizontal calculada
-        g2.drawString(this.cardValue, cardEffectValueTxtX, cardEffectValueTxtY);
+        // Símbolo do FontAwesome e formatação do texto
+        String iconeCasa = "\uf015"; 
+        String textoExibicao = this.cardValue;
+        if (!textoExibicao.contains("-") && !textoExibicao.contains("+")) {
+            textoExibicao = "+" + textoExibicao;
+        }
+
+        // 2. Mede a largura exata de cada componente individualmente
+        g2.setFont(iconeFont);
+        int larguraIcone = g2.getFontMetrics().stringWidth(iconeCasa);
+
+        g2.setFont(textoFont);
+        int larguraTexto = g2.getFontMetrics().stringWidth(textoExibicao);
+
+        // Espaçamento entre o ícone e o número
+        int espacamento = (int) (8 * SCALE);
+
+        // Largura total combinada do conjunto (Ícone + Espaço + Texto)
+        int larguraTotalConjunto = larguraIcone + espacamento + larguraTexto;
+
+        // 3. Calcula o X inicial para centralizar perfeitamente no painel da carta
+        float posX = (this.getWidth() - larguraTotalConjunto) / 2f;
+
+        g2.setColor(new Color(245, 245, 245)); // Define a cor branca fosca
+
+        // =========================================================================
+        // 4. DESENHA O ÍCONE DA CASA
+        // =========================================================================
+        g2.setFont(iconeFont);
+        g2.drawString(iconeCasa, posX, posY);
+
+        // =========================================================================
+        // 5. DESENHA A QUANTIDADE (Alinhado dinamicamente ao lado)
+        // =========================================================================
+        g2.setFont(textoFont);
+        float textoX = posX + larguraIcone + espacamento; 
+        float textoY = posY - (int) (2 * SCALE); // Sobe levemente para alinhar visualmente ao centro do ícone
+
+        g2.drawString(textoExibicao, textoX, textoY);
     }
+
+    // Método que carrega a fonte customizada na memória
+    private Font getFontAwesome() {
+        if (fontAwesomeSolid == null) {
+            try {
+                // OLHA O NOME DO ARQUIVO AQUI ABAIXO:
+                java.io.InputStream is = getClass().getResourceAsStream("/assets/fonts/Font Awesome 7 Free-Solid-900.otf");
+                if (is != null) {
+                    Font fontBase = Font.createFont(Font.TRUETYPE_FONT, is);
+                    fontAwesomeSolid = fontBase.deriveFont(Font.PLAIN, (int) (18 * SCALE));
+                } else {
+                    fontAwesomeSolid = new Font("SansSerif", Font.PLAIN, (int) (18 * SCALE));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                fontAwesomeSolid = new Font("SansSerif", Font.PLAIN, (int) (18 * SCALE));
+            }
+        }
+        return fontAwesomeSolid;
+    }
+
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Graphics2D g2 = (Graphics2D) g.create();
         
+        Graphics2D g2 = (Graphics2D) g.create();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        int w = getWidth(); 
-        int h = getHeight();
-        
+        int width = getWidth();
+        int height = getHeight();
 
-        //*perguntar o pq desse displayBackImgCard sem condição dentro do if */
-        if (displayBackImgCard) {
-            if (backImgCard != null) {
-                g2.drawImage(backImgCard, 0, 0, getWidth(), getHeight(), this);
-            } else {
-                // Caso a imagem falte, pinta um fundo cinza de segurança
-                g2.setColor(Color.RED);
-                g2.setStroke(new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, new float[]{5.0f}, 0.0f));
-                g2.drawRoundRect(0, 0, w - 1, h - 1, 18, 18);
+        // =========================================================================
+        // INSERÇÃO: SOMBRA PROJETADA 3D (Efeito realista com custo zero de lag)
+        // =========================================================================
+        if (isHovered && !displayBackImgCard) {
+            // Desenha uma silhueta escura deslocada para baixo simulando a sombra da carta no ar
+            g2.setColor(new Color(0, 0, 0, 70)); // Preto translúcido bem suave
+            int arcSize = (int) (20 * SCALE);
+            // Desenha a sombra levemente deslocada (X+2, Y+6) e um pouco menor para dar profundidade
+            g2.fillRoundRect(2, 6, width - 4, height - 4, arcSize, arcSize);
+        }
+        // =========================================================================
 
-                // Escreve um aviso discreto na tela
-                g2.setFont(new Font("Arial", Font.BOLD, 12));
-                g2.drawString("Verso não encontrado", 40, h / 2);
-                
-            }
-            return; // INTERROMPE O DESENHO AQUI (Não desenha os textos por cima do verso!)
+        // 1. Desenha o fundo estático (Sua lógica original intocada)
+        if (displayBackImgCard && backImgCard != null) {
+            g2.drawImage(backImgCard, 0, 0, width, height, this);
+        } else if (frontImgCard != null) {
+            g2.drawImage(frontImgCard, 0, 0, width, height, this);
         }
 
-        if (frontImgCard != null) {
-            g2.drawImage(frontImgCard, 0, 0, w, h, this);
+        // 2. Desenha o texto principal por cima de tudo (Sua lógica original intocada)
+        if (!displayBackImgCard && mainTxt != null) {
             cardMainTxt(g2);
-            cardEffectValue(g2);
-        } else {
-            // Fundo roxo clássico de segurança caso a imagem do molde falte
-            g2.setColor(corFundo);
-            g2.fillRoundRect(0, 0, w, h, 18, 18);   
         }
+
+        if (!displayBackImgCard) {
+            cardEffectValue(g2);
+        }
+
+        g2.dispose();
     }
 
     // --- GETTERS ---
@@ -370,45 +442,115 @@ public class CustomCards extends JPanel {
     }
 
     // Método para selecionar a frente da carta de acordo com o tipo (pergunta/efeito)
-    private void selectFrontCardImage() {
-        String imgReference = ""; // Variável para armazenar o caminho da imagem
+    // Import complementar necessário no topo da classe (caso não tenha):
 
-        // Lógica para escolher a imagem da frente com base no tipo e dificuldade
-        // Se a carta for do tipo "PERGUNTA", escolhe a imagem de acordo com a dificuldade
-        if ("PERGUNTA".equalsIgnoreCase(this.cardType)) {
-            // Se a dificuldade for "FÁCIL", usa a imagem fácil
-            if ("FÁCIL".equalsIgnoreCase(this.dificuldade)) {
-                imgReference = "easyCardFrontImg_220x340.png";
-                // Se a dificuldade for "MÉDIO", usa a imagem média
-            } else if ("MÉDIO".equalsIgnoreCase(this.dificuldade)) {
-                imgReference = "mediumCardFrontImg_220x340.png";
-                // Se a dificuldade for "DIFÍCIL", usa a imagem difícil
-            } else if ("DIFÍCIL".equalsIgnoreCase(this.dificuldade)) {
-                imgReference = "hardCardFrontImg_220x340.png";
-            }
-        } else {
-            // Se a carta for do tipo "SORTE", "AZAR" ou "SACANEAR", escolhe a imagem correspondente
-            if ("SORTE".equalsIgnoreCase(this.cardType)) {
-            imgReference = "goodLuckCardFrontImg_220x340.png";
-            } else if ("AZAR".equalsIgnoreCase(this.cardType)) {
-                imgReference = "badLuckCardFrontImg_220x340.png";
-            } else if ("SACANEAR".equalsIgnoreCase(this.cardType)) {
-                imgReference = "trickCardFrontImg_220x340.png";
-            }
+
+/**
+ * Método adaptado para construir dinamicamente o molde gráfico da frente da carta
+ * com bordas metálicas (Ouro, Prata e Bronze) para as cartas especiais.
+ */
+private void selectFrontCardImage() {
+    // Define as dimensões reais baseadas na escala matemática (250x375 conforme constante da classe)
+    int width = (int) (250 * SCALE);
+    int height = (int) (375 * SCALE);
+
+    // Cria uma imagem vazia em memória com suporte a transparência (Alpha)
+    BufferedImage moldImg = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+    Graphics2D g2 = moldImg.createGraphics();
+
+    // Ativa suavização de serrilhado (Anti-aliasing) para bordas perfeitas
+    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+    // Definição dos pontos do gradiente para cruzar a carta diagonalmente (Efeito de reflexo de luz)
+    Point2D start = new Point2D.Float(0, 0);
+    Point2D end = new Point2D.Float(width, height);
+    float[] dist = {0.0f, 0.5f, 1.0f}; // Posições das cores no gradiente (início, meio, fim)
+
+    // 1. Aplica as cores padrão ou os gradientes metálicos nas especiais
+    if ("PERGUNTA".equalsIgnoreCase(this.cardType)) {
+        Color corFundoCarta = new Color(140, 82, 255); // Roxo de segurança
+        if ("FÁCIL".equalsIgnoreCase(this.dificuldade)) {
+            corFundoCarta = Color.decode("#99AD7A"); // Verde suave
+        } else if ("MÉDIO".equalsIgnoreCase(this.dificuldade)) {
+            corFundoCarta = Color.decode("#E8A857"); // Laranja/Amarelo médio
+        } else if ("DIFÍCIL".equalsIgnoreCase(this.dificuldade)) {
+            corFundoCarta = Color.decode("#C75B5B"); // Vermelho escuro
         }
-
-        // Se o caminho da imagem foi definido (diferente de vazio), tenta carregar a imagem da frente
-        if (!imgReference.isEmpty()) {
-            final java.net.URL frontImgURL = getClass().getResource("/assets/" + imgReference);
-            // Se a imagem for encontrada, insere a imagem
-            if (frontImgURL != null) {
-                this.frontImgCard = new ImageIcon(frontImgURL).getImage();
-            } else {
-                // Se a imagem não for encontrada, exibe um erro no console e mantém a frente da carta como null (fundo roxo de segurança)
-                System.err.println("[CustomCards] Erro: Moldura '/assets/" + imgReference + "' não encontrada.");
-                this.frontImgCard = null;
-            }
+        g2.setColor(corFundoCarta);
+    } else {
+        // Lógica das Cartas Especiais com Efeito Metálico
+        if ("SORTE".equalsIgnoreCase(this.cardType)) {
+            // OURO PREMIUM
+            Color[] colorsOuro = {
+                Color.decode("#AA771C"), // Ouro Escuro / Sombra
+                Color.decode("#FFDF00"), // Dourado Brilhante / Luz
+                Color.decode("#D4AF37")  // Dourado Clássico
+            };
+            LinearGradientPaint gradientOuro = new LinearGradientPaint(start, end, dist, colorsOuro);
+            g2.setPaint(gradientOuro);
+            
+        } else if ("AZAR".equalsIgnoreCase(this.cardType)) {
+            // PRATA POLIDA
+            Color[] colorsPrata = {
+                Color.decode("#707070"), // Cinza Metálico / Sombra
+                Color.decode("#F0F0F0"), // Prata Claro / Luz
+                Color.decode("#B0B0B0")  // Cinza Prateado
+            };
+            LinearGradientPaint gradientPrata = new LinearGradientPaint(start, end, dist, colorsPrata);
+            g2.setPaint(gradientPrata);
+            
+        } else if ("SACANEAR".equalsIgnoreCase(this.cardType)) {
+            // BRONZE ACOBREADO
+            Color[] colorsBronze = {
+                Color.decode("#593114"), // Bronze Escuro / Sombra
+                Color.decode("#DDA066"), // Bronze Claro / Luz
+                Color.decode("#8C5026")  // Bronze Clássico
+            };
+            LinearGradientPaint gradientBronze = new LinearGradientPaint(start, end, dist, colorsBronze);
+            g2.setPaint(gradientBronze);
         }
     }
+
+    // 2. Desenha o preenchimento da base externa (Será a borda colorida ou metálica brilhante)
+    int arcSize = (int) (20 * SCALE); // Curvatura dos cantos
+    g2.fillRoundRect(0, 0, width, height, arcSize, arcSize);
+
+    // =========================================================================
+    // MOLDE INTERNO PRETO FOSCO (DESIGN MODERNO)
+    // =========================================================================
+    // Uma margem para afastar a caixa preta, revelando o metal brilhante nas bordas
+    int margem = (int) (12 * SCALE); 
+    int internoWidth = width - (margem * 2);
+    int internoHeight = height - (margem * 2);
+    int arcSizeInterno = (int) (12 * SCALE);
+
+    // Preto fosco elegante e semitransparente (Glassmorphism)
+    g2.setColor(new Color(20, 20, 20, 150)); 
+    g2.fillRoundRect(margem, margem, internoWidth, internoHeight, arcSizeInterno, arcSizeInterno);
+
+    // Linha fina interna sutil para dar acabamento premium no contêiner preto
+    g2.setColor(new Color(255, 255, 255, 25)); 
+    g2.setStroke(new BasicStroke((float) (1.0 * SCALE)));
+    g2.drawRoundRect(margem, margem, internoWidth, internoHeight, arcSizeInterno, arcSizeInterno);
+    // =========================================================================
+
+    // 3. Desenha o contorno escuro final da carta inteira para dar profundidade
+    g2.setColor(new Color(30, 30, 30, 120)); 
+    g2.setStroke(new BasicStroke((float) (2.5 * SCALE)));
+    g2.drawRoundRect(
+        (int) (1.2 * SCALE), 
+        (int) (1.2 * SCALE), 
+        width - (int) (2.4 * SCALE), 
+        height - (int) (2.4 * SCALE), 
+        arcSize, 
+        arcSize
+    );
+
+    // Libera os recursos gráficos da imagem em memória
+    g2.dispose();
+
+    // Aplica o molde gerado na variável da classe
+    this.frontImgCard = moldImg;
+}
 }
 
