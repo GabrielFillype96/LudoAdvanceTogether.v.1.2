@@ -4,7 +4,7 @@
     "tipoGeral": "PERGUNTA",
     "dificuldade": "FÁCIL",
     "tipoPergunta": "SIM_NAO",
-    "enunciado": "Sim ou Não: 'Em briga de marido e mulher, não se mete a colher'.",
+    "enunciado": "'Em briga de marido e mulher, não se mete a colher'. Isso é correto?",
     "alternativas": [],
     "respostaCorreta": "Não",
     "efeito": "AVANÇAR",
@@ -15,7 +15,7 @@
     "id": 2,
     "tipoGeral": "PERGUNTA",
     "dificuldade": "FÁCIL",
-    "tipoPergunta": "MULTIPLA_ESCHLE",
+    "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual o número da Central de atendimento à mulher no Brasil?",
     "alternativas": [
       "180",
@@ -82,11 +82,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das opções abaixo melhor descreve a violência patrimonial contra a mulher?",
     "alternativas": [
-      "Retenção, subtração ou destruição de documentos, bens e recursos financeiros da mulher",
-      "Agressão física que deixa marcas no corpo da mulher",
-      "Ameaças verbais e isolamento social imposto pelo agressor"
+      "Retenção ou destruição de documentos, bens e dinheiro.",
+      "Agressão física que deixa marcas corporais.",
+      "Ameaças verbais e isolamento social."
     ],
-    "respostaCorreta": "Retenção, subtração ou destruição de documentos, bens e recursos financeiros da mulher",
+    "respostaCorreta": "Retenção ou destruição de documentos, bens e dinheiro.",
     "efeito": "AVANÇAR",
     "valorEfeito": "2/6",
     "iconePeao": "peao_vermelho.png"
@@ -143,11 +143,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das opções abaixo melhor descreve a violência patrimonial contra a mulher?",
     "alternativas": [
-      "Retenção, subtração ou destruição de documentos, bens e recursos financeiros da mulher",
-      "Agressão física que deixa marcas no corpo da mulher",
-      "Ameaças verbais e isolamento social imposto pelo agressor"
+      "Retenção ou destruição de documentos, bens e dinheiro.",
+      "Agressão física que deixa marcas corporais.",
+      "Ameaças verbais e isolamento social."
     ],
-    "respostaCorreta": "Retenção, subtração ou destruição de documentos, bens e recursos financeiros da mulher",
+    "respostaCorreta": "Retenção ou destruição de documentos, bens e dinheiro.",
     "efeito": "AVANÇAR",
     "valorEfeito": "2/6",
     "iconePeao": ""
@@ -159,11 +159,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo melhor descreve o ciclo da violência doméstica?",
     "alternativas": [
-      "Um padrão que inclui fases de tensão, agressão, arrependimento e lua de mel que se repetem",
-      "Um ciclo de denúncias e arquivamento de processos judiciais",
-      "Um processo de separação gradual mediado pelo Estado"
+      "Fases repetitivas de tensão, agressão e lua de mel.",
+      "Ciclo de denúncias e arquivamento de processos.",
+      "Processo de separação mediado pelo Estado."
     ],
-    "respostaCorreta": "Um padrão que inclui fases de tensão, agressão, arrependimento e lua de mel que se repetem",
+    "respostaCorreta": "Fases repetitivas de tensão, agressão e lua de mel.",
     "efeito": "AVANÇAR",
     "valorEfeito": "2/6",
     "iconePeao": ""
@@ -175,11 +175,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo é um recurso correto para mulheres em situação de violência buscarem ajuda no Brasil?",
     "alternativas": [
-      "Ligar para o 180, que oferece orientação e encaminhamento para serviços de proteção",
-      "Ligar para o 190 exclusivamente, que é o único canal habilitado para esses casos",
-      "Procurar apenas hospitais, pois são os únicos autorizados a registrar violência"
+      "Ligar 180 para orientação e serviços de proteção.",
+      "Ligar exclusivamente para o 190.",
+      "Procurar apenas hospitais."
     ],
-    "respostaCorreta": "Ligar para o 180, que oferece orientação e encaminhamento para serviços de proteção",
+    "respostaCorreta": "Ligar 180 para orientação e serviços de proteção.",
     "efeito": "AVANÇAR",
     "valorEfeito": "2/6",
     "iconePeao": ""
@@ -236,11 +236,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo melhor descreve o papel da Defensoria Pública no atendimento a mulheres vítimas de violência?",
     "alternativas": [
-      "Presta assistência jurídica gratuita a mulheres sem condições de pagar advogado, ajudando na obtenção de medidas protetivas",
-      "Atua apenas como mediadora entre vítima e agressor para promover reconciliação",
-      "Representa exclusivamente o Estado em ações penais, sem contato direto com a vítima"
+      "Presta assistência jurídica gratuita à vítima.",
+      "Atua apenas como mediadora para reconciliação.",
+      "Representa o Estado, sem contato com a vítima."
     ],
-    "respostaCorreta": "Presta assistência jurídica gratuita a mulheres sem condições de pagar advogado, ajudando na obtenção de medidas protetivas",
+    "respostaCorreta": "Presta assistência jurídica gratuita à vítima.",
     "efeito": "AVANÇAR",
     "valorEfeito": "4/6",
     "iconePeao": ""
@@ -252,11 +252,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente o que é a Rede de Enfrentamento à Violência contra a Mulher?",
     "alternativas": [
-      "Conjunto articulado de serviços públicos e privados que atendem mulheres em situação de violência, incluindo saúde, assistência social, segurança e justiça",
-      "Organização não governamental criada exclusivamente para arrecadação de fundos para casas-abrigo",
-      "Programa de treinamento de policiais militares para atendimento de ocorrências domésticas"
+      "Serviços articulados (saúde, justiça, etc.) para as vítimas.",
+      "ONG exclusiva para financiar casas-abrigo.",
+      "Programa de treinamento policial."
     ],
-    "respostaCorreta": "Conjunto articulado de serviços públicos e privados que atendem mulheres em situação de violência, incluindo saúde, assistência social, segurança e justiça",
+    "respostaCorreta": "Serviços articulados (saúde, justiça, etc.) para as vítimas.",
     "efeito": "AVANÇAR",
     "valorEfeito": "4/6",
     "iconePeao": ""
@@ -268,11 +268,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo NÃO é uma atribuição das Delegacias Especializadas de Atendimento à Mulher (DEAMs)?",
     "alternativas": [
-      "Realizar julgamentos e condenar agressores diretamente sem intervenção do Poder Judiciário",
-      "Receber denúncias e registrar boletins de ocorrência de violência doméstica",
-      "Investigar crimes e encaminhar inquéritos ao Ministério Público"
+      "Julgar e condenar agressores diretamente.",
+      "Receber denúncias e registrar BOs.",
+      "Investigar crimes e inquéritos."
     ],
-    "respostaCorreta": "Realizar julgamentos e condenar agressores diretamente sem intervenção do Poder Judiciário",
+    "respostaCorreta": "Julgar e condenar agressores diretamente.",
     "efeito": "AVANÇAR",
     "valorEfeito": "3/6",
     "iconePeao": ""
@@ -329,11 +329,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente o que o caso Maria da Penha Maia Fernandes na Comissão Interamericana de Direitos Humanos resultou para o Brasil?",
     "alternativas": [
-      "Recomendação de reformas legislativas e reparação à vítima, o que impulsionou a criação da Lei 11.340/2006",
-      "Aplicação de sanções econômicas ao Brasil por descumprimento de tratados internacionais",
-      "Transferência do julgamento do agressor para o Tribunal Penal Internacional"
+      "Recomendou reformas, impulsionando a Lei 11.340/2006.",
+      "Aplicou sanções econômicas ao Brasil.",
+      "Transferiu o agressor ao Tribunal Penal Internacional."
     ],
-    "respostaCorreta": "Recomendação de reformas legislativas e reparação à vítima, o que impulsionou a criação da Lei 11.340/2006",
+    "respostaCorreta": "Recomendou reformas, impulsionando a Lei 11.340/2006.",
     "efeito": "AVANÇAR",
     "valorEfeito": "6/6",
     "iconePeao": ""
@@ -345,11 +345,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente o conceito de coercive control (controle coercitivo) no contexto da violência doméstica?",
     "alternativas": [
-      "Padrão de comportamento que busca dominar e isolar a vítima por meio de intimidação e restrição de autonomia, muitas vezes sem agressão física aparente",
-      "Técnica policial de negociação usada em situações de crise em ocorrências domésticas",
-      "Mecanismo judicial que limita o contato do agressor com a vítima durante processos criminais"
+      "Dominação e isolamento da vítima por intimidação.",
+      "Técnica de negociação policial em crises.",
+      "Mecanismo judicial que limita contato do agressor."
     ],
-    "respostaCorreta": "Padrão de comportamento que busca dominar e isolar a vítima por meio de intimidação e restrição de autonomia, muitas vezes sem agressão física aparente",
+    "respostaCorreta": "Dominação e isolamento da vítima por intimidação.",
     "efeito": "AVANÇAR",
     "valorEfeito": "6/6",
     "iconePeao": ""
@@ -361,11 +361,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente a diferença entre violência de gênero e violência doméstica?",
     "alternativas": [
-      "Violência de gênero é mais ampla e abarca qualquer violência motivada por gênero; violência doméstica é a que ocorre no ambiente familiar ou de convivência íntima",
-      "Violência de gênero e violência doméstica são sinônimos perfeitos e intercambiáveis em qualquer contexto jurídico",
-      "Violência doméstica é mais ampla por incluir homens e crianças sem distinção de motivação"
+      "Gênero engloba motivação; doméstica ocorre no convívio.",
+      "São termos perfeitamente sinônimos no meio jurídico.",
+      "Doméstica é mais ampla por incluir agressão a homens."
     ],
-    "respostaCorreta": "Violência de gênero é mais ampla e abarca qualquer violência motivada por gênero; violência doméstica é a que ocorre no ambiente familiar ou de convivência íntima",
+    "respostaCorreta": "Gênero engloba motivação; doméstica ocorre no convívio.",
     "efeito": "AVANÇAR",
     "valorEfeito": "5/6",
     "iconePeao": ""
@@ -727,11 +727,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente o objetivo das Casas-Abrigo para mulheres em situação de violência?",
     "alternativas": [
-      "Oferecer acolhimento temporário e seguro para mulheres e seus filhos que estejam em risco de vida",
-      "Servir como presídio feminino para mulheres que cometem crimes",
-      "Oferecer apenas serviços jurídicos, sem acolhimento residencial"
+      "Acolhimento temporário e seguro para mulheres em risco.",
+      "Presídio feminino para mulheres infratoras.",
+      "Serviços jurídicos, sem acolhimento residencial."
     ],
-    "respostaCorreta": "Oferecer acolhimento temporário e seguro para mulheres e seus filhos que estejam em risco de vida",
+    "respostaCorreta": "Acolhimento temporário e seguro para mulheres em risco.",
     "efeito": "AVANÇAR",
     "valorEfeito": "2/6",
     "iconePeao": ""
@@ -743,11 +743,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente uma medida protetiva de urgência prevista na Lei Maria da Penha?",
     "alternativas": [
-      "Proibição do agressor de se aproximar da vítima, de seus familiares e de testemunhas",
-      "Prisão automática do agressor por 30 dias sem necessidade de investigação",
-      "Transferência compulsória da vítima para outro estado do país"
+      "Proibição do agressor se aproximar da vítima.",
+      "Prisão automática sem necessidade de investigação.",
+      "Transferência compulsória da vítima de estado."
     ],
-    "respostaCorreta": "Proibição do agressor de se aproximar da vítima, de seus familiares e de testemunhas",
+    "respostaCorreta": "Proibição do agressor se aproximar da vítima.",
     "efeito": "AVANÇAR",
     "valorEfeito": "2/6",
     "iconePeao": ""
@@ -759,11 +759,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo melhor define o conceito de feminicídio?",
     "alternativas": [
-      "Homicídio de mulher motivado por razões da condição do sexo feminino, envolvendo violência de gênero",
-      "Qualquer morte de mulher ocorrida no ambiente doméstico",
-      "Homicídio de mulher praticado exclusivamente por parceiro íntimo com uso de arma branca"
+      "Homicídio motivado pela condição do sexo feminino/gênero.",
+      "Qualquer morte de mulher ocorrida no ambiente doméstico.",
+      "Homicídio com arma branca praticado por parceiro íntimo."
     ],
-    "respostaCorreta": "Homicídio de mulher motivado por razões da condição do sexo feminino, envolvendo violência de gênero",
+    "respostaCorreta": "Homicídio motivado pela condição do sexo feminino/gênero.",
     "efeito": "AVANÇAR",
     "valorEfeito": "2/6",
     "iconePeao": ""
@@ -791,11 +791,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente o papel da Delegacia Especializada de Atendimento à Mulher (DEAM)?",
     "alternativas": [
-      "Receber denúncias, registrar boletins de ocorrência e investigar crimes de violência doméstica contra mulheres",
-      "Realizar julgamentos e condenar agressores sem envolvimento do Poder Judiciário",
-      "Oferecer exclusivamente atendimento psicológico e assistência social às vítimas"
+      "Registrar denúncias e investigar crimes contra mulheres.",
+      "Julgar e condenar agressores sem o Judiciário.",
+      "Oferecer exclusivamente atendimento psicológico."
     ],
-    "respostaCorreta": "Receber denúncias, registrar boletins de ocorrência e investigar crimes de violência doméstica contra mulheres",
+    "respostaCorreta": "Registrar denúncias e investigar crimes contra mulheres.",
     "efeito": "AVANÇAR",
     "valorEfeito": "2/6",
     "iconePeao": ""
@@ -807,11 +807,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo melhor descreve um sinal de alerta precoce de relacionamento abusivo?",
     "alternativas": [
-      "O parceiro isola a mulher de amigos e familiares, monitora suas redes sociais e critica constantemente suas decisões",
-      "O casal discute eventualmente e depois resolve os conflitos com diálogo",
-      "A mulher opta voluntariamente por passar mais tempo em casa"
+      "O parceiro isola, monitora e critica a mulher.",
+      "O casal discute, mas resolve os conflitos com diálogo.",
+      "A mulher opta voluntariamente por ficar em casa."
     ],
-    "respostaCorreta": "O parceiro isola a mulher de amigos e familiares, monitora suas redes sociais e critica constantemente suas decisões",
+    "respostaCorreta": "O parceiro isola, monitora e critica a mulher.",
     "efeito": "AVANÇAR",
     "valorEfeito": "2/6",
     "iconePeao": ""
@@ -1033,11 +1033,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente o que é stalking no contexto da violência contra a mulher?",
     "alternativas": [
-      "Perseguição obsessiva e repetida que causa medo e constrangimento à vítima, podendo ser física, digital ou por terceiros",
-      "Tipo de violência exclusivamente física com agressões recorrentes",
-      "Prática de espionagem industrial que ocorre apenas no ambiente de trabalho"
+      "Perseguição obsessiva que causa medo na vítima.",
+      "Agressões físicas recorrentes.",
+      "Espionagem industrial no ambiente de trabalho."
     ],
-    "respostaCorreta": "Perseguição obsessiva e repetida que causa medo e constrangimento à vítima, podendo ser física, digital ou por terceiros",
+    "respostaCorreta": "Perseguição obsessiva que causa medo na vítima.",
     "efeito": "AVANÇAR",
     "valorEfeito": "3/6",
     "iconePeao": ""
@@ -1049,11 +1049,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente o que é violência obstétrica?",
     "alternativas": [
-      "Qualquer ato ou omissão de profissional de saúde que afete negativamente o processo de parturição, causando dano ou constrangimento à mulher",
-      "Violência praticada exclusivamente por parteiras não habilitadas em regiões rurais",
-      "Dificuldades naturais e inevitáveis que ocorrem durante o parto sem responsabilidade do profissional"
+      "Ato médico que causa dano ou constrangimento no parto.",
+      "Violência de parteiras não habilitadas em áreas rurais.",
+      "Dificuldades naturais inevitáveis durante o parto."
     ],
-    "respostaCorreta": "Qualquer ato ou omissão de profissional de saúde que afete negativamente o processo de parturição, causando dano ou constrangimento à mulher",
+    "respostaCorreta": "Ato médico que causa dano ou constrangimento no parto.",
     "efeito": "AVANÇAR",
     "valorEfeito": "3/6",
     "iconePeao": ""
@@ -1065,11 +1065,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente o papel do CRAS no enfrentamento à violência contra a mulher?",
     "alternativas": [
-      "Oferece orientação, acompanhamento psicossocial e encaminhamento para a rede de proteção a mulheres em vulnerabilidade",
-      "Realiza prisão preventiva de agressores e aplica medidas protetivas de urgência",
-      "Atua exclusivamente como delegacia especializada no registro de boletins de ocorrência"
+      "Acompanhamento psicossocial e encaminhamento à rede.",
+      "Realiza prisões e aplica medidas protetivas.",
+      "Atua exclusivamente como delegacia especializada."
     ],
-    "respostaCorreta": "Oferece orientação, acompanhamento psicossocial e encaminhamento para a rede de proteção a mulheres em vulnerabilidade",
+    "respostaCorreta": "Acompanhamento psicossocial e encaminhamento à rede.",
     "efeito": "AVANÇAR",
     "valorEfeito": "3/6",
     "iconePeao": ""
@@ -1081,11 +1081,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente o papel do Ministério Público no contexto da Lei Maria da Penha?",
     "alternativas": [
-      "Pode dar prosseguimento à ação penal mesmo que a vítima decida não representar contra o agressor em casos de lesão corporal dolosa",
-      "Só pode agir quando expressamente autorizado pela vítima em qualquer tipo de crime doméstico",
-      "Tem atuação limitada à fase de execução da pena, sem participar da investigação"
+      "Pode prosseguir a ação penal sem representação da vítima.",
+      "Age apenas quando autorizado pela vítima.",
+      "Atua limitadamente na fase de execução da pena."
     ],
-    "respostaCorreta": "Pode dar prosseguimento à ação penal mesmo que a vítima decida não representar contra o agressor em casos de lesão corporal dolosa",
+    "respostaCorreta": "Pode prosseguir a ação penal sem representação da vítima.",
     "efeito": "AVANÇAR",
     "valorEfeito": "4/6",
     "iconePeao": ""
@@ -1097,11 +1097,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente a importância do Boletim de Ocorrência (BO) para mulheres vítimas de violência?",
     "alternativas": [
-      "Documento oficial que registra formalmente o crime, sendo fundamental para iniciar investigações e solicitar medidas protetivas",
-      "Documento elaborado exclusivamente por médicos que atestam lesões físicas",
-      "Relatório social emitido pelo CRAS que autoriza acesso a casas-abrigo"
+      "Registro formal essencial para investigações e medidas.",
+      "Documento médico que atesta lesões físicas.",
+      "Relatório do CRAS para acesso a casas-abrigo."
     ],
-    "respostaCorreta": "Documento oficial que registra formalmente o crime, sendo fundamental para iniciar investigações e solicitar medidas protetivas",
+    "respostaCorreta": "Registro formal essencial para investigações e medidas.",
     "efeito": "AVANÇAR",
     "valorEfeito": "3/6",
     "iconePeao": ""
@@ -1113,11 +1113,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo melhor descreve o fenômeno da violência simbólica no contexto das relações de gênero?",
     "alternativas": [
-      "Forma de dominação exercida por representações culturais e práticas sociais que naturalizam a submissão feminina",
-      "Violência praticada por meio de símbolos religiosos e rituais místicos",
-      "Agressão física que deixa marcas simbólicas mas sem lesões visíveis"
+      "Práticas culturais que naturalizam a submissão feminina.",
+      "Violência por meio de símbolos religiosos.",
+      "Agressão física sem marcas visíveis."
     ],
-    "respostaCorreta": "Forma de dominação exercida por representações culturais e práticas sociais que naturalizam a submissão feminina",
+    "respostaCorreta": "Práticas culturais que naturalizam a submissão feminina.",
     "efeito": "AVANÇAR",
     "valorEfeito": "4/6",
     "iconePeao": ""
@@ -1129,11 +1129,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente o canal de atendimento do Ligue 180?",
     "alternativas": [
-      "Central de Atendimento à Mulher vinculada ao Ministério das Mulheres, disponível 24h para orientação e denúncias",
-      "Serviço exclusivo para registro de boletim de ocorrência online",
-      "Canal de atendimento do INSS para mulheres em situação de vulnerabilidade"
+      "Central 24h para orientação e denúncias.",
+      "Serviço exclusivo para BOs online.",
+      "Canal de atendimento do INSS para mulheres."
     ],
-    "respostaCorreta": "Central de Atendimento à Mulher vinculada ao Ministério das Mulheres, disponível 24h para orientação e denúncias",
+    "respostaCorreta": "Central 24h para orientação e denúncias.",
     "efeito": "AVANÇAR",
     "valorEfeito": "3/6",
     "iconePeao": ""
@@ -1145,11 +1145,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo melhor descreve o conceito de violência simbólica para Pierre Bourdieu aplicado ao contexto de gênero?",
     "alternativas": [
-      "Dominação suave exercida pelo consentimento dos dominados, que internalizam a lógica de sua própria subordinação tornando a violência invisível",
-      "Forma explícita de agressão verbal que usa símbolos e metáforas para humilhar a mulher",
-      "Violência praticada em rituais públicos e cerimônias culturais tradicionais"
+      "Dominação sutil onde a vítima aceita a subordinação.",
+      "Agressão verbal explícita usando metáforas.",
+      "Violência praticada em rituais públicos."
     ],
-    "respostaCorreta": "Dominação suave exercida pelo consentimento dos dominados, que internalizam a lógica de sua própria subordinação tornando a violência invisível",
+    "respostaCorreta": "Dominação sutil onde a vítima aceita a subordinação.",
     "efeito": "AVANÇAR",
     "valorEfeito": "5/6",
     "iconePeao": ""
@@ -1356,11 +1356,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente o conceito de feminicídio íntimo conforme a literatura jurídica e criminológica?",
     "alternativas": [
-      "Homicídio de mulher praticado por parceiro ou ex-parceiro íntimo, motivado por relações desiguais de poder de gênero",
-      "Morte de mulher provocada exclusivamente por desconhecidos em espaços públicos",
-      "Qualquer morte de mulher ocorrida no ambiente doméstico, independentemente da motivação"
+      "Homicídio por parceiro motivado por desigualdade de gênero.",
+      "Morte de mulher por desconhecidos na rua.",
+      "Qualquer morte de mulher ocorrida no ambiente doméstico."
     ],
-    "respostaCorreta": "Homicídio de mulher praticado por parceiro ou ex-parceiro íntimo, motivado por relações desiguais de poder de gênero",
+    "respostaCorreta": "Homicídio por parceiro motivado por desigualdade de gênero.",
     "efeito": "AVANÇAR",
     "valorEfeito": "5/6",
     "iconePeao": ""
@@ -1372,11 +1372,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo melhor descreve o fenômeno da subnotificação da violência contra a mulher no Brasil?",
     "alternativas": [
-      "Grande parte das ocorrências nunca é denunciada às autoridades por medo, dependência financeira, vergonha ou desconfiança nas instituições",
-      "Prática de registrar boletins de ocorrência com informações incompletas por parte das delegacias",
-      "Ausência de estatísticas nacionais sobre violência doméstica por falta de sistema de coleta de dados"
+      "Muitos casos não são denunciados por medo ou vergonha.",
+      "Delegacias registram BOs com falhas e incompletos.",
+      "Ausência total de sistema de dados no Brasil."
     ],
-    "respostaCorreta": "Grande parte das ocorrências nunca é denunciada às autoridades por medo, dependência financeira, vergonha ou desconfiança nas instituições",
+    "respostaCorreta": "Muitos casos não são denunciados por medo ou vergonha.",
     "efeito": "AVANÇAR",
     "valorEfeito": "5/6",
     "iconePeao": ""
@@ -1388,11 +1388,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente o conceito de revitimização no atendimento a mulheres vítimas de violência?",
     "alternativas": [
-      "Processo em que a vítima sofre novo sofrimento por atitudes inadequadas de profissionais ou familiares que questionam sua credibilidade ou culpabilizam sua conduta",
-      "Retorno da vítima ao relacionamento abusivo após período de separação",
-      "Prática de registrar múltiplos boletins de ocorrência para o mesmo caso de violência"
+      "Novo sofrimento causado por quem duvida ou culpa a vítima.",
+      "Retorno da vítima ao relacionamento abusivo.",
+      "Prática de registrar múltiplos BOs para o mesmo caso."
     ],
-    "respostaCorreta": "Processo em que a vítima sofre novo sofrimento por atitudes inadequadas de profissionais ou familiares que questionam sua credibilidade ou culpabilizam sua conduta",
+    "respostaCorreta": "Novo sofrimento causado por quem duvida ou culpa a vítima.",
     "efeito": "AVANÇAR",
     "valorEfeito": "6/6",
     "iconePeao": ""
@@ -1404,11 +1404,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente a função do Juizado de Violência Doméstica e Familiar contra a Mulher criado pela Lei Maria da Penha?",
     "alternativas": [
-      "Juízo especializado com competência civil e criminal para processar e julgar causas decorrentes de violência doméstica contra a mulher",
-      "Órgão administrativo vinculado à Secretaria de Segurança Pública para monitoramento de medidas protetivas",
-      "Tribunal de arbitragem para resolução extrajudicial de conflitos domésticos entre casais"
+      "Juízo especializado em causas de violência doméstica.",
+      "Órgão de monitoramento de medidas protetivas.",
+      "Tribunal extrajudicial para mediação de casais."
     ],
-    "respostaCorreta": "Juízo especializado com competência civil e criminal para processar e julgar causas decorrentes de violência doméstica contra a mulher",
+    "respostaCorreta": "Juízo especializado em causas de violência doméstica.",
     "efeito": "AVANÇAR",
     "valorEfeito": "6/6",
     "iconePeao": ""
@@ -1420,11 +1420,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente o conceito de violência institucional contra a mulher?",
     "alternativas": [
-      "Violência praticada por agentes do Estado ou instituições por meio de ações ou omissões que perpetuam discriminação, negligência ou maus-tratos a mulheres",
-      "Violência ocorrida exclusivamente dentro de hospitais e maternidades",
-      "Atos de violência praticados por grupos organizados contra mulheres em cargos públicos"
+      "Violência ou negligência praticada por agentes do Estado.",
+      "Violência ocorrida exclusivamente em hospitais.",
+      "Violência praticada contra mulheres em cargos públicos."
     ],
-    "respostaCorreta": "Violência praticada por agentes do Estado ou instituições por meio de ações ou omissões que perpetuam discriminação, negligência ou maus-tratos a mulheres",
+    "respostaCorreta": "Violência ou negligência praticada por agentes do Estado.",
     "efeito": "AVANÇAR",
     "valorEfeito": "6/6",
     "iconePeao": ""
@@ -1436,11 +1436,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo melhor descreve o conceito de empoderamento feminino no contexto do enfrentamento à violência?",
     "alternativas": [
-      "Processo pelo qual mulheres desenvolvem autonomia, autoestima e capacidade de tomar decisões sobre suas próprias vidas, reduzindo vulnerabilidade à violência",
-      "Programa governamental de concessão de benefícios financeiros exclusivamente para vítimas de violência",
-      "Movimento que defende a superioridade feminina como compensação histórica à opressão patriarcal"
+      "Processo de autonomia e decisão sobre a própria vida.",
+      "Benefício financeiro exclusivo para vítimas.",
+      "Movimento que defende a superioridade feminina."
     ],
-    "respostaCorreta": "Processo pelo qual mulheres desenvolvem autonomia, autoestima e capacidade de tomar decisões sobre suas próprias vidas, reduzindo vulnerabilidade à violência",
+    "respostaCorreta": "Processo de autonomia e decisão sobre a própria vida.",
     "efeito": "AVANÇAR",
     "valorEfeito": "5/6",
     "iconePeao": ""
@@ -1452,11 +1452,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente o protocolo de atendimento humanizado a vítimas de violência sexual nos serviços de saúde?",
     "alternativas": [
-      "Diretrizes que orientam atenção integral à vítima, incluindo anticoncepção de emergência, profilaxia para ISTs/HIV e suporte psicológico",
-      "Protocolo restrito a hospitais universitários que exige notificação policial antes do atendimento médico",
-      "Manual que exige autorização judicial prévia para qualquer procedimento em vítimas de violência sexual"
+      "Atenção integral (anticoncepção, profilaxia e apoio).",
+      "Exige notificação policial antes do atendimento.",
+      "Exige autorização judicial para procedimentos médicos."
     ],
-    "respostaCorreta": "Diretrizes que orientam atenção integral à vítima, incluindo anticoncepção de emergência, profilaxia para ISTs/HIV e suporte psicológico",
+    "respostaCorreta": "Atenção integral (anticoncepção, profilaxia e apoio).",
     "efeito": "AVANÇAR",
     "valorEfeito": "6/6",
     "iconePeao": ""
@@ -1468,11 +1468,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo melhor descreve o impacto do isolamento social imposto pelo agressor sobre a vítima de violência doméstica?",
     "alternativas": [
-      "Reduz a rede de apoio, aumenta dependência emocional e financeira do agressor e dificulta a percepção do abuso e o pedido de ajuda",
-      "Gera na vítima maior autonomia e capacidade de reflexão sobre o relacionamento",
-      "É uma medida de proteção da privacidade do casal que não configura violência"
+      "Reduz apoio, aumenta dependência e dificulta pedido de ajuda.",
+      "Gera maior autonomia na vítima sobre o relacionamento.",
+      "Medida de proteção de privacidade que não é violência."
     ],
-    "respostaCorreta": "Reduz a rede de apoio, aumenta dependência emocional e financeira do agressor e dificulta a percepção do abuso e o pedido de ajuda",
+    "respostaCorreta": "Reduz apoio, aumenta dependência e dificulta pedido de ajuda.",
     "efeito": "AVANÇAR",
     "valorEfeito": "5/6",
     "iconePeao": ""
@@ -1484,11 +1484,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo melhor descreve a perspectiva interseccional no desenvolvimento de políticas públicas de combate à violência contra a mulher?",
     "alternativas": [
-      "Permite criar políticas mais eficazes ao reconhecer que raça, classe, orientação sexual e outros marcadores se combinam e geram diferentes vulnerabilidades à violência",
-      "Restringe políticas a grupos específicos, deixando de atender mulheres fora das categorias reconhecidas",
-      "É uma abordagem teórica sem aplicação prática nas políticas de segurança pública e assistência social"
+      "Reconhece que raça e classe geram diferentes vulnerabilidades.",
+      "Restringe políticas públicas a grupos demográficos específicos.",
+      "Abordagem teórica sem aplicação em políticas de segurança."
     ],
-    "respostaCorreta": "Permite criar políticas mais eficazes ao reconhecer que raça, classe, orientação sexual e outros marcadores se combinam e geram diferentes vulnerabilidades à violência",
+    "respostaCorreta": "Reconhece que raça e classe geram diferentes vulnerabilidades.",
     "efeito": "AVANÇAR",
     "valorEfeito": "6/6",
     "iconePeao": ""
@@ -1500,11 +1500,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente os critérios que configuram o feminicídio como qualificadora do homicídio no Código Penal?",
     "alternativas": [
-      "Homicídio praticado contra mulher por razões da condição do sexo feminino, envolvendo violência doméstica ou menosprezo à condição de mulher",
-      "Todo homicídio de mulher praticado por homem, independentemente de motivação",
-      "Homicídio de mulher praticado com arma de fogo em ambiente público"
+      "Homicídio por condição feminina, menosprezo ou violência doméstica.",
+      "Qualquer homicídio de mulher praticado por um homem.",
+      "Homicídio de mulher praticado com arma de fogo em público."
     ],
-    "respostaCorreta": "Homicídio praticado contra mulher por razões da condição do sexo feminino, envolvendo violência doméstica ou menosprezo à condição de mulher",
+    "respostaCorreta": "Homicídio por condição feminina, menosprezo ou violência doméstica.",
     "efeito": "AVANÇAR",
     "valorEfeito": "6/6",
     "iconePeao": ""
@@ -1516,11 +1516,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente o papel dos Centros de Referência de Atendimento à Mulher em Situação de Violência (CRAMs)?",
     "alternativas": [
-      "Serviços especializados que oferecem atendimento psicológico, social e jurídico a mulheres em situação de violência, articulando o acesso à rede de proteção",
-      "Órgãos policiais especializados no atendimento de ocorrências de violência doméstica em flagrante",
-      "Espaços residenciais de longa permanência para reintegração de mulheres egressas do sistema prisional"
+      "Serviços de atendimento psicológico, social e jurídico.",
+      "Órgãos policiais para atendimento de flagrantes.",
+      "Abrigos residenciais para mulheres egressas da prisão."
     ],
-    "respostaCorreta": "Serviços especializados que oferecem atendimento psicológico, social e jurídico a mulheres em situação de violência, articulando o acesso à rede de proteção",
+    "respostaCorreta": "Serviços de atendimento psicológico, social e jurídico.",
     "efeito": "AVANÇAR",
     "valorEfeito": "5/6",
     "iconePeao": ""
@@ -1532,11 +1532,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente o que estabelece a Convenção de Istambul (Conselho da Europa, 2011) sobre violência contra mulheres?",
     "alternativas": [
-      "Tratado europeu abrangente sobre prevenção e combate à violência contra mulheres e violência doméstica, com obrigações legais para os Estados signatários",
-      "Tratado que regulamenta exclusivamente o tráfico internacional de mulheres para exploração sexual",
-      "Acordo bilateral para extradição de agressores que cruzam fronteiras internacionais"
+      "Tratado europeu sobre prevenção à violência contra mulheres.",
+      "Regulamenta apenas o tráfico internacional de mulheres.",
+      "Acordo bilateral de extradição de agressores foragidos."
     ],
-    "respostaCorreta": "Tratado europeu abrangente sobre prevenção e combate à violência contra mulheres e violência doméstica, com obrigações legais para os Estados signatários",
+    "respostaCorreta": "Tratado europeu sobre prevenção à violência contra mulheres.",
     "efeito": "AVANÇAR",
     "valorEfeito": "6/6",
     "iconePeao": ""
@@ -1548,11 +1548,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente a função da prisão preventiva no contexto da Lei Maria da Penha?",
     "alternativas": [
-      "Pode ser decretada pelo juiz a qualquer momento para garantir a segurança da vítima, mesmo sem flagrante, quando houver risco de descumprimento de medidas protetivas",
-      "Só pode ser decretada após condenação definitiva do agressor em segunda instância",
-      "É vedada pela Lei Maria da Penha por se tratar de crimes de menor potencial ofensivo"
+      "Pode ser decretada para garantir a segurança da vítima.",
+      "Apenas após condenação definitiva em segunda instância.",
+      "É vedada pela lei em crimes de menor potencial ofensivo."
     ],
-    "respostaCorreta": "Pode ser decretada pelo juiz a qualquer momento para garantir a segurança da vítima, mesmo sem flagrante, quando houver risco de descumprimento de medidas protetivas",
+    "respostaCorreta": "Pode ser decretada para garantir a segurança da vítima.",
     "efeito": "AVANÇAR",
     "valorEfeito": "5/6",
     "iconePeao": ""
@@ -1564,11 +1564,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente o que é o depoimento especial de crianças e adolescentes vítimas de violência previsto na Lei 13.431/2017?",
     "alternativas": [
-      "Técnica de escuta especializada conduzida por profissional capacitado em ambiente adequado, que visa proteger a criança da revitimização ao transmitir o depoimento ao juiz",
-      "Procedimento que permite à criança testemunhar em segredo de justiça sem que seus pais sejam informados",
-      "Método que substitui completamente a investigação policial em casos de violência infantil"
+      "Escuta especializada para proteger a criança da revitimização.",
+      "Procedimento de testemunho em segredo sem os pais.",
+      "Método que substitui completamente a investigação policial."
     ],
-    "respostaCorreta": "Técnica de escuta especializada conduzida por profissional capacitado em ambiente adequado, que visa proteger a criança da revitimização ao transmitir o depoimento ao juiz",
+    "respostaCorreta": "Escuta especializada para proteger a criança da revitimização.",
     "efeito": "AVANÇAR",
     "valorEfeito": "6/6",
     "iconePeao": ""
@@ -1580,11 +1580,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo melhor descreve o conceito de patriarcado e sua relação com a violência contra a mulher?",
     "alternativas": [
-      "Sistema social estrutural baseado na dominação masculina que naturaliza hierarquias de gênero e serve de base ideológica para práticas violentas contra mulheres",
-      "Prática religiosa restrita a certas culturas que legitima o controle do marido sobre a esposa",
-      "Conceito histórico superado nas sociedades modernas ocidentais"
+      "Sistema de dominação masculina que legitima violências.",
+      "Prática religiosa que legitima o controle do marido.",
+      "Conceito histórico superado nas sociedades modernas."
     ],
-    "respostaCorreta": "Sistema social estrutural baseado na dominação masculina que naturaliza hierarquias de gênero e serve de base ideológica para práticas violentas contra mulheres",
+    "respostaCorreta": "Sistema de dominação masculina que legitima violências.",
     "efeito": "AVANÇAR",
     "valorEfeito": "6/6",
     "iconePeao": ""
@@ -1596,11 +1596,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo melhor descreve o conceito de violência econômica contra a mulher?",
     "alternativas": [
-      "Controle dos recursos financeiros da mulher pelo agressor, impedindo seu acesso a dinheiro, emprego ou educação para manter dominação e dificultar a saída do relacionamento",
-      "Crimes financeiros praticados por mulheres contra cônjuges em casos de divórcio litigioso",
-      "Discriminação salarial sofrida por mulheres no mercado de trabalho sem relação com violência doméstica"
+      "Controle de recursos financeiros e impedimento de autonomia.",
+      "Crimes financeiros praticados em divórcios litigiosos.",
+      "Discriminação salarial comum no mercado de trabalho."
     ],
-    "respostaCorreta": "Controle dos recursos financeiros da mulher pelo agressor, impedindo seu acesso a dinheiro, emprego ou educação para manter dominação e dificultar a saída do relacionamento",
+    "respostaCorreta": "Controle de recursos financeiros e impedimento de autonomia.",
     "efeito": "AVANÇAR",
     "valorEfeito": "6/6",
     "iconePeao": ""
@@ -1612,11 +1612,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente a Lei Mariana Ferrer (Lei 14.245/2021) e sua finalidade?",
     "alternativas": [
-      "Criada para coibir a humilhação e revitimização de vítimas de violência sexual durante audiências judiciais",
-      "Criada para proteger agressores com ficha criminal limpa de julgamento precipitado",
-      "Criada para vedar provas digitais em processos de violência doméstica"
+      "Coíbe humilhação de vítimas de violência em audiências.",
+      "Protege agressores primários de julgamentos precipitados.",
+      "Veda completamente provas digitais nos processos."
     ],
-    "respostaCorreta": "Criada para coibir a humilhação e revitimização de vítimas de violência sexual durante audiências judiciais",
+    "respostaCorreta": "Coíbe humilhação de vítimas de violência em audiências.",
     "efeito": "AVANÇAR",
     "valorEfeito": "5/6",
     "iconePeao": ""
@@ -1628,11 +1628,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo melhor descreve a síndrome de Estocolmo no contexto de violência doméstica?",
     "alternativas": [
-      "Processo psicológico em que a vítima desenvolve vínculo emocional com o agressor, podendo defendê-lo como mecanismo de sobrevivência",
-      "Diagnóstico psiquiátrico exclusivo de reféns em sequestros que não se aplica ao contexto doméstico",
-      "Resposta fisiológica de paralisação que impede a vítima de reagir fisicamente às agressões"
+      "Vítima cria vínculo emocional com o agressor para sobreviver.",
+      "Diagnóstico psiquiátrico restrito a reféns de sequestros.",
+      "Resposta física de paralisação que impede reação às agressões."
     ],
-    "respostaCorreta": "Processo psicológico em que a vítima desenvolve vínculo emocional com o agressor, podendo defendê-lo como mecanismo de sobrevivência",
+    "respostaCorreta": "Vítima cria vínculo emocional com o agressor para sobreviver.",
     "efeito": "AVANÇAR",
     "valorEfeito": "6/6",
     "iconePeao": ""
@@ -1644,11 +1644,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo melhor descreve o princípio da não-revitimização obrigatório aos profissionais que atendem mulheres vítimas de violência?",
     "alternativas": [
-      "Obriga profissionais a adotar postura não julgadora, evitando questionar a credibilidade da vítima ou atribuir responsabilidade a ela pelos abusos sofridos",
-      "Proíbe profissionais de registrar detalhes dos relatos das vítimas para proteger sua privacidade",
-      "Determina que apenas profissionais do sexo feminino podem atender mulheres vítimas de violência"
+      "Exige postura não julgadora, sem culpabilizar a vítima.",
+      "Proíbe anotar relatos da vítima para proteger a privacidade.",
+      "Determina atendimento exclusivo por profissionais mulheres."
     ],
-    "respostaCorreta": "Obriga profissionais a adotar postura não julgadora, evitando questionar a credibilidade da vítima ou atribuir responsabilidade a ela pelos abusos sofridos",
+    "respostaCorreta": "Exige postura não julgadora, sem culpabilizar a vítima.",
     "efeito": "AVANÇAR",
     "valorEfeito": "5/6",
     "iconePeao": ""
@@ -1660,11 +1660,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente o impacto da dependência econômica na manutenção de relacionamentos abusivos?",
     "alternativas": [
-      "A dependência financeira é um dos principais fatores que dificultam a saída da vítima, pois ela teme não conseguir sustentar a si mesma e aos filhos",
-      "A dependência econômica é irrelevante para a permanência no relacionamento, sendo o medo físico o único fator determinante",
-      "Mulheres economicamente independentes nunca permanecem em relacionamentos abusivos"
+      "Dificulta a saída pelo medo de não conseguir se sustentar.",
+      "É irrelevante, o medo físico é o único fator limitante.",
+      "Mulheres independentes nunca permanecem em relacionamentos abusivos."
     ],
-    "respostaCorreta": "A dependência financeira é um dos principais fatores que dificultam a saída da vítima, pois ela teme não conseguir sustentar a si mesma e aos filhos",
+    "respostaCorreta": "Dificulta a saída pelo medo de não conseguir se sustentar.",
     "efeito": "AVANÇAR",
     "valorEfeito": "5/6",
     "iconePeao": ""
@@ -1676,11 +1676,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente a perspectiva de gênero no atendimento a mulheres vítimas de violência?",
     "alternativas": [
-      "Abordagem que reconhece desigualdades estruturais entre homens e mulheres, orientando o atendimento para evitar julgamentos e revitimização",
-      "Tratamento que oferece mais benefícios judiciais às mulheres em relação a homens em qualquer situação",
-      "Método terapêutico baseado exclusivamente em psicologia comportamental para tratar traumas de violência"
+      "Reconhece desigualdades estruturais para evitar julgamentos.",
+      "Concede maiores benefícios judiciais às mulheres em relação aos homens.",
+      "Terapia comportamental exclusiva para tratar traumas."
     ],
-    "respostaCorreta": "Abordagem que reconhece desigualdades estruturais entre homens e mulheres, orientando o atendimento para evitar julgamentos e revitimização",
+    "respostaCorreta": "Reconhece desigualdades estruturais para evitar julgamentos.",
     "efeito": "AVANÇAR",
     "valorEfeito": "6/6",
     "iconePeao": ""
@@ -1692,11 +1692,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente o gaslighting como forma de violência psicológica?",
     "alternativas": [
-      "Manipulação sistemática em que o agressor faz a vítima questionar sua própria percepção da realidade, memória e sanidade mental para mantê-la sob controle",
-      "Prática de gravar secretamente conversas da vítima para usar como ameaça em disputas judiciais",
-      "Forma de violência física que não deixa marcas visíveis mas provoca dor psicossomática"
+      "Manipulação que faz a vítima questionar sua própria sanidade.",
+      "Prática de gravar secretamente a vítima para chantagem.",
+      "Violência física sem marcas, mas com dor psicossomática."
     ],
-    "respostaCorreta": "Manipulação sistemática em que o agressor faz a vítima questionar sua própria percepção da realidade, memória e sanidade mental para mantê-la sob controle",
+    "respostaCorreta": "Manipulação que faz a vítima questionar sua própria sanidade.",
     "efeito": "AVANÇAR",
     "valorEfeito": "5/6",
     "iconePeao": ""
@@ -1708,11 +1708,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo melhor descreve o papel da teoria feminista do direito no contexto da violência contra a mulher?",
     "alternativas": [
-      "Questiona a pretensa neutralidade das normas jurídicas, argumentando que o direito pode reproduzir e legitimar desigualdades e violências de gênero",
-      "Defende que o sistema jurídico já é plenamente igualitário e que leis específicas para mulheres são desnecessárias",
-      "Propõe substituir o direito penal por mecanismos de mediação familiar em todos os casos de violência doméstica"
+      "Questiona a neutralidade das leis que reproduzem desigualdades.",
+      "Defende que o sistema jurídico já é plenamente igualitário.",
+      "Propõe substituir o direito penal por mediação familiar."
     ],
-    "respostaCorreta": "Questiona a pretensa neutralidade das normas jurídicas, argumentando que o direito pode reproduzir e legitimar desigualdades e violências de gênero",
+    "respostaCorreta": "Questiona a neutralidade das leis que reproduzem desigualdades.",
     "efeito": "AVANÇAR",
     "valorEfeito": "6/6",
     "iconePeao": ""
@@ -1724,11 +1724,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente a violência contra a mulher com deficiência como vulnerabilidade interseccional?",
     "alternativas": [
-      "Mulheres com deficiência enfrentam dupla vulnerabilidade, pois a deficiência pode ser usada pelo agressor para aumentar o controle, o isolamento e a dependência da vítima",
-      "Mulheres com deficiência têm maior proteção legal e são raramente alvo de violência doméstica",
-      "A deficiência é fator neutro que não influencia a dinâmica ou a intensidade da violência doméstica sofrida"
+      "Dupla vulnerabilidade usada pelo agressor para maior controle.",
+      "Mulheres com deficiência têm maior proteção e raramente sofrem abuso.",
+      "A deficiência não influencia na intensidade da violência sofrida."
     ],
-    "respostaCorreta": "Mulheres com deficiência enfrentam dupla vulnerabilidade, pois a deficiência pode ser usada pelo agressor para aumentar o controle, o isolamento e a dependência da vítima",
+    "respostaCorreta": "Dupla vulnerabilidade usada pelo agressor para maior controle.",
     "efeito": "AVANÇAR",
     "valorEfeito": "6/6",
     "iconePeao": ""
@@ -1740,11 +1740,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente o conceito de violência de gênero segundo a Convenção de Belém do Pará?",
     "alternativas": [
-      "Qualquer ação ou conduta baseada no gênero que cause morte, dano ou sofrimento físico, sexual ou psicológico à mulher, tanto no âmbito público como no privado",
-      "Apenas agressões físicas documentadas e registradas em delegacia no âmbito doméstico",
-      "Violência praticada exclusivamente por homens adultos contra mulheres em relacionamentos conjugais formalizados"
+      "Conduta baseada no gênero que cause dano no meio público ou privado.",
+      "Apenas agressões físicas documentadas no âmbito doméstico.",
+      "Violência praticada exclusivamente em casamentos formalizados."
     ],
-    "respostaCorreta": "Qualquer ação ou conduta baseada no gênero que cause morte, dano ou sofrimento físico, sexual ou psicológico à mulher, tanto no âmbito público como no privado",
+    "respostaCorreta": "Conduta baseada no gênero que cause dano no meio público ou privado.",
     "efeito": "AVANÇAR",
     "valorEfeito": "6/6",
     "iconePeao": ""
@@ -2041,11 +2041,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "O que é o Ligue 180?",
     "alternativas": [
-      "Central de Atendimento à Mulher que funciona 24h para orientação, denúncia e encaminhamento de casos de violência contra a mulher",
-      "Serviço de emergência da Polícia Militar para atendimento de ocorrências de violência doméstica",
-      "Canal exclusivo para advogados registrarem queixas em nome de mulheres vítimas de violência"
+      "Central 24h para orientação e denúncias sobre violência.",
+      "Serviço de emergência presencial da Polícia Militar.",
+      "Canal exclusivo para advogados registrarem queixas."
     ],
-    "respostaCorreta": "Central de Atendimento à Mulher que funciona 24h para orientação, denúncia e encaminhamento de casos de violência contra a mulher",
+    "respostaCorreta": "Central 24h para orientação e denúncias sobre violência.",
     "efeito": "AVANÇAR",
     "valorEfeito": "2/6",
     "iconePeao": ""
@@ -2057,11 +2057,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo representa corretamente um tipo de violência doméstica prevista pela Lei Maria da Penha?",
     "alternativas": [
-      "Violência psicológica, caracterizada por condutas que causam dano emocional, diminuição da autoestima ou prejudicam o desenvolvimento da mulher",
-      "Violência econômica nacional, que se refere à discriminação salarial no mercado formal de trabalho",
-      "Violência urbanística, praticada pelo Estado ao negar acesso a serviços públicos básicos"
+      "Violência psicológica (dano emocional e queda na autoestima).",
+      "Violência econômica no mercado de trabalho.",
+      "Violência urbanística (negação de serviços públicos básicos)."
     ],
-    "respostaCorreta": "Violência psicológica, caracterizada por condutas que causam dano emocional, diminuição da autoestima ou prejudicam o desenvolvimento da mulher",
+    "respostaCorreta": "Violência psicológica (dano emocional e queda na autoestima).",
     "efeito": "AVANÇAR",
     "valorEfeito": "2/6",
     "iconePeao": ""
@@ -2073,11 +2073,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente o que um vizinho deve fazer ao testemunhar situação de violência doméstica?",
     "alternativas": [
-      "Ligar para o 190 (Polícia Militar) ou para o 180 para acionar as autoridades e ajudar a vítima",
-      "Não interferir, pois violência doméstica é assunto privado do casal",
-      "Esperar a vítima tomar a iniciativa de pedir ajuda para não se meter em conflito alheio"
+      "Ligar para o 190 ou 180 para acionar as autoridades.",
+      "Não interferir, pois trata-se de um assunto privado.",
+      "Esperar a vítima pedir ajuda voluntariamente."
     ],
-    "respostaCorreta": "Ligar para o 190 (Polícia Militar) ou para o 180 para acionar as autoridades e ajudar a vítima",
+    "respostaCorreta": "Ligar para o 190 ou 180 para acionar as autoridades.",
     "efeito": "AVANÇAR",
     "valorEfeito": "2/6",
     "iconePeao": ""
@@ -2089,11 +2089,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "O que caracteriza a violência sexual segundo a Lei Maria da Penha?",
     "alternativas": [
-      "Qualquer conduta que constranja a mulher a presenciar, manter ou participar de relação sexual não desejada, mediante intimidação, ameaça ou uso de força",
-      "Apenas estupro com penetração praticado por desconhecido em via pública",
-      "Somente relações sexuais forçadas que resultam em lesões físicas documentadas por laudo médico"
+      "Forçar a mulher a manter relação indesejada por intimidação.",
+      "Apenas o estupro com penetração praticado por desconhecido.",
+      "Somente relações forçadas que resultem em lesões físicas."
     ],
-    "respostaCorreta": "Qualquer conduta que constranja a mulher a presenciar, manter ou participar de relação sexual não desejada, mediante intimidação, ameaça ou uso de força",
+    "respostaCorreta": "Forçar a mulher a manter relação indesejada por intimidação.",
     "efeito": "AVANÇAR",
     "valorEfeito": "2/6",
     "iconePeao": ""
@@ -2105,11 +2105,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "O que são medidas protetivas de urgência no contexto da Lei Maria da Penha?",
     "alternativas": [
-      "Providências judiciais imediatas que visam proteger a integridade física e psicológica da vítima, como afastamento do agressor e proibição de contato",
-      "Punições definitivas aplicadas ao agressor logo após a denúncia, sem necessidade de processo judicial",
-      "Acordos firmados entre vítima e agressor para encerramento do conflito sem envolvimento do Judiciário"
+      "Providências judiciais imediatas para proteger a vítima.",
+      "Punições definitivas aplicadas logo após a denúncia.",
+      "Acordos informais entre a vítima e o agressor."
     ],
-    "respostaCorreta": "Providências judiciais imediatas que visam proteger a integridade física e psicológica da vítima, como afastamento do agressor e proibição de contato",
+    "respostaCorreta": "Providências judiciais imediatas para proteger a vítima.",
     "efeito": "AVANÇAR",
     "valorEfeito": "2/6",
     "iconePeao": ""
@@ -2121,11 +2121,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo é um exemplo de violência patrimonial contra a mulher?",
     "alternativas": [
-      "O parceiro rasga os documentos pessoais da mulher e toma conta do dinheiro do salário dela sem autorização",
-      "O casal decide em conjunto abrir uma conta bancária compartilhada",
-      "A mulher transfere voluntariamente a gestão das finanças para o marido por preferência própria"
+      "Rasgar documentos pessoais e tomar o salário da mulher.",
+      "O casal decide abrir uma conta bancária conjunta.",
+      "A mulher transfere finanças ao marido voluntariamente."
     ],
-    "respostaCorreta": "O parceiro rasga os documentos pessoais da mulher e toma conta do dinheiro do salário dela sem autorização",
+    "respostaCorreta": "Rasgar documentos pessoais e tomar o salário da mulher.",
     "efeito": "AVANÇAR",
     "valorEfeito": "2/6",
     "iconePeao": ""
@@ -2137,11 +2137,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "O que significa dizer que o feminicídio é um crime de gênero?",
     "alternativas": [
-      "Significa que a motivação do crime está relacionada à condição de ser mulher, a relações de poder desiguais e à discriminação de gênero",
-      "Significa que apenas homens podem ser autores desse tipo de crime",
-      "Significa que o crime ocorre exclusivamente dentro de residências e somente entre cônjuges"
+      "Motivado pela condição de mulher e discriminação de gênero.",
+      "Significa que apenas homens podem ser autores do crime.",
+      "Ocorre exclusivamente dentro de residências entre cônjuges."
     ],
-    "respostaCorreta": "Significa que a motivação do crime está relacionada à condição de ser mulher, a relações de poder desiguais e à discriminação de gênero",
+    "respostaCorreta": "Motivado pela condição de mulher e discriminação de gênero.",
     "efeito": "AVANÇAR",
     "valorEfeito": "2/6",
     "iconePeao": ""
@@ -2153,11 +2153,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Para que serve a Casa-Abrigo para mulheres em situação de violência?",
     "alternativas": [
-      "Para oferecer moradia temporária e sigilosa a mulheres e filhos em risco de vida, garantindo proteção enquanto se reorganizam",
-      "Para punir mulheres que cometem crimes domésticos, funcionando como alternativa ao sistema prisional",
-      "Para reeducar casais em conflito por meio de convivência supervisionada com mediadores sociais"
+      "Moradia temporária e sigilosa para proteção de mulheres e filhos.",
+      "Presídio para mulheres que cometem crimes domésticos.",
+      "Centro de reeducação de casais com mediação social."
     ],
-    "respostaCorreta": "Para oferecer moradia temporária e sigilosa a mulheres e filhos em risco de vida, garantindo proteção enquanto se reorganizam",
+    "respostaCorreta": "Moradia temporária e sigilosa para proteção de mulheres e filhos.",
     "efeito": "AVANÇAR",
     "valorEfeito": "2/6",
     "iconePeao": ""
@@ -2169,11 +2169,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual dos comportamentos abaixo é um exemplo de violência moral?",
     "alternativas": [
-      "O parceiro espalha rumores falsos sobre a mulher para amigos e colegas de trabalho visando prejudicá-la",
-      "O casal discute em voz alta durante uma discussão acalorada sobre finanças domésticas",
-      "A mulher recebe críticas construtivas do parceiro sobre seu comportamento em público"
+      "Espalhar rumores falsos para prejudicar a mulher.",
+      "Discutir em voz alta durante uma briga financeira.",
+      "A mulher receber críticas construtivas em público."
     ],
-    "respostaCorreta": "O parceiro espalha rumores falsos sobre a mulher para amigos e colegas de trabalho visando prejudicá-la",
+    "respostaCorreta": "Espalhar rumores falsos para prejudicar a mulher.",
     "efeito": "AVANÇAR",
     "valorEfeito": "2/6",
     "iconePeao": ""
@@ -2185,11 +2185,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "O que é o CREAS e qual sua função no atendimento a mulheres vítimas de violência?",
     "alternativas": [
-      "Centro de Referência Especializado de Assistência Social que atende pessoas em situação de violação de direitos, oferecendo acompanhamento psicossocial e jurídico",
-      "Centro Residencial de Emergência para Atendimento Social, que oferece moradia permanente para mulheres em situação de rua",
-      "Centro Regional de Educação e Apoio Social, focado exclusivamente em cursos profissionalizantes para mulheres"
+      "Centro de Referência que oferece acompanhamento psicossocial.",
+      "Centro Residencial de Emergência permanente para sem-teto.",
+      "Centro Regional de Educação com cursos profissionalizantes."
     ],
-    "respostaCorreta": "Centro de Referência Especializado de Assistência Social que atende pessoas em situação de violação de direitos, oferecendo acompanhamento psicossocial e jurídico",
+    "respostaCorreta": "Centro de Referência que oferece acompanhamento psicossocial.",
     "efeito": "AVANÇAR",
     "valorEfeito": "2/6",
     "iconePeao": ""
@@ -2201,11 +2201,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual a importância de a mulher guardar provas (fotos, prints, laudos) de situações de violência?",
     "alternativas": [
-      "As provas são fundamentais para registrar o histórico de violência, dar suporte à investigação policial e fortalecer o pedido de medidas protetivas na Justiça",
-      "As provas só têm validade se forem coletadas exclusivamente pela polícia e não têm utilidade quando reunidas pela própria vítima",
-      "Guardar provas é opcional, pois a palavra da vítima sozinha é suficiente para qualquer processo judicial"
+      "Baseiam a investigação e fortalecem o pedido de medidas protetivas.",
+      "Só têm validade se forem coletadas exclusivamente pela polícia.",
+      "A palavra da mulher basta, dispensando qualquer tipo de prova."
     ],
-    "respostaCorreta": "As provas são fundamentais para registrar o histórico de violência, dar suporte à investigação policial e fortalecer o pedido de medidas protetivas na Justiça",
+    "respostaCorreta": "Baseiam a investigação e fortalecem o pedido de medidas protetivas.",
     "efeito": "AVANÇAR",
     "valorEfeito": "2/6",
     "iconePeao": ""
@@ -2217,11 +2217,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Por que é importante que amigos e familiares acolham sem julgamentos uma mulher que revela estar sofrendo violência doméstica?",
     "alternativas": [
-      "Porque o apoio da rede afetiva fortalece a autoestima da vítima, reduz o isolamento imposto pelo agressor e aumenta as chances de ela buscar ajuda profissional",
-      "Porque somente amigos e família podem registrar denúncias em nome da vítima, substituindo a necessidade de acionamento policial",
-      "Porque o acolhimento informal dispensa a necessidade de atendimento especializado por serviços públicos de proteção"
+      "Fortalece a autoestima e encoraja a busca por ajuda.",
+      "Permite que amigos registrem denúncias no lugar dela.",
+      "O apoio informal substitui os serviços públicos."
     ],
-    "respostaCorreta": "Porque o apoio da rede afetiva fortalece a autoestima da vítima, reduz o isolamento imposto pelo agressor e aumenta as chances de ela buscar ajuda profissional",
+    "respostaCorreta": "Fortalece a autoestima e encoraja a busca por ajuda.",
     "efeito": "AVANÇAR",
     "valorEfeito": "2/6",
     "iconePeao": ""
@@ -2233,11 +2233,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo melhor explica por que muitas mulheres não denunciam imediatamente a violência que sofrem?",
     "alternativas": [
-      "Medo de represálias do agressor, dependência financeira, vergonha, falta de informação sobre seus direitos e temor de não serem acreditadas",
-      "Porque a violência doméstica não é crime no Brasil e, portanto, não há amparo legal para a denúncia",
-      "Porque o sistema de justiça brasileiro exige que a mulher aguarde pelo menos três episódios de agressão antes de registrar queixa"
+      "Medo, dependência financeira, vergonha e desinformação.",
+      "A violência doméstica não tem qualquer amparo legal.",
+      "A lei exige a comprovação de pelo menos três agressões."
     ],
-    "respostaCorreta": "Medo de represálias do agressor, dependência financeira, vergonha, falta de informação sobre seus direitos e temor de não serem acreditadas",
+    "respostaCorreta": "Medo, dependência financeira, vergonha e desinformação.",
     "efeito": "AVANÇAR",
     "valorEfeito": "2/6",
     "iconePeao": ""
@@ -2249,11 +2249,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente o que é violência doméstica segundo a Lei Maria da Penha?",
     "alternativas": [
-      "Ação ou omissão baseada em relação doméstica, familiar ou afetiva que cause morte, lesão, sofrimento físico, sexual, psicológico, dano moral ou patrimonial à mulher",
-      "Apenas agressões físicas cometidas no interior de uma residência entre membros da mesma família",
-      "Conflitos verbais entre parceiros durante discussões conjugais que não resultam em lesões físicas"
+      "Ação familiar/afetiva que cause lesão, sofrimento ou dano à mulher.",
+      "Apenas agressões físicas dentro de casa entre familiares.",
+      "Conflitos verbais de casal sem agressões físicas."
     ],
-    "respostaCorreta": "Ação ou omissão baseada em relação doméstica, familiar ou afetiva que cause morte, lesão, sofrimento físico, sexual, psicológico, dano moral ou patrimonial à mulher",
+    "respostaCorreta": "Ação familiar/afetiva que cause lesão, sofrimento ou dano à mulher.",
     "efeito": "AVANÇAR",
     "valorEfeito": "2/6",
     "iconePeao": ""
@@ -2265,11 +2265,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo é um exemplo claro de violência psicológica?",
     "alternativas": [
-      "O parceiro ameaça constantemente tirar os filhos da mulher caso ela tente se separar, fazendo-a sentir que não tem saída",
-      "O casal decide separar as responsabilidades domésticas por meio de acordo mútuo",
-      "A mulher recebe crítica sobre seu estilo de vida de uma amiga próxima"
+      "Ameaçar tirar os filhos da mulher caso ela se separe.",
+      "O casal separar responsabilidades por meio de acordo.",
+      "A mulher receber crítica construtiva de uma amiga."
     ],
-    "respostaCorreta": "O parceiro ameaça constantemente tirar os filhos da mulher caso ela tente se separar, fazendo-a sentir que não tem saída",
+    "respostaCorreta": "Ameaçar tirar os filhos da mulher caso ela se separe.",
     "efeito": "AVANÇAR",
     "valorEfeito": "2/6",
     "iconePeao": ""
@@ -2281,11 +2281,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "O que significa a expressão 'violência invisível' no contexto do abuso doméstico?",
     "alternativas": [
-      "Violências que não deixam marcas físicas visíveis, como a violência psicológica, patrimonial e moral, frequentemente ignoradas ou minimizadas pela sociedade",
-      "Crimes cometidos à noite ou sem testemunhas, nos quais não há evidências materiais do ocorrido",
-      "Agressões praticadas por pessoas desconhecidas que a vítima não consegue identificar"
+      "Violências sem marcas físicas, como abusos psicológicos e patrimoniais.",
+      "Crimes noturnos onde não há evidências materiais.",
+      "Agressões de desconhecidos não identificados pela vítima."
     ],
-    "respostaCorreta": "Violências que não deixam marcas físicas visíveis, como a violência psicológica, patrimonial e moral, frequentemente ignoradas ou minimizadas pela sociedade",
+    "respostaCorreta": "Violências sem marcas físicas, como abusos psicológicos e patrimoniais.",
     "efeito": "AVANÇAR",
     "valorEfeito": "2/6",
     "iconePeao": ""
@@ -2297,11 +2297,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente o papel do Poder Judiciário no enfrentamento à violência doméstica?",
     "alternativas": [
-      "Analisar pedidos de medidas protetivas, decretar prisões preventivas quando necessário e julgar os crimes de violência doméstica e familiar contra a mulher",
-      "Investigar crimes de violência doméstica diretamente, sem necessidade de delegacia ou Ministério Público",
-      "Realizar mediação entre vítima e agressor visando reconciliação do casal como solução prioritária"
+      "Analisar medidas protetivas, decretar prisões e julgar crimes.",
+      "Investigar crimes diretamente, sem passar por delegacias.",
+      "Realizar mediação para reconciliar o casal como prioridade."
     ],
-    "respostaCorreta": "Analisar pedidos de medidas protetivas, decretar prisões preventivas quando necessário e julgar os crimes de violência doméstica e familiar contra a mulher",
+    "respostaCorreta": "Analisar medidas protetivas, decretar prisões e julgar crimes.",
     "efeito": "AVANÇAR",
     "valorEfeito": "2/6",
     "iconePeao": ""
@@ -2313,11 +2313,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo melhor explica o conceito de rede de proteção à mulher vítima de violência?",
     "alternativas": [
-      "Conjunto de serviços interligados — saúde, assistência social, segurança pública, justiça e organizações da sociedade civil — que atuam de forma articulada para proteger e apoiar a mulher",
-      "Grupo de voluntários sem formação técnica que acompanham pessoalmente mulheres em situação de risco até delegacias",
-      "Sistema exclusivamente policial de monitoramento de agressores com histórico de violência doméstica"
+      "Serviços interligados (saúde, segurança, justiça) para apoio.",
+      "Grupo de voluntários que leva as vítimas até a delegacia.",
+      "Sistema de monitoramento exclusivamente policial."
     ],
-    "respostaCorreta": "Conjunto de serviços interligados — saúde, assistência social, segurança pública, justiça e organizações da sociedade civil — que atuam de forma articulada para proteger e apoiar a mulher",
+    "respostaCorreta": "Serviços interligados (saúde, segurança, justiça) para apoio.",
     "efeito": "AVANÇAR",
     "valorEfeito": "2/6",
     "iconePeao": ""
@@ -2329,11 +2329,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente o que é um relacionamento abusivo?",
     "alternativas": [
-      "Relacionamento marcado por padrões de controle, manipulação, humilhação, isolamento e agressões que visam manter o domínio sobre a parceira",
-      "Relacionamento em que os parceiros discutem frequentemente por incompatibilidade de temperamentos",
-      "Relacionamento com dificuldades de comunicação que podem ser resolvidas com terapia de casal"
+      "Padrão de controle, manipulação, isolamento e agressões.",
+      "Frequentes discussões devido a incompatibilidade.",
+      "Dificuldades de comunicação solúveis com terapia."
     ],
-    "respostaCorreta": "Relacionamento marcado por padrões de controle, manipulação, humilhação, isolamento e agressões que visam manter o domínio sobre a parceira",
+    "respostaCorreta": "Padrão de controle, manipulação, isolamento e agressões.",
     "efeito": "AVANÇAR",
     "valorEfeito": "2/6",
     "iconePeao": ""
@@ -2345,11 +2345,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo explica por que campanhas de conscientização sobre violência contra a mulher são importantes?",
     "alternativas": [
-      "Porque informam a população sobre os tipos de violência, os direitos das vítimas e os canais de denúncia, contribuindo para a prevenção e o combate ao problema",
-      "Porque substituem a necessidade de políticas públicas e serviços especializados de atendimento às vítimas",
-      "Porque servem exclusivamente para divulgar estatísticas criminais sem orientação prática para a população"
+      "Informam sobre tipos de violência e canais de ajuda.",
+      "Substituem os serviços públicos de atendimento e segurança.",
+      "Apenas divulgam números e estatísticas sem orientação."
     ],
-    "respostaCorreta": "Porque informam a população sobre os tipos de violência, os direitos das vítimas e os canais de denúncia, contribuindo para a prevenção e o combate ao problema",
+    "respostaCorreta": "Informam sobre tipos de violência e canais de ajuda.",
     "efeito": "AVANÇAR",
     "valorEfeito": "2/6",
     "iconePeao": ""
@@ -2361,11 +2361,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente a violência obstétrica como uma forma de violência de gênero?",
     "alternativas": [
-      "Trata-se de condutas de profissionais de saúde que desrespeitam a autonomia da mulher durante o parto, como procedimentos sem consentimento, julgamentos morais e negligência",
-      "É exclusivamente a violência física praticada por acompanhantes durante o trabalho de parto",
-      "É um termo técnico restrito a complicações médicas inevitáveis sem responsabilidade dos profissionais de saúde"
+      "Desrespeito à autonomia da mulher e procedimentos sem consentimento no parto.",
+      "Apenas violência física de acompanhantes na hora do parto.",
+      "Termo técnico para complicações médicas sem responsabilidade."
     ],
-    "respostaCorreta": "Trata-se de condutas de profissionais de saúde que desrespeitam a autonomia da mulher durante o parto, como procedimentos sem consentimento, julgamentos morais e negligência",
+    "respostaCorreta": "Desrespeito à autonomia da mulher e procedimentos sem consentimento no parto.",
     "efeito": "AVANÇAR",
     "valorEfeito": "2/6",
     "iconePeao": ""
@@ -2632,11 +2632,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente o que é gaslighting no contexto de relacionamentos abusivos?",
     "alternativas": [
-      "Técnica de manipulação em que o agressor distorce fatos e nega situações vividas pela vítima, fazendo-a duvidar da própria memória, percepção e sanidade",
-      "Prática de gravar conversas da vítima sem consentimento para usar como chantagem",
-      "Tipo de violência física que não deixa marcas externas, mas causa danos internos ao organismo"
+      "O agressor distorce a realidade, fazendo a vítima duvidar de si mesma.",
+      "Gravação de conversas sem consentimento para chantagem.",
+      "Violência física que causa danos apenas internos."
     ],
-    "respostaCorreta": "Técnica de manipulação em que o agressor distorce fatos e nega situações vividas pela vítima, fazendo-a duvidar da própria memória, percepção e sanidade",
+    "respostaCorreta": "O agressor distorce a realidade, fazendo a vítima duvidar de si mesma.",
     "efeito": "AVANÇAR",
     "valorEfeito": "4/6",
     "iconePeao": ""

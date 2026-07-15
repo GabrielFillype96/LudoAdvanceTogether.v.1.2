@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -31,6 +32,7 @@ public class CardOptionButton extends JButton {
     // VARIÁVEIS DE INSTÂNCIA
 
     private static final double SCALE = 1.5;
+    
     
     private final String CARD_QUESTION_TYPE;
     private String cardAnswerLetter = "";  
@@ -99,22 +101,51 @@ public class CardOptionButton extends JButton {
     }
 
     /**
-     * CONSTRUTOR SOBRECARREGADO: 
-     * Usado apenas para botões simples (como o botão "OK" das cartas de Sorte/Azar).
+     * NOVO CONSTRUTOR DE 2 PARÂMETROS:
+     * Recebe o texto ("OK") e o TIPO DA CARTA ("SORTE", "AZAR", "SACANEAR") para definir a cor dinâmica.
      */
-    public CardOptionButton(String text) {
-        // Preenchemos as variáveis obrigatórias com valores neutros/vazios
+    public CardOptionButton(String text, String cardType) {
+        // Mantemos como ESPECIAL para o paintComponent saber que deve ocultar a box e centralizar o texto
         this.CARD_QUESTION_TYPE = "ESPECIAL";
-        this.cardAnswerLetter = ""; // Deixamos vazio pois não tem letra (A, B, C...)
-        this.cardAnswerTxt = text;  // Aqui entra o "OK"
-        this.CARD_COLOR = new Color(200, 200, 200); // Uma cor cinza neutra 
+        this.cardAnswerLetter = ""; 
+        this.cardAnswerTxt = text;  
         
-        // Configurações visuais básicas do Swing (mantenha igual ao seu construtor original)
+        // =========================================================================
+        // SELEÇÃO DINÂMICA DE COR DO HOVER (Baseada no Tipo da Carta)
+        // =========================================================================
+        String tipo = (cardType != null) ? cardType.toUpperCase() : "";
+        
+        if (tipo.contains("SORTE")) {
+            this.CARD_COLOR = new Color(20, 160, 100); // Verde vibrante (ou Dourado: 255, 190, 20 se preferir)
+        } else if (tipo.contains("AZAR")) {
+            this.CARD_COLOR = new Color(190, 45, 45);  // Vermelho perigo
+        } else if (tipo.contains("SACANEAR")) {
+            this.CARD_COLOR = new Color(130, 40, 180); // Roxo ardiloso/neon
+        } else {
+            this.CARD_COLOR = new Color(200, 200, 200); // Cinza Padrão (Fallback)
+        }
+        
+        // Configurações visuais básicas do Swing
         this.setContentAreaFilled(false);
         this.setFocusPainted(false);
         this.setBorderPainted(false);
         this.setCursor(new Cursor(Cursor.HAND_CURSOR));
         this.isHovered = false;
+
+        // Adicionando o evento de Hover
+        this.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                isHovered = true;
+                repaint();
+            }
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                isHovered = false;
+                repaint();
+            }
+        });
     }
 
     // Método para separar a alternativa do texto da carta
@@ -130,120 +161,178 @@ public class CardOptionButton extends JButton {
         }
     }
 
-    @Override
+   @Override
     protected void paintComponent(Graphics g) {
-        // NÃO chamamos o super.paintComponent(g) para evitar o botão padrão
+        // NÃO chamamos o super.paintComponent(g)
         Graphics2D g2 = (Graphics2D) g.create();
 
-        // Ativa a suavização máxima (Antialiasing) para bordas e textos perfeitos
+        // Ativa antialiasing máximo
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
         int w = getWidth();
         int h = getHeight();
-        int raioCurva = (int) (8 * SCALE); // Curvatura nos cantos do botão
+        int raioCurva = (int) (8 * SCALE);
 
         // =========================================================================
-        // 0. CORREÇÃO DA LETRA DA ALTERNATIVA (Se vier número "1", muda para "A")
+        // VALIDAÇÃO: VERIFICA SE É O BOTÃO DA CARTA ESPECIAL
+        // =========================================================================
+        // O seu construtor de 1 parâmetro define CARD_QUESTION_TYPE como "ESPECIAL"
+        boolean isEspecial = "ESPECIAL".equalsIgnoreCase(CARD_QUESTION_TYPE);
+
+        // =========================================================================
+        // 0. CORREÇÃO E FORMATAÇÃO DA LETRA
         // =========================================================================
         String letraExibicao = cardAnswerLetter != null ? cardAnswerLetter.trim() : "";
-        if (letraExibicao.equals("1")) letraExibicao = "A";
-        else if (letraExibicao.equals("2")) letraExibicao = "B";
-        else if (letraExibicao.equals("3")) letraExibicao = "C";
-        else if (letraExibicao.equals("4")) letraExibicao = "D";
-
-        // Garante o formato estético "A)"
-        if (!letraExibicao.isEmpty() && !letraExibicao.contains(")")) {
-            letraExibicao = letraExibicao + ")";
+        if (!isEspecial) { // Só formata a letra se NÃO for uma carta especial
+            if (letraExibicao.equals("1")) letraExibicao = "A";
+            else if (letraExibicao.equals("2")) letraExibicao = "B";
+            else if (letraExibicao.equals("3")) letraExibicao = "C";
+            else if (letraExibicao.equals("4")) letraExibicao = "D";
+            letraExibicao = letraExibicao.replace(")", ""); // Sem parênteses para o novo design
         }
 
         // =========================================================================
-        // 1. CORES DO FUNDO VETORIAL (Tom de Branco translúcido com Hover)
+        // DEFINIÇÃO INTELIGENTE DA COR (Dificuldade Priorizada)
+        // =========================================================================
+        Color corTema = new Color(20, 160, 100); // Verde padrão de segurança (Fácil)
+
+        if (CARD_QUESTION_TYPE != null) {
+            String tipo = CARD_QUESTION_TYPE.toUpperCase();
+            
+            if (tipo.contains("MÉDIO") || tipo.contains("MEDIO")) {
+                corTema = new Color(210, 140, 10); 
+            } else if (tipo.contains("DIFÍCIL") || tipo.contains("DIFICIL")) {
+                corTema = new Color(190, 45, 45); 
+            } else if (tipo.contains("BOSS") || tipo.contains("DESAFIO")) {
+                corTema = new Color(130, 40, 180); 
+            } else if (tipo.contains("FÁCIL") || tipo.contains("FACIL")) {
+                corTema = new Color(20, 160, 100); 
+            } else if (CARD_COLOR != null) {
+                corTema = CARD_COLOR; 
+            }
+        } else if (CARD_COLOR != null) {
+            corTema = CARD_COLOR;
+        }
+
+        // =========================================================================
+        // 1. DESENHO DO FUNDO DIREITO (Vidro Jateado Branco)
         // =========================================================================
         Color corFundoCima;
         Color corFundoBaixo;
         Color corBorda;
 
         if (isHovered) {
-            // Estado Hover: Branco mais sólido e brilhante, borda destaca com a cor de tema da própria carta
-            corFundoCima  = new Color(255, 255, 255, 210); // Branco translúcido forte e nítido
+            corFundoCima  = new Color(255, 255, 255, 210); 
             corFundoBaixo = new Color(245, 245, 245, 210);
-            corBorda      = (CARD_COLOR != null) ? CARD_COLOR : new Color(255, 255, 255, 180); // Borda assume o tom da carta
+            corBorda      = corTema; // Borda inteira brilha com a cor do tema
         } else {
-            // Estado Normal: Branco bem suave/sutil (estilo vidro jateado)
-            corFundoCima  = new Color(255, 255, 255, 55);  // Branco transparente suave
-            corFundoBaixo = new Color(255, 255, 255, 35);  // Degradê sutil para baixo
-            corBorda      = new Color(255, 255, 255, 80);  // Borda branca suave transparente
+            corFundoCima  = new Color(255, 255, 255, 55);  
+            corFundoBaixo = new Color(255, 255, 255, 35);  
+            corBorda      = new Color(255, 255, 255, 80);  
         }
 
-        // Desenha o fundo do botão com o gradiente esbranquiçado
+        java.awt.geom.RoundRectangle2D.Float fundoBotao = new java.awt.geom.RoundRectangle2D.Float(0, 0, w, h, raioCurva, raioCurva);
+        
         java.awt.GradientPaint gradienteFundo = new java.awt.GradientPaint(0, 0, corFundoCima, 0, h, corFundoBaixo);
         g2.setPaint(gradienteFundo);
-        g2.fillRoundRect(0, 0, w, h, raioCurva, raioCurva);
+        g2.fill(fundoBotao);
 
-        // Desenha a borda fina
+        // =========================================================================
+        // 2 E 3. DESENHO DO PAINEL ESQUERDO E DA LETRA
+        // SÓ SERÃO DESENHADOS SE A CARTA NÃO FOR "ESPECIAL"
+        // =========================================================================
+        int larguraPainelEsquerdo = (int) (36 * SCALE); // Espessura da barra lateral
+        
+        if (!isEspecial) {
+            // Criamos um "Clip" (Máscara).
+            java.awt.Shape clipAntigo = g2.getClip();
+            g2.setClip(fundoBotao);
+            
+            // Pinta a barra lateral esquerda inteira com a cor inteligente
+            g2.setColor(corTema);
+            g2.fillRect(0, 0, larguraPainelEsquerdo, h);
+
+            // Linha branca sutil na divisão entre a barra lateral e o resto do botão
+            g2.setColor(new Color(255, 255, 255, 70));
+            g2.drawLine(larguraPainelEsquerdo - 1, 0, larguraPainelEsquerdo - 1, h);
+
+            // Remove a máscara para desenhar o resto normalmente
+            g2.setClip(clipAntigo);
+
+            // DESENHO DA LETRA
+            g2.setFont(new Font("Arial", Font.BOLD, (int) (14 * SCALE)));
+            
+            FontMetrics fm = g2.getFontMetrics();
+            int letterWidth = fm.stringWidth(letraExibicao);
+            int letterX = (larguraPainelEsquerdo - letterWidth) / 2;
+            int letterY = (h - fm.getHeight()) / 2 + fm.getAscent();
+            
+            g2.setColor(new Color(0, 0, 0, 70));
+            g2.drawString(letraExibicao, letterX + 1, letterY + 1);
+            
+            g2.setColor(Color.WHITE); 
+            g2.drawString(letraExibicao, letterX, letterY);
+        }
+
+        // =========================================================================
+        // DESENHO DA BORDA GERAL (Para todos os botões)
+        // =========================================================================
         g2.setColor(corBorda);
         g2.setStroke(new BasicStroke((float) (1.2 * SCALE)));
         g2.drawRoundRect(1, 1, w - 2, h - 2, raioCurva, raioCurva);
 
         // =========================================================================
-        // 2. DESENHO DA LETRA DA ALTERNATIVA (Visível sobre o fundo claro do botão)
-        // =========================================================================
-        g2.setFont(new Font("Arial", Font.BOLD, (int) (14 * SCALE)));
-        
-        // No hover, quando o fundo fica muito branco, usamos a cor escura da sua classe para dar contraste
-        if (isHovered) {
-            g2.setColor(COR_TEXTO_ESCURO); 
-        } else {
-            // Em repouso, o botão é ligeiramente transparente, então podemos usar um tom branco/claro bem visível
-            g2.setColor(new Color(245, 245, 245)); 
-        }
-
-        int xLetter = (int) (12 * SCALE);
-        int yLetter = (int) ((h / 2) + (g2.getFontMetrics().getAscent() / 2f) - (2 * SCALE));
-        g2.drawString(letraExibicao, xLetter, yLetter);
-
-        // =========================================================================
-        // 3. DESENHO DO TEXTO DA RESPOSTA (Contraste adaptável)
+        // 4. DESENHO DO TEXTO DA RESPOSTA
         // =========================================================================
         Font fonteResposta = new Font("Arial", Font.BOLD, (int) (11.5 * SCALE));
         g2.setFont(fonteResposta);
         
-        // Define a cor do texto da resposta:
         if (isHovered) {
-            g2.setColor(COR_TEXTO_ESCURO); // Fica escuro quando o fundo brilha
+            g2.setColor(new Color(30, 30, 30)); // Cinza grafite bem escuro
         } else {
-            g2.setColor(new Color(245, 245, 245)); // Fica branco quando o botão está transparente
+            g2.setColor(new Color(245, 245, 245)); // Branco fosco
         }
 
-        int xCardAnswerTxt = (int) (34 * SCALE); // Espaço seguro para não encavalar na letra
-        int larguraMaximaTexto = w - xCardAnswerTxt - (int) (12 * SCALE);
-
         if (cardAnswerTxt != null && !cardAnswerTxt.isEmpty()) {
-            AttributedString attributedString = new AttributedString(cardAnswerTxt);
-            attributedString.addAttribute(TextAttribute.FONT, fonteResposta);
-            attributedString.addAttribute(TextAttribute.FOREGROUND, g2.getColor());
             
-            AttributedCharacterIterator paragraph = attributedString.getIterator();
-            FontRenderContext frc = g2.getFontRenderContext();
-            LineBreakMeasurer lineMeasurer = new LineBreakMeasurer(paragraph, frc);
-            lineMeasurer.setPosition(paragraph.getBeginIndex());
+            if (isEspecial) {
+                // SE FOR CARTA ESPECIAL: Desenha o "OK" perfeitamente centralizado no meio do botão inteiro
+                FontMetrics fmTxt = g2.getFontMetrics();
+                int txtWidth = fmTxt.stringWidth(cardAnswerTxt);
+                int txtX = (w - txtWidth) / 2;
+                int txtY = (h - fmTxt.getHeight()) / 2 + fmTxt.getAscent();
+                g2.drawString(cardAnswerTxt, txtX, txtY);
+                
+            } else {
+                // SE FOR CARTA NORMAL: Quebra de linha e alinhamento pela direita da barra colorida
+                int xCardAnswerTxt = larguraPainelEsquerdo + (int) (12 * SCALE); 
+                int larguraMaximaTexto = w - xCardAnswerTxt - (int) (16 * SCALE);
+                
+                AttributedString attributedString = new AttributedString(cardAnswerTxt);
+                attributedString.addAttribute(TextAttribute.FONT, fonteResposta);
+                attributedString.addAttribute(TextAttribute.FOREGROUND, g2.getColor());
+                
+                AttributedCharacterIterator paragraph = attributedString.getIterator();
+                FontRenderContext frc = g2.getFontRenderContext();
+                LineBreakMeasurer lineMeasurer = new LineBreakMeasurer(paragraph, frc);
+                lineMeasurer.setPosition(paragraph.getBeginIndex());
 
-            List<TextLayout> linhas = new ArrayList<>();
-            float alturaTotal = 0;
-            
-            while (lineMeasurer.getPosition() < paragraph.getEndIndex()) {
-                TextLayout layout = lineMeasurer.nextLayout(larguraMaximaTexto);
-                linhas.add(layout);
-                alturaTotal += layout.getAscent() + layout.getDescent() + layout.getLeading();
-            }
+                List<TextLayout> linhas = new ArrayList<>();
+                float alturaTotal = 0;
+                
+                while (lineMeasurer.getPosition() < paragraph.getEndIndex()) {
+                    TextLayout layout = lineMeasurer.nextLayout(larguraMaximaTexto);
+                    linhas.add(layout);
+                    alturaTotal += layout.getAscent() + layout.getDescent() + layout.getLeading();
+                }
 
-            // Centraliza o bloco de texto verticalmente no espaço do botão
-            float yConstrucao = (h - alturaTotal) / 2f + linhas.get(0).getAscent();
+                float yConstrucao = (h - alturaTotal) / 2f + linhas.get(0).getAscent();
 
-            for (TextLayout layout : linhas) {
-                layout.draw(g2, xCardAnswerTxt, yConstrucao);
-                yConstrucao += layout.getDescent() + layout.getLeading() + layout.getAscent();
+                for (TextLayout layout : linhas) {
+                    layout.draw(g2, xCardAnswerTxt, yConstrucao);
+                    yConstrucao += layout.getDescent() + layout.getLeading() + layout.getAscent();
+                }
             }
         }
 

@@ -169,7 +169,7 @@ public class CustomCards extends JPanel {
         setOpaque(false);
         setLayout(null); // Ativa o posicionamento absoluto para podermos alinhar os botões via código
 
-        // Adiciona o efeito visual de "descolar da mesa" sem usar CPU
+       // Adiciona o efeito visual de "descolar da mesa" sem usar CPU
         this.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseEntered(java.awt.event.MouseEvent e) {
@@ -183,6 +183,11 @@ public class CustomCards extends JPanel {
 
             @Override
             public void mouseExited(java.awt.event.MouseEvent e) {
+                // CORREÇÃO: Ignora o evento se o mouse apenas passou para cima de um botão interno
+                if (contains(e.getPoint())) {
+                    return; 
+                }
+                
                 if (isHovered) {
                     isHovered = false;
                     // Retorna a carta para a posição original no tabuleiro
@@ -199,44 +204,62 @@ public class CustomCards extends JPanel {
      * de forma reta (sem inclinação/skew).
      */
     private void inicializarBotoesAlternativas() {
-            if (this.alternativas == null || this.alternativas.length == 0) return;
+        if (this.alternativas == null || this.alternativas.length == 0) return;
 
-            // 1. Inicializa o array com o tamanho exato da quantidade de alternativas
-            this.botoesOpcao = new CardOptionButton[alternativas.length];
+        // 1. Inicializa o array com o tamanho exato da quantidade de alternativas
+        this.botoesOpcao = new CardOptionButton[alternativas.length];
 
-            int larguraBotao = (int) (215 * SCALE); 
-            int alturaBotao = (int) (30 * SCALE);
-            int espacamento = (int) (6 * SCALE);
-            int yInicial = (int) (195 * SCALE); 
-            int xCentralizado = 29; 
+        int larguraBotao = (int) (215 * SCALE); 
+        int alturaBotao = (int) (42 * SCALE); // Aumentado em 40% para caber mais linhas
+        int espacamento = (int) (5 * SCALE);  // Levemente reduzido para compensar a altura
+        int yInicial = (int) (175 * SCALE);   // Bloco movido para cima para liberar espaço 
+        int xCentralizado = 29; 
 
-            Color corInterna = new Color(255, 255, 255, 195);
-            if (this.cardType.equals("PERGUNTA") && this.dificuldade.equals("FÁCIL")) {
-                corInterna = Color.decode("#99AD7A"); 
-            }
-
-            // Letras dinâmicas de A a D
-            String[] letras = {"A", "B", "C", "D"};
-
-            for (int i = 0; i < alternativas.length; i++) {
-                // 1. Cria o botão
-                CardOptionButton btn = new CardOptionButton(alternativas[i], letras[i], corInterna, this.tipoPergunta);
-                
-                int yBotao = yInicial + (i * (alturaBotao + espacamento));
-                btn.setBounds(xCentralizado, yBotao, larguraBotao, alturaBotao);
-
-                this.botoesOpcao[i] = btn;
-
-                this.add(btn); // Adiciona o botão à carta
-            }
+        // Definimos uma cor padrão para o botão
+        Color corInterna = new Color(255, 255, 255, 195);
+        if (this.cardType.equals("PERGUNTA") && this.dificuldade.equals("FÁCIL")) {
+            corInterna = Color.decode("#99AD7A");
         }
+
+        // =========================================================================
+        // DEFINIÇÃO DINÂMICA DAS LETRAS (A, B, C, D ou S, N)
+        // =========================================================================
+        String[] letras;
+        if (this.tipoPergunta != null && this.tipoPergunta.toUpperCase().contains("SIM_NAO")) {
+            letras = new String[]{"S", "N"};
+        } else {
+            letras = new String[]{"A", "B", "C", "D"};
+        }
+        
+        for (int i = 0; i < alternativas.length; i++) {
+            // Garante que não estoure o array de letras caso haja mais alternativas que o esperado
+            String letraAtual = (i < letras.length) ? letras[i] : String.valueOf((char)('A' + i));
+            
+            // Formata o texto para o botão (ex: "S) Sim" ou "A) Alternativa")
+            String textoCompleto = letraAtual + ") " + alternativas[i];
+            
+            // Instancia passando as variáveis alinhadas com o construtor do botão
+            CardOptionButton btn = new CardOptionButton(
+                textoCompleto, 
+                this.dificuldade, 
+                corInterna, 
+                this.tipoPergunta
+            );
+            
+            int yBotao = yInicial + (i * (alturaBotao + espacamento));
+            btn.setBounds(xCentralizado, yBotao, larguraBotao, alturaBotao);
+            this.botoesOpcao[i] = btn;
+            adicionarListenerHoverBotoes(btn);
+            this.add(btn); // Adiciona o botão à carta
+        }
+    }
 
     /*
      * Método responsável por inicializar e posicionar o botão "OK"
      * para as cartas do tipo SORTE, AZAR ou SACANEAR.
      */
     private void inicializarBotaoConfirmar() {
-        this.botaoConfirmar = new CardOptionButton("OK"); 
+        this.botaoConfirmar = new CardOptionButton("OK", this.cardType); 
         
         // Ajuste o x, y, largura e altura conforme o design da sua carta
         this.botaoConfirmar.setBounds(
@@ -246,6 +269,7 @@ public class CustomCards extends JPanel {
             (int) (32 * SCALE)
         ); 
         
+        adicionarListenerHoverBotoes(this.botaoConfirmar);
         this.add(this.botaoConfirmar);
     }
 
@@ -414,6 +438,26 @@ public class CustomCards extends JPanel {
         }
 
         g2.dispose();
+    }
+
+    // Método para garantir que a carta perca o hover se o mouse sair do botão direto para fora dela
+    private void adicionarListenerHoverBotoes(CardOptionButton btn) {
+        btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent e) {
+                // Converte as coordenadas do botão para o sistema de coordenadas da carta
+                java.awt.Point p = javax.swing.SwingUtilities.convertPoint(btn, e.getPoint(), CustomCards.this);
+                
+                // Se o mouse saiu do botão e as coordenadas já estão fora da carta, desce a carta
+                if (!CustomCards.this.contains(p)) {
+                    if (isHovered) {
+                        isHovered = false;
+                        setLocation(getX(), getY() + 8);
+                        repaint();
+                    }
+                }
+            }
+        });
     }
 
     // --- GETTERS ---
