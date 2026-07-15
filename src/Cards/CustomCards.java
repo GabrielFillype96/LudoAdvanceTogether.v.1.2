@@ -206,24 +206,46 @@ public class CustomCards extends JPanel {
     private void inicializarBotoesAlternativas() {
         if (this.alternativas == null || this.alternativas.length == 0) return;
 
-        // 1. Inicializa o array com o tamanho exato da quantidade de alternativas
         this.botoesOpcao = new CardOptionButton[alternativas.length];
 
+        int larguraCarta = (int) (250 * SCALE); 
         int larguraBotao = (int) (215 * SCALE); 
-        int alturaBotao = (int) (42 * SCALE); // Aumentado em 40% para caber mais linhas
-        int espacamento = (int) (5 * SCALE);  // Levemente reduzido para compensar a altura
-        int yInicial = (int) (185 * SCALE);   // Bloco movido para cima para liberar espaço 
-        int xCentralizado = 29; 
+        int alturaBotao = (int) (42 * SCALE); 
+        int espacamento = (int) (5 * SCALE);  
+        
+        int xCentralizado = (larguraCarta - larguraBotao) / 2; 
 
-        // Definimos uma cor padrão para o botão
+        // =========================================================================
+        // CÁLCULO DINÂMICO DO Y INICIAL (UNIFICADO COM O DESENHO REAL)
+        // =========================================================================
+        int textoStartY = (int) (72 * SCALE); 
+        
+        // CORREÇÃO 1: Alinha a largura máxima
+        int larguraMaximaTexto = larguraCarta - (int) (40 * SCALE); 
+        
+        // CORREÇÃO 2: Alinha o peso e tamanho da fonte
+        Font fonteRealTexto = new Font("Arial", Font.BOLD, (int) (14 * SCALE));
+        
+        int alturaTexto = calcularAlturaTexto(
+            this.mainTxt, 
+            fonteRealTexto, 
+            larguraMaximaTexto
+        );
+        
+        int textoEndY = textoStartY + alturaTexto;
+        int margemDeSeguranca = (int) (30 * SCALE); // Aumentado para 30 para maior respiro
+        
+        int yIdeal = textoEndY + margemDeSeguranca;
+        int yMinimo = (int) (185 * SCALE); 
+        
+        int yInicial = Math.max(yMinimo, yIdeal);
+        // =========================================================================
+
         Color corInterna = new Color(255, 255, 255, 195);
         if (this.cardType.equals("PERGUNTA") && this.dificuldade.equals("FÁCIL")) {
             corInterna = Color.decode("#99AD7A");
         }
 
-        // =========================================================================
-        // DEFINIÇÃO DINÂMICA DAS LETRAS (A, B, C, D ou S, N)
-        // =========================================================================
         String[] letras;
         if (this.tipoPergunta != null && this.tipoPergunta.toUpperCase().contains("SIM_NAO")) {
             letras = new String[]{"S", "N"};
@@ -232,13 +254,9 @@ public class CustomCards extends JPanel {
         }
         
         for (int i = 0; i < alternativas.length; i++) {
-            // Garante que não estoure o array de letras caso haja mais alternativas que o esperado
             String letraAtual = (i < letras.length) ? letras[i] : String.valueOf((char)('A' + i));
-            
-            // Formata o texto para o botão (ex: "S) Sim" ou "A) Alternativa")
             String textoCompleto = letraAtual + ") " + alternativas[i];
             
-            // Instancia passando as variáveis alinhadas com o construtor do botão
             CardOptionButton btn = new CardOptionButton(
                 textoCompleto, 
                 this.dificuldade, 
@@ -248,9 +266,10 @@ public class CustomCards extends JPanel {
             
             int yBotao = yInicial + (i * (alturaBotao + espacamento));
             btn.setBounds(xCentralizado, yBotao, larguraBotao, alturaBotao);
+            
             this.botoesOpcao[i] = btn;
             adicionarListenerHoverBotoes(btn);
-            this.add(btn); // Adiciona o botão à carta
+            this.add(btn); 
         }
     }
 
@@ -291,6 +310,31 @@ public class CustomCards extends JPanel {
             System.err.println("[CustomCards] Aviso ao carregar ícones: " + e.getMessage());
         }
     }
+
+    // Calcula dinamicamente a altura em pixels que o texto principal ocupará
+private int calcularAlturaTexto(String texto, Font fonte, int larguraMaxima) {
+    if (texto == null || texto.isEmpty()) return 0;
+
+    // Criamos uma imagem temporária de 1x1 apenas para capturar o contexto de renderização
+    java.awt.image.BufferedImage img = new java.awt.image.BufferedImage(1, 1, java.awt.image.BufferedImage.TYPE_INT_ARGB);
+    Graphics2D g2 = img.createGraphics();
+    java.awt.font.FontRenderContext frc = g2.getFontRenderContext();
+
+    java.text.AttributedString attrStr = new java.text.AttributedString(texto);
+    attrStr.addAttribute(java.awt.font.TextAttribute.FONT, fonte);
+    java.text.AttributedCharacterIterator iterator = attrStr.getIterator();
+
+    java.awt.font.LineBreakMeasurer measurer = new java.awt.font.LineBreakMeasurer(iterator, frc);
+    float alturaTotal = 0;
+
+    while (measurer.getPosition() < iterator.getEndIndex()) {
+        java.awt.font.TextLayout layout = measurer.nextLayout(larguraMaxima);
+        alturaTotal += layout.getAscent() + layout.getDescent() + layout.getLeading();
+    }
+
+    g2.dispose();
+    return (int) alturaTotal;
+}
 
     // Método para inserir o texto principal do card (conteúdo vem de um arquivo JSON)
     // Método para inserir o texto principal do card alinhado à esquerda com margens seguras
