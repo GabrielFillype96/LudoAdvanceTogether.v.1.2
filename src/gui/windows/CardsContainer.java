@@ -1,5 +1,3 @@
-// Classe responsável por construir o painel que irá exibir as cartas dinâmicas
-
 // Package
 package gui.windows;
 
@@ -9,6 +7,7 @@ import control.GameManager;
 import control.DeckManager;
 import control.TurnManager;
 import gui.components.CardDeckBackground;
+import gui.components.DeckStackBackground; // <--- NOVO IMPORT AQUI
 import gui.components.buttons.cardsButton.CardOptionButton;
 import actions.CardAnswerValidation;
 
@@ -16,52 +15,60 @@ import actions.CardAnswerValidation;
 import java.awt.event.ActionListener;
 import javax.swing.JPanel;
 
-/*
- * Painel base responsável por carregar e posicionar
- * a exibição visual das novas cartas dinâmicas vindas do JSON.
- */
 public class CardsContainer extends JPanel {
     // VARIÁVEIS DE INSTÂNCIA
-    private CustomCards activeCard;
-    private CardDeckBackground cardDeckBackground;
+    private CustomCards activeCard;                  // Camada 1 (Topo/Frente)
+    private CardDeckBackground cardDeckBackground;   // Camada 2 (Meio/Costas)
+    private DeckStackBackground deckStackBackground; // Camada 3 (Base/Pilha) <-- NOVA VARIÁVEL
+    
     private GameManager gameManager;
     private CardAnswerValidation cardAnswerValidation;
     
-    // NOVOS MANAGERS INJETADOS
     private DeckManager deckManager;
     private TurnManager turnManager;
     
     private static final double SCALE = 1.5; 
 
-    /**
-     ** Construtor restaurado e atualizado:
-     * Recebe as dependências (gameManager e cardAnswerValidation) via Injeção de Dependência
-     */
     public CardsContainer(GameManager gameManager, CardAnswerValidation cardAnswerValidation) {
         this.gameManager = gameManager;
         this.cardAnswerValidation = cardAnswerValidation;
 
-        //this.setBackground(java.awt.Color.RED);
         this.setOpaque(false);
         this.setLayout(null);
         
         // =========================================================
-        // RESTAURAÇÃO DO PATH DA IMAGEM DO BARALHO
+        // CAMADA 2: A CARTA DE COSTAS INTERATIVA (CardDeckBackground)
         // =========================================================
-        this.cardDeckBackground = new CardDeckBackground("/assets/deckCardImage_220x340.png");
+        this.cardDeckBackground = new CardDeckBackground("/assets/cardCapaRoxo.png");
         this.cardDeckBackground.setBounds(
-            (int) (10 * SCALE),   // X (Posição horizontal)
-            (int) (10 * SCALE),   // Y (Posição vertical)
-            (int) (280 * SCALE),  // Largura (mesmo tamanho da carta)
-            (int) (420 * SCALE)   // Altura (mesmo tamanho da carta)
+            (int) (10 * SCALE) + 2,   
+            (int) (10 * SCALE) + 2,   
+            (int) (250 * SCALE),  
+            (int) (375 * SCALE)   
         );
         this.add(this.cardDeckBackground);
         
+        // =========================================================
+        // CAMADA 3: O EFEITO DE PILHA DO DECK (DeckStackBackground)
+        // =========================================================
+        // Passamos o mesmo asset da capa roxa para que o topo da pilha seja igual
+        this.deckStackBackground = new DeckStackBackground("/assets/cardCapaRoxo.png");
+        this.deckStackBackground.setBounds(
+            (int) (10 * SCALE), 
+            (int) (10 * SCALE), 
+            (int) (250 * SCALE) + 20, 
+            (int) (375 * SCALE) + 20
+        );
+        this.add(this.deckStackBackground);
+        
+        // ORGANIZAÇÃO INICIAL DAS CAMADAS:
+        this.setComponentZOrder(this.cardDeckBackground, 0); // Fica por cima na inicialização
+        this.setComponentZOrder(this.deckStackBackground, 1); // Fica embaixo do CardDeckBackground
+
         // Adiciona um MouseListener ao cardDeckBackground para simular a puxada de carta
         this.cardDeckBackground.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
-                // Previne que clique no baralho caso a animação do jogo ainda esteja a correr
                 if (gameManager != null && gameManager.getTurnManager() != null) {
                     System.out.println("[CardsContainer] Clique detectado no baralho.");
                     if (activeCard == null) {
@@ -72,7 +79,6 @@ public class CardsContainer extends JPanel {
         });
     }
 
-    // NOVOS SETTERS PARA OS MANAGERS
     public void setDeckManager(DeckManager deckManager) {
         this.deckManager = deckManager;
     }
@@ -81,29 +87,23 @@ public class CardsContainer extends JPanel {
         this.turnManager = turnManager;
     }
 
-    /**
-     ** Método responsável por alternar para a próxima carta.
-     * Puxa a carta diretamente do DeckManager baseado no jogador atual!
-     */
     public void transitionToNextCard() {
         if (this.deckManager == null || this.turnManager == null) {
             System.err.println("[CardsContainer] Erro: DeckManager ou TurnManager não injetados!");
             return;
         }
 
-        // Apenas permite que o Humano (ID 0) puxe carta clicando. A CPU fará isso automaticamente depois.
         int activePlayerId = this.turnManager.getCurrentTurn();
         if (activePlayerId != 0) {
             System.out.println("[CardsContainer] Não é a vez do jogador humano. Ignore o clique.");
             return;
         }
 
-        // Se já existir uma carta ativa, remove do painel para dar espaço à próxima
         if (this.activeCard != null) {
             this.remove(this.activeCard);
         }
 
-        // === PASSO B: PUXAR A CARTA DO DECK DO JOGADOR ===
+        // PUXAR CARTA
         this.activeCard = this.deckManager.drawCard(activePlayerId);
         
         if (this.activeCard == null) {
@@ -111,17 +111,14 @@ public class CardsContainer extends JPanel {
             return;
         }
 
-        // Reconfigura e reposiciona a nova carta usando os tamanhos fixos do seu CustomCards
         this.activeCard.setBounds(
-            (int) (14 * SCALE), 
-            (int) (5 * SCALE), 
-            (int) (250 * SCALE), // Largura real da carta
-            (int) (375 * SCALE)  // Altura real da carta
+            (int) (10 * SCALE) + 2, 
+            (int) (10 * SCALE) + 2, 
+            (int) (250 * SCALE),
+            (int) (375 * SCALE)
         );
         
-        // =========================================================
-        // CORREÇÃO 2: LIGAÇÃO DOS BOTÕES COM O DESCARTE + BACKUP DA CARTA
-        // =========================================================
+        // (A LÓGICA DE BOTÕES QUE VOCÊ TINHA SE MANTÉM IGUAL AQUI)
         if ("SORTE".equalsIgnoreCase(this.activeCard.getCardType()) || "AZAR".equalsIgnoreCase(this.activeCard.getCardType())) {
             CardOptionButton botaoConfirmar = this.activeCard.getConfirmButton();
             if (botaoConfirmar != null) {
@@ -130,9 +127,7 @@ public class CardsContainer extends JPanel {
                 }
                 
                 botaoConfirmar.addActionListener(e -> {
-                    // === SALVA A CARTA ANTES QUE ELA SEJA APAGADA ===
                     CustomCards cartaParaDescartar = this.activeCard;
-                    
                     try {
                         if (this.cardAnswerValidation != null) {
                             this.cardAnswerValidation.validar("ESPECIAL", cartaParaDescartar, this);
@@ -143,7 +138,6 @@ public class CardsContainer extends JPanel {
                             this.turnManager.nextTurn();
                         }
                     } finally {
-                        // === USA A CARTA SALVA PARA DESCARTAR ===
                         this.deckManager.discardCard(activePlayerId, cartaParaDescartar);
                         this.clearActiveCard();
                     }
@@ -157,9 +151,7 @@ public class CardsContainer extends JPanel {
                     }
                     
                     botao.addActionListener(e -> {
-                        // === SALVA A CARTA ANTES QUE ELA SEJA APAGADA ===
                         CustomCards cartaParaDescartar = this.activeCard;
-                        
                         try {
                             String respostaEscolhida = botao.getText();
                             if (this.cardAnswerValidation != null) {
@@ -171,7 +163,6 @@ public class CardsContainer extends JPanel {
                                 this.turnManager.nextTurn();
                             }
                         } finally {
-                            // === USA A CARTA SALVA PARA DESCARTAR ===
                             this.deckManager.discardCard(activePlayerId, cartaParaDescartar);
                             this.clearActiveCard();
                         }
@@ -181,17 +172,19 @@ public class CardsContainer extends JPanel {
         }
         
         this.add(this.activeCard); 
-        this.setComponentZOrder(this.activeCard, 0);
-        this.setComponentZOrder(this.cardDeckBackground, 1);
+        
+        // =========================================================
+        // ATUALIZAÇÃO DO Z-ORDER DAS 3 CAMADAS QUANDO A CARTA ATIVA SURGE
+        // =========================================================
+        this.setComponentZOrder(this.activeCard, 0);          // Camada 1 (Topo)
+        this.setComponentZOrder(this.cardDeckBackground, 1);  // Camada 2 (Meio)
+        this.setComponentZOrder(this.deckStackBackground, 2); // Camada 3 (Base)
         
         this.revalidate(); 
         this.repaint(); 
         System.out.println("[CardsContainer] Transição concluída. Exibindo carta ID: " + activeCard.getCardID());
     }
 
-    /**
-     * Método para limpar a carta da tela e liberar o painel para o próximo turno
-     */
     public void clearActiveCard() {
         this.activeCard = null;
         this.repaint();
