@@ -212,7 +212,7 @@ public class CustomCards extends JPanel {
         int larguraBotao = (int) (215 * SCALE); 
         int alturaBotao = (int) (42 * SCALE); // Aumentado em 40% para caber mais linhas
         int espacamento = (int) (5 * SCALE);  // Levemente reduzido para compensar a altura
-        int yInicial = (int) (175 * SCALE);   // Bloco movido para cima para liberar espaço 
+        int yInicial = (int) (185 * SCALE);   // Bloco movido para cima para liberar espaço 
         int xCentralizado = 29; 
 
         // Definimos uma cor padrão para o botão
@@ -302,7 +302,7 @@ public class CustomCards extends JPanel {
         // Define a margem esquerda e direita (isso centraliza o "bloco" de texto na carta)
         float marginX = (int) (20 * SCALE);
         float maxWidth = this.getWidth() - (marginX * 2);
-        float posY = (int) (60 * SCALE); // Altura onde o texto começa
+        float posY = (int) (72 * SCALE); // Altura onde o texto começa
 
         AttributedString attributedString = new AttributedString(mainTxt);
         attributedString.addAttribute(TextAttribute.FONT, mainTxtFont);
@@ -322,6 +322,52 @@ public class CustomCards extends JPanel {
             posY += layout.getDescent() + layout.getLeading();
         }
     }
+
+    // Desenha o rótulo do tipo de carta e as estrelas de dificuldade no topo
+private void drawCardHeader(Graphics2D g2) {
+    if (displayBackImgCard) return; // Não desenha nada se a carta estiver virada
+
+    float marginX = (int) (20 * SCALE);
+    float posY = (int) (42 * SCALE); // Posicionado logo acima do enunciado
+
+    // 1. DESENHO DO TEXTO DO CABEÇALHO (Ex: PERGUNTA • DIFÍCIL)
+    g2.setFont(new Font("Arial", Font.BOLD, (int) (9 * SCALE)));
+    g2.setColor(new Color(245, 245, 245, 180)); // Branco suave semi-transparente
+
+    String textoHeader = this.cardType;
+    if (this.dificuldade != null && !this.dificuldade.isEmpty()) {
+        textoHeader += " • " + this.dificuldade;
+    }
+    g2.drawString(textoHeader, marginX, posY);
+
+    // 2. DESENHO DAS ESTRELAS DE DIFICULDADE (Ex: ★★★)
+    if ("PERGUNTA".equalsIgnoreCase(this.cardType)) {
+        String estrelas = "";
+        String dif = this.dificuldade != null ? this.dificuldade.toUpperCase() : "";
+
+        // Usando o código Unicode (\u2605) em vez do símbolo colado para evitar erros de leitura da IDE
+        if (dif.contains("FÁCIL") || dif.contains("FACIL")) {
+            estrelas = "\u2605";
+        } else if (dif.contains("MÉDIO") || dif.contains("MEDIO")) {
+            estrelas = "\u2605\u2605";
+        } else if (dif.contains("DIFÍCIL") || dif.contains("DIFICIL")) {
+            estrelas = "\u2605\u2605\u2605";
+        }
+
+        if (!estrelas.isEmpty()) {
+            // Trocando "Arial" por "Dialog", que é a fonte lógica do Java com melhor suporte a símbolos gráficos
+            g2.setFont(new Font("Dialog", Font.PLAIN, (int) (12 * SCALE))); 
+            int larguraEstrelas = g2.getFontMetrics().stringWidth(estrelas);
+            
+            // Margem direita levemente ajustada para garantir que o símbolo não fique fora do card
+            float estrelasX = this.getWidth() - (int) (22 * SCALE) - larguraEstrelas;
+            
+            // Amarelo dourado suave para destacar as estrelas
+            g2.setColor(new Color(255, 215, 0, 220)); 
+            g2.drawString(estrelas, estrelasX, posY + (int)(1 * SCALE));
+        }
+    }
+}
 
     // Método para inserir o texto referente ao valor da carta (conteúdo vem de um arquivo JSON)
     private void cardEffectValue(Graphics2D g2) {
@@ -427,6 +473,8 @@ public class CustomCards extends JPanel {
         } else if (frontImgCard != null) {
             g2.drawImage(frontImgCard, 0, 0, width, height, this);
         }
+
+        drawCardHeader(g2);
 
         // 2. Desenha o texto principal por cima de tudo (Sua lógica original intocada)
         if (!displayBackImgCard && mainTxt != null) {
