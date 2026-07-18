@@ -11,6 +11,7 @@ import gui.components.DeckStackBackground; // <--- NOVO IMPORT AQUI
 import gui.components.buttons.cardsButton.CardOptionButton;
 import actions.CardAnswerValidation;
 
+
 // Import externo
 import java.awt.event.ActionListener;
 import javax.swing.JPanel;
@@ -26,6 +27,7 @@ public class CardsContainer extends JPanel {
     
     private DeckManager deckManager;
     private TurnManager turnManager;
+
     
     private static final double SCALE = 1.5; 
 
@@ -40,13 +42,16 @@ public class CardsContainer extends JPanel {
         // CAMADA 2: A CARTA DE COSTAS INTERATIVA (CardDeckBackground)
         // =========================================================
         this.cardDeckBackground = new CardDeckBackground("/assets/cardCapaRoxo.png");
+        
+        // Margem de 25 pixels para acomodar o brilho suave e espalhado
+        int glowMargin = 25; 
+        
         this.cardDeckBackground.setBounds(
-            (int) (10 * SCALE) + 2,   
-            (int) (10 * SCALE) + 2,   
-            (int) (250 * SCALE),  
-            (int) (375 * SCALE)   
+            (int) (10 * SCALE) + 2 - glowMargin,   
+            (int) (10 * SCALE) + 2 - glowMargin,   
+            (int) (250 * SCALE) + (glowMargin * 2), 
+            (int) (375 * SCALE) + (glowMargin * 2)  
         );
-        this.add(this.cardDeckBackground);
         
         // =========================================================
         // CAMADA 3: O EFEITO DE PILHA DO DECK (DeckStackBackground)
@@ -72,6 +77,10 @@ public class CardsContainer extends JPanel {
                 if (gameManager != null && gameManager.getTurnManager() != null) {
                     System.out.println("[CardsContainer] Clique detectado no baralho.");
                     if (activeCard == null) {
+                        
+                        // <-- NOVO: Pára a animação assim que o jogador clica no baralho
+                        cardDeckBackground.stopTurnHighlight(); 
+                        
                         transitionToNextCard();
                     }
                 }
@@ -85,6 +94,17 @@ public class CardsContainer extends JPanel {
 
     public void setTurnManager(TurnManager turnManager) {
         this.turnManager = turnManager;
+
+        if (this.turnManager != null) {
+            this.turnManager.setCardsContainer(this);
+        }
+    }
+
+    public void startDeckHighlight() {
+        // Só liga a animação se NÃO houver nenhuma carta já puxada na mesa
+        if (this.cardDeckBackground != null && this.activeCard == null) {
+            this.cardDeckBackground.startTurnHighlight();
+        }
     }
 
     public void transitionToNextCard() {

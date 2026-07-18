@@ -1,17 +1,25 @@
 package control;
 
+// Imports internos
+import gui.windows.CardsContainer;
+
 public class TurnManager {
     
     private int currentTurn; 
     private GameManager gameManager;
-    private CPUIManager cpuManager; // NOVO: Injetamos a inteligência aqui!
+    private CPUIManager cpuManager;
+    private CardsContainer cardsContainer;
 
     public TurnManager(GameManager gameManager) {
         this.gameManager = gameManager;
         this.currentTurn = 0; 
     }
 
-    // NOVO SETTER
+    public void setCardsContainer(CardsContainer cardsContainer) {
+        this.cardsContainer = cardsContainer;
+    }
+
+    
     public void setCPUIManager(CPUIManager cpuManager) {
         this.cpuManager = cpuManager;
     }
@@ -43,6 +51,9 @@ public class TurnManager {
 
     private void startHumanTurn() {
         System.out.println("[TurnManager] Vez do humano. Aguardando interação...");
+        if (this.cardsContainer != null) {
+            this.cardsContainer.startDeckHighlight();
+        }
     }
 
     private void startCPUTurn() {

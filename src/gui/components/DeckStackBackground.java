@@ -17,7 +17,7 @@ public class DeckStackBackground extends JPanel {
     // Dimensões da carta
     private final int widthCard = (int) (250 * SCALE);
     private final int heightCard = (int) (375 * SCALE);
-    private final int arcSize = (int) (20 * SCALE);
+    private final int arcSize = (int) (15 * SCALE);
 
     // Imagem para o topo do deck
     private Image cardBackImg;
@@ -49,20 +49,39 @@ public class DeckStackBackground extends JPanel {
             int x = i * espacamentoX;
             int y = i * espacamentoY;
 
-            // Se for a carta do TOPO da pilha (i == 1) e a imagem estiver carregada
+            /// Se for a carta do TOPO da pilha (i == 1) e a imagem estiver carregada
             if (i == 1 && cardBackImg != null) {
                 // Desenha a imagem real da capa roxa ligeiramente deslocada do centro
                 g2.drawImage(cardBackImg, x, y, widthCard, heightCard, this);
+                
+                // =========================================================
+                // NOVO: DESENHA A MESMA BORDA DA CAMADA 2 PARA ALINHAR PERFEITAMENTE
+                // =========================================================
+                // Lembre-se de usar os mesmos Gaps que você deixou no CardDeckBackground
+                int gapEsquerda = 4;  
+                int gapDireita  = 2;  
+                int gapTopo     = 2;
+                int gapBase     = 2;
+
+                int visualX = x + gapEsquerda;
+                int visualY = y + gapTopo;
+                int visualWidth = widthCard - gapEsquerda - gapDireita;
+                int visualHeight = heightCard - gapTopo - gapBase;
+
+                g2.setColor(new Color(255, 255, 255, 200)); 
+                g2.setStroke(new BasicStroke(4.0f)); 
+                g2.drawRoundRect(visualX, visualY, visualWidth, visualHeight, arcSize, arcSize);
+                
             } else {
                 // Para as cartas de baixo (i > 1), desenha apenas as bordas simulando as folhas de papel
                 
                 // 1. Corpo/borda da carta (cinza claro/papel)
-                g2.setColor(new Color(230, 230, 230));
+                g2.setColor(new Color(255, 255, 255, 200));
                 g2.fillRoundRect(x, y, widthCard, heightCard, arcSize, arcSize);
 
                 // 2. Contorno fino para separar as cartas empilhadas
                 g2.setColor(new Color(150, 150, 150, 180));
-                g2.setStroke(new BasicStroke(1.0f));
+                g2.setStroke(new BasicStroke(1.5f));
                 g2.drawRoundRect(x, y, widthCard, heightCard, arcSize, arcSize);
                 
                 // 3. Sombra interna para profundidade
