@@ -339,13 +339,19 @@ private int calcularAlturaTexto(String texto, Font fonte, int larguraMaxima) {
     // Método para inserir o texto principal do card (conteúdo vem de um arquivo JSON)
     // Método para inserir o texto principal do card alinhado à esquerda com margens seguras
     private void cardMainTxt(Graphics2D g2) {
-        g2.setColor(new Color(245, 245, 245)); // Branco fosco elegante
+        float marginX = (int) (20 * SCALE);
+    float maxWidth = this.getWidth() - (marginX * 2);
+
+    // TRAVA DE SEGURANÇA REAL: Se a área útil do texto for zero ou negativa, para aqui.
+    if (maxWidth <= 0) {
+        return;
+    }
+    
+    g2.setColor(new Color(245, 245, 245)); // Branco fosco elegante
         Font mainTxtFont = new Font("Arial", Font.BOLD, (int) (14 * SCALE));
         g2.setFont(mainTxtFont);
 
         // Define a margem esquerda e direita (isso centraliza o "bloco" de texto na carta)
-        float marginX = (int) (20 * SCALE);
-        float maxWidth = this.getWidth() - (marginX * 2);
         float posY = (int) (72 * SCALE); // Altura onde o texto começa
 
         AttributedString attributedString = new AttributedString(mainTxt);
@@ -498,6 +504,20 @@ private void drawCardHeader(Graphics2D g2) {
 
         int width = getWidth();
         int height = getHeight();
+
+        // =========================================================================
+        // TRAVA GLOBAL DE ANIMAÇÃO: Se a carta estiver muito estreita, desenha apenas
+        // a imagem base (frente/verso) e não processa os textos, cabeçalhos ou ícones.
+        // =========================================================================
+        if (width <= 30) {
+            if (displayBackImgCard && backImgCard != null) {
+                g2.drawImage(backImgCard, 0, 0, width, height, this);
+            } else if (frontImgCard != null) {
+                g2.drawImage(frontImgCard, 0, 0, width, height, this);
+            }
+            g2.dispose();
+            return; // Interrompe o resto do desenho pesado
+        }
 
         // =========================================================================
         // INSERÇÃO: SOMBRA PROJETADA 3D (Efeito realista com custo zero de lag)

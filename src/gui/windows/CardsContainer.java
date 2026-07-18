@@ -38,25 +38,19 @@ public class CardsContainer extends JPanel {
         this.setOpaque(false);
         this.setLayout(null);
         
-        // =========================================================
         // CAMADA 2: A CARTA DE COSTAS INTERATIVA (CardDeckBackground)
-        // =========================================================
         this.cardDeckBackground = new CardDeckBackground("/assets/cardCapaRoxo.png");
         
-        // Margem de 25 pixels para acomodar o brilho suave e espalhado
         int glowMargin = 25; 
-        
         this.cardDeckBackground.setBounds(
             (int) (10 * SCALE) + 2 - glowMargin,   
             (int) (10 * SCALE) + 2 - glowMargin,   
             (int) (250 * SCALE) + (glowMargin * 2), 
             (int) (375 * SCALE) + (glowMargin * 2)  
         );
+        this.add(this.cardDeckBackground); // <--- ADICIONE ESTA LINHA QUE ESTÁ FALTANDO!
         
-        // =========================================================
         // CAMADA 3: O EFEITO DE PILHA DO DECK (DeckStackBackground)
-        // =========================================================
-        // Passamos o mesmo asset da capa roxa para que o topo da pilha seja igual
         this.deckStackBackground = new DeckStackBackground("/assets/cardCapaRoxo.png");
         this.deckStackBackground.setBounds(
             (int) (10 * SCALE), 
@@ -191,14 +185,10 @@ public class CardsContainer extends JPanel {
             }
         }
         
-        this.add(this.activeCard); 
-        
-        // =========================================================
-        // ATUALIZAÇÃO DO Z-ORDER DAS 3 CAMADAS QUANDO A CARTA ATIVA SURGE
-        // =========================================================
-        this.setComponentZOrder(this.activeCard, 0);          // Camada 1 (Topo)
-        this.setComponentZOrder(this.cardDeckBackground, 1);  // Camada 2 (Meio)
-        this.setComponentZOrder(this.deckStackBackground, 2); // Camada 3 (Base)
+        gui.animations.CardFlipAnimation flipAnimation = new gui.animations.CardFlipAnimation(
+            this, this.cardDeckBackground, this.activeCard, SCALE, false, null
+        );
+        flipAnimation.start();
         
         this.revalidate(); 
         this.repaint(); 
@@ -206,8 +196,41 @@ public class CardsContainer extends JPanel {
     }
 
     public void clearActiveCard() {
-        this.activeCard = null;
-        this.repaint();
+        if (this.activeCard == null) return;
+
+        // Oculta ou desativa os botões internos da carta para evitar cliques acidentais durante o sumiço
+        this.activeCard.setEnabled(false);
+
+        // Cria a animação passando 'true' (Modo Descartar) 
+        // O último parâmetro é o código que vai rodar assim que a animação terminar de rodar
+        gui.animations.CardFlipAnimation discardAnimation = new gui.animations.CardFlipAnimation(
+            this, this.cardDeckBackground, this.activeCard, SCALE, true, () -> {
+                
+                // =========================================================
+                // ESTE BLOCO SÓ EXECUTA QUANDO A CARTA TERMINAR O FLIP DE VOLTA!
+                // =========================================================
+                if (this.activeCard != null) {
+                    this.remove(this.activeCard);
+                }
+                this.activeCard = null;
+
+                // Restaura o tamanho e posição estável do baralho de costas original
+                int glowMargin = 25;
+                this.cardDeckBackground.setBounds(
+                    (int) (10 * SCALE) + 2 - glowMargin,   
+                    (int) (10 * SCALE) + 2 - glowMargin,   
+                    (int) (250 * SCALE) + (glowMargin * 2), 
+                    (int) (375 * SCALE) + (glowMargin * 2)  
+                );
+                this.cardDeckBackground.setVisible(true);
+                this.setComponentZOrder(this.cardDeckBackground, 0); 
+
+                this.revalidate();
+                this.repaint();
+            }
+        );
+        
+        discardAnimation.start();
     }
 
     public CustomCards getActiveCard() {
