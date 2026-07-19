@@ -64,8 +64,8 @@ public class TurnManager {
                             delayHumano.setRepeats(false);
                             delayHumano.start();
                         } else {
-                            // Delay inicial controlado antes de acionar a máquina de estados da CPU
-                            Timer delayCPU = new Timer(1500, ev -> startCPUTurn());
+                            // MODIFICADO: Passa 'false' pois é o primeiro turno normal do jogo
+                            Timer delayCPU = new Timer(1500, ev -> startCPUTurn(false));
                             delayCPU.setRepeats(false);
                             delayCPU.start();
                         }
@@ -115,7 +115,8 @@ public class TurnManager {
         if (currentTurn == 0) {
             startHumanTurn();
         } else {
-            startCPUTurn();
+            // MODIFICADO: Passa 'false' porque é uma transição normal de turnos
+            startCPUTurn(false);
         }
     }
 
@@ -133,7 +134,8 @@ public class TurnManager {
         }
     }
 
-    private void startCPUTurn() {
+    // MODIFICADO: Agora aceita o parâmetro booleano para identificar jogadas bônus
+    private void startCPUTurn(boolean ehTurnoExtra) {
         if (this.gameManager == null) {
             executarAcaoCPU();
             return;
@@ -142,10 +144,12 @@ public class TurnManager {
         String nomeCPU = this.gameManager.getPlayerNameById(this.currentTurn);
         System.out.println("[TurnManager] Iniciando sequência de turno para: " + nomeCPU);
         
-        // ETAPA 1: Mostrar imediatamente de quem é o turno
-        this.gameManager.emitirStatus("Turno de " + nomeCPU, COLOR_INFO);
+        // CORREÇÃO AQUI: Só exibe "Turno de CPU X" se NÃO for uma jogada bônus (6)
+        if (!ehTurnoExtra) {
+            this.gameManager.emitirStatus("Turno de " + nomeCPU, COLOR_INFO);
+        }
 
-        // ETAPA 2: Após 1,2 segundos, atualiza para o status "Pensando..."
+        // ETAPA 2: Após 1,8 segundos, atualiza para o status "Pensando..."
         Timer timerPensando = new Timer(1800, ePensando -> {
             this.gameManager.emitirStatus("🤖 " + nomeCPU + " está pensando...", COLOR_WARNING);
 
@@ -183,7 +187,8 @@ public class TurnManager {
         if (currentTurn == 0) {
             startHumanTurn();
         } else {
-            startCPUTurn();
+            // MODIFICADO: Passa 'true' para pular a mensagem genérica de turno
+            startCPUTurn(true);
         }
     }
 
