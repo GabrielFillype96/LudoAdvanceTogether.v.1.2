@@ -97,6 +97,10 @@ public class TurnManager {
     }
 
     public void nextTurn() {
+        if (this.currentTurn == 0 && this.gameManager != null) {
+            this.gameManager.resetHumanPawnsVisuals();
+        }
+
         currentTurn++;
         if (currentTurn > 3) {
             currentTurn = 0;
@@ -117,7 +121,7 @@ public class TurnManager {
         System.out.println("[TurnManager] Vez do humano. Aguardando interação...");
         
         if (this.gameManager != null) {
-            
+            this.gameManager.resetHumanPawnsVisuals();
             this.gameManager.emitirStatus("🎲 Sua vez! Clique no deck para revelar sua carta.", COLOR_INFO);
         }
         
@@ -166,6 +170,11 @@ public class TurnManager {
         System.out.println("\n=================================");
         System.out.println("[TurnManager] TURNO EXTRA! A vez continua com o Jogador: " + currentTurn);
         System.out.println("=================================");
+
+        // Limpa o visual para a nova jogada bônus do humano
+        if (this.currentTurn == 0 && this.gameManager != null) {
+            this.gameManager.resetHumanPawnsVisuals();
+        }
         
         if (currentTurn == 0) {
             startHumanTurn();

@@ -105,6 +105,15 @@ public class PawnControlContainer extends JPanel {
         pawnLabels[pawnIndex].setVisualState(pawnState);
         repaint();
     }
+
+    public void resetAllPawnsToNormal() {
+        for (int i = 0; i < 4; i++) {
+            // Só reseta se o peão NÃO estiver dourado (vitorioso)
+            if (pawnControlManager != null && !"DOURADO".equalsIgnoreCase(pawnControlManager.getPawnState(i))) {
+                pawnVisualState(i, "NORMAL");
+            }
+        }
+    }
     
     public ReferencePawn getReferencePawn(int pawnIndex) {
         if (pawnIndex >= 0 && pawnIndex < 4) {

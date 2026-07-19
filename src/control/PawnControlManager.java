@@ -189,5 +189,9 @@ public class PawnControlManager {
         );
     }
 
-    
+    public void resetHumanPawnsVisuals() {
+        if (this.pawnControlContainer != null) {
+            this.pawnControlContainer.resetAllPawnsToNormal();
+        }
+    }
 }

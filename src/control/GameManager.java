@@ -833,6 +833,12 @@ public class GameManager {
         return melhorPeao != -1 ? melhorPeao : peoesDisponiveis.get(0);
     }
 
+    public void resetHumanPawnsVisuals() {
+        if (this.pawnControlManager != null) {
+            this.pawnControlManager.resetHumanPawnsVisuals();
+        }
+    }
+
     public int getFurthestPawnIndex(int playerId) {
         int furthestPawn = -1;
         int maxPosition = -1;
