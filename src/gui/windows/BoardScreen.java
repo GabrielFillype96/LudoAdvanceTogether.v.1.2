@@ -119,6 +119,7 @@ public class BoardScreen extends JPanel {
                 this.add(playersPawns[p][i]);
             }
         }
+        addPlayerNameSlots();
     }
 
     private Color colorName(String colorName) {
@@ -178,127 +179,130 @@ public class BoardScreen extends JPanel {
      * a partir do ponto de partida do Jogador 1 (Azul, Canto Inferior Esquerdo).
     */
     private void pawnPath() {
-        
-        player1Path = new java.awt.Point[] {
-            // Local de "nascimento" / Spawn dos peões do jogador 1
-            new java.awt.Point((int)(40 * SCALE), (int)(400 * SCALE)),  // [0] Casa inicial peão 1
-            new java.awt.Point((int)(40 * SCALE), (int)(520 * SCALE)),  // [1] Casa inicial peão 2
-            new java.awt.Point((int)(160 * SCALE), (int)(400 * SCALE)), // [2] Casa inicial peão 3
-            new java.awt.Point((int)(160 * SCALE), (int)(520 * SCALE)), // [3] Casa inicial peão 4
+        // 1. Inicializa os caminhos com o tamanho total do circuito (61 posições)
+        int pathLength = 61; 
+        player1Path = new java.awt.Point[pathLength];
+        player2Path = new java.awt.Point[pathLength];
+        player3Path = new java.awt.Point[pathLength];
+        player4Path = new java.awt.Point[pathLength];
 
-            // Circuito do tabuleiro
-            // Caminho do jogador 1 - subindo em direção ao centro do tabuleiro
+        // =========================================================================
+        // COORDENADAS MANUAIS DAS BASES (Métrica perfeita e independente)
+        // Centraliza os círculos na área útil restante, respeitando os slots de nomes.
+        // =========================================================================
+        
+        // JOGADOR 1: GABRIEL (Azul - Canto Inferior Esquerdo | Slot no Rodapé)
+        player1Path[0] = new java.awt.Point((int)(65 * SCALE), (int)(402 * SCALE));
+        player1Path[1] = new java.awt.Point((int)(65 * SCALE), (int)(472 * SCALE));
+        player1Path[2] = new java.awt.Point((int)(135 * SCALE), (int)(402 * SCALE));
+        player1Path[3] = new java.awt.Point((int)(135 * SCALE), (int)(472 * SCALE));
+
+        // JOGADOR 2: FERNANDA (Roxo - Canto Superior Esquerdo | Slot no Topo)
+        player2Path[0] = new java.awt.Point((int)(65 * SCALE), (int)(87 * SCALE));
+        player2Path[1] = new java.awt.Point((int)(65 * SCALE), (int)(157 * SCALE));
+        player2Path[2] = new java.awt.Point((int)(135 * SCALE), (int)(87 * SCALE));
+        player2Path[3] = new java.awt.Point((int)(135 * SCALE), (int)(157 * SCALE));
+
+        // JOGADOR 3: RAIMUNDA (Rosa - Canto Superior Direito | Slot no Topo)
+        player3Path[0] = new java.awt.Point((int)(425 * SCALE), (int)(87 * SCALE));
+        player3Path[1] = new java.awt.Point((int)(425 * SCALE), (int)(157 * SCALE));
+        player3Path[2] = new java.awt.Point((int)(495 * SCALE), (int)(87 * SCALE));
+        player3Path[3] = new java.awt.Point((int)(495 * SCALE), (int)(157 * SCALE));
+
+        // JOGADOR 4: PAULO (Amarelo - Canto Inferior Direito | Slot no Rodapé)
+        player4Path[0] = new java.awt.Point((int)(425 * SCALE), (int)(402 * SCALE));
+        player4Path[1] = new java.awt.Point((int)(425 * SCALE), (int)(472 * SCALE));
+        player4Path[2] = new java.awt.Point((int)(495 * SCALE), (int)(402 * SCALE));
+        player4Path[3] = new java.awt.Point((int)(495 * SCALE), (int)(472 * SCALE));
+
+        // =========================================================================
+        // CIRCUITO DA TRILHA PADRÃO DO JOGADOR 1 (Índices 4 ao 60)
+        // =========================================================================
+        java.awt.Point[] circuitoTrilha = new java.awt.Point[] {
             new java.awt.Point((int)(240 * SCALE), (int)(520 * SCALE)), // [4]
             new java.awt.Point((int)(240 * SCALE), (int)(480 * SCALE)), // [5]
             new java.awt.Point((int)(240 * SCALE), (int)(440 * SCALE)), // [6]
             new java.awt.Point((int)(240 * SCALE), (int)(400 * SCALE)), // [7]
             new java.awt.Point((int)(240 * SCALE), (int)(360 * SCALE)), // [8]
-            
-            // Caminho do jogador 1 - indo para esquerda em direção a borda esquerda do tabuleiro
-            new java.awt.Point((int)(200 * SCALE), (int)(320 * SCALE)),  // [9]
-            new java.awt.Point((int)(160 * SCALE), (int)(320 * SCALE)),  // [10]
-            new java.awt.Point((int)(120 * SCALE), (int)(320 * SCALE)),  // [11]
-            new java.awt.Point((int)(80 * SCALE),  (int)(320 * SCALE)),  // [12]
-            new java.awt.Point((int)(40* SCALE),   (int)(320 * SCALE)),  // [13]
-            new java.awt.Point((int)(0 * SCALE),    (int)(320 * SCALE)), // [14]
-
-            // Caminho do jogador 1 - subindo no braço esquerdo do tabuleiro
-            new java.awt.Point((int)(0 * SCALE),    (int)(280 * SCALE)), // [15]
-            new java.awt.Point((int)(0 * SCALE),    (int)(240 * SCALE)), // [16]
-            
-            // Caminho do jogador 1 - indo para direita em direção ao centro do tabuleiro
+            new java.awt.Point((int)(200 * SCALE), (int)(320 * SCALE)), // [9]
+            new java.awt.Point((int)(160 * SCALE), (int)(320 * SCALE)), // [10]
+            new java.awt.Point((int)(120 * SCALE), (int)(320 * SCALE)), // [11]
+            new java.awt.Point((int)(80 * SCALE),  (int)(320 * SCALE)), // [12]
+            new java.awt.Point((int)(40 * SCALE),  (int)(320 * SCALE)), // [13]
+            new java.awt.Point((int)(0 * SCALE),   (int)(320 * SCALE)), // [14]
+            new java.awt.Point((int)(0 * SCALE),   (int)(280 * SCALE)), // [15]
+            new java.awt.Point((int)(0 * SCALE),   (int)(240 * SCALE)), // [16]
             new java.awt.Point((int)(40 * SCALE),  (int)(240 * SCALE)), // [17]
             new java.awt.Point((int)(80 * SCALE),  (int)(240 * SCALE)), // [18]
             new java.awt.Point((int)(120 * SCALE), (int)(240 * SCALE)), // [19]
             new java.awt.Point((int)(160 * SCALE), (int)(240 * SCALE)), // [20]
             new java.awt.Point((int)(200 * SCALE), (int)(240 * SCALE)), // [21]
-
-            // Caminho do jogador 1 - subindo em direção a borda superior do tabuleiro
             new java.awt.Point((int)(240 * SCALE), (int)(200 * SCALE)), // [22]
             new java.awt.Point((int)(240 * SCALE), (int)(160 * SCALE)), // [23]
             new java.awt.Point((int)(240 * SCALE), (int)(120 * SCALE)), // [24]
             new java.awt.Point((int)(240 * SCALE), (int)(80 * SCALE)),  // [25]
             new java.awt.Point((int)(240 * SCALE), (int)(40 * SCALE)),  // [26]
             new java.awt.Point((int)(240 * SCALE), (int)(0 * SCALE)),   // [27]
-            
-            // Caminho do jogador 1 - indo para direita no braço superior do tabuleiro
             new java.awt.Point((int)(280 * SCALE), (int)(0 * SCALE)),   // [28]
             new java.awt.Point((int)(320 * SCALE), (int)(0 * SCALE)),   // [29]
-
-            // Caminho do jogador 1 - descendo para o centro do tabuleiro
             new java.awt.Point((int)(320 * SCALE), (int)(40 * SCALE)),  // [30]
             new java.awt.Point((int)(320 * SCALE), (int)(80 * SCALE)),  // [31]
             new java.awt.Point((int)(320 * SCALE), (int)(120 * SCALE)), // [32]
             new java.awt.Point((int)(320 * SCALE), (int)(160 * SCALE)), // [33]
             new java.awt.Point((int)(320 * SCALE), (int)(200 * SCALE)), // [34]
-            
-            // Caminho do jogador 1 - indo para direita em direção a borda do direita do tabuleiro
             new java.awt.Point((int)(360 * SCALE), (int)(240 * SCALE)), // [35]
             new java.awt.Point((int)(400 * SCALE), (int)(240 * SCALE)), // [36]
             new java.awt.Point((int)(440 * SCALE), (int)(240 * SCALE)), // [37]
             new java.awt.Point((int)(480 * SCALE), (int)(240 * SCALE)), // [38]
             new java.awt.Point((int)(520 * SCALE), (int)(240 * SCALE)), // [39]
             new java.awt.Point((int)(560 * SCALE), (int)(240 * SCALE)), // [40]
-            
-            // Caminho do jogador 1 - descendo no braço direito do tabuleiro
             new java.awt.Point((int)(560 * SCALE), (int)(280 * SCALE)), // [41]
             new java.awt.Point((int)(560 * SCALE), (int)(320 * SCALE)), // [42]
-            
-            // Caminho do jogador 1 - indo para esquerda em direção ao centro do tabuleiro
             new java.awt.Point((int)(520 * SCALE), (int)(320 * SCALE)), // [43]
             new java.awt.Point((int)(480 * SCALE), (int)(320 * SCALE)), // [44]
             new java.awt.Point((int)(440 * SCALE), (int)(320 * SCALE)), // [45]
             new java.awt.Point((int)(400 * SCALE), (int)(320 * SCALE)), // [46]
             new java.awt.Point((int)(360 * SCALE), (int)(320 * SCALE)), // [47]
-
-            // Caminho do jogador 1 - descendo em direção a borda inferior do tabuleiro
             new java.awt.Point((int)(320 * SCALE), (int)(360 * SCALE)), // [48]
             new java.awt.Point((int)(320 * SCALE), (int)(400 * SCALE)), // [49]   
             new java.awt.Point((int)(320 * SCALE), (int)(440 * SCALE)), // [50]
             new java.awt.Point((int)(320 * SCALE), (int)(480 * SCALE)), // [51]
             new java.awt.Point((int)(320 * SCALE), (int)(520 * SCALE)), // [52]
             new java.awt.Point((int)(320 * SCALE), (int)(560 * SCALE)), // [53]
-            
-            // Caminho do jogador 1 - indo para esquerda no braço inferior do tabuleiro
             new java.awt.Point((int)(280 * SCALE), (int)(560 * SCALE)), // [54]
-            
-            // Caminho do jogador 1 - subindo em direção ao centro do tabuleiro (caminho final do jogador 1)
             new java.awt.Point((int)(280 * SCALE), (int)(520 * SCALE)), // [55]
             new java.awt.Point((int)(280 * SCALE), (int)(480 * SCALE)), // [56]
             new java.awt.Point((int)(280 * SCALE), (int)(440 * SCALE)), // [57]
             new java.awt.Point((int)(280 * SCALE), (int)(400 * SCALE)), // [58]
             new java.awt.Point((int)(280 * SCALE), (int)(360 * SCALE)), // [59]
             new java.awt.Point((int)(280 * SCALE), (int)(320 * SCALE))  // [60] Casa final (centro)
-        }; 
+        };
 
-       // =========================================================================
-        // AUTOMAÇÃO DOS CAMINHOS DAS CPUS (Com correção de alinhamento pelo centro)
+        // Aloca o circuito no array do Jogador 1 pulando as casas da base
+        System.arraycopy(circuitoTrilha, 0, player1Path, 4, circuitoTrilha.length);
+
+        // =========================================================================
+        // ROTAÇÃO MATEMÁTICA: Executada APENAS do índice 4 em diante (Trilha ativa)
+        // Isso impede que as bases das CPUs sofram distorções.
         // =========================================================================
         int centroTabuleiro = (int) (300 * SCALE); 
-        int offsetCentroCasa = (int) (20 * SCALE); // A casa tem 40, então o centro é 20
-        
-        this.player2Path = new Point[player1Path.length];
-        this.player3Path = new Point[player1Path.length];
-        this.player4Path = new Point[player1Path.length];
+        int offsetCentroCasa = (int) (20 * SCALE); 
 
-        for (int i = 0; i < player1Path.length; i++) {
-            Point p1 = player1Path[i];
+        for (int i = 4; i < player1Path.length; i++) {
+            java.awt.Point p1 = player1Path[i];
             if (p1 == null) continue;
 
-            // 1. Acha o centro exato da casa do Jogador 1
             int centroX = p1.x + offsetCentroCasa;
             int centroY = p1.y + offsetCentroCasa;
 
-            // 2. Calcula a distância do centro da casa até o centro do tabuleiro
             int dx = centroX - centroTabuleiro;
             int dy = centroY - centroTabuleiro;
 
-            // 3. Rotaciona e subtrai o offset para devolver ao canto superior esquerdo
-            this.player2Path[i] = new Point((centroTabuleiro - dy) - offsetCentroCasa, (centroTabuleiro + dx) - offsetCentroCasa);
-            this.player3Path[i] = new Point((centroTabuleiro - dx) - offsetCentroCasa, (centroTabuleiro - dy) - offsetCentroCasa);
-            this.player4Path[i] = new Point((centroTabuleiro + dy) - offsetCentroCasa, (centroTabuleiro - dx) - offsetCentroCasa);
+            this.player2Path[i] = new java.awt.Point((centroTabuleiro - dy) - offsetCentroCasa, (centroTabuleiro + dx) - offsetCentroCasa);
+            this.player3Path[i] = new java.awt.Point((centroTabuleiro - dx) - offsetCentroCasa, (centroTabuleiro - dy) - offsetCentroCasa);
+            this.player4Path[i] = new java.awt.Point((centroTabuleiro + dy) - offsetCentroCasa, (centroTabuleiro - dx) - offsetCentroCasa);
         }
-    } 
+    }
 
     public void startBoardPawnShake(int pawnIndex) {
         if (pawnIndex >= 0 && pawnIndex < 4) {
@@ -587,6 +591,34 @@ public class BoardScreen extends JPanel {
         g2d.fillPolygon(xPoints, yPoints, 10);
         g2d.setColor(Color.ORANGE);
         g2d.drawPolygon(xPoints, yPoints, 10);
+    }
+
+    private void addPlayerNameSlots() {
+        Color colorP1 = colorName(player1Color);
+        Color colorP2 = colorName(player2Color);
+        Color colorP3 = colorName(player3Color);
+        Color colorP4 = colorName(player4Color);
+
+        gui.components.PlayerBoardSlot slotP1 = new gui.components.PlayerBoardSlot(player1Name, colorP1, SCALE);
+        gui.components.PlayerBoardSlot slotP2 = new gui.components.PlayerBoardSlot(player2Name, colorP2, SCALE);
+        gui.components.PlayerBoardSlot slotP3 = new gui.components.PlayerBoardSlot(player3Name, colorP3, SCALE);
+        gui.components.PlayerBoardSlot slotP4 = new gui.components.PlayerBoardSlot(player4Name, colorP4, SCALE);
+
+        int slotW = (int) (140 * SCALE);
+        int slotH = (int) (28 * SCALE);
+
+        // =========================================================================
+        // POSICIONAMENTO CORRIGIDO: 17 pixels de margem recuada em todas as extremidades
+        // =========================================================================
+        slotP2.setBounds((int) (50 * SCALE), (int) (17 * SCALE), slotW, slotH);   // Top-Left (Fernanda)
+        slotP3.setBounds((int) (410 * SCALE), (int) (17 * SCALE), slotW, slotH);  // Top-Right (Raimunda)
+        slotP1.setBounds((int) (50 * SCALE), (int) (555 * SCALE), slotW, slotH);  // Bottom-Left (Gabriel)
+        slotP4.setBounds((int) (410 * SCALE), (int) (555 * SCALE), slotW, slotH); // Bottom-Right (Paulo)
+
+        this.add(slotP2);
+        this.add(slotP3);
+        this.add(slotP1);
+        this.add(slotP4);
     }
 
     /**
