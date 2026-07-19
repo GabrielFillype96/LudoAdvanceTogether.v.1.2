@@ -19,6 +19,11 @@ public class GameManager {
     private CPUIManager cpuIManager;
     private GameStatusBar gameStatusBar; // Variável da barra de status
     private boolean movimentoAutomaticoEmAndamento = false; // Flag para silenciar avisos de seleção durante jogadas automáticas
+    private String currentCardType = ""; // Armazena o tipo da carta atual para controle de turno bônus
+    // Flag para impedir interações com o baralho durante o sorteio de início do jogo
+    private boolean sorteioInicialAtivo = true;
+    // Próximo às outras flags da classe (como jogoFinalizado)
+    private boolean jogadaEmAndamento = false;
 
     // =========================================================================
     // CONFIGURAÇÕES DE TIMERS E DELAYS (Altere aqui o ritmo do seu jogo!)
@@ -107,8 +112,22 @@ public class GameManager {
         if (boardScreen == null || jogoFinalizado) return;
         if (timerAnimation != null && timerAnimation.isRunning()) return;
 
+        
         int activePlayerId = (this.turnManager != null) ? this.turnManager.getCurrentTurn() : 0;
+        
+        if (activePlayerId == 0 && jogadaEmAndamento) {
+            System.out.println("[GameManager] Clique duplicado ou spam detectado e bloqueado.");
+            return;
+        }
+        
+        if (activePlayerId == 0) {
+            this.jogadaEmAndamento = true;
+        }
+        
+        this.currentCardType = cardType; // Salva o tipo de carta atual globalmente
         String nomeJogador = getPlayerNameById(activePlayerId);
+
+
  
         PlayerPawn p1 = boardScreen.getPlayerPawn(activePlayerId, 0);
         Point[] mapaCasas = boardScreen.getCaminhoCasas(activePlayerId);
@@ -153,8 +172,8 @@ public class GameManager {
 
                 int valorDado = Integer.parseInt(cardValueTreated);
 
-                // PENALIDADE DOS TRÊS 6 CONSECUTIVOS
-                if (Math.abs(valorDado) == 6) {
+                // PENALIDADE DOS TRÊS 6 CONSECUTIVOS (Ignora se for carta de SORTE)
+                if (Math.abs(valorDado) == 6 && !"SORTE".equalsIgnoreCase(cardType)) {
                     consecutiveSixesCounters[activePlayerId]++;
                     if (consecutiveSixesCounters[activePlayerId] == 3) {
                         consecutiveSixesCounters[activePlayerId] = 0; 
@@ -212,7 +231,6 @@ public class GameManager {
                         if (!peoesDisponiveis.isEmpty() && this.cpuIManager != null) {
                             String personalidade = this.cpuIManager.getCPUPersonality(activePlayerId);
                             
-                            // LINHA CORRIGIDA AQUI (Sem o cardEffect)
                             int peaoEscolhido = escolherMelhorPeaoParaCPU(activePlayerId, peoesDisponiveis, valorDado, personalidade);
                             
                             PlayerPawn peaoAlvo = boardScreen.getPlayerPawn(activePlayerId, peaoEscolhido);
@@ -310,7 +328,6 @@ public class GameManager {
                             
                             if (peoesDisponiveis.size() == 1) {
                                 int peaoAutomatico = peoesDisponiveis.get(0);
-                                // CORREÇÃO: Busca o número real mapeado do peão único
                                 int numeroReal = (this.pawnControlManager != null) ? this.pawnControlManager.getRealPawnNumber(peaoAutomatico) : (peaoAutomatico + 1);
                                 
                                 if (ehCartaSorte) {
@@ -324,7 +341,6 @@ public class GameManager {
                                 StringBuilder sb = new StringBuilder();
                                 for (int i = 0; i < peoesDisponiveis.size(); i++) {
                                     int idxPeao = peoesDisponiveis.get(i);
-                                    // CORREÇÃO: Busca o número real mapeado de cada peão da lista
                                     int numeroReal = (this.pawnControlManager != null) ? this.pawnControlManager.getRealPawnNumber(idxPeao) : (idxPeao + 1);
                                     
                                     if (i == 0) sb.append(numeroReal);
@@ -361,13 +377,11 @@ public class GameManager {
             pawnControlManager.onReferencePawnHoverExited(peaoIndex);
             pawnControlManager.onBoardPawnHoverExit(peaoIndex);
             
-            // ADICIONADO: Ativa o modo silencioso antes de clicar
             this.movimentoAutomaticoEmAndamento = true; 
             
             pawnControlManager.onReferencePawnClicked(peaoIndex); 
             pawnControlManager.onReferencePawnClicked(peaoIndex); 
             
-            // ADICIONADO: Desativa o modo silencioso logo após concluir os cliques
             this.movimentoAutomaticoEmAndamento = false; 
         });
         atrasoDramatico.setRepeats(false); 
@@ -578,7 +592,8 @@ public class GameManager {
                               "RETROCEDER".equalsIgnoreCase(cardEffect);
         if (isBackwards && cardValue > 0) cardValue = -cardValue; 
         
-        boolean ganhouTurnoExtra = (Math.abs(cardValue) == 6);
+        // CORREÇÃO AQUI: Só ganha turno extra se tirar 6 E NÃO for uma carta de SORTE
+        boolean ganhouTurnoExtra = (Math.abs(cardValue) == 6 && !"SORTE".equalsIgnoreCase(this.currentCardType));
         boolean exitBase = false;
 
         if (pawnActualPosition < 4) {
@@ -747,7 +762,6 @@ public class GameManager {
             
             // Aguarda o tempo estipulado antes de processar o Turno Bônus
             Timer delayTransicaoExtra = new Timer(DELAY_FINAL_TURNO, eExtra -> {
-                // CORREÇÃO: Removemos o 'if (activePlayerId > 0)' para incluir o jogador humano
                 this.turnManager.processExtraTurn();
             });
             delayTransicaoExtra.setRepeats(false);
@@ -868,19 +882,16 @@ public class GameManager {
         return melhorPeao != -1 ? melhorPeao : peoesDisponiveis.get(0);
     }
 
-    /**
-     * Verifica se os 4 peões de um jogador estão guardados na base (posição menor que 4)
-     */
     public boolean areAllPawnsInBase(int playerId) {
         if (this.boardScreen == null) return true;
         
         for (int i = 0; i < 4; i++) {
             PlayerPawn pawn = this.boardScreen.getPlayerPawn(playerId, i);
             if (pawn != null && pawn.getPawnCurrentPos() >= 4) {
-                return false; // Encontrou pelo menos um peão que já saiu para o tabuleiro
+                return false; 
             }
         }
-        return true; // Todos os 4 peões estão na base
+        return true; 
     }
 
     public void resetHumanPawnsVisuals() {
@@ -912,5 +923,53 @@ public class GameManager {
         return furthestPawn; 
     }
 
-    
+    // Altere para 'false' no seu sistema assim que o sorteio inicial terminar e o primeiro turno começar oficialmente
+    public void setSorteioInicialAtivo(boolean ativo) {
+        this.sorteioInicialAtivo = ativo;
+        if (this.turnManager != null && this.turnManager.getCardsContainer() != null) {
+            this.turnManager.getCardsContainer().updateDeckCursor();
+        }
+    }
+
+    public boolean isSorteioInicialAtivo() {
+        return this.sorteioInicialAtivo;
+    }
+
+    /**
+     * TRAVA DE SEGURANÇA GLOBAL DO BARALHO
+     * Define se o jogador humano tem permissão total de puxar uma carta agora.
+     */
+    public boolean canPlayerDrawCard() {
+        if (jogoFinalizado) {
+            System.out.println("[TRAVA BARALHO] Bloqueado: O jogo já terminou.");
+            return false;
+        }
+        if (sorteioInicialAtivo) {
+            System.out.println("[TRAVA BARALHO] Bloqueado: O sorteio inicial ainda está ativo (sorteioInicialAtivo = true).");
+            return false;
+        }
+        // LINHA ADICIONADA: Bloqueia o clique se houver uma jogada ou delay sendo processado
+        if (jogadaEmAndamento) {
+            System.out.println("[TRAVA BARALHO] Bloqueado: Uma jogada ou transição de turno está em andamento.");
+            return false;
+        }
+        if (movimentoAutomaticoEmAndamento) {
+            System.out.println("[TRAVA BARALHO] Bloqueado: Há um movimento automático em andamento.");
+            return false;
+        }
+        if (timerAnimation != null && timerAnimation.isRunning()) {
+            System.out.println("[TRAVA BARALHO] Bloqueado: Existe um peão se movendo no tabuleiro agora.");
+            return false;
+        }
+        if (pawnControlManager != null && pawnControlManager.isAwaitingPawnSelection()) {
+            System.out.println("[TRAVA BARALHO] Bloqueado: O jogo está esperando você escolher ou confirmar um peão.");
+            return false;
+        }
+        return true;
+    }
+
+    public void setJogadaEmAndamento(boolean emAndamento) {
+        this.jogadaEmAndamento = emAndamento;
+    }
+
 }

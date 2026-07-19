@@ -1,26 +1,23 @@
-// Package
 package gui.windows;
 
-// Import interno
 import cards.CustomCards;
 import control.GameManager;
 import control.DeckManager;
 import control.TurnManager;
 import gui.components.CardDeckBackground;
-import gui.components.DeckStackBackground; // <--- NOVO IMPORT AQUI
+import gui.components.DeckStackBackground;
 import gui.components.buttons.cardsButton.CardOptionButton;
 import actions.CardAnswerValidation;
 
 import java.awt.Color;
-// Import externo
+import java.awt.Cursor;
 import java.awt.event.ActionListener;
 import javax.swing.JPanel;
 
 public class CardsContainer extends JPanel {
-    // VARIÁVEIS DE INSTÂNCIA
     private CustomCards activeCard;                  // Camada 1 (Topo/Frente)
     private CardDeckBackground cardDeckBackground;   // Camada 2 (Meio/Costas)
-    private DeckStackBackground deckStackBackground; // Camada 3 (Base/Pilha) <-- NOVA VARIÁVEL
+    private DeckStackBackground deckStackBackground; // Camada 3 (Base/Pilha)
     
     private GameManager gameManager;
     private CardAnswerValidation cardAnswerValidation;
@@ -38,7 +35,6 @@ public class CardsContainer extends JPanel {
         this.setOpaque(false);
         this.setLayout(null);
         
-        // CAMADA 2: A CARTA DE COSTAS INTERATIVA (CardDeckBackground)
         this.cardDeckBackground = new CardDeckBackground("/assets/cardCapaRoxo.png");
         
         int glowMargin = 25; 
@@ -48,9 +44,8 @@ public class CardsContainer extends JPanel {
             (int) (250 * SCALE) + (glowMargin * 2), 
             (int) (375 * SCALE) + (glowMargin * 2)  
         );
-        this.add(this.cardDeckBackground); // <--- ADICIONE ESTA LINHA QUE ESTÁ FALTANDO!
+        this.add(this.cardDeckBackground);
         
-        // CAMADA 3: O EFEITO DE PILHA DO DECK (DeckStackBackground)
         this.deckStackBackground = new DeckStackBackground("/assets/cardCapaRoxo.png");
         this.deckStackBackground.setBounds(
             (int) (10 * SCALE), 
@@ -60,26 +55,70 @@ public class CardsContainer extends JPanel {
         );
         this.add(this.deckStackBackground);
         
-        // ORGANIZAÇÃO INICIAL DAS CAMADAS:
-        this.setComponentZOrder(this.cardDeckBackground, 0); // Fica por cima na inicialização
-        this.setComponentZOrder(this.deckStackBackground, 1); // Fica embaixo do CardDeckBackground
+        this.setComponentZOrder(this.cardDeckBackground, 0); 
+        this.setComponentZOrder(this.deckStackBackground, 1); 
 
-        // Adiciona um MouseListener ao cardDeckBackground para simular a puxada de carta
-        this.cardDeckBackground.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
+        // Cria o adaptador único para escutar cliques, entradas e movimentos do mouse
+        java.awt.event.MouseAdapter deckMouseAdapter = new java.awt.event.MouseAdapter() {
+           @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
                 if (gameManager != null && gameManager.getTurnManager() != null) {
+                    // TRAVA DE SEGURANÇA: Cancela o clique se o jogo estiver processando animações, sorteios ou peões
+                    if (!gameManager.canPlayerDrawCard()) return;
+
+                    // Bloqueia clique se não for a vez do humano
+                    if (turnManager.getCurrentTurn() != 0) return;
+
                     System.out.println("[CardsContainer] Clique detectado no baralho.");
                     if (activeCard == null) {
-                        
-                        // <-- NOVO: Pára a animação assim que o jogador clica no baralho
                         cardDeckBackground.stopTurnHighlight(); 
-                        
+                        cardDeckBackground.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
                         transitionToNextCard();
                     }
                 }
             }
-        });
+
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent e) {
+                updateDeckCursor();
+            }
+
+            @Override
+            public void mouseMoved(java.awt.event.MouseEvent e) {
+                // CORREÇÃO: Qualquer micro-movimento do mouse recalcula se ainda é o turno do humano
+                updateDeckCursor();
+            }
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent e) {
+                cardDeckBackground.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+            }
+        };
+
+        // Registra o adaptador nas duas frentes de escuta do baralho
+        this.cardDeckBackground.addMouseListener(deckMouseAdapter);
+        this.cardDeckBackground.addMouseMotionListener(deckMouseAdapter);
+        
+        // Força o cursor padrão inicial seguro
+        updateDeckCursor();
+    }
+
+    /**
+     * CORREÇÃO CENTRAL: Controla rigidamente o cursor do baralho baseado no turno real do jogo.
+     * Pode ser chamada internamente ou externamente quando os turnos mudarem.
+     */
+    public void updateDeckCursor() {
+        if (this.cardDeckBackground == null) return;
+        
+        // Só ganha a mãozinha se o GameManager liberar a segurança E for o turno do humano E não houver carta aberta
+        boolean segurancaLiberada = (this.gameManager != null && this.gameManager.canPlayerDrawCard());
+        boolean ehTurnoDoHumano = (this.turnManager != null && this.turnManager.getCurrentTurn() == 0);
+        
+        if (segurancaLiberada && ehTurnoDoHumano && this.activeCard == null) {
+            this.cardDeckBackground.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        } else {
+            this.cardDeckBackground.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+        }
     }
 
     public void setDeckManager(DeckManager deckManager) {
@@ -92,12 +131,17 @@ public class CardsContainer extends JPanel {
         if (this.turnManager != null) {
             this.turnManager.setCardsContainer(this);
         }
+        updateDeckCursor();
     }
 
     public void startDeckHighlight() {
-        // Só liga a animação se NÃO houver nenhuma carta já puxada na mesa
         if (this.cardDeckBackground != null && this.activeCard == null) {
             this.cardDeckBackground.startTurnHighlight();
+            
+            // Força a checagem caso o mouse já estivesse posicionado aqui antes do turno começar
+            if (this.cardDeckBackground.getMousePosition() != null) {
+                updateDeckCursor();
+            }
         }
     }
 
@@ -117,8 +161,6 @@ public class CardsContainer extends JPanel {
             this.remove(this.activeCard);
         }
 
-        // PUXAR CARTA
-        // Descobre se o jogador atual possui peões na pista (fora da base)
         boolean todosNaBase = (gameManager.getFurthestPawnIndex(activePlayerId) == -1);
         this.activeCard = this.deckManager.drawCard(activePlayerId, todosNaBase);
         
@@ -134,9 +176,6 @@ public class CardsContainer extends JPanel {
             (int) (375 * SCALE)
         );
         
-        // =========================================================================
-        // ATUALIZAÇÃO DA BARRA DE STATUS CONFORME O TIPO DE CARTA REVELADA
-        // =========================================================================
         if (this.gameManager != null) {
             String tipoCarta = this.activeCard.getCardType();
             if ("PERGUNTA".equalsIgnoreCase(tipoCarta)) {
@@ -150,8 +189,6 @@ public class CardsContainer extends JPanel {
             }
         }
     
-        
-        // (A LÓGICA DE BOTÕES QUE VOCÊ TINHA SE MANTÉM IGUAL AQUI)
         if ("SORTE".equalsIgnoreCase(this.activeCard.getCardType()) || "AZAR".equalsIgnoreCase(this.activeCard.getCardType())) {
             CardOptionButton botaoConfirmar = this.activeCard.getConfirmButton();
             if (botaoConfirmar != null) {
@@ -217,23 +254,15 @@ public class CardsContainer extends JPanel {
     public void clearActiveCard() {
         if (this.activeCard == null) return;
 
-        // Oculta ou desativa os botões internos da carta para evitar cliques acidentais durante o sumiço
         this.activeCard.setEnabled(false);
 
-        // Cria a animação passando 'true' (Modo Descartar) 
-        // O último parâmetro é o código que vai rodar assim que a animação terminar de rodar
         gui.animations.CardFlipAnimation discardAnimation = new gui.animations.CardFlipAnimation(
             this, this.cardDeckBackground, this.activeCard, SCALE, true, () -> {
-                
-                // =========================================================
-                // ESTE BLOCO SÓ EXECUTA QUANDO A CARTA TERMINAR O FLIP DE VOLTA!
-                // =========================================================
                 if (this.activeCard != null) {
                     this.remove(this.activeCard);
                 }
                 this.activeCard = null;
 
-                // Restaura o tamanho e posição estável do baralho de costas original
                 int glowMargin = 25;
                 this.cardDeckBackground.setBounds(
                     (int) (10 * SCALE) + 2 - glowMargin,   
@@ -243,6 +272,9 @@ public class CardsContainer extends JPanel {
                 );
                 this.cardDeckBackground.setVisible(true);
                 this.setComponentZOrder(this.cardDeckBackground, 0); 
+
+                // Atualiza o cursor assim que a carta é limpa da tela
+                updateDeckCursor();
 
                 this.revalidate();
                 this.repaint();

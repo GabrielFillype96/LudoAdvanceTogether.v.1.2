@@ -49,6 +49,8 @@ public class TurnManager {
 
                     if (delayAtual[0] >= 500) {
                         timerSorteio.stop();
+
+                        this.gameManager.setSorteioInicialAtivo(false);
                         
                         this.currentTurn = (int) (Math.random() * 4);
                         String nomeVencedor = (this.currentTurn == 0) ? "Você" : this.gameManager.getPlayerNameById(this.currentTurn);
@@ -121,6 +123,7 @@ public class TurnManager {
         System.out.println("[TurnManager] Vez do humano. Aguardando interação...");
         
         if (this.gameManager != null) {
+            this.gameManager.setJogadaEmAndamento(false);
             this.gameManager.resetHumanPawnsVisuals();
             this.gameManager.emitirStatus("🎲 Sua vez! Clique no deck para revelar sua carta.", COLOR_INFO);
         }
@@ -173,6 +176,7 @@ public class TurnManager {
 
         // Limpa o visual para a nova jogada bônus do humano
         if (this.currentTurn == 0 && this.gameManager != null) {
+            this.gameManager.setJogadaEmAndamento(false);
             this.gameManager.resetHumanPawnsVisuals();
         }
         
@@ -181,5 +185,9 @@ public class TurnManager {
         } else {
             startCPUTurn();
         }
+    }
+
+    public CardsContainer getCardsContainer() {
+        return this.cardsContainer; 
     }
 }
