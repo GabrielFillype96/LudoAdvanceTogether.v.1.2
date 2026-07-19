@@ -10,6 +10,7 @@ import control.GameManager;
 import control.PawnControlManager;
 import control.TurnManager;
 import gui.components.PlayerPawn;
+import gui.components.GameStatusBar; // ADICIONADO: Import da barra de status
 import gui.events.BoardPawnMouseListener;
 
 
@@ -27,6 +28,7 @@ public class GameContainer extends JPanel {
     private PawnControlManager pawnControlManager;
     private DeckManager deckManager;
     private BoardScreen boardScreen;
+    private GameStatusBar statusBar; // ADICIONADO: Variável para gerenciar a barra de status
     private static final double SCALE = 1.5;
     private static final Rectangle GAME_CONTAINER_BOUNDS = new Rectangle(
         0, 
@@ -35,13 +37,13 @@ public class GameContainer extends JPanel {
         (int) (600 * SCALE)
     );
     private static final Rectangle CARDS_AREA_BOUNDS = new Rectangle(
-        (int) (600* SCALE), 
+        (int) (600 * SCALE), 
         (int) (0 * SCALE), 
         (int) (300 * SCALE), 
-        (int) (440 * SCALE) // anteriormente estava em 600
+        (int) (400 * SCALE) 
     );
     private static final Rectangle CARDS_CONTAINER_BOUNDS = new Rectangle(
-        (int) (0 * SCALE), 
+        (int) (10 * SCALE), 
         (int) (0 * SCALE), 
         (int) (300 * SCALE), 
         (int) (500 * SCALE)
@@ -52,11 +54,19 @@ public class GameContainer extends JPanel {
         (int) (300 * SCALE),
         (int) (200 * SCALE)
     );
+    
+    // ADICIONADO: Posição da barra de status (Logo acima do quadro de peões que fica no Y=35)
+    private static final Rectangle STATUS_BAR_BOUNDS = new Rectangle(
+        (int) (40 * SCALE),
+        (int) (2 * SCALE),
+        (int) (220 * SCALE),
+        (int) (28 * SCALE)
+    );
     private static final Rectangle PAWN_CONTROL_CONTAINER_BOUNDS = new Rectangle(
         (int) (40 * SCALE),
-        (int) (35 * SCALE),
+        (int) (25 * SCALE),
         (int) (220 * SCALE),
-        (int) (100 * SCALE)
+        (int) (120 * SCALE)
     );
     private static final Rectangle BOARD_SCREEN_BOUNDS = new Rectangle(
         (int) (0 * SCALE),
@@ -66,7 +76,7 @@ public class GameContainer extends JPanel {
     );
     
 
-    // Construtor da classe "GamContainer"
+    // Construtor da classe "GameContainer"
     public GameContainer(String playerName, String cpuDifficulty) {
         this.playerName = playerName;
         this.cpuDifficulty = cpuDifficulty;
@@ -99,7 +109,7 @@ public class GameContainer extends JPanel {
         // Área reservada ao layout das cartas, controles e informações de jogador (450x600)
         JPanel cardsArea = new JPanel(); // Instancia o painel completo que irá conter as cartas, controles e informações do jogador
         cardsArea.setBounds(CARDS_AREA_BOUNDS); // Tamanho e posição da área das cartas (900, 0) (450x600)
-        cardsArea.setBackground(new Color(38, 24, 16)); // Tom amadeirado escuro
+        cardsArea.setBackground(new Color(255, 0, 16)); // Tom amadeirado escuro
         cardsArea.setLayout(null);
 
         // Instancia a validação das respostas através do clique do jogador
@@ -109,6 +119,7 @@ public class GameContainer extends JPanel {
         // Ele mesmo vai carregar o JSON e inicializar a primeira carta.
         CardsContainer cardsContainer = new CardsContainer(gameManager, cardAnswerValidation);
         cardsContainer.setBounds(CARDS_CONTAINER_BOUNDS); // Tamanho e posição do container das cartas (60, 165) (330x510)
+        cardsContainer.setBackground(new Color(0, 255, 16));
         cardsArea.add(cardsContainer);
 
         cardsContainer.setDeckManager(this.deckManager); // Aquele mesmo que criamos antes!
@@ -119,6 +130,12 @@ public class GameContainer extends JPanel {
         pawnControlArea.setBounds(PAWN_CONTROL_AREA_BOUNDS); // Tamanho e posição da área do controle dos peões (0, 0) (450x225)
         pawnControlArea.setBackground(new Color(38, 24, 16)); // Tom amadeirado escuro
         pawnControlArea.setLayout(null);
+
+        // ADICIONADO: Instancia e adiciona a barra de status no painel de controle dos peões
+        this.statusBar = new GameStatusBar(SCALE);
+        this.statusBar.setBounds(STATUS_BAR_BOUNDS);
+        this.statusBar.updateStatus("Vez de Gabriel: Clique no deck", Color.WHITE);
+        pawnControlArea.add(this.statusBar);
 
         // Instancia o "PawnControlManager" para servir de parâmetro na instância do "PawnControlContainer"
         this.pawnControlManager = new PawnControlManager(this.boardScreen, gameManager);
@@ -131,7 +148,6 @@ public class GameContainer extends JPanel {
         PawnControlContainer pawnControlContainer = new PawnControlContainer(pawnControlManager);
         pawnControlContainer.setBounds(PAWN_CONTROL_CONTAINER_BOUNDS); // Tamanho e posição do container de controle dos peões (60, 22.5) (330x150)
         pawnControlContainer.setBackground(new Color(38, 24, 16));
-        pawnControlArea.setLayout(null);
         pawnControlArea.add(pawnControlContainer);
         
         // Força a atualização do fluxo gráfico do Swing
@@ -141,6 +157,8 @@ public class GameContainer extends JPanel {
         pawnControlArea.repaint();
         pawnControlArea.revalidate();
         cardsArea.repaint();
+        this.statusBar.revalidate(); // ADICIONADO: Atualização gráfica da barra
+        this.statusBar.repaint();    // ADICIONADO: Atualização gráfica da barra
         this.boardScreen.revalidate();
         this.boardScreen.repaint();
     
@@ -162,18 +180,6 @@ public class GameContainer extends JPanel {
                 playerPawn.addMouseListener(new BoardPawnMouseListener(pawnControlManager, i));
             }
         }   
-      
-
-        
-        
-        
-        // Perguntar sobre classe anonima no PlayerPawn
-        // Perguntar pq o método timer é diferente no PlayerPawn do ReferencePawn
-        // Perguntar sobre o implements
-        // Perguntar sobre o super
-        // Perguntar a ordem certa do "add" entre o BoardScreen e PawnControlContainer
-        // Perguntar a diferenca da classe CardAnswerValidation e a GameManager, especificamente no metodo cardResultVerification do GameManager
-       
     }
 
     // Método getter para acessar as dimensões do GameContainer

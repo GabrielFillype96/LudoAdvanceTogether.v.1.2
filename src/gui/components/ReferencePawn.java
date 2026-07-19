@@ -14,6 +14,7 @@ import javax.swing.Timer;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -51,8 +52,8 @@ public class ReferencePawn extends JLabel {
         this.scale = scale;
 
         // Define o tamanho dos peões de referência com base no JLabel criado no "PawnControlContainer"
-        int referencePawnWidth = (int) (30 * scale);
-        int referencePawnHeight = (int) (30 * scale);
+        int referencePawnWidth = (int) (40 * scale);
+        int referencePawnHeight = (int) (40 * scale);
 
         // Carrega e redimensiona as imagens dos peões de referência em seus respectivos estados
         this.stdReferencePawnIcon = ImageLoaderManager.loadIcon( // Peão padrão
@@ -151,51 +152,53 @@ public class ReferencePawn extends JLabel {
     }
 
     @Override
-    protected void paintComponent(Graphics g) {
-        Graphics2D g2 = (Graphics2D) g.create();
-        
-        // Ativa o Antialiasing completo (incluindo texto) para curvas suaves
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+protected void paintComponent(Graphics g) {
+    Graphics2D g2 = (Graphics2D) g.create();
+    
+    // Ativa filtros de suavização para evitar serrilhados
+    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+    g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+    g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 
-        // --- 1. RENDERIZAÇÃO DO NÚMERO DE FUNDO ---
-        String numStr = String.valueOf(this.pawnNumber);
-        
-        // Define o tamanho da fonte dinamicamente com base no scale (ex: tamanho base 25)
-        g2.setFont(new Font("SansSerif", Font.BOLD, (int) (45 * scale)));
-        FontMetrics fm = g2.getFontMetrics();
-        
-        // Centraliza o texto no JLabel
-        int textX = (this.getWidth() - fm.stringWidth(numStr)) / 2;
-        // Ajusta levemente a altura para o número sobressair perfeitamente na parte superior/central
-        int textY = (this.getHeight() + fm.getAscent() - fm.getDescent()) / 2 - (int)(1 * scale);
+    int w = this.getWidth();
+    int h = this.getHeight();
+    int centerX = w / 2;
+    int centerY = h / 2;
 
-        // Desenha contorno fino (1px) em cruz usando um cinza escuro discreto
-        g2.setColor(new Color(45, 45, 45, 180));
-        g2.drawString(numStr, textX - 1, textY);
-        g2.drawString(numStr, textX + 1, textY);
-        g2.drawString(numStr, textX, textY - 1);
-        g2.drawString(numStr, textX, textY + 1);
+    // 1. Criamos uma imagem transparente temporária do tamanho do peão
+    java.awt.image.BufferedImage canvas = new java.awt.image.BufferedImage(w, h, java.awt.image.BufferedImage.TYPE_INT_ARGB);
+    Graphics2D gCanvas = canvas.createGraphics();
+    gCanvas.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+    gCanvas.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
-        // Desenha o preenchimento interno do número em Branco
-        g2.setColor(Color.WHITE);
-        g2.drawString(numStr, textX, textY);
-        
-        // --- 2. RENDERIZAÇÃO DO PEÃO (SOBRE O NÚMERO) ---
-        int centerX = this.getWidth() / 2;
-        int centerY = this.getHeight() / 2;
-
-        ImageIcon currentIcon = (ImageIcon) this.getIcon();
-        if (currentIcon != null) {
-            // Aplica a rotação apenas na imagem do peão, mantendo o número reto ao fundo
-            g2.rotate(Math.toRadians(actualAngle), centerX, centerY);
-            g2.drawImage(currentIcon.getImage(), 0, 0, this);
-        }
-        
-        super.paintComponent(g2);
-        g2.dispose();
+    // 2. Desenhamos o Peão normalmente nesta imagem temporária
+    ImageIcon currentIcon = (ImageIcon) this.getIcon();
+    if (currentIcon != null) {
+        gCanvas.rotate(Math.toRadians(actualAngle), centerX, centerY);
+        gCanvas.drawImage(currentIcon.getImage(), 0, 0, this);
     }
+
+    // 3. Ativamos o modo DST_OUT (Tudo o que desenharmos agora vai APAGAR os pixels do peão)
+    gCanvas.setComposite(AlphaComposite.getInstance(AlphaComposite.DST_OUT, 1.0f));
+
+    // 4. Configura e desenha o número centralizado (ele vai abrir o buraco no peão)
+    String numStr = String.valueOf(this.pawnNumber);
+    gCanvas.setFont(new Font("SansSerif", Font.BOLD, (int) (24 * scale))); // Tamanho proporcional para caber no peão
+    FontMetrics fm = gCanvas.getFontMetrics();
+    
+    int textX = (w - fm.stringWidth(numStr)) / 2;
+    // Ajuste fino no eixo Y para centralizar verticalmente no corpo do peão
+    int textY = (h + fm.getAscent() - fm.getDescent()) / 2 + (int)(2 * scale);
+
+    gCanvas.drawString(numStr, textX, textY);
+    gCanvas.dispose();
+
+    // 5. Desenhamos o resultado final vazado na tela do jogo
+    g2.drawImage(canvas, 0, 0, null);
+    
+    super.paintComponent(g2);
+    g2.dispose();
+}
 
     public double getActualAngle() {
         return this.actualAngle;
