@@ -92,6 +92,7 @@ public class GameContainer extends JPanel {
 
         // Instancia o manager global do jogo
         GameManager gameManager = new GameManager(this.boardScreen);
+        
 
         CPUIManager cpuManager = new CPUIManager(gameManager);
         gameManager.setCPUIManager(cpuManager); 
@@ -131,10 +132,12 @@ public class GameContainer extends JPanel {
         pawnControlArea.setBackground(new Color(38, 24, 16)); // Tom amadeirado escuro
         pawnControlArea.setLayout(null);
 
-        // ADICIONADO: Instancia e adiciona a barra de status no painel de controle dos peões
+        // Instancia e adiciona a barra de status no painel de controle dos peões
         this.statusBar = new GameStatusBar(SCALE);
         this.statusBar.setBounds(STATUS_BAR_BOUNDS);
-        this.statusBar.updateStatus("Vez de Gabriel: Clique no deck", Color.WHITE);
+        turnManager.sortearPrimeiroJogador();
+        
+        gameManager.setGameStatusBar(statusBar);
         pawnControlArea.add(this.statusBar);
 
         // Instancia o "PawnControlManager" para servir de parâmetro na instância do "PawnControlContainer"

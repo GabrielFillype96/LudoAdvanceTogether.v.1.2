@@ -69,9 +69,9 @@ public class CPUIManager {
                         System.out.println("[CPUIManager] A CPU puxou uma carta " + carta.getCardType() + " e... " + (acertou ? "ACERTOU!" : "ERROU!"));
                     }
                     
-                    // === BLINDAGEM MÁXIMA RESTAURADA AQUI ===
+                    // === CORREÇÃO: ENVIANDO OS 4 PARÂMETROS PARA ATIVAR TODAS AS REGRAS E INTERFACES ===
                     try {
-                        this.gameManager.cardResultVerification(acertou, carta.getCardValueText(), carta.getCardEffect());
+                        this.gameManager.cardResultVerification(acertou, carta.getCardValueText(), carta.getCardEffect(), carta.getCardType());
                     } catch (Exception ex) {
                         System.err.println("[CPUIManager] Erro inesperado na carta: " + ex.getMessage());
                         this.gameManager.getTurnManager().nextTurn(); // Passa a vez para não travar

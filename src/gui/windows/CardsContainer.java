@@ -11,7 +11,7 @@ import gui.components.DeckStackBackground; // <--- NOVO IMPORT AQUI
 import gui.components.buttons.cardsButton.CardOptionButton;
 import actions.CardAnswerValidation;
 
-
+import java.awt.Color;
 // Import externo
 import java.awt.event.ActionListener;
 import javax.swing.JPanel;
@@ -27,7 +27,7 @@ public class CardsContainer extends JPanel {
     
     private DeckManager deckManager;
     private TurnManager turnManager;
-
+    private static final Color COLOR_ACTION = new Color(230, 126, 34);
     
     private static final double SCALE = 1.5; 
 
@@ -131,6 +131,23 @@ public class CardsContainer extends JPanel {
             (int) (250 * SCALE),
             (int) (375 * SCALE)
         );
+        
+        // =========================================================================
+        // ATUALIZAÇÃO DA BARRA DE STATUS CONFORME O TIPO DE CARTA REVELADA
+        // =========================================================================
+        if (this.gameManager != null) {
+            String tipoCarta = this.activeCard.getCardType();
+            if ("PERGUNTA".equalsIgnoreCase(tipoCarta)) {
+                this.gameManager.emitirStatus("🧠 Desafio! Selecione a alternativa correta.", java.awt.Color.WHITE);
+            } else if ("SORTE".equalsIgnoreCase(tipoCarta)) {
+                this.gameManager.emitirStatus("🍀 Parece que alguém aqui tem muita sorte!", java.awt.Color.WHITE);
+            } else if ("AZAR".equalsIgnoreCase(tipoCarta)) {
+                this.gameManager.emitirStatus("💀 Que azar! Parece que alguém vai voltar algumas casas!", java.awt.Color.WHITE);
+            } else if ("PEGADINHA".equalsIgnoreCase(tipoCarta)) {
+                this.gameManager.emitirStatus("🃏 Seu espertinho! Escolha um jogador para sacanear.", COLOR_ACTION);
+            }
+        }
+    
         
         // (A LÓGICA DE BOTÕES QUE VOCÊ TINHA SE MANTÉM IGUAL AQUI)
         if ("SORTE".equalsIgnoreCase(this.activeCard.getCardType()) || "AZAR".equalsIgnoreCase(this.activeCard.getCardType())) {
