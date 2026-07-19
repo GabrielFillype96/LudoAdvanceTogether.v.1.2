@@ -13,8 +13,8 @@ public class SubMenuContainer extends JPanel {
     private static final Rectangle SUB_MENU_CONTAINER_BOUNDS = new Rectangle( // Dimensões fixas para o painel de opções do menu principal onde os mini-menu's são exibidos
         (int) (0 * SCALE), 
         (int) (0 * SCALE), 
-        (int) (520 * SCALE),
-        (int) (420 * SCALE)
+        (int) (560 * SCALE),
+        (int) (460 * SCALE)
     );
 
     /**

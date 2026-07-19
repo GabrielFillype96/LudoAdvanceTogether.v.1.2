@@ -5,17 +5,15 @@ import java.awt.Color;
 import java.awt.Font;
 
 public class DifficultyRadioButton {
-    // Variável de instância para a cor dourada dos textos/bordas
-    // A variável "GOLD_ACCENT" recebe um método static para que o método estático consiga enxergá-la
-    private static final Color GOLD_ACCENT = new Color(222, 179, 102); // Dourado fosco dos textos/bordas
+    private static final Color GOLD_ACCENT = new Color(222, 179, 102); 
     
-    /**
-     * Método Estático para criar botões de rádio dourados customizados.
-     * Pode ser chamado diretamente através de: DifficultyRadioButton.goldenBtnRd("Texto");
-     */
-    public static JRadioButton goldenBtnRd(String texto) {
+    // MODIFICADO: Agora o método recebe o parâmetro 'scale' no final
+    public static JRadioButton goldenBtnRd(String texto, double scale) {
         JRadioButton rb = new JRadioButton(texto);
-        rb.setFont(new Font("SansSerif", Font.BOLD, 13));
+        
+        // MODIFICADO: O tamanho da fonte agora acompanha o multiplicador de escala
+        rb.setFont(new Font("SansSerif", Font.BOLD, (int) (13 * scale)));
+        
         rb.setForeground(GOLD_ACCENT);
         rb.setOpaque(false);
         rb.setFocusPainted(false);

@@ -1,9 +1,6 @@
 // Classe responsável por criar a interface do menu do modo de jogo offline
-
-// Packages
 package gui.windows;
 
-// Imports internos
 import gui.components.SlotsIcon;
 import gui.components.PlayerIdentifier;
 import gui.components.SlotsName;
@@ -13,264 +10,238 @@ import gui.components.buttons.DifficultyRadioButton;
 import actions.StartGameAction;
 import gui.theme.GameColors;
 
-//Imports externos
 import java.awt.*;
 import javax.swing.*;
 
-// Cria uma classe "NewGameMenuScreen" que irá herdar métodos da classe JPanel (nativa do Java Swing)
 public class NewGameMenuScreen extends JPanel {
-    // VARIÁVEIS DE INSTÂNCIA
-    // Variável para armazenar a referência ao WindowManager, que é o responsável por controlar as telas do jogo
     private WindowManager windowManager;
-
-    // Variável para armazenar a referência ao painel de opções do menu principal, onde os mini-menu's são exibidos
     private SubMenuContainer subMenuContainer;
-    private static final double SCALE = 1.5; // Fator de escala para ajustar o tamanho dos componentes (pode ser ajustado conforme necessário)
+    private static final double SCALE = 1.5; 
 
-    // Instancia (cria o objeto) da classe Dimension do Java Awt com as dimensões do menu offline
-    private static final Dimension OFFLINE_MENU_DIMENSION = new Dimension( // Dimensões fixas para o menu offline
-        (int) (520 * SCALE), 
-        (int) (420 * SCALE)
+    private static final Dimension OFFLINE_MENU_DIMENSION = new Dimension( 
+        (int) (560 * SCALE), 
+        (int) (460 * SCALE)
     );
 
-    // Variáveis para os componentes interativos do menu offline
-    private JRadioButton rbEasy, rbMedium, rbHard; // Botões do tipo radio para a dificuldade7
+    private JRadioButton rbEasy, rbMedium, rbHard; 
+    private JTextField txtP1, txtCPU1, txtCPU2, txtCPU3; 
+    private JComboBox<String> cbColorP1, cbColorCPU1, cbColorCPU2, cbColorCPU3;
+    
+    // NOVO: Declaração das variáveis dos ícones para podermos alterar a cor deles depois
+    private JLabel lblIconP1, lblIconCPU1, lblIconCPU2, lblIconCPU3;
+    
+    private boolean updatingColors = false; 
 
-    // Depois irá precisar de um método getter para pegar o nome dos demais players 
-    private JTextField txtP1, txtCPU1, txtCPU2, txtCPU3; // Campos de texto para os nomes dos jogadores
-    
-    
-    /** 
-    * @param WindowManager Gerenciador responsável pela troca de tela
-    * @param SubMenuContainer Container que irá guardar o subMenu
-    */
-    // Construtor que recebe o WindowManager para poder chamar as transições de tela
     public NewGameMenuScreen(WindowManager windowManager, SubMenuContainer subMenuContainer) {
         this.windowManager = windowManager;
         this.subMenuContainer = subMenuContainer;
-        // Dimensões exatas para o GridBagLayout centralizar perfeitamente
-        //setSize(offlineMenuSize); // Define o tamanho do painel para as dimensões do menu offline
-        setPreferredSize(OFFLINE_MENU_DIMENSION); // 
+        
+        setPreferredSize(OFFLINE_MENU_DIMENSION); 
         setMinimumSize(OFFLINE_MENU_DIMENSION);
         setMaximumSize(OFFLINE_MENU_DIMENSION);
         
-        setOpaque(false); // Deixa o layer transparente para mostrar o fundo 
-        setLayout(null); // Layout absoluto para controle total dos pixels de espaçamento
+        setOpaque(false); 
+        setLayout(null); 
 
         // Título do sub-menu
-        // Instancia um JLabel com o texto "MODO JOGO OFFLINE" e centraliza o texto horizontalmente
-        JLabel title = new JLabel(
-            "MODO JOGO OFFLINE", 
-            SwingConstants.CENTER
-        ); 
+        JLabel title = new JLabel("MODO JOGO OFFLINE", SwingConstants.CENTER); 
+        title.setFont(new Font("Serif", Font.BOLD, (int) (22 * SCALE)));
+        title.setForeground(GameColors.GOLD_ACCENT);
+        title.setBounds((int) (0 * SCALE), (int) (25 * SCALE), (int) (560 * SCALE), (int) (30 * SCALE)); 
+        add(title); 
 
-        // Define a fonte, cor e posição do título
-        title.setFont(new Font(
-            "Serif", // Fonte Serif
-            Font.BOLD, // Estilo da fonte em negrito
-            (int) (22 * SCALE) // Tamanho da fonte 22
-        ));
-        title.setForeground(GameColors.GOLD_ACCENT); // Cor do título em dourado fosco
-        title.setBounds(
-            (int) (0 * SCALE), 
-            (int) (25 * SCALE), 
-            (int) (520 * SCALE), 
-            (int) (30 * SCALE)
-        ); 
-        add(title); // Adiciona o título ao painel
-
-        // Seleção da dificuldade da CPU
-        // Instancia um JLabel para a seção de dificuldade, alinhado à direita
-        JLabel lblDif = new JLabel(
-            "Dificuldade da CPU:", 
-            SwingConstants.RIGHT
-        );
-
-        // Define a fonte, cor e posição do label de dificuldade
-        lblDif.setFont(new Font(
-            "SansSerif", // Fonte SansSerif
-            Font.BOLD, // Estilo da fonte em negrito
-            (int) (13 * SCALE)// Tamanho da fonte 13
-        ));
+        // Seleção da dificuldade
+        JLabel lblDif = new JLabel("Dificuldade da CPU:", SwingConstants.RIGHT);
+        lblDif.setFont(new Font("SansSerif", Font.BOLD, (int) (13 * SCALE)));
         lblDif.setForeground(GameColors.GOLD_ACCENT);
-        lblDif.setBounds(
-            (int) (20 * SCALE), 
-            (int) (70 * SCALE), 
-            (int) (140 * SCALE), 
-            (int) (25 * SCALE)
-        );
-        add(lblDif); // Adiciona o label de dificuldade ao painel
+        lblDif.setBounds((int) (20 * SCALE), (int) (70 * SCALE), (int) (140 * SCALE), (int) (25 * SCALE));
+        add(lblDif); 
 
-        // Instancia os botões de rádio para as opções de dificuldade e define a posição e tamanho
-        rbEasy = DifficultyRadioButton.goldenBtnRd("Fácil");
-        rbEasy.setBounds(
-            (int) (180 * SCALE), 
-            (int) (70 * SCALE), 
-            (int) (70 * SCALE), 
-            (int) (25 *SCALE)
-        );
-        rbMedium = gui.components.buttons.DifficultyRadioButton.goldenBtnRd("Médio");
-        rbMedium.setBounds(
-            (int) (260 * SCALE), 
-            (int) (70 * SCALE), 
-            (int) (80 * SCALE), 
-            (int) (25 * SCALE)
-        );
+        rbEasy = DifficultyRadioButton.goldenBtnRd("Fácil", SCALE);
+        rbEasy.setBounds((int) (180 * SCALE), (int) (70 * SCALE), (int) (70 * SCALE), (int) (25 * SCALE));
+        rbMedium = DifficultyRadioButton.goldenBtnRd("Médio", SCALE);
+        rbMedium.setBounds((int) (260 * SCALE), (int) (70 * SCALE), (int) (80 * SCALE), (int) (25 * SCALE));
         rbMedium.setSelected(true);
-        rbHard = gui.components.buttons.DifficultyRadioButton.goldenBtnRd("Difícil");
-        rbHard.setBounds(
-            (int) (350 * SCALE), 
-            (int) (70 * SCALE), 
-            (int) (80 * SCALE), 
-            (int) (25 * SCALE)
-        );
+        rbHard = DifficultyRadioButton.goldenBtnRd("Difícil", SCALE);
+        rbHard.setBounds((int) (350 * SCALE), (int) (70 * SCALE), (int) (80 * SCALE), (int) (25 * SCALE));
 
-        // O método ButtonGroup é utilizado para agrupar os botões de rádio, garantindo que apenas um possa ser selecionado por vez.
         ButtonGroup buttonGroup = new ButtonGroup();
-        // Adiciona os botões de rádio ao grupo para garantir a exclusividade da seleção
         buttonGroup.add(rbEasy); 
         buttonGroup.add(rbMedium); 
         buttonGroup.add(rbHard);
-        // Adiciona os botões de rádio ao painel para que sejam exibidos na interface
         add(rbEasy); 
         add(rbMedium); 
         add(rbHard);
 
-        // Seção de slots para os nomes dos jogadores
-        JLabel subTitle = new JLabel(
-            "INSERIR NOMES DOS JOGADORES", 
-            SwingConstants.CENTER
-        );
-        subTitle.setFont(new Font(
-            "SansSerif", // Fonte SansSerif
-            Font.BOLD, // Estilo da fonte em negrito
-            (int) (14 * SCALE) // Tamanho da fonte 14
-        ));
+        // Subtítulo
+        JLabel subTitle = new JLabel("INSERIR NOMES DOS JOGADORES", SwingConstants.CENTER);
+        subTitle.setFont(new Font("SansSerif", Font.BOLD, (int) (14 * SCALE)));
         subTitle.setForeground(GameColors.GOLD_ACCENT);
-        subTitle.setBounds(
-            (int) (0 * SCALE), 
-            (int) (120 * SCALE), 
-            (int) (520 * SCALE), 
-            (int) (20 * SCALE)
-        );
+        subTitle.setBounds((int) (0 * SCALE), (int) (560 * SCALE), (int) (560 * SCALE), (int) (20 * SCALE));
+        
+        // Correção visual do bound do subtítulo para o novo tamanho da caixa
+        subTitle.setBounds((int) (0 * SCALE), (int) (120 * SCALE), (int) (560 * SCALE), (int) (20 * SCALE));
         add(subTitle);
 
-        /* 
-         * Explicação dos espaçamentos dos slots (X):
-         * Número começa em X. Mede 35px de largura.
-         * Damos +8px de espaço vazio (respiro para sua arte).
-         * Campo de texto começa em X + 35 + 8.
-         */
-        int i = 0;
-        for (int x = 25; x <= 280; x +=255) {
-            for (int y = 155; y <= 210; y += 55) {
+        // --- LINHA 1 DE JOGADORES ---
+        add(PlayerIdentifier.squarePlayerIdentifier("1", (int) (25 * SCALE), (int) (155 * SCALE), SCALE));
+        add(PlayerIdentifier.squarePlayerIdentifier("3", (int) (280 * SCALE), (int) (155 * SCALE), SCALE));
 
-                // MODIFICADO: Adicionado 'SCALE' como último argumento
-                add(PlayerIdentifier.squarePlayerIdentifier(
-                    String.valueOf(i + 1),
-                    (int) (x * SCALE),
-                    (int) (y * SCALE),
-                    SCALE
-                ));
-                i++;
-            }
-        }
-
-        // Cria o campo de texto para os jogadores utilizando a classe "SlotsName" e armazena a referência na variável.
-        // Não é preciso criar um novo objeto pois a classe "SlotsName" já tem um método estático que retorna o JTextField pronto para uso.
         txtP1 = SlotsName.slotName((int) (68 * SCALE), (int) (155 * SCALE), (int) (155 * SCALE), (int) (35 * SCALE), true, SCALE);
         txtCPU1 = SlotsName.slotName((int) (328 * SCALE), (int) (155 * SCALE), (int) (155 * SCALE), (int) (35 * SCALE), false, SCALE); 
-        txtCPU2 = SlotsName.slotName((int) (68 * SCALE), (int) (210 * SCALE), (int) (155 * SCALE), (int) (35 * SCALE), false, SCALE); 
-        txtCPU3 = SlotsName.slotName((int) (328 * SCALE), (int) (210 * SCALE), (int) (155 * SCALE), (int) (35 * SCALE), false, SCALE); 
-        
-        // Define o texto padrão dos campos
-        txtP1.setText("Digite seu nome"); // Player 1
-        txtCPU1.setText("Computador 1"); // CPU 1
-        txtCPU2.setText("Computador 2"); // CPU 2
-        txtCPU3.setText("Computador 3"); // CPU 3
-
-        // Adiciona os campos de texto ao painel para que sejam exibidos na interface
+        txtP1.setText("Digite seu nome");
+        txtCPU1.setText("Computador 1");
         add(txtP1);
         add(txtCPU1);
+        
+        // MODIFICADO: Atribuindo os ícones às variáveis criadas
+        lblIconP1 = SlotsIcon.slotIconLabel("👤", (int) (225 * SCALE), (int) (155 * SCALE), SCALE); 
+        lblIconCPU1 = SlotsIcon.slotIconLabel("💻", (int) (485 * SCALE), (int) (155 * SCALE), SCALE); 
+        add(lblIconP1);
+        add(lblIconCPU1);
+
+        cbColorP1 = createColorComboBox((int) (68 * SCALE), (int) (195 * SCALE), (int) (155 * SCALE), (int) (25 * SCALE));
+        cbColorCPU1 = createColorComboBox((int) (328 * SCALE), (int) (195 * SCALE), (int) (155 * SCALE), (int) (25 * SCALE));
+        cbColorP1.setSelectedIndex(0);   
+        cbColorCPU1.setSelectedIndex(1); 
+        add(cbColorP1);
+        add(cbColorCPU1);
+
+        // --- LINHA 2 DE JOGADORES ---
+        add(PlayerIdentifier.squarePlayerIdentifier("2", (int) (25 * SCALE), (int) (245 * SCALE), SCALE));
+        add(PlayerIdentifier.squarePlayerIdentifier("4", (int) (280 * SCALE), (int) (245 * SCALE), SCALE));
+
+        txtCPU2 = SlotsName.slotName((int) (68 * SCALE), (int) (245 * SCALE), (int) (155 * SCALE), (int) (35 * SCALE), false, SCALE); 
+        txtCPU3 = SlotsName.slotName((int) (328 * SCALE), (int) (245 * SCALE), (int) (155 * SCALE), (int) (35 * SCALE), false, SCALE); 
+        txtCPU2.setText("Computador 2");
+        txtCPU3.setText("Computador 3");
         add(txtCPU2);
         add(txtCPU3);
-        
-        // Adiciona os ícones laterais
-        // Adiciona os ícones laterais atualizados com a escala
-        add(SlotsIcon.slotIconLabel("👤", (int) (225 * SCALE), (int) (155 * SCALE), SCALE)); 
-        add(SlotsIcon.slotIconLabel("💻", (int) (485 * SCALE), (int) (155 * SCALE), SCALE)); 
-        add(SlotsIcon.slotIconLabel("💻", (int) (225 * SCALE), (int) (210 * SCALE), SCALE));
-        add(SlotsIcon.slotIconLabel("💻", (int) (485 * SCALE), (int) (210 * SCALE), SCALE));
-        
-        // Cria o botão de iniciar o jogo utilizando a classe "PlayButton" e armazena a referência na variável "playBtn"
+
+        // MODIFICADO: Atribuindo os ícones às variáveis criadas
+        lblIconCPU2 = SlotsIcon.slotIconLabel("💻", (int) (225 * SCALE), (int) (245 * SCALE), SCALE);
+        lblIconCPU3 = SlotsIcon.slotIconLabel("💻", (int) (485 * SCALE), (int) (245 * SCALE), SCALE);
+        add(lblIconCPU2);
+        add(lblIconCPU3);
+
+        cbColorCPU2 = createColorComboBox((int) (68 * SCALE), (int) (285 * SCALE), (int) (155 * SCALE), (int) (25 * SCALE));
+        cbColorCPU3 = createColorComboBox((int) (328 * SCALE), (int) (285 * SCALE), (int) (155 * SCALE), (int) (25 * SCALE));
+        cbColorCPU2.setSelectedIndex(2); 
+        cbColorCPU3.setSelectedIndex(3); 
+        add(cbColorCPU2);
+        add(cbColorCPU3);
+
+        // Ativa a lógica inteligente que gerencia as cores e os ícones
+        setupColorSelectionLogic();
+
+        // Botão Jogar
         CustomButton playBtn = new PlayButton();
-        playBtn.setBounds(
-            (int) (180 * SCALE), 
-            (int) (300 * SCALE), 
-            (int) (200 * SCALE), 
-            (int) (45 * SCALE)
-        ); // Define a posição e o tamanho do botão
+        playBtn.setBounds((int) (180 * SCALE), (int) (355 * SCALE), (int) (200 * SCALE), (int) (45 * SCALE)); 
         
-        // Cria a ação de iniciar o jogo
         StartGameAction startGameAction = new StartGameAction(this, this.windowManager); 
-        playBtn.addActionListener(startGameAction); // Adiciona a ação de iniciar o jogo ao botão "playBtn"
-        add(playBtn); // Adiciona o botão "playBtn" ao painel para que seja exibido na interface
+        playBtn.addActionListener(startGameAction); 
+        add(playBtn); 
     }
 
-    // Método para desenhar o fundo personalizado do menu offline
-    // @Override indica que o método "paintComponent" está sendo sobrescrito da classe pai (JPanel). Serve como uma espécie de "guarda-costas" para garantir que estamos realmente sobrescrevendo um método existente e não criando um novo método por engano.
-    @Override
-    // O método "paintComponent" é chamado sempre que o painel precisa ser redesenhado, permitindo que personalizemos a aparência do fundo do menu offline.
-    // Visibilidade "protected" para que apenas classes dentro do mesmo pacote ou subclasses possam acessar este método
-    protected void paintComponent(Graphics g) {
-        // Estrutura padrão do "paintComponent" para garantir que o fundo seja desenhado corretamente
-        super.paintComponent(g);
-        // Cria um contexto gráfico 2D para aplicar renderizações avançadas (como anti-aliasing)
-        Graphics2D g2 = (Graphics2D) g;
-        // Habilita o anti-aliasing para suavizar as bordas das imagens desenhadas
-        g2.setRenderingHint(
-            RenderingHints.KEY_ANTIALIASING, 
-            RenderingHints.VALUE_ANTIALIAS_ON
-        );
+    private JComboBox<String> createColorComboBox(int x, int y, int w, int h) {
+        String[] cores = {"Roxo", "Azul", "Amarelo", "Rosa"};
+        JComboBox<String> cb = new JComboBox<>(cores);
+        cb.setBounds(x, y, w, h);
+        cb.setBackground(new Color(25, 14, 33)); 
+        cb.setForeground(Color.WHITE);
+        cb.setFont(new Font("SansSerif", Font.BOLD, (int) (12 * SCALE)));
+        cb.setBorder(new javax.swing.border.LineBorder(GameColors.GOLD_ACCENT, 1));
+        return cb;
+    }
 
-        // Placa roxa de fundo
-        g2.setColor(GameColors.PURPLE_BG);
-        g2.fillRoundRect(
-            (int) (0 * SCALE), 
-            (int) (0 * SCALE), 
-            (int) (getWidth()), 
-            (int) (getHeight()), 
-            (int) (24 * SCALE), 
-            (int) (24 * SCALE)
-        );
+    // NOVO: Método para traduzir o texto da seleção em um objeto Color real para os ícones
+    private Color getColorByString(String nomeCor) {
+        if (nomeCor == null) return GameColors.GOLD_ACCENT;
+        switch (nomeCor) {
+            case "Roxo": return new Color(155, 89, 182);   // Roxo vivo
+            case "Azul": return new Color(52, 152, 219);   // Azul claro/médio
+            case "Amarelo": return new Color(241, 196, 15); // Amarelo clássico
+            case "Rosa": return new Color(232, 67, 147);    // Rosa destacado
+            default: return GameColors.GOLD_ACCENT;
+        }
+    }
+
+    // MODIFICADO: Atualiza a troca automática e aplica as novas cores nos ícones correspondentes
+    private void setupColorSelectionLogic() {
+        @SuppressWarnings("unchecked")
+        JComboBox<String>[] boxes = new JComboBox[]{cbColorP1, cbColorCPU1, cbColorCPU2, cbColorCPU3};
+        JLabel[] icons = new JLabel[]{lblIconP1, lblIconCPU1, lblIconCPU2, lblIconCPU3};
         
-        // Moldura dourada externa
+        for (int i = 0; i < boxes.length; i++) {
+            final int currentIndex = i;
+            boxes[i].addActionListener(e -> {
+                if (updatingColors) return; 
+                
+                updatingColors = true;
+                
+                int duplicateIndex = -1;
+                for (int j = 0; j < boxes.length; j++) {
+                    if (j != currentIndex && boxes[j].getSelectedIndex() == boxes[currentIndex].getSelectedIndex()) {
+                        duplicateIndex = j;
+                        break;
+                    }
+                }
+                
+                if (duplicateIndex != -1) {
+                    boolean[] colorUsed = new boolean[4];
+                    for (int j = 0; j < boxes.length; j++) {
+                        if (j != duplicateIndex) {
+                            colorUsed[boxes[j].getSelectedIndex()] = true;
+                        }
+                    }
+                    
+                    int missingColorIndex = 0;
+                    for (int k = 0; k < 4; k++) {
+                        if (!colorUsed[k]) {
+                            missingColorIndex = k;
+                            break;
+                        }
+                    }
+                    
+                    boxes[duplicateIndex].setSelectedIndex(missingColorIndex);
+                }
+                
+                // NOVO: Aplica dinamicamente a cor certa no ícone de cada jogador após a definição das cores
+                for (int j = 0; j < boxes.length; j++) {
+                    String corSelecionada = (String) boxes[j].getSelectedItem();
+                    icons[j].setForeground(getColorByString(corSelecionada));
+                }
+                
+                updatingColors = false;
+            });
+        }
+        
+        // Força os ícones a iniciarem com as cores corretas logo na abertura da tela
+        for (int j = 0; j < boxes.length; j++) {
+            String corSelecionada = (String) boxes[j].getSelectedItem();
+            icons[j].setForeground(getColorByString(corSelecionada));
+        }
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+        g2.setColor(GameColors.PURPLE_BG);
+        g2.fillRoundRect(0, 0, getWidth(), getHeight(), (int) (24 * SCALE), (int) (24 * SCALE));
+        
         g2.setColor(GameColors.GOLD_ACCENT);
         g2.setStroke(new BasicStroke(3));
-        g2.drawRoundRect(
-            (int) (2 * SCALE), 
-            (int) (2 * SCALE), 
-            getWidth() - (int) (5 * SCALE), 
-            getHeight() - (int) (5 * SCALE), 
-            (int) (24 * SCALE), 
-            (int)(24 * SCALE)
-        );
+        g2.drawRoundRect((int) (2 * SCALE), (int) (2 * SCALE), getWidth() - (int) (5 * SCALE), getHeight() - (int) (5 * SCALE), (int) (24 * SCALE), (int)(24 * SCALE));
     }
 
-    // Método para obter a referência ao painel de opções do menu principal, onde os mini-menu's são exibidos
-    public SubMenuContainer getSubMenuContainer() {
-        return subMenuContainer;
-    }
-    // Método para obter o nome do jogador inserido no campo de texto "txtP1"
-    public String getPlayerName() {
-        // Retorna o texto do campo do P1 (certifique-se de que a variável txtP1 seja visível aqui)
-        return txtP1.getText();
-    }
-    // Método para obter a dificuldade selecionada pelos botões de rádio
+    public SubMenuContainer getSubMenuContainer() { return subMenuContainer; }
+    public String getPlayerName() { return txtP1.getText(); }
     public String getCPUDifficulty() {
-        // Verifica qual rádio botão está marcado no momento do clique
         if (rbEasy.isSelected()) return "FÁCIL";
         if (rbHard.isSelected()) return "DIFÍCIL";
-        return "MÉDIO"; // Caso padrão
+        return "MÉDIO";
     }
 }
