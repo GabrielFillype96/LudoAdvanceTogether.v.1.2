@@ -10,7 +10,6 @@ public class StartGameAction implements ActionListener {
     private NewGameMenuScreen offlineMenu;
     private WindowManager windowManager;
 
-    // O construtor recebe o menu offline para poder ler os inputs e o gerenciador para mudar a tela
     public StartGameAction(NewGameMenuScreen offlineMenu, WindowManager windowManager) {
         this.offlineMenu = offlineMenu;
         this.windowManager = windowManager;
@@ -21,16 +20,31 @@ public class StartGameAction implements ActionListener {
         System.out.println("[Action] Botão JOGAR detectado! Processando dados da partida...");
 
         if (offlineMenu != null && windowManager != null) {
-            // 1. Extrai o nome do jogador do JTextField (vamos criar esses métodos no menu já já)
-            String player1Name = offlineMenu.getPlayerName();
+            // 1. Extrai todos os nomes do menu (usando os getters que adicionamos no menu)
+            String p1Name = offlineMenu.getPlayer1Name();
+            String p2Name = offlineMenu.getCPU1Name(); // Slot 2 (Computador 2)
+            String p3Name = offlineMenu.getCPU2Name(); // Slot 3 (Computador 1)
+            String p4Name = offlineMenu.getCPU3Name(); // Slot 4 (Computador 3)
 
-            // 2. Extrai a dificuldade selecionada nos RadioButtons
+            // 2. Extrai todas as cores selecionadas
+            String p1Color = offlineMenu.getPlayer1Color();
+            String p2Color = offlineMenu.getCPU1Color();
+            String p3Color = offlineMenu.getCPU2Color();
+            String p4Color = offlineMenu.getCPU3Color();
+
+            // 3. Extrai a dificuldade
             String difficulty = offlineMenu.getCPUDifficulty();
 
-            System.out.println("[Action] Dados Coletados -> Jogador: " + player1Name + " | Dificuldade: " + difficulty);
+            System.out.println("[Action] Enviando dados para o WindowManager...");
 
-            // 3. Ordena ao WindowManager para carregar o jogo com esses parâmetros
-            windowManager.startOfflineGameMode(player1Name, difficulty);
+            // 4. Envia tudo para o WindowManager iniciar a tela do jogo
+            windowManager.startOfflineGameMode(
+                p1Name, p1Color,
+                p2Name, p2Color,
+                p3Name, p3Color,
+                p4Name, p4Color,
+                difficulty
+            );
         }
     }
 }

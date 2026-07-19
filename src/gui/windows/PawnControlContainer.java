@@ -15,9 +15,9 @@ import java.awt.Cursor;
 
 public class PawnControlContainer extends JPanel {
     private PawnControlManager pawnControlManager;
-    private static final String STD_PAWN_IMG_PATH = "/assets/peaoAzul_90x90.png"; 
-    private static final String DISABLED_PAWN_IMG_PATH = "/assets/peaoRosa_90x90.png"; 
-    private static final String GOLDEN_PAWN_IMG_PATH = "/assets/peaoAmarelo_90x90.png"; 
+    private String stdPawnImgPath = "/assets/peaoAzul_90x90.png"; 
+    private String disabledPawnImgPath = "/assets/peaoRosa_90x90.png"; 
+    private String goldenPawnImgPath = "/assets/peaoAmarelo_90x90.png"; 
     private ReferencePawn[] pawnLabels;
     private static final double SCALE = 1.5;
     private boolean locked = true; // Inicia bloqueado até que o jogo libere
@@ -29,14 +29,27 @@ public class PawnControlContainer extends JPanel {
         (int) (120 * SCALE)
     );
     
-    public PawnControlContainer(PawnControlManager pawnControlManager) {
+    // Atualize a assinatura do construtor para receber "playerColor"
+    public PawnControlContainer(PawnControlManager pawnControlManager, String playerColor) {
         this.pawnControlManager = pawnControlManager;
         setBounds(PAWN_CONTROL_CONTAINER_BOUNDS); 
         setOpaque(false);   
         setLayout(null);    
 
-        this.pawnLabels = new ReferencePawn[4];
+        // Define a imagem padrão com base na cor escolhida no menu
+        if (playerColor == null) playerColor = "azul";
+        switch (playerColor.toLowerCase()) {
+            case "roxo":    this.stdPawnImgPath = "/assets/peaoRoxo_90x90.png"; break;
+            case "rosa":    this.stdPawnImgPath = "/assets/peaoRosa_90x90.png"; break;
+            case "amarelo": this.stdPawnImgPath = "/assets/peaoAmarelo_90x90.png"; break;
+            default:        this.stdPawnImgPath = "/assets/peaoAzul_90x90.png"; break;
+        }
 
+        // Mantenha ou altere os caminhos abaixo caso possua variações específicas dessas imagens
+        this.disabledPawnImgPath = "/assets/peaoRosa_90x90.png"; 
+        this.goldenPawnImgPath = "/assets/peaoAmarelo_90x90.png"; 
+
+        this.pawnLabels = new ReferencePawn[4];
         int labelWidth = (int) (40 * SCALE);
         int labelHeight = (int) (40 * SCALE);
 
@@ -45,10 +58,11 @@ public class PawnControlContainer extends JPanel {
         int[] posY = {15, 65, 15, 65};
 
         for (int i = 0; i < 4; i++) {
+            // Agora passa os caminhos dinâmicos configurados acima
             pawnLabels[i] = new ReferencePawn(
-                STD_PAWN_IMG_PATH, 
-                DISABLED_PAWN_IMG_PATH, 
-                GOLDEN_PAWN_IMG_PATH, 
+                this.stdPawnImgPath, 
+                this.disabledPawnImgPath, 
+                this.goldenPawnImgPath, 
                 pawnNumbers[i], 
                 SCALE
             );
@@ -62,9 +76,7 @@ public class PawnControlContainer extends JPanel {
         pawnVisualState(2, "NORMAL");
         pawnVisualState(3, "NORMAL");
 
-        // Aplica o cursor padrão inicial
         setLocked(true);
-
         this.pawnControlManager.setPawnControlContainer(this);
     }
 

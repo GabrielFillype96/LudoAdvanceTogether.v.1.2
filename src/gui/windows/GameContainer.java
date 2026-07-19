@@ -87,18 +87,29 @@ public class GameContainer extends JPanel {
     );
     
 
-    // Construtor da classe "GameContainer"
-    public GameContainer(String playerName, String cpuDifficulty) {
-        this.playerName = playerName;
+    // MODIFICADO: Construtor atualizado para aceitar a configuração dinâmica vinda do menu
+    public GameContainer(
+        String player1Name, String player1Color, 
+        String player2Name, String player2Color, 
+        String player3Name, String player3Color, 
+        String player4Name, String player4Color, 
+        String cpuDifficulty
+    ) {
+        this.playerName = player1Name;
         this.cpuDifficulty = cpuDifficulty;
 
         // Dimensões fixas para o painel dos cards
         setBounds(GAME_CONTAINER_BOUNDS); // Tamanho do container do jogo (1470x1020)
-        setLayout(null); // Layout nulo torna o painel absoluto 
+        setLayout(null); // Layout nulo torna o painel absoluto
         setOpaque(false); // Fundo transparente para permitir a exibição do deck
 
-        // Instancia o painel do tabuleiro original
-        this.boardScreen = new BoardScreen("Gabriel", "Azul", "Fernanda", "Roxo", "Raimunda", "Rosa", "Paulo", "Amarelo");
+        // MODIFICADO: Agora instancia a BoardScreen usando as strings reais enviadas do menu
+        this.boardScreen = new BoardScreen(
+            player1Name, player1Color, 
+            player2Name, player2Color, 
+            player3Name, player3Color, 
+            player4Name, player4Color
+        );
         
         // =========================================================================
         // INTEGRAÇÃO DA MOLDURA: Encapsula o tabuleiro dentro do painel com moldura
@@ -111,7 +122,7 @@ public class GameContainer extends JPanel {
         
 
         CPUIManager cpuManager = new CPUIManager(gameManager);
-        gameManager.setCPUIManager(cpuManager); 
+        gameManager.setCPUIManager(cpuManager);
 
         TurnManager turnManager = new TurnManager(gameManager);
         gameManager.setTurnManager(turnManager);
@@ -124,8 +135,8 @@ public class GameContainer extends JPanel {
         turnManager.setCPUIManager(cpuManager);
 
         // Área reservada ao layout das cartas, controles e informações de jogador
-        JPanel cardsArea = new JPanel(); 
-        cardsArea.setBounds(CARDS_AREA_BOUNDS); 
+        JPanel cardsArea = new JPanel();
+        cardsArea.setBounds(CARDS_AREA_BOUNDS);
         cardsArea.setBackground(new Color(255, 0, 16)); // Tom amadeirado escuro
         cardsArea.setLayout(null);
 
@@ -134,16 +145,16 @@ public class GameContainer extends JPanel {
 
         // Instancia o "CardsContainer" que será responsável por conter e renderizar as cartas do jogo
         CardsContainer cardsContainer = new CardsContainer(gameManager, cardAnswerValidation);
-        cardsContainer.setBounds(CARDS_CONTAINER_BOUNDS); 
+        cardsContainer.setBounds(CARDS_CONTAINER_BOUNDS);
         cardsContainer.setBackground(new Color(0, 255, 16));
         cardsArea.add(cardsContainer);
 
-        cardsContainer.setDeckManager(this.deckManager); 
+        cardsContainer.setDeckManager(this.deckManager);
         cardsContainer.setTurnManager(turnManager);
 
         // Área reservada ao layout do controle dos peões
         JPanel pawnControlArea = new JPanel();
-        pawnControlArea.setBounds(PAWN_CONTROL_AREA_BOUNDS); 
+        pawnControlArea.setBounds(PAWN_CONTROL_AREA_BOUNDS);
         pawnControlArea.setBackground(new Color(38, 24, 16)); // Tom amadeirado escuro
         pawnControlArea.setLayout(null);
 
@@ -163,8 +174,8 @@ public class GameContainer extends JPanel {
         
         
         // Instancia o "PawnControlContainer" que será responsável por conter e renderizar os peões de controle do jogo
-        PawnControlContainer pawnControlContainer = new PawnControlContainer(pawnControlManager);
-        pawnControlContainer.setBounds(PAWN_CONTROL_CONTAINER_BOUNDS); 
+        PawnControlContainer pawnControlContainer = new PawnControlContainer(pawnControlManager, player1Color);
+        pawnControlContainer.setBounds(PAWN_CONTROL_CONTAINER_BOUNDS);
         pawnControlContainer.setBackground(new Color(38, 24, 16));
         pawnControlArea.add(pawnControlContainer);
         
@@ -175,8 +186,8 @@ public class GameContainer extends JPanel {
         pawnControlArea.repaint();
         pawnControlArea.revalidate();
         cardsArea.repaint();
-        this.statusBar.revalidate(); 
-        this.statusBar.repaint();    
+        this.statusBar.revalidate();
+        this.statusBar.repaint();   
         this.boardScreen.revalidate();
         this.boardScreen.repaint();
         boardWithFrame.revalidate();

@@ -244,4 +244,16 @@ public class NewGameMenuScreen extends JPanel {
         if (rbHard.isSelected()) return "DIFÍCIL";
         return "MÉDIO";
     }
+
+    // Retorna os nomes de todos os slots
+    public String getPlayer1Name() { return txtP1.getText().trim(); }
+    public String getCPU1Name() { return txtCPU1.getText().trim(); }
+    public String getCPU2Name() { return txtCPU2.getText().trim(); }
+    public String getCPU3Name() { return txtCPU3.getText().trim(); }
+
+    // Retorna as cores selecionadas em formato de texto (ex: "Roxo", "Azul")
+    public String getPlayer1Color() { return (String) cbColorP1.getSelectedItem(); }
+    public String getCPU1Color() { return (String) cbColorCPU1.getSelectedItem(); }
+    public String getCPU2Color() { return (String) cbColorCPU2.getSelectedItem(); }
+    public String getCPU3Color() { return (String) cbColorCPU3.getSelectedItem(); }
 }

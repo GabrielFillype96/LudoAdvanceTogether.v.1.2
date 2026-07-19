@@ -90,10 +90,10 @@ public class BoardScreen extends JPanel {
         
         // ATENÇÃO: Substitua os nomes dos arquivos PNG de acordo com as cores reais que tem na sua pasta assets!
         String[] pawnImages = {
-            "/assets/peaoAzul_90x90.png",    // Jogador 1
-            "/assets/peaoRoxo_90x90.png", // Jogador 2 (CPU 1)
-            "/assets/peaoRosa_90x90.png",    // Jogador 3 (CPU 2)
-            "/assets/peaoAmarelo_90x90.png"   // Jogador 4 (CPU 3)
+            getPawnImagePath(player1Color), // Imagem dinâmica do Jogador 1
+            getPawnImagePath(player2Color), // Imagem dinâmica do Jogador 2
+            getPawnImagePath(player3Color), // Imagem dinâmica do Jogador 3
+            getPawnImagePath(player4Color)  // Imagem dinâmica do Jogador 4
         };
         
         // Array com os caminhos (paths) de todos os jogadores para facilitar a leitura no loop
@@ -644,6 +644,19 @@ public class BoardScreen extends JPanel {
             case 2: return this.player3Path;
             case 3: return this.player4Path;
             default: return this.player1Path; // Retorno de segurança
+        }
+    }
+
+    // Método auxiliar para converter o nome da cor no caminho do asset correspondente
+    private String getPawnImagePath(String colorName) {
+        if (colorName == null) return "/assets/peaoAzul_90x90.png";
+        
+        switch (colorName.toLowerCase()) {
+            case "roxo": return "/assets/peaoRoxo_90x90.png";
+            case "azul": return "/assets/peaoAzul_90x90.png";
+            case "rosa": return "/assets/peaoRosa_90x90.png";
+            case "amarelo": return "/assets/peaoAmarelo_90x90.png";
+            default: return "/assets/peaoAzul_90x90.png"; // Padrão de segurança
         }
     }
 }
