@@ -18,10 +18,17 @@ public class Main {
             janela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             janela.setResizable(false); // Mantido false para o usuário não distorcer o layout nulo
             
+            // =========================================================================
+            // REMOVE A BARRA DE TÍTULO SUPERIOR PARA GANHAR ESPAÇO VERTICAL
+            // =========================================================================
+            janela.setUndecorated(true);
+            
             // 1. Instancia o painel base de fundo e define seu tamanho preferido
             MainScreenContainer telaFundo = new MainScreenContainer();
             telaFundo.setLayout(null);
-            telaFundo.setPreferredSize(new java.awt.Dimension(1350, 900));
+            
+            // DIMENSÃO DA JANELA ATUALIZADA: De 1350x900 para 1470x1020 (980x680 * 1.5)
+            telaFundo.setPreferredSize(new java.awt.Dimension(1470, 1020));
 
             // 2. Cria o WindowManager passando a tela de fundo para gerir as transições
             WindowManager gerenciadorJanelas = new WindowManager(telaFundo);

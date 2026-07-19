@@ -117,6 +117,7 @@ public class TurnManager {
         System.out.println("[TurnManager] Vez do humano. Aguardando interação...");
         
         if (this.gameManager != null) {
+            
             this.gameManager.emitirStatus("🎲 Sua vez! Clique no deck para revelar sua carta.", COLOR_INFO);
         }
         

@@ -188,4 +188,6 @@ public class PawnControlManager {
             "[PawnControlManager] Movimento guardado: " + steps + " casas. Aguardando seleção do peão..."
         );
     }
+
+    
 }

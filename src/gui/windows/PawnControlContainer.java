@@ -36,27 +36,32 @@ public class PawnControlContainer extends JPanel {
 
         this.pawnLabels = new ReferencePawn[4];
 
-        // AJUSTADO: Tamanho dos peões aumentado de 30 para 40
         int labelWidth = (int) (40 * SCALE);
         int labelHeight = (int) (40 * SCALE);
+
+        // =========================================================================
+        // ALINHAMENTO COM O TABULEIRO: Vincula o índice do array à posição real da base
+        // Índice 0 = Top-Left (Peão 1)  | Índice 1 = Bottom-Left (Peão 3)
+        // Índice 2 = Top-Right (Peão 2) | Índice 3 = Bottom-Right (Peão 4)
+        // =========================================================================
+        int[] pawnNumbers = {1, 3, 2, 4};
+        int[] posX = {45, 45, 135, 135};
+        int[] posY = {15, 65, 15, 65};
 
         for (int i = 0; i < 4; i++) {
             pawnLabels[i] = new ReferencePawn(
                 STD_PAWN_IMG_PATH, 
                 DISABLED_PAWN_IMG_PATH, 
                 GOLDEN_PAWN_IMG_PATH, 
-                (i + 1), 
+                pawnNumbers[i], // Atribui o número correto para o índice
                 SCALE
             );
             add(pawnLabels[i]);
             pawnLabels[i].addMouseListener(new ReferencePawnMouseListener(pawnControlManager, i));
+            
+            // Define a coordenada correta de cada peão mapeado
+            pawnLabels[i].setBounds((int) (posX[i] * SCALE), (int) (posY[i] * SCALE), labelWidth, labelHeight);
         }
-        
-        // AJUSTADO: Coordenadas recalculadas para centralizar os peões de tamanho 40x40 de forma simétrica
-        pawnLabels[0].setBounds((int) (45 * SCALE), (int) (15 * SCALE), labelWidth, labelHeight);
-        pawnLabels[1].setBounds((int) (135 * SCALE), (int) (15 * SCALE), labelWidth, labelHeight);
-        pawnLabels[2].setBounds((int) (45 * SCALE), (int) (65 * SCALE), labelWidth, labelHeight);
-        pawnLabels[3].setBounds((int) (135 * SCALE), (int) (65 * SCALE), labelWidth, labelHeight);
 
         pawnVisualState(0, "NORMAL");
         pawnVisualState(1, "NORMAL");

@@ -22,6 +22,13 @@ public class DeckStackBackground extends JPanel {
     // Imagem para o topo do deck
     private Image cardBackImg;
 
+    // =========================================================================
+    // DESLOCAMENTOS FIXOS ORGÂNICOS: Simulam imperfeição manual sem oscilar no repaint
+    // Mapeados para os índices de 1 a 6 da renderização
+    // =========================================================================
+    private static final int[] OFFSETS_X = {0, 2, 5, 3, 8, 6, 10};
+    private static final int[] OFFSETS_Y = {0, 2, 4, 9, 7, 12, 14};
+
     // Recebe o caminho da imagem no construtor
     public DeckStackBackground(String cardBackPath) {
         setOpaque(false); 
@@ -41,23 +48,21 @@ public class DeckStackBackground extends JPanel {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         int camadas = 6;         // Quantidade de cartas na pilha
-        int espacamentoX = 2;    // Deslocamento horizontal
-        int espacamentoY = 2;    // Deslocamento vertical
 
         // Desenhamos de trás para frente
         for (int i = camadas; i >= 1; i--) {
-            int x = i * espacamentoX;
-            int y = i * espacamentoY;
+            // Substituição do cálculo linear pelos desvios manuais assustados
+            int x = OFFSETS_X[i];
+            int y = OFFSETS_Y[i];
 
-            /// Se for a carta do TOPO da pilha (i == 1) e a imagem estiver carregada
+            // Se for a carta do TOPO da pilha (i == 1) e a imagem estiver carregada
             if (i == 1 && cardBackImg != null) {
                 // Desenha a imagem real da capa roxa ligeiramente deslocada do centro
                 g2.drawImage(cardBackImg, x, y, widthCard, heightCard, this);
                 
                 // =========================================================
-                // NOVO: DESENHA A MESMA BORDA DA CAMADA 2 PARA ALINHAR PERFEITAMENTE
+                // DESENHA A MESMA BORDA DA CAMADA 2 PARA ALINHAR PERFEITAMENTE
                 // =========================================================
-                // Lembre-se de usar os mesmos Gaps que você deixou no CardDeckBackground
                 int gapEsquerda = 4;  
                 int gapDireita  = 2;  
                 int gapTopo     = 2;
