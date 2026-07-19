@@ -712,7 +712,7 @@ public class GameManager {
             if (this.pawnControlManager != null && activePlayerId == 0) {
                 this.pawnControlManager.updatePawnVisualState(pawnIndex, "DOURADO");
             }
-            peao.updatePawnVisual("/assets/peaoAmarelo_90x90.png");
+            peao.updatePawnVisual(boardScreen.getGoldenPawnImagePath(activePlayerId));
 
             emitirStatus("🏆 INCRÍVEL! O peão " + (pawnIndex + 1) + " de " + peao.getPlayerName() + " chegou ao Centro!", COLOR_SUCCESS);
                 

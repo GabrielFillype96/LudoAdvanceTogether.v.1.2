@@ -652,11 +652,34 @@ public class BoardScreen extends JPanel {
         if (colorName == null) return "/assets/peaoAzul_90x90.png";
         
         switch (colorName.toLowerCase()) {
-            case "roxo": return "/assets/peaoRoxo_90x90.png";
-            case "azul": return "/assets/peaoAzul_90x90.png";
-            case "rosa": return "/assets/peaoRosa_90x90.png";
-            case "amarelo": return "/assets/peaoAmarelo_90x90.png";
-            default: return "/assets/peaoAzul_90x90.png"; // Padrão de segurança
+            case "roxo": return "/assets/img/purplePawn_90x90.png";
+            case "azul": return "/assets/img/bluePawn_90x90.png";
+            case "rosa": return "/assets/img/pinkPawn_90x90.png";
+            case "amarelo": return "/assets/img/yellowPawn_90x90.png";
+            default: return "/assets/img/bluePawn_90x90.png"; // Padrão de segurança
         }
     }
+
+    // Adicione este método dentro da sua classe BoardScreen.java
+public String getGoldenPawnImagePath(int playerId) {
+    String colorName = "azul";
+    
+    // Identifica a cor salva para o respectivo jogador/CPU
+    switch (playerId) {
+        case 0: colorName = player1Color; break;
+        case 1: colorName = player2Color; break;
+        case 2: colorName = player3Color; break;
+        case 3: colorName = player4Color; break;
+    }
+    
+    if (colorName == null) return "/assets/peaoAzulCoroa_90x90.png";
+    
+    // Retorna o arquivo correspondente à coroa daquela cor
+    switch (colorName.toLowerCase()) {
+        case "roxo":    return "/assets/img/purplePawnWinner_90x90.png";
+        case "rosa":    return "/assets/img/pinkPawnWinner_90x90.png";
+        case "amarelo": return "/assets/img/yellowPawnWinner_90x90.png";
+        default:        return "/assets/img/bluePawnWinner_90x90.png"; // Padrão
+    }
+}
 }

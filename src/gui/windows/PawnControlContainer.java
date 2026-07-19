@@ -39,14 +39,26 @@ public class PawnControlContainer extends JPanel {
         // Define a imagem padrão com base na cor escolhida no menu
         if (playerColor == null) playerColor = "azul";
         switch (playerColor.toLowerCase()) {
-            case "roxo":    this.stdPawnImgPath = "/assets/peaoRoxo_90x90.png"; break;
-            case "rosa":    this.stdPawnImgPath = "/assets/peaoRosa_90x90.png"; break;
-            case "amarelo": this.stdPawnImgPath = "/assets/peaoAmarelo_90x90.png"; break;
-            default:        this.stdPawnImgPath = "/assets/peaoAzul_90x90.png"; break;
+            case "roxo":
+                this.stdPawnImgPath = "/assets/img/purplePawn_90x90.png";
+                this.goldenPawnImgPath = "/assets/img/purplePawnWinner_90x90.png"; // Altere para o nome real do seu arquivo
+                break;
+            case "rosa":
+                this.stdPawnImgPath = "/assets/img/pinkPawn_90x90.png";
+                this.goldenPawnImgPath = "/assets/img/pinkPawnWinner_90x90.png"; // Altere para o nome real do seu arquivo
+                break;
+            case "amarelo":
+                this.stdPawnImgPath = "/assets/img/yellowPawn_90x90.png";
+                this.goldenPawnImgPath = "/assets/img/yellowPawnWinner_90x90.png"; // Altere para o nome real do seu arquivo
+                break;
+            default: // Azul / Padrão
+                this.stdPawnImgPath = "/assets/img/bluePawn_90x90.png";
+                this.goldenPawnImgPath = "/assets/img/bluePawnWinner_90x90.png"; // Altere para o nome real do seu arquivo
+                break;
         }
 
         // Mantenha ou altere os caminhos abaixo caso possua variações específicas dessas imagens
-        this.disabledPawnImgPath = "/assets/peaoRosa_90x90.png"; 
+        this.disabledPawnImgPath = "/assets/img/greyPawn_90x90.png"; 
         this.goldenPawnImgPath = "/assets/peaoAmarelo_90x90.png"; 
 
         this.pawnLabels = new ReferencePawn[4];
