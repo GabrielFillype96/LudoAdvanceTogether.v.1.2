@@ -172,6 +172,10 @@ public class ReferencePawn extends JLabel {
         g2.dispose();
     }
 
+    public int getPawnNumber() {
+        return this.pawnNumber;
+    }
+
     public double getActualAngle() {
         return this.actualAngle;
     }

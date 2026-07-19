@@ -118,7 +118,9 @@ public class CardsContainer extends JPanel {
         }
 
         // PUXAR CARTA
-        this.activeCard = this.deckManager.drawCard(activePlayerId);
+        // Descobre se o jogador atual possui peões na pista (fora da base)
+        boolean todosNaBase = (gameManager.getFurthestPawnIndex(activePlayerId) == -1);
+        this.activeCard = this.deckManager.drawCard(activePlayerId, todosNaBase);
         
         if (this.activeCard == null) {
             System.err.println("[CardsContainer] Erro: O DeckManager devolveu uma carta nula.");

@@ -18,6 +18,7 @@ public class GameManager {
     private TurnManager turnManager;
     private CPUIManager cpuIManager;
     private GameStatusBar gameStatusBar; // Variável da barra de status
+    private boolean movimentoAutomaticoEmAndamento = false; // Flag para silenciar avisos de seleção durante jogadas automáticas
 
     // =========================================================================
     // CONFIGURAÇÕES DE TIMERS E DELAYS (Altere aqui o ritmo do seu jogo!)
@@ -189,7 +190,7 @@ public class GameManager {
                             return;
                         }
 
-                        emitirStatus("💀 Voltando o peão azarado " + (peaoAzarado + 1) + " " + Math.abs(valorDado) + " casas!", COLOR_ERROR);
+                        emitirStatus("💀 O peão azarado " + (peaoAzarado + 1) + " vai retroceder " + Math.abs(valorDado) + " casas!", COLOR_ERROR);
                         
                         Timer delayAzar = new Timer(DELAY_ACAO_TEXTO, eAzar -> {
                             moveChosenPawn(peaoAzarado, valorDado, cardEffect);
@@ -206,9 +207,27 @@ public class GameManager {
                     // =========================================================================
                     if (activePlayerId > 0) {
                         
+                        // Pre-calcula se a CPU vai tirar um peão da base para ajustar o texto
+                        boolean vaiSairDaBase = false;
+                        if (!peoesDisponiveis.isEmpty() && this.cpuIManager != null) {
+                            String personalidade = this.cpuIManager.getCPUPersonality(activePlayerId);
+                            
+                            // LINHA CORRIGIDA AQUI (Sem o cardEffect)
+                            int peaoEscolhido = escolherMelhorPeaoParaCPU(activePlayerId, peoesDisponiveis, valorDado, personalidade);
+                            
+                            PlayerPawn peaoAlvo = boardScreen.getPlayerPawn(activePlayerId, peaoEscolhido);
+                            if (peaoAlvo != null && peaoAlvo.getPawnCurrentPos() < 4) {
+                                vaiSairDaBase = true;
+                            }
+                        }
+
                         // 1. Identifica o tipo de carta e define a mensagem ideal no status
                         if ("SORTE".equalsIgnoreCase(cardType)) {
-                            emitirStatus("🍀 " + nomeJogador + " está com sorte e vai avançar " + valorDado + " casas!", COLOR_SUCCESS);
+                            if (vaiSairDaBase) {
+                                emitirStatus("🍀 " + nomeJogador + " está com sorte e vai colocar um peão em jogo!", COLOR_SUCCESS);
+                            } else {
+                                emitirStatus("🍀 " + nomeJogador + " está com sorte e vai avançar " + valorDado + " casas!", COLOR_SUCCESS);
+                            }
                         } 
                         else if ("AZAR".equalsIgnoreCase(cardType)) {
                             emitirStatus("💀 " + nomeJogador + " deu azar e terá que retroceder " + Math.abs(valorDado) + " casas!", COLOR_ERROR);
@@ -217,15 +236,19 @@ public class GameManager {
                             emitirStatus("🃏 " + nomeJogador + " vai usar uma Pegadinha contra outro jogador!", COLOR_ACTION);
                         } 
                         else {
-                            String acaoVerbo = "AVANÇAR".equalsIgnoreCase(cardEffect) ? "avançar" : "retroceder";
-                            emitirStatus("🧠 " + nomeJogador + " acertou a resposta e vai " + acaoVerbo + " " + valorDado + " casas!", COLOR_SUCCESS);
+                            if (vaiSairDaBase) {
+                                emitirStatus("🧠 " + nomeJogador + " acertou a resposta e vai colocar um peão em jogo!", COLOR_SUCCESS);
+                            } else {
+                                String acaoVerbo = "AVANÇAR".equalsIgnoreCase(cardEffect) ? "avançar" : "retroceder";
+                                emitirStatus("🧠 " + nomeJogador + " acertou a resposta e vai " + acaoVerbo + " " + valorDado + " casas!", COLOR_SUCCESS);
+                            }
                         }
 
                         // Delay configurado para ler o evento da CPU antes dela agir
                         Timer delayAcaoCPU = new Timer(DELAY_ACAO_TEXTO, eAcao -> {
                             
                             if ("PEGADINHA".equalsIgnoreCase(cardType)) {
-                                System.out.println("[GameManager] CPU executando Pegadinha (Lógica a ser implementada)...");
+                                System.out.println("[GameManager] CPU executing Pegadinha (Lógica a ser implementada)...");
                                 if (this.turnManager != null) this.turnManager.nextTurn();
                                 return;
                             }
@@ -260,6 +283,7 @@ public class GameManager {
                         delayAcaoCPU.setRepeats(false);
                         delayAcaoCPU.start();
                     }
+                    
                     // =========================================================================
                     // TRACK DE ACERTO DO HUMANO
                     // =========================================================================
@@ -286,20 +310,26 @@ public class GameManager {
                             
                             if (peoesDisponiveis.size() == 1) {
                                 int peaoAutomatico = peoesDisponiveis.get(0);
+                                // CORREÇÃO: Busca o número real mapeado do peão único
+                                int numeroReal = (this.pawnControlManager != null) ? this.pawnControlManager.getRealPawnNumber(peaoAutomatico) : (peaoAutomatico + 1);
+                                
                                 if (ehCartaSorte) {
-                                    emitirStatus("🤖 Movendo o peão sortudo " + (peaoAutomatico + 1) + " automaticamente...", COLOR_INFO);
+                                    emitirStatus("🤖 Movendo o peão sortudo " + numeroReal + " automaticamente...", COLOR_INFO);
                                 } else {
-                                    emitirStatus("🤖 Apenas o peão " + (peaoAutomatico + 1) + " está disponível. Movendo automaticamente...", COLOR_INFO);
+                                    emitirStatus("🤖 Apenas o peão " + numeroReal + " está disponível. Movendo automaticamente...", COLOR_INFO);
                                 }
                                 executarMovimentoAutomaticoHumano(peaoAutomatico, valorDado, cardEffect);
                             } 
                             else {
                                 StringBuilder sb = new StringBuilder();
                                 for (int i = 0; i < peoesDisponiveis.size(); i++) {
-                                    int numeroPeao = peoesDisponiveis.get(i) + 1;
-                                    if (i == 0) sb.append(numeroPeao);
-                                    else if (i == peoesDisponiveis.size() - 1) sb.append(" ou ").append(numeroPeao);
-                                    else sb.append(", ").append(numeroPeao);
+                                    int idxPeao = peoesDisponiveis.get(i);
+                                    // CORREÇÃO: Busca o número real mapeado de cada peão da lista
+                                    int numeroReal = (this.pawnControlManager != null) ? this.pawnControlManager.getRealPawnNumber(idxPeao) : (idxPeao + 1);
+                                    
+                                    if (i == 0) sb.append(numeroReal);
+                                    else if (i == peoesDisponiveis.size() - 1) sb.append(" ou ").append(numeroReal);
+                                    else sb.append(", ").append(numeroReal);
                                 }
                                 
                                 if (ehCartaSorte) {
@@ -331,8 +361,14 @@ public class GameManager {
             pawnControlManager.onReferencePawnHoverExited(peaoIndex);
             pawnControlManager.onBoardPawnHoverExit(peaoIndex);
             
+            // ADICIONADO: Ativa o modo silencioso antes de clicar
+            this.movimentoAutomaticoEmAndamento = true; 
+            
             pawnControlManager.onReferencePawnClicked(peaoIndex); 
             pawnControlManager.onReferencePawnClicked(peaoIndex); 
+            
+            // ADICIONADO: Desativa o modo silencioso logo após concluir os cliques
+            this.movimentoAutomaticoEmAndamento = false; 
         });
         atrasoDramatico.setRepeats(false); 
         atrasoDramatico.start();
@@ -687,7 +723,7 @@ public class GameManager {
 
         if (ganhouTurnoExtra) {
             if (activePlayerId == 0) {
-                emitirStatus("🎲 Turno Bônus! Você tirou um '6', jogue novamente.", COLOR_SUCCESS);
+                emitirStatus("🎲 Turno Bônus! Você tirou 6 e poderá realizar uma nova jogada.", COLOR_SUCCESS);
             } else {
                 emitirStatus("🤖 " + getPlayerNameById(activePlayerId) + " tirou um '6' e ganhou turno extra!", COLOR_INFO);
             }
@@ -711,9 +747,8 @@ public class GameManager {
             
             // Aguarda o tempo estipulado antes de processar o Turno Bônus
             Timer delayTransicaoExtra = new Timer(DELAY_FINAL_TURNO, eExtra -> {
-                if (activePlayerId > 0) {
-                    this.turnManager.processExtraTurn();
-                }
+                // CORREÇÃO: Removemos o 'if (activePlayerId > 0)' para incluir o jogador humano
+                this.turnManager.processExtraTurn();
             });
             delayTransicaoExtra.setRepeats(false);
             delayTransicaoExtra.start();
@@ -833,10 +868,29 @@ public class GameManager {
         return melhorPeao != -1 ? melhorPeao : peoesDisponiveis.get(0);
     }
 
+    /**
+     * Verifica se os 4 peões de um jogador estão guardados na base (posição menor que 4)
+     */
+    public boolean areAllPawnsInBase(int playerId) {
+        if (this.boardScreen == null) return true;
+        
+        for (int i = 0; i < 4; i++) {
+            PlayerPawn pawn = this.boardScreen.getPlayerPawn(playerId, i);
+            if (pawn != null && pawn.getPawnCurrentPos() >= 4) {
+                return false; // Encontrou pelo menos um peão que já saiu para o tabuleiro
+            }
+        }
+        return true; // Todos os 4 peões estão na base
+    }
+
     public void resetHumanPawnsVisuals() {
         if (this.pawnControlManager != null) {
             this.pawnControlManager.resetHumanPawnsVisuals();
         }
+    }
+
+    public boolean isMovimentoAutomaticoEmAndamento() {
+        return this.movimentoAutomaticoEmAndamento;
     }
 
     public int getFurthestPawnIndex(int playerId) {
@@ -857,4 +911,6 @@ public class GameManager {
         }
         return furthestPawn; 
     }
+
+    
 }

@@ -54,7 +54,10 @@ public class CPUIManager {
 
         Timer cpuTimer = new Timer(2000, e -> {
             if (this.deckManager != null) {
-                CustomCards carta = this.deckManager.drawCard(cpuId);
+
+                // Descobre se o jogador atual possui peões na pista (fora da base)
+                boolean todosNaBase = (gameManager.getFurthestPawnIndex(cpuId) == -1);
+                CustomCards carta = this.deckManager.drawCard(cpuId, todosNaBase);
                 
                 if (carta != null) {
                     System.out.println("[CPUIManager] A CPU " + cpuId + " puxou a carta ID: " + carta.getCardID());
@@ -147,5 +150,12 @@ public class CPUIManager {
             default:
                 return chance <= 0.50; // Fallback: 50% de chance se algo der errado
         }
+    }
+
+    public String getCPUPersonality(int cpuId) {
+        if (cpuId >= 0 && cpuId < this.personalidadesCPUs.length) {
+            return this.personalidadesCPUs[cpuId];
+        }
+        return "PADRAO";
     }
 }

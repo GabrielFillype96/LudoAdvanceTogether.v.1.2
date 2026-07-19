@@ -110,12 +110,22 @@ public class PawnControlManager {
 
         // CENÁRIO 1: O jogador clicou num peão novo (Primeiro clique / Seleção)
         if (this.selectedPawnIndex != pawnIndex) {
-            this.selectedPawnIndex = pawnIndex; // Guarda quem foi o escolhido
+            this.selectedPawnIndex = pawnIndex; 
             System.out.println("[PawnControlManager] Peão " + pawnIndex + " SELECIONADO. Clique nele novamente para confirmar!");
             
             // MOSTRA A PREVISÃO VISUAL NO TABULEIRO!
             if (gameManager != null) {
                 gameManager.showMovementPreview(pawnIndex, pendingSteps, pendingEffect);
+                
+                int numeroPeao = pawnIndex + 1; 
+                if (pawnControlContainer != null && pawnControlContainer.getReferencePawn(pawnIndex) != null) {
+                    numeroPeao = pawnControlContainer.getReferencePawn(pawnIndex).getPawnNumber();
+                }
+                
+                // ALTERADO: Adicionado o "if (!gameManager.isMovimentoAutomaticoEmAndamento())"
+                if (!gameManager.isMovimentoAutomaticoEmAndamento()) {
+                    gameManager.emitirStatus("♟️ Peão " + numeroPeao + " selecionado para andar. Confirme sua jogada clicando nele novamente!", java.awt.Color.WHITE);
+                }
             }
             return; 
         }
@@ -193,5 +203,12 @@ public class PawnControlManager {
         if (this.pawnControlContainer != null) {
             this.pawnControlContainer.resetAllPawnsToNormal();
         }
+    }
+
+    public int getRealPawnNumber(int pawnIndex) {
+        if (this.pawnControlContainer != null && this.pawnControlContainer.getReferencePawn(pawnIndex) != null) {
+            return this.pawnControlContainer.getReferencePawn(pawnIndex).getPawnNumber();
+        }
+        return pawnIndex + 1; // Fallback caso o container não tenha carregado
     }
 }

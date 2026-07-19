@@ -50,35 +50,69 @@ public class DeckManager {
         }
     }
 
-    /**
-     * Puxa a carta do topo para o jogador atual, gerenciando o reabastecimento automático.
+   /**
+     * Puxa a carta do topo filtrando por cartas válidas baseadas no estado dos peões.
      */
-    public CustomCards drawCard(int playerId) {
+    public CustomCards drawCard(int playerId, boolean allPawnsInBase) {
         if (playerId < 0 || playerId >= 4) return null;
 
         List<CustomCards> drawPile = drawPiles[playerId];
         List<CustomCards> discardPile = discardPiles[playerId];
 
-        // === O GATILHO DE REABASTECIMENTO AUTOMÁTICO ===
         if (drawPile.isEmpty()) {
-            System.out.println("[DeckManager] Baralho do Jogador " + playerId + " vazio! Reabastecendo com o descarte...");
-            
-            if (discardPile.isEmpty()) {
-                System.err.println("[DeckManager] Erro: Não há cartas no descarte para reabastecer!");
-                return null; 
-            }
-
-            // 1. Move todas as cartas do descarte de volta para a compra
+            if (discardPile.isEmpty()) return null;
             drawPile.addAll(discardPile);
-            
-            // 2. Limpa o monte de descarte
             discardPile.clear();
-
-            // 3. Embaralha a nova pilha de compra
             Collections.shuffle(drawPile);
         }
 
-        // Remove e devolve a primeira carta da lista (o topo do baralho)
+        int tentativas = 0;
+        int tamanhoMaximo = drawPile.size();
+
+        while (!drawPile.isEmpty() && tentativas < tamanhoMaximo) {
+            CustomCards card = drawPile.get(0);
+            String tipoCarta = card.getCardType();
+
+            boolean ehSorteOuAzar = "SORTE".equalsIgnoreCase(tipoCarta) || "AZAR".equalsIgnoreCase(tipoCarta);
+            boolean ehPegadinha = "PEGADINHA".equalsIgnoreCase(tipoCarta);
+            boolean devePular = false;
+
+            // FILTRAGEM DE INÍCIO DE JOGO (Todos na base)
+            if (allPawnsInBase) {
+                if (ehSorteOuAzar) {
+                    devePular = true; // Pula Sorte/Azar se não há peões na pista para interagir
+                } else if (!ehPegadinha) {
+                    // É uma carta de pergunta. Só aceita se for valor 1 ou 6
+                    int valorDado = 0;
+                    try {
+                        String cardValueTreated = card.getCardValueText().trim();
+                        if (cardValueTreated.contains("/")) {
+                            cardValueTreated = cardValueTreated.split("/")[0].trim();
+                        }
+                        valorDado = Math.abs(Integer.parseInt(cardValueTreated));
+                    } catch (Exception e) {
+                        System.err.println("[DeckManager] Erro ao processar valor da carta: " + e.getMessage());
+                    }
+
+                    if (valorDado != 1 && valorDado != 6) {
+                        devePular = true; // Pula perguntas de valor 2, 3, 4, 5
+                    }
+                }
+                // Se for PEGADINHA e estiver na base, devePular continua false (está liberada!)
+            }
+
+            // AÇÃO DO FILTRO
+            if (devePular) {
+                // Move a carta inválida para o final do deck e passa para a próxima tentativa
+                drawPile.remove(0);
+                drawPile.add(card);
+                tentativas++;
+            } else {
+                // Carta perfeitamente válida encontrada!
+                return drawPile.remove(0);
+            }
+        }
+
         return drawPile.remove(0);
     }
 
