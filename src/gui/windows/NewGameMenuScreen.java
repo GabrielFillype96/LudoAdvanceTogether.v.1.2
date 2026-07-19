@@ -165,10 +165,12 @@ public class NewGameMenuScreen extends JPanel {
         for (int x = 25; x <= 280; x +=255) {
             for (int y = 155; y <= 210; y += 55) {
 
+                // MODIFICADO: Adicionado 'SCALE' como último argumento
                 add(PlayerIdentifier.squarePlayerIdentifier(
                     String.valueOf(i + 1),
                     (int) (x * SCALE),
-                    (int) (y * SCALE)
+                    (int) (y * SCALE),
+                    SCALE
                 ));
                 i++;
             }
@@ -176,34 +178,10 @@ public class NewGameMenuScreen extends JPanel {
 
         // Cria o campo de texto para os jogadores utilizando a classe "SlotsName" e armazena a referência na variável.
         // Não é preciso criar um novo objeto pois a classe "SlotsName" já tem um método estático que retorna o JTextField pronto para uso.
-        txtP1 = SlotsName.slotName( // 45 + 35 + 8 = 88 --> P1
-            (int) (68 * SCALE), 
-            (int) (155 * SCALE), 
-            (int) (155 * SCALE), 
-            (int) (35 * SCALE), 
-            true
-        );
-        txtCPU1 = SlotsName.slotName( // 305 + 35 + 8 = 348 --> CPU 1
-            (int) (328 * SCALE),
-            (int) (155 * SCALE), 
-            (int) (155 * SCALE), 
-            (int) (35 * SCALE), 
-            false
-        ); 
-        txtCPU2 = SlotsName.slotName( // 45 + 35 + 8 = 88 --> CPU 2
-            (int) (68 * SCALE), 
-            (int) (210 * SCALE), 
-            (int) (155 * SCALE), 
-            (int) (35 * SCALE), 
-            false
-        ); 
-        txtCPU3 = SlotsName.slotName( // 305 + 35 + 8 = 348 --> CPU 3
-            (int) (328 * SCALE), 
-            (int) (210 * SCALE), 
-            (int) (155 * SCALE), 
-            (int) (35 * SCALE), 
-            false
-        ); 
+        txtP1 = SlotsName.slotName((int) (68 * SCALE), (int) (155 * SCALE), (int) (155 * SCALE), (int) (35 * SCALE), true, SCALE);
+        txtCPU1 = SlotsName.slotName((int) (328 * SCALE), (int) (155 * SCALE), (int) (155 * SCALE), (int) (35 * SCALE), false, SCALE); 
+        txtCPU2 = SlotsName.slotName((int) (68 * SCALE), (int) (210 * SCALE), (int) (155 * SCALE), (int) (35 * SCALE), false, SCALE); 
+        txtCPU3 = SlotsName.slotName((int) (328 * SCALE), (int) (210 * SCALE), (int) (155 * SCALE), (int) (35 * SCALE), false, SCALE); 
         
         // Define o texto padrão dos campos
         txtP1.setText("Digite seu nome"); // Player 1
@@ -218,27 +196,12 @@ public class NewGameMenuScreen extends JPanel {
         add(txtCPU3);
         
         // Adiciona os ícones laterais
-        add(SlotsIcon.slotIconLabel( 
-            "👤", 
-            (int) (225 * SCALE), 
-            (int) (155 * SCALE)
-        )); 
-        add(SlotsIcon.slotIconLabel(
-            "💻", 
-            (int) (485 * SCALE), 
-            (int) (155 * SCALE)
-        )); 
-        add(SlotsIcon.slotIconLabel(
-            "💻", 
-            (int) (225 * SCALE), 
-            (int) (210 * SCALE)
-        ));
-        add(SlotsIcon.slotIconLabel(
-            "💻", 
-            (int) (485 * SCALE), 
-            (int) (210 * SCALE)
-        ));
-
+        // Adiciona os ícones laterais atualizados com a escala
+        add(SlotsIcon.slotIconLabel("👤", (int) (225 * SCALE), (int) (155 * SCALE), SCALE)); 
+        add(SlotsIcon.slotIconLabel("💻", (int) (485 * SCALE), (int) (155 * SCALE), SCALE)); 
+        add(SlotsIcon.slotIconLabel("💻", (int) (225 * SCALE), (int) (210 * SCALE), SCALE));
+        add(SlotsIcon.slotIconLabel("💻", (int) (485 * SCALE), (int) (210 * SCALE), SCALE));
+        
         // Cria o botão de iniciar o jogo utilizando a classe "PlayButton" e armazena a referência na variável "playBtn"
         CustomButton playBtn = new PlayButton();
         playBtn.setBounds(

@@ -6,6 +6,7 @@ package gui.components;
 // Imports externos
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
@@ -17,12 +18,14 @@ public class PlayerIdentifier {
      * Método Estático para criar o identificador (número) do jogador.
      * Tenta carregar a arte customizada; se falhar, renderiza o fallback estruturado.
      */
-    public static JLabel squarePlayerIdentifier(String text, int x, int y) {
+    // MODIFICADO: Agora recebe o parâmetro 'scale' no final
+    public static JLabel squarePlayerIdentifier(String text, int x, int y, double scale) {
         // Cria um JLabel para o identificador do jogador, centralizando o texto
         JLabel squarePlayerId = new JLabel(text, SwingConstants.CENTER);
         
-        // Define o tamanho e a posição do JLabel para criar um quadrado de 35x35 pixels
-        squarePlayerId.setBounds(x, y, 35, 35);
+        // MODIFICADO: Tamanho do quadrado recalculado com base na escala
+        int size = (int) (35 * scale);
+        squarePlayerId.setBounds(x, y, size, size);
 
         try {
             // Tenta carregar a imagem a partir da sua pasta de assets
@@ -33,7 +36,11 @@ public class PlayerIdentifier {
                 throw new Exception("Imagem não encontrada");
             }
             
-            squarePlayerId.setIcon(icon);
+            // MODIFICADO: Redimensiona suavemente a imagem para o novo tamanho escalado
+            Image img = icon.getImage();
+            Image scaledImg = img.getScaledInstance(size, size, Image.SCALE_SMOOTH);
+            
+            squarePlayerId.setIcon(new ImageIcon(scaledImg));
             squarePlayerId.setText(""); // Apaga o texto para destacar a arte gráfica
             
         } catch (Exception e) {
@@ -41,7 +48,10 @@ public class PlayerIdentifier {
             squarePlayerId.setOpaque(true);
             squarePlayerId.setBackground(new Color(40, 26, 50)); 
             squarePlayerId.setForeground(gui.theme.GameColors.GOLD_ACCENT);
-            squarePlayerId.setFont(new Font("Arial", Font.BOLD, 16));
+            
+            // MODIFICADO: Tamanho da fonte agora acompanha o multiplicador de escala
+            squarePlayerId.setFont(new Font("Arial", Font.BOLD, (int) (16 * scale)));
+            
             squarePlayerId.setBorder(new LineBorder(gui.theme.GameColors.GOLD_ACCENT, 1));
             squarePlayerId.setText(text); // Garante que o texto numérico apareça
         }
