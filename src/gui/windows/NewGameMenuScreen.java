@@ -88,9 +88,14 @@ public class NewGameMenuScreen extends JPanel {
         add(PlayerIdentifier.squarePlayerIdentifier("3", (int) (280 * SCALE), (int) (155 * SCALE), SCALE));
 
         txtP1 = SlotsName.slotName((int) (68 * SCALE), (int) (155 * SCALE), (int) (155 * SCALE), (int) (35 * SCALE), true, SCALE);
-        txtCPU1 = SlotsName.slotName((int) (328 * SCALE), (int) (155 * SCALE), (int) (155 * SCALE), (int) (35 * SCALE), false, SCALE); 
+        txtCPU1 = SlotsName.slotName((int) (328 * SCALE), (int) (155 * SCALE), (int) (155 * SCALE), (int) (35 * SCALE), true, SCALE); // Ativado aqui
         txtP1.setText("Digite seu nome");
         txtCPU1.setText("Computador 1");
+
+        // Aplica o comportamento inteligente de clique
+        setupPlaceholder(txtP1, "Digite seu nome");
+        setupPlaceholder(txtCPU1, "Computador 1");
+
         add(txtP1);
         add(txtCPU1);
         
@@ -111,10 +116,15 @@ public class NewGameMenuScreen extends JPanel {
         add(PlayerIdentifier.squarePlayerIdentifier("2", (int) (25 * SCALE), (int) (245 * SCALE), SCALE));
         add(PlayerIdentifier.squarePlayerIdentifier("4", (int) (280 * SCALE), (int) (245 * SCALE), SCALE));
 
-        txtCPU2 = SlotsName.slotName((int) (68 * SCALE), (int) (245 * SCALE), (int) (155 * SCALE), (int) (35 * SCALE), false, SCALE); 
-        txtCPU3 = SlotsName.slotName((int) (328 * SCALE), (int) (245 * SCALE), (int) (155 * SCALE), (int) (35 * SCALE), false, SCALE); 
+        txtCPU2 = SlotsName.slotName((int) (68 * SCALE), (int) (245 * SCALE), (int) (155 * SCALE), (int) (35 * SCALE), true, SCALE); // Ativado aqui
+        txtCPU3 = SlotsName.slotName((int) (328 * SCALE), (int) (245 * SCALE), (int) (155 * SCALE), (int) (35 * SCALE), true, SCALE); // Ativado aqui
+
         txtCPU2.setText("Computador 2");
         txtCPU3.setText("Computador 3");
+
+        // Aplica o comportamento inteligente de clique
+        setupPlaceholder(txtCPU2, "Computador 2");
+        setupPlaceholder(txtCPU3, "Computador 3");
         add(txtCPU2);
         add(txtCPU3);
 
@@ -256,4 +266,30 @@ public class NewGameMenuScreen extends JPanel {
     public String getCPU1Color() { return (String) cbColorCPU1.getSelectedItem(); }
     public String getCPU2Color() { return (String) cbColorCPU2.getSelectedItem(); }
     public String getCPU3Color() { return (String) cbColorCPU3.getSelectedItem(); }
+
+    // Método auxiliar para adicionar o efeito de placeholder inteligente nos campos
+    private void setupPlaceholder(JTextField textField, String placeholder) {
+        // Inicializa o texto padrão com a cor cinza de dica
+        textField.setForeground(Color.GRAY);
+        
+        textField.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusGained(java.awt.event.FocusEvent e) {
+                // Se o usuário clicar e o texto for o padrão, limpa o campo e muda para branco
+                if (textField.getText().equals(placeholder)) {
+                    textField.setText("");
+                    textField.setForeground(Color.WHITE);
+                }
+            }
+
+            @Override
+            public void focusLost(java.awt.event.FocusEvent e) {
+                // Se o usuário clicar fora e não tiver digitado nada, restaura o padrão em cinza
+                if (textField.getText().trim().isEmpty()) {
+                    textField.setText(placeholder);
+                    textField.setForeground(Color.GRAY);
+                }
+            }
+        });
+    }
 }
