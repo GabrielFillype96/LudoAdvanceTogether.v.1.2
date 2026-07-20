@@ -16,7 +16,7 @@ public class BoardWithFrame extends JPanel {
     private final int thickness; // Espessura da moldura (não escalada)
 
     // Caminho opcional para a imagem de textura futuramente (ex: "/assets/wood_texture.png")
-    private static final String TEXTURE_PATH = ""; 
+    private static final String TEXTURE_PATH = "/assets/img/woodTextured.jpg"; 
 
     public BoardWithFrame(BoardScreen boardScreen, double scale) {
         this.boardScreen = boardScreen;

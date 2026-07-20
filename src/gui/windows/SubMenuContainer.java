@@ -37,6 +37,10 @@ public class SubMenuContainer extends JPanel {
         this.repaint(); // Repaint para garantir que o painel seja redesenhado com o novo mini-menu visível
     }
 
+    public void exibirSobreMenu() {
+        displaySubMenu(new AboutSubMenuPanel());
+    }
+
     // Método getter para acessar as dimensões da tela principal
     public static Rectangle getSubMenuContainerBounds() {
         return SUB_MENU_CONTAINER_BOUNDS;

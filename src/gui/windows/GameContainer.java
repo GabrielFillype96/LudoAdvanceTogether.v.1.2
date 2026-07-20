@@ -124,14 +124,14 @@ public class GameContainer extends JPanel {
 
         JPanel cardsArea = new JPanel();
         cardsArea.setBounds(CARDS_AREA_BOUNDS);
-        cardsArea.setBackground(new Color(255, 0, 16));
+        cardsArea.setBackground(new Color(42, 24, 54));
         cardsArea.setLayout(null);
 
         CardAnswerValidation cardAnswerValidation = new CardAnswerValidation(this.gameManager);
 
         CardsContainer cardsContainer = new CardsContainer(this.gameManager, cardAnswerValidation);
         cardsContainer.setBounds(CARDS_CONTAINER_BOUNDS);
-        cardsContainer.setBackground(new Color(0, 255, 16));
+        cardsContainer.setBackground(new Color(42, 24, 54));
         cardsArea.add(cardsContainer);
 
         cardsContainer.setDeckManager(this.deckManager);
@@ -139,7 +139,7 @@ public class GameContainer extends JPanel {
 
         JPanel pawnControlArea = new JPanel();
         pawnControlArea.setBounds(PAWN_CONTROL_AREA_BOUNDS);
-        pawnControlArea.setBackground(new Color(38, 24, 16));
+        pawnControlArea.setBackground(new Color(42, 24, 54));
         pawnControlArea.setLayout(null);
 
         this.statusBar = new GameStatusBar(SCALE);
@@ -224,7 +224,7 @@ public class GameContainer extends JPanel {
     }
 
     private void abrirMenuPausa() {
-        InGameMenuDialog menuDialog = new InGameMenuDialog(this, this.windowManager);
+        InGameMenu menuDialog = new InGameMenu(this, this.windowManager);
         menuDialog.setVisible(true);
     }
 

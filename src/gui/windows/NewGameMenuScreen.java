@@ -317,10 +317,10 @@ public class NewGameMenuScreen extends JPanel {
     private Color getColorByString(String nomeCor) {
         if (nomeCor == null) return GameColors.GOLD_ACCENT;
         switch (nomeCor) {
-            case "Roxo": return new Color(155, 89, 182);
-            case "Azul": return new Color(52, 152, 219);
-            case "Amarelo": return new Color(241, 196, 15);
-            case "Rosa": return new Color(232, 67, 147);
+            case "Roxo": return new Color(107, 86, 165);
+            case "Azul": return new Color(80, 163, 213);
+            case "Amarelo": return new Color(243, 177, 28);
+            case "Rosa": return new Color(218, 99, 127);
             default: return GameColors.GOLD_ACCENT;
         }
     }

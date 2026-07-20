@@ -1,6 +1,5 @@
 // Classe responsável por criar a interface do menu principal do jogo
 
-// Packages
 package gui.windows;
 
 // Import internos
@@ -16,8 +15,8 @@ import javax.swing.JPanel;
 
 public class MainMenuScreen extends JPanel {
     // VARIÁVEIS DE INSTÂNCIA
-    private SubMenuContainer subMenuContainer; // Painel para conter os mini-menu's abertos pelos botões do menu principal
-    private static final double SCALE = 1.5; // Fator de escala para ajustar o tamanho dos componentes
+    private SubMenuContainer subMenuContainer; 
+    private static final double SCALE = 1.5; 
     private static final Rectangle BUTTON_NAVIGATION_CONTAINER_BOUNDS = new Rectangle( 
         (int) (0 * SCALE), 
         (int) (35 * SCALE), 
@@ -27,20 +26,19 @@ public class MainMenuScreen extends JPanel {
 
     // Construtor da classe MainMenuScreen
     public MainMenuScreen(WindowManager windowManager) {
-        setOpaque(false);  // Mantém o fundo transparente para a imagem de fundo do jogo aparecer
-        setLayout(null); // Layout nulo torna o painel absoluto 
+        setOpaque(false);  
+        setLayout(null); 
         setBounds(MainScreenContainer.getMainScreenContainerBounds()); 
         
-        // Cria o layer transparente onde ficarão alocadas as opções do menu principal
+        // Cria o layer transparente das opções do menu
         JPanel buttonNavigationPanel = new JPanel(new GridBagLayout());
-        
         buttonNavigationPanel.setOpaque(false); 
         buttonNavigationPanel.setBounds(BUTTON_NAVIGATION_CONTAINER_BOUNDS); 
 
-        // Configuração do grid das opções do menu (GridBagConstraints)
+        // Configuração do grid
         GridBagConstraints gbc = new GridBagConstraints(); 
-        gbc.gridx = 0; // Tudo na mesma coluna
-        gbc.gridy = GridBagConstraints.RELATIVE; // Próximo botão vai para a linha de baixo
+        gbc.gridx = 0; 
+        gbc.gridy = GridBagConstraints.RELATIVE; 
         gbc.fill = GridBagConstraints.NONE; 
         gbc.insets = new Insets( 
             (int) (7 * SCALE), 
@@ -49,7 +47,7 @@ public class MainMenuScreen extends JPanel {
             (int) (0 * SCALE)
         ); 
 
-        // Criação dos botões (sem o ConfigButton)
+        // Instância dos botões
         NewGameButton btnNewGame = new NewGameButton(); 
         ConnectionButton btnConnection = new ConnectionButton(); 
         AboutButton btnAbout = new AboutButton(); 
@@ -61,14 +59,15 @@ public class MainMenuScreen extends JPanel {
         buttonNavigationPanel.add(btnAbout, gbc);
         buttonNavigationPanel.add(btnExit, gbc);
 
-        // Adiciona o painel de opções ao painel principal
         add(buttonNavigationPanel);
 
-        // Ações de clique
+        // Ações de clique dos botões
         btnNewGame.addActionListener(new NewGameMenuAction(windowManager));
         btnConnection.addActionListener(e -> windowManager.openLobbyMultiplayer());
+        btnAbout.addActionListener(e -> subMenuContainer.exibirSobreMenu());
+        btnExit.addActionListener(e -> System.exit(0)); // Encerra a aplicação ao clicar em SAIR
 
-        // Instancia o painel de sub-menus
+        // SubMenuContainer
         subMenuContainer = new SubMenuContainer(windowManager);
         subMenuContainer.setBounds(
             (int) (320 * SCALE), 
