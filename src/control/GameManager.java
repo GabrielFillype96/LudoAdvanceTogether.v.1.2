@@ -499,7 +499,10 @@ public class GameManager {
         timerAnimation = new Timer(15, e -> {
             if (STEP_INDEX[0] >= pawnPathList.size() - 1) {
                 timerAnimation.stop();
-                if (boardScreen != null) boardScreen.clearPreview();
+                if (boardScreen != null) {
+                    boardScreen.clearPreview();
+                    boardScreen.repositionAllPawns();
+                }
                 
                 int activePlayerId = (this.turnManager != null) ? this.turnManager.getCurrentTurn() : 0;
                 verificarCaptura(activePlayerId, toWhere);
@@ -758,9 +761,9 @@ public class GameManager {
                     emitirStatus("⚔️ ATAQUE! " + atacante + " capturou o " + vitima + "!", COLOR_ACTION);
                     
                     enemyPawn.setPawnCurrentPos(i);
-                    Point basePoint = boardScreen.getCaminhoCasas(p)[i];
-                    enemyPawn.setPawnVisualCoordinates(basePoint);
-                    boardScreen.repaint();
+                    if (boardScreen != null) {
+                        boardScreen.repositionAllPawns();
+                    }
                 }
             }
         }

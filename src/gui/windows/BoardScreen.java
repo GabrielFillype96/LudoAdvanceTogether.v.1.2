@@ -22,6 +22,10 @@ import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.Dimension;
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class BoardScreen extends JPanel {
 
@@ -119,6 +123,86 @@ public class BoardScreen extends JPanel {
             }
         }
         addPlayerNameSlots();
+
+        // Organiza e aplica offsets nos peões no carregamento do tabuleiro
+        repositionAllPawns();
+    }
+
+    /**
+     * Recalcula a posição visual de todos os peões no tabuleiro.
+     * Mapeia peões na mesma casa e aplica um deslocamento (offset) em grade/diagonal.
+     */
+    public void repositionAllPawns() {
+        Map<Point, List<PlayerPawn>> pawnsOnSameTile = new HashMap<>();
+
+        // 1. Agrupa os peões por coordenada base da casa atual
+        for (int p = 0; p < 4; p++) {
+            Point[] path = getCaminhoCasas(p);
+            if (path == null) continue;
+
+            for (int i = 0; i < 4; i++) {
+                PlayerPawn pawn = playersPawns[p][i];
+                if (pawn == null) continue;
+
+                int pos = pawn.getPawnCurrentPos();
+                if (pos >= 0 && pos < path.length) {
+                    Point basePoint = path[pos];
+                    pawnsOnSameTile.computeIfAbsent(basePoint, k -> new ArrayList<>()).add(pawn);
+                }
+            }
+        }
+
+        // 2. Aplica o deslocamento visual para cada casa ocupada
+        int displacement = (int) (7 * SCALE);
+
+        for (Map.Entry<Point, List<PlayerPawn>> entry : pawnsOnSameTile.entrySet()) {
+            Point basePoint = entry.getKey();
+            List<PlayerPawn> pawns = entry.getValue();
+            int count = pawns.size();
+
+            for (int index = 0; index < count; index++) {
+                PlayerPawn pawn = pawns.get(index);
+                int offsetX = 0;
+                int offsetY = 0;
+
+                if (count == 2) {
+                    // 2 Peões: Desloca na diagonal
+                    if (index == 0) {
+                        offsetX = -displacement;
+                        offsetY = -displacement;
+                    } else {
+                        offsetX = displacement;
+                        offsetY = displacement;
+                    }
+                } else if (count >= 3) {
+                    // 3 ou 4 Peões: Distribui em uma grade 2x2
+                    switch (index) {
+                        case 0:
+                            offsetX = -displacement;
+                            offsetY = -displacement;
+                            break;
+                        case 1:
+                            offsetX = displacement;
+                            offsetY = -displacement;
+                            break;
+                        case 2:
+                            offsetX = -displacement;
+                            offsetY = displacement;
+                            break;
+                        case 3:
+                            offsetX = displacement;
+                            offsetY = displacement;
+                            break;
+                    }
+                }
+
+                Point adjustedPoint = new Point(basePoint.x + offsetX, basePoint.y + offsetY);
+                pawn.setPawnVisualCoordinates(adjustedPoint);
+            }
+        }
+
+        this.revalidate();
+        this.repaint();
     }
 
     private Color colorName(String colorName) {
