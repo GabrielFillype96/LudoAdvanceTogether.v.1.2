@@ -1,9 +1,11 @@
 // Importações internas
+import control.ImageLoaderManager; // Import adicionado
 import gui.windows.MainScreenContainer;
 import gui.windows.MainMenuScreen;
 import gui.windows.WindowManager;
 
 // Imports externos
+import javax.swing.ImageIcon; // Import adicionado
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
@@ -15,6 +17,14 @@ public class Main {
         SwingUtilities.invokeLater(() -> {
             // Instancia a janela principal do jogo 
             JFrame janela = new JFrame("Jogo de Ludo - Advance Together");
+
+            // === APLICA O ÍCONE NA BARRA DE TAREFAS ===
+            ImageIcon appIcon = ImageLoaderManager.loadIcon("/assets/img/gameIcon.png"); // Ajuste o caminho da sua imagem
+            if (appIcon != null) {
+                janela.setIconImage(appIcon.getImage());
+            }
+            // ==========================================
+
             janela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             janela.setResizable(false); // Mantido false para o usuário não distorcer o layout nulo
                 
