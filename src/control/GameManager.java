@@ -1,10 +1,10 @@
-// Classe responsável por gerenciar as regras de movimentação dos peões de acordo com as cartas
-
 package control;
 
 import gui.windows.BoardScreen;
 import gui.components.GameStatusBar;
 import gui.components.PlayerPawn;
+import network.GameClient;
+import network.NetworkMessage;
 
 import java.awt.Color;
 import java.awt.Point;
@@ -17,44 +17,41 @@ public class GameManager {
     private PawnControlManager pawnControlManager;
     private TurnManager turnManager;
     private CPUIManager cpuIManager;
-    private GameStatusBar gameStatusBar; // Variável da barra de status
-    private boolean movimentoAutomaticoEmAndamento = false; // Flag para silenciar avisos de seleção durante jogadas automáticas
-    private String currentCardType = ""; // Armazena o tipo da carta atual para controle de turno bônus
-    // Flag para impedir interações com o baralho durante o sorteio de início do jogo
+    private GameStatusBar gameStatusBar;
+    private GameClient gameClient;
+    private boolean movimentoAutomaticoEmAndamento = false;
+    private String currentCardType = "";
     private boolean sorteioInicialAtivo = true;
-    // Próximo às outras flags da classe (como jogoFinalizado)
     private boolean jogadaEmAndamento = false;
 
-    // =========================================================================
-    // CONFIGURAÇÕES DE TIMERS E DELAYS (Altere aqui o ritmo do seu jogo!)
-    // =========================================================================
-    private static final int DELAY_ERRO_E_AVISOS = 3000;     // Tempo para ler erros/penalidades
-    private static final int DELAY_ACAO_TEXTO = 2500;        // Tempo para ler o que o jogador/CPU vai fazer
-    private static final int DELAY_MOVIMENTO_AUTO = 2000;     // Atraso antes do peão humano andar sozinho
-    private static final int DELAY_FINAL_TURNO = 3500;       // A última mensagem na tela antes de mudar o turno
+    private static final int DELAY_ERRO_E_AVISOS = 3000;
+    private static final int DELAY_ACAO_TEXTO = 2500;
+    private static final int DELAY_MOVIMENTO_AUTO = 2000;
+    private static final int DELAY_FINAL_TURNO = 3500;
 
-    // Definição de cores dinâmicas para o sistema de status
     private static final Color COLOR_INFO = Color.WHITE;
-    private static final Color COLOR_SUCCESS = new Color(46, 204, 113);  // Verde
-    private static final Color COLOR_WARNING = new Color(241, 196, 15);  // Amarelo
-    private static final Color COLOR_ERROR = new Color(231, 76, 60);     // Vermelho
-    private static final Color COLOR_ACTION = new Color(230, 126, 34);    // Laranja
+    private static final Color COLOR_SUCCESS = new Color(46, 204, 113);
+    private static final Color COLOR_WARNING = new Color(241, 196, 15);
+    private static final Color COLOR_ERROR = new Color(231, 76, 60);
+    private static final Color COLOR_ACTION = new Color(230, 126, 34);
     
-    // Rastreador de 6s consecutivos para cada um dos 4 jogadores (0 a 3)
     private int[] consecutiveSixesCounters = new int[4]; 
-    
-    // Flag para congelar o jogo quando alguém vencer
     private boolean jogoFinalizado = false;
 
-    // =========================================================================
-    // CONFIGURAÇÕES DINÂMICAS 
-    // =========================================================================
     private boolean usarRegraTorre = true; 
     private boolean usarZonasSeguras = true; 
     private boolean usarReboteCentro = true; 
 
     public GameManager(BoardScreen boardScreen) {
         this.boardScreen = boardScreen;
+    }
+
+    public void setGameClient(GameClient gameClient) {
+        this.gameClient = gameClient;
+    }
+
+    public GameClient getGameClient() {
+        return this.gameClient;
     }
 
     public void setTurnManager(TurnManager turnManager) {
@@ -89,14 +86,12 @@ public class GameManager {
         this.cpuIManager = cpuIManager;
     }
 
-    // Retorna se um peão específico do jogador ainda está na base (posição < 4)
     public boolean isPeaoNaBase(int playerId, int pawnIndex) {
         if (this.boardScreen == null) return false;
         PlayerPawn pawn = this.boardScreen.getPlayerPawn(playerId, pawnIndex);
         return pawn != null && pawn.getPawnCurrentPos() < 4;
     }
 
-    // Retorna o nome real do jogador ou da CPU baseado no ID (0 a 3)
     public String getPlayerNameById(int playerId) {
         if (playerId == 0) return "Você";
         
@@ -109,12 +104,10 @@ public class GameManager {
         return "CPU " + playerId; 
     }
 
-    // ASSINATURA ANTIGA: Mantida para compatibilidade com as cartas de perguntas comuns
     public void cardResultVerification(boolean correct, String cardValue, String cardEffect) {
         cardResultVerification(correct, cardValue, cardEffect, "PERGUNTA");
     }
 
-    // Processa os textos e regras especiais de cada tipo de carta (Humano e CPU)
     public void cardResultVerification(boolean correct, String cardValue, String cardEffect, String cardType) {
         if (boardScreen == null || jogoFinalizado) return;
         if (timerAnimation != null && timerAnimation.isRunning()) return;
@@ -130,7 +123,7 @@ public class GameManager {
             this.jogadaEmAndamento = true;
         }
         
-        this.currentCardType = cardType; // Salva o tipo de carta atual globalmente
+        this.currentCardType = cardType;
         String nomeJogador = getPlayerNameById(activePlayerId);
 
         PlayerPawn p1 = boardScreen.getPlayerPawn(activePlayerId, 0);
@@ -138,15 +131,11 @@ public class GameManager {
 
         if (p1 == null || mapaCasas == null) return;
 
-        // SE FOR UMA CARTA DE PEGADINHA (Humano)
         if ("PEGADINHA".equalsIgnoreCase(cardType) && activePlayerId == 0) {
             emitirStatus("🃏 Seu espertinho! Escolha um jogador para sacanear.", COLOR_ACTION);
             return;
         }
 
-        // =========================================================================
-        // TRACK DE ERRO (Humano e CPU)
-        // =========================================================================
         if (!correct) {
             System.out.println("[GameManager] Resposta incorreta. Passando o turno.");
             consecutiveSixesCounters[activePlayerId] = 0; 
@@ -165,7 +154,6 @@ public class GameManager {
             return;
         }
 
-        // SE FOR CARTA DE SUCESSO OU EFEITO IMEDIATO (AVANÇAR / VOLTAR)
         if ("AVANÇAR".equalsIgnoreCase(cardEffect) || "VOLTAR".equalsIgnoreCase(cardEffect) || "RETROCEDER".equalsIgnoreCase(cardEffect)) {
             try {
                 String cardValueTreated = cardValue.trim();
@@ -175,7 +163,6 @@ public class GameManager {
 
                 int valorDado = Integer.parseInt(cardValueTreated);
 
-                // PENALIDADE DOS TRÊS 6 CONSECUTIVOS (Ignora se for carta de SORTE)
                 if (Math.abs(valorDado) == 6 && !"SORTE".equalsIgnoreCase(cardType)) {
                     consecutiveSixesCounters[activePlayerId]++;
                     if (consecutiveSixesCounters[activePlayerId] == 3) {
@@ -198,7 +185,6 @@ public class GameManager {
 
                 if (this.pawnControlManager != null) {
                     
-                    // REGRA ESPECIAL: Carta de Azar do jogador Humano
                     if (activePlayerId == 0 && "AZAR".equalsIgnoreCase(cardType)) {
                         int peaoAzarado = getFurthestPawnIndex(activePlayerId);
                         
@@ -214,9 +200,7 @@ public class GameManager {
 
                         emitirStatus("💀 O peão azarado " + (peaoAzarado + 1) + " vai retroceder " + Math.abs(valorDado) + " casas!", COLOR_ERROR);
                         
-                        Timer delayAzar = new Timer(DELAY_ACAO_TEXTO, eAzar -> {
-                            moveChosenPawn(peaoAzarado, valorDado, cardEffect);
-                        });
+                        Timer delayAzar = new Timer(DELAY_ACAO_TEXTO, eAzar -> moveChosenPawn(peaoAzarado, valorDado, cardEffect));
                         delayAzar.setRepeats(false);
                         delayAzar.start();
                         return;
@@ -224,11 +208,7 @@ public class GameManager {
 
                     java.util.List<Integer> peoesDisponiveis = updatePlayablePawns(valorDado, cardEffect, activePlayerId);
                     
-                    // =========================================================================
-                    // TRACK DE EVENTOS DA CPU
-                    // =========================================================================
                     if (activePlayerId > 0) {
-                        
                         boolean vaiSairDaBase = false;
                         if (!peoesDisponiveis.isEmpty() && this.cpuIManager != null) {
                             String personalidade = this.cpuIManager.getCPUPersonality(activePlayerId);
@@ -264,7 +244,6 @@ public class GameManager {
 
                         Timer delayAcaoCPU = new Timer(DELAY_ACAO_TEXTO, eAcao -> {
                             if ("PEGADINHA".equalsIgnoreCase(cardType)) {
-                                System.out.println("[GameManager] CPU executing Pegadinha...");
                                 if (this.turnManager != null) this.turnManager.nextTurn();
                                 return;
                             }
@@ -299,10 +278,6 @@ public class GameManager {
                         delayAcaoCPU.setRepeats(false);
                         delayAcaoCPU.start();
                     }
-                    
-                    // =========================================================================
-                    // TRACK DE ACERTO DO HUMANO
-                    // =========================================================================
                     else {
                         boolean ehCartaSorte = "SORTE".equalsIgnoreCase(cardType);
                         
@@ -569,6 +544,12 @@ public class GameManager {
         int pawnActualPosition = chosenPawn.getPawnCurrentPos();
         
         if (pawnActualPosition >= pawnPath.length - 1) return false;
+
+        // Transmite a jogada via rede se for a vez do jogador local
+        if (gameClient != null && turnManager != null && turnManager.isMyTurn()) {
+            String payload = pawnIndex + ":" + cardValue + ":" + (cardEffect != null ? cardEffect : "");
+            gameClient.send(new NetworkMessage("MOVE_PAWN", gameClient.getMyPlayerId(), payload));
+        }
 
         boolean isBackwards = "VOLTAR".equalsIgnoreCase(cardEffect) || 
                               "RETRÓGRADO".equalsIgnoreCase(cardEffect) || 
@@ -911,6 +892,7 @@ public class GameManager {
         if (movimentoAutomaticoEmAndamento) return false;
         if (timerAnimation != null && timerAnimation.isRunning()) return false;
         if (pawnControlManager != null && pawnControlManager.isAwaitingPawnSelection()) return false;
+        if (turnManager != null && !turnManager.isMyTurn()) return false; // Impede interações fora do turno local
         return true;
     }
 

@@ -16,9 +16,14 @@ public class GameClient {
     private Gson gson = new Gson();
     private LobbyScreen lobbyScreen;
     private gui.windows.WindowManager windowManager;
+    private control.GameManager gameManager;
 
     public void setLobbyScreen(LobbyScreen lobbyScreen) {
         this.lobbyScreen = lobbyScreen;
+    }
+
+    public void setGameManager(control.GameManager gameManager) {
+        this.gameManager = gameManager;
     }
 
     public void connect(String ip, int port) {
@@ -44,6 +49,12 @@ public class GameClient {
         }).start();
     }
 
+    public void send(NetworkMessage msg) {
+        if (out != null) {
+            out.println(gson.toJson(msg));
+        }
+    }
+
     private void processIncomingMessage(NetworkMessage msg) {
         SwingUtilities.invokeLater(() -> {
             switch (msg.getType()) {
@@ -57,8 +68,27 @@ public class GameClient {
                 case "START_GAME":
                     boolean[] finalSlotIsCPU = gson.fromJson(msg.getPayload(), boolean[].class);
                     if (windowManager != null) {
-                        // Chama o WindowManager para trocar a tela para o tabuleiro online
                         windowManager.startOnlineGame(this, myPlayerId, finalSlotIsCPU);
+                    }
+                    break;
+
+                case "MOVE_PAWN":
+                    if (gameManager != null) {
+                        String[] parts = msg.getPayload().split(":");
+                        int pawnIndex = Integer.parseInt(parts[0]);
+                        int steps = Integer.parseInt(parts[1]);
+                        String effect = parts.length > 2 ? parts[2] : "";
+
+                        if (msg.getPlayerId() != myPlayerId) {
+                            gameManager.moveChosenPawn(pawnIndex, steps, effect);
+                        }
+                    }
+                    break;
+
+                case "NEXT_TURN":
+                    if (gameManager != null && gameManager.getTurnManager() != null) {
+                        int nextPlayerId = Integer.parseInt(msg.getPayload());
+                        gameManager.getTurnManager().setTurn(nextPlayerId);
                     }
                     break;
             }

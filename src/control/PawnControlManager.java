@@ -2,6 +2,9 @@ package control;
 
 import gui.windows.PawnControlContainer;
 import gui.windows.BoardScreen;
+import network.GameClient;
+import network.NetworkMessage;
+
 import java.awt.Color;
 import java.awt.Cursor;
 import java.util.ArrayList;
@@ -15,6 +18,7 @@ public class PawnControlManager {
     private String pendingEffect = "";
     private boolean awaitingPawnSelection = false;
     private GameManager gameManager;
+    private GameClient gameClient;
     private int selectedPawnIndex = -1; 
     private boolean hasUserInteracted = false;
     private int currentlyShakingPawnIndex = -1;
@@ -25,6 +29,10 @@ public class PawnControlManager {
         for(int i = 0; i < 4; i++) {
             pawnState[i] = "NORMAL";
         }
+    }
+
+    public void setGameClient(GameClient gameClient) {
+        this.gameClient = gameClient;
     }
 
     public String getPawnState(int pawnIndex) {
@@ -235,6 +243,12 @@ public class PawnControlManager {
                 boolean movimentoRealizado = this.gameManager.moveChosenPawn(pawnIndex, this.pendingSteps, this.pendingEffect);
 
                 if (movimentoRealizado) {
+                    // Notifica a rede sobre o movimento realizado
+                    if (gameClient != null) {
+                        String payload = pawnIndex + ":" + this.pendingSteps + ":" + this.pendingEffect;
+                        gameClient.send(new NetworkMessage("MOVE_PAWN", gameClient.getMyPlayerId(), payload));
+                    }
+
                     this.awaitingPawnSelection = false;
                     this.hasUserInteracted = false;
                     this.pendingSteps = 0;
