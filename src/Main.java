@@ -17,11 +17,8 @@ public class Main {
             JFrame janela = new JFrame("Jogo de Ludo - Advance Together");
             janela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             janela.setResizable(false); // Mantido false para o usuário não distorcer o layout nulo
-            
-            // =========================================================================
-            // REMOVE A BARRA DE TÍTULO SUPERIOR PARA GANHAR ESPAÇO VERTICAL
-            // =========================================================================
-            janela.setUndecorated(true);
+                
+            janela.setUndecorated(true);  // Remove a barra de título superior da janela
             
             // 1. Instancia o painel base de fundo e define seu tamanho preferido
             MainScreenContainer telaFundo = new MainScreenContainer();
