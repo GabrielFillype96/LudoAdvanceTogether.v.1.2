@@ -50,15 +50,16 @@ public class DeckManager {
         }
     }
 
-   /**
+    /*
      * Puxa a carta do topo filtrando por cartas válidas baseadas no estado dos peões.
-     */
+    */
     public CustomCards drawCard(int playerId, boolean allPawnsInBase) {
         if (playerId < 0 || playerId >= 4) return null;
 
         List<CustomCards> drawPile = drawPiles[playerId];
         List<CustomCards> discardPile = discardPiles[playerId];
 
+        // Se o baralho estiver vazio, junta o descarte e reembaralha
         if (drawPile.isEmpty()) {
             if (discardPile.isEmpty()) return null;
             drawPile.addAll(discardPile);
@@ -66,11 +67,9 @@ public class DeckManager {
             Collections.shuffle(drawPile);
         }
 
-        int tentativas = 0;
-        int tamanhoMaximo = drawPile.size();
-
-        while (!drawPile.isEmpty() && tentativas < tamanhoMaximo) {
-            CustomCards card = drawPile.get(0);
+        // Busca do topo para baixo a PRIMEIRA carta válida para o estado atual
+        for (int i = 0; i < drawPile.size(); i++) {
+            CustomCards card = drawPile.get(i);
             String tipoCarta = card.getCardType();
 
             boolean ehSorteOuAzar = "SORTE".equalsIgnoreCase(tipoCarta) || "AZAR".equalsIgnoreCase(tipoCarta);
@@ -80,9 +79,8 @@ public class DeckManager {
             // FILTRAGEM DE INÍCIO DE JOGO (Todos na base)
             if (allPawnsInBase) {
                 if (ehSorteOuAzar) {
-                    devePular = true; // Pula Sorte/Azar se não há peões na pista para interagir
+                    devePular = true; // Pula Sorte/Azar na base
                 } else if (!ehPegadinha) {
-                    // É uma carta de pergunta. Só aceita se for valor 1 ou 6
                     int valorDado = 0;
                     try {
                         String cardValueTreated = card.getCardValueText().trim();
@@ -95,27 +93,22 @@ public class DeckManager {
                     }
 
                     if (valorDado != 1 && valorDado != 6) {
-                        devePular = true; // Pula perguntas de valor 2, 3, 4, 5
+                        devePular = true; // Pula cartas com valor diferente de 1 ou 6
                     }
                 }
-                // Se for PEGADINHA e estiver na base, devePular continua false (está liberada!)
             }
 
-            // AÇÃO DO FILTRO
-            if (devePular) {
-                // Move a carta inválida para o final do deck e passa para a próxima tentativa
-                drawPile.remove(0);
-                drawPile.add(card);
-                tentativas++;
-            } else {
-                // Carta perfeitamente válida encontrada!
-                return drawPile.remove(0);
+            // Se a carta for válida, remove diretamente do índice 'i' e retorna
+            // As cartas puladas continuam intactas no topo do baralho!
+            if (!devePular) {
+                return drawPile.remove(i);
             }
         }
 
+        // Caso de emergência: se não houver NENHUMA carta de valor 1 ou 6 no baralho todo,
+        // retira a do topo para não travar o jogo.
         return drawPile.remove(0);
     }
-
     /**
      * Envia uma carta respondida/usada para a pilha de descarte do jogador correspondente.
      */
