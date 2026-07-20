@@ -84,22 +84,19 @@ public class NewGameMenuScreen extends JPanel {
         add(subTitle);
 
         // --- LINHA 1 DE JOGADORES ---
-        add(PlayerIdentifier.squarePlayerIdentifier("1", (int) (25 * SCALE), (int) (155 * SCALE), SCALE));
-        add(PlayerIdentifier.squarePlayerIdentifier("3", (int) (280 * SCALE), (int) (155 * SCALE), SCALE));
+        // (As linhas do PlayerIdentifier "1" e "3" foram removidas daqui)
 
         txtP1 = SlotsName.slotName((int) (68 * SCALE), (int) (155 * SCALE), (int) (155 * SCALE), (int) (35 * SCALE), true, SCALE);
-        txtCPU1 = SlotsName.slotName((int) (328 * SCALE), (int) (155 * SCALE), (int) (155 * SCALE), (int) (35 * SCALE), true, SCALE); // Ativado aqui
+        txtCPU1 = SlotsName.slotName((int) (328 * SCALE), (int) (155 * SCALE), (int) (155 * SCALE), (int) (35 * SCALE), true, SCALE); 
         txtP1.setText("Digite seu nome");
         txtCPU1.setText("Computador 1");
-
-        // Aplica o comportamento inteligente de clique
+        
         setupPlaceholder(txtP1, "Digite seu nome");
         setupPlaceholder(txtCPU1, "Computador 1");
-
+        
         add(txtP1);
         add(txtCPU1);
         
-        // MODIFICADO: Atribuindo os ícones às variáveis criadas
         lblIconP1 = SlotsIcon.slotIconLabel("👤", (int) (225 * SCALE), (int) (155 * SCALE), SCALE); 
         lblIconCPU1 = SlotsIcon.slotIconLabel("💻", (int) (485 * SCALE), (int) (155 * SCALE), SCALE); 
         add(lblIconP1);
@@ -113,22 +110,19 @@ public class NewGameMenuScreen extends JPanel {
         add(cbColorCPU1);
 
         // --- LINHA 2 DE JOGADORES ---
-        add(PlayerIdentifier.squarePlayerIdentifier("2", (int) (25 * SCALE), (int) (245 * SCALE), SCALE));
-        add(PlayerIdentifier.squarePlayerIdentifier("4", (int) (280 * SCALE), (int) (245 * SCALE), SCALE));
+        // (As linhas do PlayerIdentifier "2" e "4" foram removidas daqui)
 
-        txtCPU2 = SlotsName.slotName((int) (68 * SCALE), (int) (245 * SCALE), (int) (155 * SCALE), (int) (35 * SCALE), true, SCALE); // Ativado aqui
-        txtCPU3 = SlotsName.slotName((int) (328 * SCALE), (int) (245 * SCALE), (int) (155 * SCALE), (int) (35 * SCALE), true, SCALE); // Ativado aqui
-
+        txtCPU2 = SlotsName.slotName((int) (68 * SCALE), (int) (245 * SCALE), (int) (155 * SCALE), (int) (35 * SCALE), true, SCALE); 
+        txtCPU3 = SlotsName.slotName((int) (328 * SCALE), (int) (245 * SCALE), (int) (155 * SCALE), (int) (35 * SCALE), true, SCALE); 
         txtCPU2.setText("Computador 2");
         txtCPU3.setText("Computador 3");
-
-        // Aplica o comportamento inteligente de clique
+        
         setupPlaceholder(txtCPU2, "Computador 2");
         setupPlaceholder(txtCPU3, "Computador 3");
+        
         add(txtCPU2);
         add(txtCPU3);
 
-        // MODIFICADO: Atribuindo os ícones às variáveis criadas
         lblIconCPU2 = SlotsIcon.slotIconLabel("💻", (int) (225 * SCALE), (int) (245 * SCALE), SCALE);
         lblIconCPU3 = SlotsIcon.slotIconLabel("💻", (int) (485 * SCALE), (int) (245 * SCALE), SCALE);
         add(lblIconCPU2);
