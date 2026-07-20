@@ -112,7 +112,6 @@ public class GameManager {
         if (boardScreen == null || jogoFinalizado) return;
         if (timerAnimation != null && timerAnimation.isRunning()) return;
 
-        
         int activePlayerId = (this.turnManager != null) ? this.turnManager.getCurrentTurn() : 0;
         
         if (activePlayerId == 0 && jogadaEmAndamento) {
@@ -127,8 +126,6 @@ public class GameManager {
         this.currentCardType = cardType; // Salva o tipo de carta atual globalmente
         String nomeJogador = getPlayerNameById(activePlayerId);
 
-
- 
         PlayerPawn p1 = boardScreen.getPlayerPawn(activePlayerId, 0);
         Point[] mapaCasas = boardScreen.getCaminhoCasas(activePlayerId);
 
@@ -367,6 +364,9 @@ public class GameManager {
     }
 
     private void executarMovimentoAutomaticoHumano(int peaoIndex, int valorDado, String cardEffect) {
+        // CORREÇÃO: Ativa a trava IMEDIATAMENTE ao iniciar a rotina para evitar que qualquer clique manual altere a barra de status durante o atraso
+        this.movimentoAutomaticoEmAndamento = true;
+
         this.pawnControlManager.preparePendingMovement(valorDado, cardEffect);
         this.pawnControlManager.onReferencePawnHoverEntered(peaoIndex);
         this.pawnControlManager.onBoardPawnHoverEntered(peaoIndex);
@@ -377,10 +377,8 @@ public class GameManager {
             pawnControlManager.onReferencePawnHoverExited(peaoIndex);
             pawnControlManager.onBoardPawnHoverExit(peaoIndex);
             
-            this.movimentoAutomaticoEmAndamento = true; 
-            
-            pawnControlManager.onReferencePawnClicked(peaoIndex); 
-            pawnControlManager.onReferencePawnClicked(peaoIndex); 
+            // CORREÇÃO: Executa o movimento diretamente no tabuleiro em vez de disparar eventos de clique manual
+            moveChosenPawn(peaoIndex, valorDado, cardEffect);
             
             this.movimentoAutomaticoEmAndamento = false; 
         });
@@ -895,6 +893,7 @@ public class GameManager {
     }
 
     public void resetHumanPawnsVisuals() {
+        this.movimentoAutomaticoEmAndamento = false;
         if (this.pawnControlManager != null) {
             this.pawnControlManager.resetHumanPawnsVisuals();
         }
@@ -923,7 +922,6 @@ public class GameManager {
         return furthestPawn; 
     }
 
-    // Altere para 'false' no seu sistema assim que o sorteio inicial terminar e o primeiro turno começar oficialmente
     public void setSorteioInicialAtivo(boolean ativo) {
         this.sorteioInicialAtivo = ativo;
         if (this.turnManager != null && this.turnManager.getCardsContainer() != null) {
@@ -948,7 +946,6 @@ public class GameManager {
             System.out.println("[TRAVA BARALHO] Bloqueado: O sorteio inicial ainda está ativo (sorteioInicialAtivo = true).");
             return false;
         }
-        // LINHA ADICIONADA: Bloqueia o clique se houver uma jogada ou delay sendo processado
         if (jogadaEmAndamento) {
             System.out.println("[TRAVA BARALHO] Bloqueado: Uma jogada ou transição de turno está em andamento.");
             return false;
