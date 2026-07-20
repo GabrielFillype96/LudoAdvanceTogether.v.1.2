@@ -181,9 +181,9 @@ public class CardsContainer extends JPanel {
             if ("PERGUNTA".equalsIgnoreCase(tipoCarta)) {
                 this.gameManager.emitirStatus("🧠 Desafio! Selecione a alternativa correta.", java.awt.Color.WHITE);
             } else if ("SORTE".equalsIgnoreCase(tipoCarta)) {
-                this.gameManager.emitirStatus("🍀 Parece que alguém aqui tem muita sorte!", java.awt.Color.WHITE);
+                this.gameManager.emitirStatus("🍀 Parece que alguém aqui tem muita sorte!", java.awt.Color.GREEN);
             } else if ("AZAR".equalsIgnoreCase(tipoCarta)) {
-                this.gameManager.emitirStatus("💀 Que azar! Parece que alguém vai voltar algumas casas!", java.awt.Color.WHITE);
+                this.gameManager.emitirStatus("💀 Que azar! Parece que alguém vai voltar algumas casas!", java.awt.Color.RED);
             } else if ("PEGADINHA".equalsIgnoreCase(tipoCarta)) {
                 this.gameManager.emitirStatus("🃏 Seu espertinho! Escolha um jogador para sacanear.", COLOR_ACTION);
             }

@@ -509,12 +509,30 @@ public class BoardScreen extends JPanel {
                 }
             }
         }
+
+
+        // Transforma o Graphics normal em Graphics2D (se já não estiver feito)
+        Graphics2D g2d = (Graphics2D) g;
+        int tamanhoCasa = (int) (40 * SCALE);
+
+        // Desenha as Estrelas de Zona Segura usando os índices 4 (Saída) e 12 (Estrela)
+        int[] indicesSeguros = {4, 12};
+        for (int p = 0; p < 4; p++) {
+            Point[] caminho = getCaminhoCasas(p);
+            if (caminho != null && caminho.length > 12) {
+                for (int index : indicesSeguros) {
+                    Point casaSegura = caminho[index];
+                    // Se a sua casa tem 30x30, some metade do tamanho para centralizar a estrela
+                    desenharEstrelaSafeZone(g2d, casaSegura.x + (tamanhoCasa / 2), casaSegura.y + (tamanhoCasa / 2));
+                }
+            }
+        }
+
         
         // --- NOVO BLOCO: DESENHAR A PRÉ-VISUALIZAÇÃO (SE ESTIVER ATIVA) ---
         java.awt.Graphics2D g2dPreview = (java.awt.Graphics2D) g.create();
-        int tamanhoCasa = (int) (40 * SCALE);
-        
-       // 1. Desenhar o caminho (Pontos pretos) - Desenha sempre que houver um caminho
+       
+        // 1. Desenhar o caminho (Pontos pretos) - Desenha sempre que houver um caminho
         if (previewPath != null && !previewPath.isEmpty()) {
             int diametroPonto = 12;
             
@@ -553,29 +571,15 @@ public class BoardScreen extends JPanel {
         }
         g2dPreview.dispose();
 
-        // Transforma o Graphics normal em Graphics2D (se já não estiver feito)
-    Graphics2D g2d = (Graphics2D) g;
-
-    // Desenha as Estrelas de Zona Segura usando os índices 4 (Saída) e 12 (Estrela)
-    int[] indicesSeguros = {4, 12};
-    for (int p = 0; p < 4; p++) {
-        Point[] caminho = getCaminhoCasas(p);
-        if (caminho != null && caminho.length > 12) {
-            for (int index : indicesSeguros) {
-                Point casaSegura = caminho[index];
-                // Se a sua casa tem 30x30, some metade do tamanho para centralizar a estrela
-                desenharEstrelaSafeZone(g2d, casaSegura.x + (tamanhoCasa / 2), casaSegura.y + (tamanhoCasa / 2));
-            }
-        }
-    }
+        
     }
 
     /**
-     * Desenha uma estrela dourada translúcida numa coordenada (X,Y).
-     * Ideal para marcar as Zonas Seguras do Ludo.
+     * Desenha uma estrela dourada com contorno destacado numa coordenada (X,Y).
+     * Marcador para as Zonas Seguras do Ludo.
      */
     private void desenharEstrelaSafeZone(Graphics2D g2d, int centerX, int centerY) {
-        int radius = (int) (12 * SCALE); // Tamanho da estrela ajustável
+        int radius = (int) (12 * SCALE); // Tamanho da estrela
         int[] xPoints = new int[10];
         int[] yPoints = new int[10];
         double angle = Math.PI / 2; // Começa no topo
@@ -587,10 +591,19 @@ public class BoardScreen extends JPanel {
             angle += Math.PI / 5;
         }
 
-        g2d.setColor(new Color(255, 215, 0, 200)); // Dourado brilhante com transparência
+        // 1. Preenchimento interno (Dourado translúcido)
+        g2d.setColor(new Color(255, 215, 0, 220)); 
         g2d.fillPolygon(xPoints, yPoints, 10);
-        g2d.setColor(Color.ORANGE);
+
+        // 2. Aplicação da Borda/Contorno
+        java.awt.Stroke strokeOriginal = g2d.getStroke(); // Salva o stroke anterior
+        g2d.setStroke(new java.awt.BasicStroke(2.0f));    // Define espessura da borda (2px)
+        
+        // Escolha a cor do contorno (Ex: Color.BLACK para máximo contraste ou um tom escuro/alaranjado)
+        g2d.setColor(new Color(180, 80, 0)); // Laranja/Castanho escuro para destacar o dourado
         g2d.drawPolygon(xPoints, yPoints, 10);
+
+        g2d.setStroke(strokeOriginal); // Restaura o stroke original
     }
 
     private void addPlayerNameSlots() {

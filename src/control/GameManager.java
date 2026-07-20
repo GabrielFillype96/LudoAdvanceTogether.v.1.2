@@ -323,14 +323,18 @@ public class GameManager {
                                 return;
                             }
                             
+                            // Define a cor de destaque (Verde para SORTE, Branco para acerto normal)
+                            Color corDestaque = ehCartaSorte ? COLOR_SUCCESS : COLOR_INFO;
+
                             if (peoesDisponiveis.size() == 1) {
                                 int peaoAutomatico = peoesDisponiveis.get(0);
                                 int numeroReal = (this.pawnControlManager != null) ? this.pawnControlManager.getRealPawnNumber(peaoAutomatico) : (peaoAutomatico + 1);
                                 
                                 if (ehCartaSorte) {
-                                    emitirStatus("🤖 Movendo o peão sortudo " + numeroReal + " automaticamente...", COLOR_INFO);
+                                    // Mudar de COLOR_INFO para corDestaque (COLOR_SUCCESS)
+                                    emitirStatus("🤖 Movendo o peão sortudo " + numeroReal + " automaticamente...", corDestaque);
                                 } else {
-                                    emitirStatus("🤖 Apenas o peão " + numeroReal + " está disponível. Movendo automaticamente...", COLOR_INFO);
+                                    emitirStatus("🤖 Apenas o peão " + numeroReal + " está disponível. Movendo automaticamente...", corDestaque);
                                 }
                                 executarMovimentoAutomaticoHumano(peaoAutomatico, valorDado, cardEffect);
                             } 
@@ -346,9 +350,10 @@ public class GameManager {
                                 }
                                 
                                 if (ehCartaSorte) {
-                                    emitirStatus("👉 Escolha o peão sortudo " + sb.toString() + " para se mover.", COLOR_INFO);
+                                    // Mudar de COLOR_INFO para corDestaque (COLOR_SUCCESS)
+                                    emitirStatus("👉 Escolha o peão sortudo " + sb.toString() + " para se mover.", corDestaque);
                                 } else {
-                                    emitirStatus("👉 Escolha o peão " + sb.toString() + " para se mover.", COLOR_INFO);
+                                    emitirStatus("👉 Escolha o peão " + sb.toString() + " para se mover.", corDestaque);
                                 }
                                 this.pawnControlManager.preparePendingMovement(valorDado, cardEffect);
                             }
