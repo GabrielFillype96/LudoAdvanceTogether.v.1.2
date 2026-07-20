@@ -88,7 +88,6 @@ public class BoardScreen extends JPanel {
         
         String[] playerNames = {player1Name, player2Name, player3Name, player4Name};
         
-        // ATENÇÃO: Substitua os nomes dos arquivos PNG de acordo com as cores reais que tem na sua pasta assets!
         String[] pawnImages = {
             getPawnImagePath(player1Color), // Imagem dinâmica do Jogador 1
             getPawnImagePath(player2Color), // Imagem dinâmica do Jogador 2
@@ -187,33 +186,33 @@ public class BoardScreen extends JPanel {
         player4Path = new java.awt.Point[pathLength];
 
         // =========================================================================
-        // COORDENADAS MANUAIS DAS BASES (Métrica perfeita e independente)
-        // Centraliza os círculos na área útil restante, respeitando os slots de nomes.
+        // COORDENADAS MANUAIS DAS BASES (Métrica perfeita e alinhada)
+        // Ordem: [0] Top-Left (Peão 1) | [1] Top-Right (Peão 2) | [2] Bottom-Left (Peão 3) | [3] Bottom-Right (Peão 4)
         // =========================================================================
         
         // JOGADOR 1: GABRIEL (Azul - Canto Inferior Esquerdo | Slot no Rodapé)
-        player1Path[0] = new java.awt.Point((int)(65 * SCALE), (int)(402 * SCALE));
-        player1Path[1] = new java.awt.Point((int)(65 * SCALE), (int)(472 * SCALE));
-        player1Path[2] = new java.awt.Point((int)(135 * SCALE), (int)(402 * SCALE));
-        player1Path[3] = new java.awt.Point((int)(135 * SCALE), (int)(472 * SCALE));
+        player1Path[0] = new java.awt.Point((int)(65 * SCALE),  (int)(402 * SCALE)); // Peão 1
+        player1Path[1] = new java.awt.Point((int)(135 * SCALE), (int)(402 * SCALE)); // Peão 2
+        player1Path[2] = new java.awt.Point((int)(65 * SCALE),  (int)(472 * SCALE)); // Peão 3
+        player1Path[3] = new java.awt.Point((int)(135 * SCALE), (int)(472 * SCALE)); // Peão 4
 
         // JOGADOR 2: FERNANDA (Roxo - Canto Superior Esquerdo | Slot no Topo)
-        player2Path[0] = new java.awt.Point((int)(65 * SCALE), (int)(87 * SCALE));
-        player2Path[1] = new java.awt.Point((int)(65 * SCALE), (int)(157 * SCALE));
-        player2Path[2] = new java.awt.Point((int)(135 * SCALE), (int)(87 * SCALE));
-        player2Path[3] = new java.awt.Point((int)(135 * SCALE), (int)(157 * SCALE));
+        player2Path[0] = new java.awt.Point((int)(65 * SCALE),  (int)(87 * SCALE));  // Peão 1
+        player2Path[1] = new java.awt.Point((int)(135 * SCALE), (int)(87 * SCALE));  // Peão 2
+        player2Path[2] = new java.awt.Point((int)(65 * SCALE),  (int)(157 * SCALE)); // Peão 3
+        player2Path[3] = new java.awt.Point((int)(135 * SCALE), (int)(157 * SCALE)); // Peão 4
 
         // JOGADOR 3: RAIMUNDA (Rosa - Canto Superior Direito | Slot no Topo)
-        player3Path[0] = new java.awt.Point((int)(425 * SCALE), (int)(87 * SCALE));
-        player3Path[1] = new java.awt.Point((int)(425 * SCALE), (int)(157 * SCALE));
-        player3Path[2] = new java.awt.Point((int)(495 * SCALE), (int)(87 * SCALE));
-        player3Path[3] = new java.awt.Point((int)(495 * SCALE), (int)(157 * SCALE));
+        player3Path[0] = new java.awt.Point((int)(425 * SCALE), (int)(87 * SCALE));  // Peão 1
+        player3Path[1] = new java.awt.Point((int)(495 * SCALE), (int)(87 * SCALE));  // Peão 2
+        player3Path[2] = new java.awt.Point((int)(425 * SCALE), (int)(157 * SCALE)); // Peão 3
+        player3Path[3] = new java.awt.Point((int)(495 * SCALE), (int)(157 * SCALE)); // Peão 4
 
         // JOGADOR 4: PAULO (Amarelo - Canto Inferior Direito | Slot no Rodapé)
-        player4Path[0] = new java.awt.Point((int)(425 * SCALE), (int)(402 * SCALE));
-        player4Path[1] = new java.awt.Point((int)(425 * SCALE), (int)(472 * SCALE));
-        player4Path[2] = new java.awt.Point((int)(495 * SCALE), (int)(402 * SCALE));
-        player4Path[3] = new java.awt.Point((int)(495 * SCALE), (int)(472 * SCALE));
+        player4Path[0] = new java.awt.Point((int)(425 * SCALE), (int)(402 * SCALE)); // Peão 1
+        player4Path[1] = new java.awt.Point((int)(495 * SCALE), (int)(402 * SCALE)); // Peão 2
+        player4Path[2] = new java.awt.Point((int)(425 * SCALE), (int)(472 * SCALE)); // Peão 3
+        player4Path[3] = new java.awt.Point((int)(495 * SCALE), (int)(472 * SCALE)); // Peão 4
 
         // =========================================================================
         // CIRCUITO DA TRILHA PADRÃO DO JOGADOR 1 (Índices 4 ao 60)
@@ -484,15 +483,13 @@ public class BoardScreen extends JPanel {
         int tileSize = (int) (40 * SCALE);
         int diametroCirculo = (int) (65 * SCALE); 
         
-        // Loop pelos 4 jogadores
+        // Loop pelas bases dos 4 jogadores
         for (int p = 0; p < 4; p++) {
             if (todosCaminhos[p] != null) {
-                // Loop pelas 4 bases de cada jogador (posições 0, 1, 2, 3)
                 for (i = 0; i <= 3; i++) {
                     java.awt.Point pontoSpawn = todosCaminhos[p][i];
                     
                     if (pontoSpawn != null) {
-                        // O centro da casa é a ponta (X/Y) + metade do tamanho da casa
                         int centerX = pontoSpawn.x + (tileSize / 2);
                         int centerY = pontoSpawn.y + (tileSize / 2);
 
@@ -510,8 +507,6 @@ public class BoardScreen extends JPanel {
             }
         }
 
-
-        // Transforma o Graphics normal em Graphics2D (se já não estiver feito)
         Graphics2D g2d = (Graphics2D) g;
         int tamanhoCasa = (int) (40 * SCALE);
 
@@ -522,25 +517,21 @@ public class BoardScreen extends JPanel {
             if (caminho != null && caminho.length > 12) {
                 for (int index : indicesSeguros) {
                     Point casaSegura = caminho[index];
-                    // Se a sua casa tem 30x30, some metade do tamanho para centralizar a estrela
                     desenharEstrelaSafeZone(g2d, casaSegura.x + (tamanhoCasa / 2), casaSegura.y + (tamanhoCasa / 2));
                 }
             }
         }
 
-        
-        // --- NOVO BLOCO: DESENHAR A PRÉ-VISUALIZAÇÃO (SE ESTIVER ATIVA) ---
+        // --- DESENHAR PRÉ-VISUALIZAÇÃO ---
         java.awt.Graphics2D g2dPreview = (java.awt.Graphics2D) g.create();
        
-        // 1. Desenhar o caminho (Pontos pretos) - Desenha sempre que houver um caminho
+        // 1. Desenhar o caminho (Pontos pretos)
         if (previewPath != null && !previewPath.isEmpty()) {
             int diametroPonto = 12;
             
             for (int k = 0; k < previewPath.size(); k++) {
-                // Se for o último ponto da lista (destino), não desenha a bolinha
                 if (k == previewPath.size() - 1) { continue; }
                 
-                // CORREÇÃO: Pega a transparência individual da onda para a bolinha 'k'
                 int dotAlpha = pulseAnimator.getAlphaForIndex(k);
                 g2dPreview.setColor(new java.awt.Color(0, 0, 0, dotAlpha));
                 
@@ -551,7 +542,7 @@ public class BoardScreen extends JPanel {
             }
         }
 
-        // 2. Desenhar o Peão Fantasma (Apenas se o índice dele não tiver sido apagado)
+        // 2. Desenhar Peão Fantasma
         if (previewPawnIndex != -1 && previewDestinationIndex != -1) {
             Point destinationPoint = getCaminhoCasas(0)[previewDestinationIndex];
             PlayerPawn pawnToClone = getPlayerPawn(0, previewPawnIndex);
@@ -570,19 +561,13 @@ public class BoardScreen extends JPanel {
             }
         }
         g2dPreview.dispose();
-
-        
     }
 
-    /**
-     * Desenha uma estrela dourada com contorno destacado numa coordenada (X,Y).
-     * Marcador para as Zonas Seguras do Ludo.
-     */
     private void desenharEstrelaSafeZone(Graphics2D g2d, int centerX, int centerY) {
-        int radius = (int) (12 * SCALE); // Tamanho da estrela
+        int radius = (int) (12 * SCALE);
         int[] xPoints = new int[10];
         int[] yPoints = new int[10];
-        double angle = Math.PI / 2; // Começa no topo
+        double angle = Math.PI / 2;
 
         for (int i = 0; i < 10; i++) {
             double r = (i % 2 == 0) ? radius : radius / 2.0;
@@ -591,19 +576,16 @@ public class BoardScreen extends JPanel {
             angle += Math.PI / 5;
         }
 
-        // 1. Preenchimento interno (Dourado translúcido)
         g2d.setColor(new Color(255, 215, 0, 220)); 
         g2d.fillPolygon(xPoints, yPoints, 10);
 
-        // 2. Aplicação da Borda/Contorno
-        java.awt.Stroke strokeOriginal = g2d.getStroke(); // Salva o stroke anterior
-        g2d.setStroke(new java.awt.BasicStroke(2.0f));    // Define espessura da borda (2px)
+        java.awt.Stroke strokeOriginal = g2d.getStroke();
+        g2d.setStroke(new java.awt.BasicStroke(2.0f));
         
-        // Escolha a cor do contorno (Ex: Color.BLACK para máximo contraste ou um tom escuro/alaranjado)
-        g2d.setColor(new Color(180, 80, 0)); // Laranja/Castanho escuro para destacar o dourado
+        g2d.setColor(new Color(180, 80, 0)); 
         g2d.drawPolygon(xPoints, yPoints, 10);
 
-        g2d.setStroke(strokeOriginal); // Restaura o stroke original
+        g2d.setStroke(strokeOriginal);
     }
 
     private void addPlayerNameSlots() {
@@ -620,9 +602,6 @@ public class BoardScreen extends JPanel {
         int slotW = (int) (140 * SCALE);
         int slotH = (int) (28 * SCALE);
 
-        // =========================================================================
-        // POSICIONAMENTO CORRIGIDO: 17 pixels de margem recuada em todas as extremidades
-        // =========================================================================
         slotP2.setBounds((int) (50 * SCALE), (int) (17 * SCALE), slotW, slotH);   // Top-Left (Fernanda)
         slotP3.setBounds((int) (410 * SCALE), (int) (17 * SCALE), slotW, slotH);  // Top-Right (Raimunda)
         slotP1.setBounds((int) (50 * SCALE), (int) (555 * SCALE), slotW, slotH);  // Bottom-Left (Gabriel)
@@ -634,11 +613,6 @@ public class BoardScreen extends JPanel {
         this.add(slotP4);
     }
 
-    /**
-     * Método universal para aceder a qualquer peão de qualquer jogador.
-     * @param playerId O índice do jogador (0 = J1, 1 = J2, 2 = J3, 3 = J4)
-     * @param pawnIndex O índice do peão (0 a 3)
-     */
     public PlayerPawn getPlayerPawn(int playerId, int pawnIndex) {
         if (playerId >= 0 && playerId < 4 && pawnIndex >= 0 && pawnIndex < 4) {
             return this.playersPawns[playerId][pawnIndex];
@@ -646,21 +620,16 @@ public class BoardScreen extends JPanel {
         return null;
     }
 
-    /**
-     * Retorna o caminho de casas (rota) específico para cada jogador.
-     * @param playerId O índice do jogador (0 = Azul/J1, 1 = Roxo/CPU1, 2 = Rosa/CPU2, 3 = Amarelo/CPU3)
-     */
     public java.awt.Point[] getCaminhoCasas(int playerId) {
         switch (playerId) {
             case 0: return this.player1Path;
             case 1: return this.player2Path;
             case 2: return this.player3Path;
             case 3: return this.player4Path;
-            default: return this.player1Path; // Retorno de segurança
+            default: return this.player1Path;
         }
     }
 
-    // Método auxiliar para converter o nome da cor no caminho do asset correspondente
     private String getPawnImagePath(String colorName) {
         if (colorName == null) return "/assets/peaoAzul_90x90.png";
         
@@ -669,30 +638,27 @@ public class BoardScreen extends JPanel {
             case "azul": return "/assets/img/bluePawn_90x90.png";
             case "rosa": return "/assets/img/pinkPawn_90x90.png";
             case "amarelo": return "/assets/img/yellowPawn_90x90.png";
-            default: return "/assets/img/bluePawn_90x90.png"; // Padrão de segurança
+            default: return "/assets/img/bluePawn_90x90.png";
         }
     }
 
-    // Adicione este método dentro da sua classe BoardScreen.java
-public String getGoldenPawnImagePath(int playerId) {
-    String colorName = "azul";
-    
-    // Identifica a cor salva para o respectivo jogador/CPU
-    switch (playerId) {
-        case 0: colorName = player1Color; break;
-        case 1: colorName = player2Color; break;
-        case 2: colorName = player3Color; break;
-        case 3: colorName = player4Color; break;
+    public String getGoldenPawnImagePath(int playerId) {
+        String colorName = "azul";
+        
+        switch (playerId) {
+            case 0: colorName = player1Color; break;
+            case 1: colorName = player2Color; break;
+            case 2: colorName = player3Color; break;
+            case 3: colorName = player4Color; break;
+        }
+        
+        if (colorName == null) return "/assets/peaoAzulCoroa_90x90.png";
+        
+        switch (colorName.toLowerCase()) {
+            case "roxo":    return "/assets/img/purplePawnWinner_90x90.png";
+            case "rosa":    return "/assets/img/pinkPawnWinner_90x90.png";
+            case "amarelo": return "/assets/img/yellowPawnWinner_90x90.png";
+            default:        return "/assets/img/bluePawnWinner_90x90.png";
+        }
     }
-    
-    if (colorName == null) return "/assets/peaoAzulCoroa_90x90.png";
-    
-    // Retorna o arquivo correspondente à coroa daquela cor
-    switch (colorName.toLowerCase()) {
-        case "roxo":    return "/assets/img/purplePawnWinner_90x90.png";
-        case "rosa":    return "/assets/img/pinkPawnWinner_90x90.png";
-        case "amarelo": return "/assets/img/yellowPawnWinner_90x90.png";
-        default:        return "/assets/img/bluePawnWinner_90x90.png"; // Padrão
-    }
-}
 }

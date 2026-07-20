@@ -28,10 +28,10 @@ public class GameManager {
     // =========================================================================
     // CONFIGURAÇÕES DE TIMERS E DELAYS (Altere aqui o ritmo do seu jogo!)
     // =========================================================================
-    private static final int DELAY_ERRO_E_AVISOS = 3000;     // Tempo para ler erros/penalidades (era 1500ms)
-    private static final int DELAY_ACAO_TEXTO = 2500;        // Tempo para ler o que o jogador/CPU vai fazer (era 1500ms)
-    private static final int DELAY_MOVIMENTO_AUTO = 2000;     // Atraso antes do peão humano andar sozinho (era 1500ms)
-    private static final int DELAY_FINAL_TURNO = 3500;       // A última mensagem na tela antes de mudar o turno (era 2000ms)
+    private static final int DELAY_ERRO_E_AVISOS = 3000;     // Tempo para ler erros/penalidades
+    private static final int DELAY_ACAO_TEXTO = 2500;        // Tempo para ler o que o jogador/CPU vai fazer
+    private static final int DELAY_MOVIMENTO_AUTO = 2000;     // Atraso antes do peão humano andar sozinho
+    private static final int DELAY_FINAL_TURNO = 3500;       // A última mensagem na tela antes de mudar o turno
 
     // Definição de cores dinâmicas para o sistema de status
     private static final Color COLOR_INFO = Color.WHITE;
@@ -87,6 +87,13 @@ public class GameManager {
     
     public void setCPUIManager(CPUIManager cpuIManager) {
         this.cpuIManager = cpuIManager;
+    }
+
+    // Retorna se um peão específico do jogador ainda está na base (posição < 4)
+    public boolean isPeaoNaBase(int playerId, int pawnIndex) {
+        if (this.boardScreen == null) return false;
+        PlayerPawn pawn = this.boardScreen.getPlayerPawn(playerId, pawnIndex);
+        return pawn != null && pawn.getPawnCurrentPos() < 4;
     }
 
     // Retorna o nome real do jogador ou da CPU baseado no ID (0 a 3)
@@ -150,7 +157,6 @@ public class GameManager {
                 emitirStatus("❌ " + nomeJogador + " errou a resposta e perdeu a vez!", COLOR_ERROR);
             }
 
-            // Delay configurado para leitura do erro
             Timer delayErro = new Timer(DELAY_ERRO_E_AVISOS, eErro -> {
                 if (this.turnManager != null) this.turnManager.nextTurn();
             });
@@ -219,15 +225,13 @@ public class GameManager {
                     java.util.List<Integer> peoesDisponiveis = updatePlayablePawns(valorDado, cardEffect, activePlayerId);
                     
                     // =========================================================================
-                    // TRACK DE EVENTOS DA CPU (Mensagens das Cartas e Respostas)
+                    // TRACK DE EVENTOS DA CPU
                     // =========================================================================
                     if (activePlayerId > 0) {
                         
-                        // Pre-calcula se a CPU vai tirar um peão da base para ajustar o texto
                         boolean vaiSairDaBase = false;
                         if (!peoesDisponiveis.isEmpty() && this.cpuIManager != null) {
                             String personalidade = this.cpuIManager.getCPUPersonality(activePlayerId);
-                            
                             int peaoEscolhido = escolherMelhorPeaoParaCPU(activePlayerId, peoesDisponiveis, valorDado, personalidade);
                             
                             PlayerPawn peaoAlvo = boardScreen.getPlayerPawn(activePlayerId, peaoEscolhido);
@@ -236,7 +240,6 @@ public class GameManager {
                             }
                         }
 
-                        // 1. Identifica o tipo de carta e define a mensagem ideal no status
                         if ("SORTE".equalsIgnoreCase(cardType)) {
                             if (vaiSairDaBase) {
                                 emitirStatus("🍀 " + nomeJogador + " está com sorte e vai colocar um peão em jogo!", COLOR_SUCCESS);
@@ -259,11 +262,9 @@ public class GameManager {
                             }
                         }
 
-                        // Delay configurado para ler o evento da CPU antes dela agir
                         Timer delayAcaoCPU = new Timer(DELAY_ACAO_TEXTO, eAcao -> {
-                            
                             if ("PEGADINHA".equalsIgnoreCase(cardType)) {
-                                System.out.println("[GameManager] CPU executing Pegadinha (Lógica a ser implementada)...");
+                                System.out.println("[GameManager] CPU executing Pegadinha...");
                                 if (this.turnManager != null) this.turnManager.nextTurn();
                                 return;
                             }
@@ -323,7 +324,6 @@ public class GameManager {
                                 return;
                             }
                             
-                            // Define a cor de destaque (Verde para SORTE, Branco para acerto normal)
                             Color corDestaque = ehCartaSorte ? COLOR_SUCCESS : COLOR_INFO;
 
                             if (peoesDisponiveis.size() == 1) {
@@ -331,7 +331,6 @@ public class GameManager {
                                 int numeroReal = (this.pawnControlManager != null) ? this.pawnControlManager.getRealPawnNumber(peaoAutomatico) : (peaoAutomatico + 1);
                                 
                                 if (ehCartaSorte) {
-                                    // Mudar de COLOR_INFO para corDestaque (COLOR_SUCCESS)
                                     emitirStatus("🤖 Movendo o peão sortudo " + numeroReal + " automaticamente...", corDestaque);
                                 } else {
                                     emitirStatus("🤖 Apenas o peão " + numeroReal + " está disponível. Movendo automaticamente...", corDestaque);
@@ -339,22 +338,6 @@ public class GameManager {
                                 executarMovimentoAutomaticoHumano(peaoAutomatico, valorDado, cardEffect);
                             } 
                             else {
-                                StringBuilder sb = new StringBuilder();
-                                for (int i = 0; i < peoesDisponiveis.size(); i++) {
-                                    int idxPeao = peoesDisponiveis.get(i);
-                                    int numeroReal = (this.pawnControlManager != null) ? this.pawnControlManager.getRealPawnNumber(idxPeao) : (idxPeao + 1);
-                                    
-                                    if (i == 0) sb.append(numeroReal);
-                                    else if (i == peoesDisponiveis.size() - 1) sb.append(" ou ").append(numeroReal);
-                                    else sb.append(", ").append(numeroReal);
-                                }
-                                
-                                if (ehCartaSorte) {
-                                    // Mudar de COLOR_INFO para corDestaque (COLOR_SUCCESS)
-                                    emitirStatus("👉 Escolha o peão sortudo " + sb.toString() + " para se mover.", corDestaque);
-                                } else {
-                                    emitirStatus("👉 Escolha o peão " + sb.toString() + " para se mover.", corDestaque);
-                                }
                                 this.pawnControlManager.preparePendingMovement(valorDado, cardEffect);
                             }
                         });
@@ -369,7 +352,6 @@ public class GameManager {
     }
 
     private void executarMovimentoAutomaticoHumano(int peaoIndex, int valorDado, String cardEffect) {
-        // CORREÇÃO: Ativa a trava IMEDIATAMENTE ao iniciar a rotina para evitar que qualquer clique manual altere a barra de status durante o atraso
         this.movimentoAutomaticoEmAndamento = true;
 
         this.pawnControlManager.preparePendingMovement(valorDado, cardEffect);
@@ -382,9 +364,7 @@ public class GameManager {
             pawnControlManager.onReferencePawnHoverExited(peaoIndex);
             pawnControlManager.onBoardPawnHoverExit(peaoIndex);
             
-            // CORREÇÃO: Executa o movimento diretamente no tabuleiro em vez de disparar eventos de clique manual
             moveChosenPawn(peaoIndex, valorDado, cardEffect);
-            
             this.movimentoAutomaticoEmAndamento = false; 
         });
         atrasoDramatico.setRepeats(false); 
@@ -595,7 +575,6 @@ public class GameManager {
                               "RETROCEDER".equalsIgnoreCase(cardEffect);
         if (isBackwards && cardValue > 0) cardValue = -cardValue; 
         
-        // CORREÇÃO AQUI: Só ganha turno extra se tirar 6 E NÃO for uma carta de SORTE
         boolean ganhouTurnoExtra = (Math.abs(cardValue) == 6 && !"SORTE".equalsIgnoreCase(this.currentCardType));
         boolean exitBase = false;
 
@@ -648,7 +627,7 @@ public class GameManager {
         PlayerPawn chosenPawn = boardScreen.getPlayerPawn(activePlayerId, pawnIndex);
         if (chosenPawn == null) return;
 
-        Point[] pawnPath = boardScreen.getCaminhoCasas(0);
+        Point[] pawnPath = boardScreen.getCaminhoCasas(activePlayerId);
         int pawnActualPosition = chosenPawn.getPawnCurrentPos();
         
         if (pawnActualPosition >= pawnPath.length - 1) {
@@ -700,10 +679,6 @@ public class GameManager {
         boardScreen.setPreviewData(pawnIndex, destIndex, previewPathList);
     }
 
-    private void verificarConditionsFinais(PlayerPawn peao, int pawnIndex, int posicaoAlcancada, boolean ganhouTurnoExtra) {
-        verificarCondicoesFinais(peao, pawnIndex, posicaoAlcancada, ganhouTurnoExtra);
-    }
-
     private void verificarCondicoesFinais(PlayerPawn peao, int pawnIndex, int posicaoAlcancada, boolean ganhouTurnoExtra) {
         if (jogoFinalizado) return;
         
@@ -734,7 +709,7 @@ public class GameManager {
                     "🎉👑 PARABÉNS! Você levou todos os 4 peões ao Centro e VENCEU O JOGO!" :
                     "🤖 FIM DE JOGO! A " + peao.getPlayerName() + " venceu a partida.";
 
-                    emitirStatus(mensagemVitoria, COLOR_SUCCESS);
+                emitirStatus(mensagemVitoria, COLOR_SUCCESS);
                 return;
             }
         }
@@ -748,13 +723,9 @@ public class GameManager {
             passarVez = false; 
         }
 
-        // =========================================================================
-        // ULTIMA MENSAGEM ANTES DE PASSAR O TURNO (Ajustado via Constante)
-        // =========================================================================
         if (passarVez && this.turnManager != null) {
             consecutiveSixesCounters[activePlayerId] = 0; 
             
-            // Aguarda o tempo estipulado para o jogador ver a última alteração/mensagem na tela
             Timer delayTransicaoTurno = new Timer(DELAY_FINAL_TURNO, eFim -> {
                 this.turnManager.nextTurn();
             });
@@ -763,17 +734,12 @@ public class GameManager {
             
         } else if (!passarVez && this.turnManager != null) {
             
-            // Aguarda o tempo estipulado antes de processar o Turno Bônus
             Timer delayTransicaoExtra = new Timer(DELAY_FINAL_TURNO, eExtra -> {
                 this.turnManager.processExtraTurn();
             });
             delayTransicaoExtra.setRepeats(false);
             delayTransicaoExtra.start();
         }
-    }
-
-    private void verificarCapture(int activePlayerId, int destIndex) {
-        verificarCaptura(activePlayerId, destIndex);
     }
 
     private void verificarCaptura(int activePlayerId, int destIndex) {
@@ -938,40 +904,17 @@ public class GameManager {
         return this.sorteioInicialAtivo;
     }
 
-    /**
-     * TRAVA DE SEGURANÇA GLOBAL DO BARALHO
-     * Define se o jogador humano tem permissão total de puxar uma carta agora.
-     */
     public boolean canPlayerDrawCard() {
-        if (jogoFinalizado) {
-            System.out.println("[TRAVA BARALHO] Bloqueado: O jogo já terminou.");
-            return false;
-        }
-        if (sorteioInicialAtivo) {
-            System.out.println("[TRAVA BARALHO] Bloqueado: O sorteio inicial ainda está ativo (sorteioInicialAtivo = true).");
-            return false;
-        }
-        if (jogadaEmAndamento) {
-            System.out.println("[TRAVA BARALHO] Bloqueado: Uma jogada ou transição de turno está em andamento.");
-            return false;
-        }
-        if (movimentoAutomaticoEmAndamento) {
-            System.out.println("[TRAVA BARALHO] Bloqueado: Há um movimento automático em andamento.");
-            return false;
-        }
-        if (timerAnimation != null && timerAnimation.isRunning()) {
-            System.out.println("[TRAVA BARALHO] Bloqueado: Existe um peão se movendo no tabuleiro agora.");
-            return false;
-        }
-        if (pawnControlManager != null && pawnControlManager.isAwaitingPawnSelection()) {
-            System.out.println("[TRAVA BARALHO] Bloqueado: O jogo está esperando você escolher ou confirmar um peão.");
-            return false;
-        }
+        if (jogoFinalizado) return false;
+        if (sorteioInicialAtivo) return false;
+        if (jogadaEmAndamento) return false;
+        if (movimentoAutomaticoEmAndamento) return false;
+        if (timerAnimation != null && timerAnimation.isRunning()) return false;
+        if (pawnControlManager != null && pawnControlManager.isAwaitingPawnSelection()) return false;
         return true;
     }
 
     public void setJogadaEmAndamento(boolean emAndamento) {
         this.jogadaEmAndamento = emAndamento;
     }
-
 }

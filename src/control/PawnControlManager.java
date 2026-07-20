@@ -2,6 +2,10 @@ package control;
 
 import gui.windows.PawnControlContainer;
 import gui.windows.BoardScreen;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PawnControlManager {
     private String[] pawnState = new String[4];
@@ -12,6 +16,8 @@ public class PawnControlManager {
     private boolean awaitingPawnSelection = false;
     private GameManager gameManager;
     private int selectedPawnIndex = -1; 
+    private boolean hasUserInteracted = false;
+    private int currentlyShakingPawnIndex = -1;
 
     public PawnControlManager(BoardScreen boardScreen, GameManager gameManager) {
         this.boardScreen = boardScreen;
@@ -37,7 +43,6 @@ public class PawnControlManager {
     public void setPawnControlContainer(PawnControlContainer pawnControlContainer) {
         this.pawnControlContainer = pawnControlContainer;
         if (this.pawnControlContainer != null) {
-            // Sincroniza o estado visual da película com a variável lógica de controle
             this.pawnControlContainer.setLocked(!this.awaitingPawnSelection);
         }
     }
@@ -49,61 +54,148 @@ public class PawnControlManager {
             setPawnState(pawnIndex, state);
         }
     }
+
+    private void pararShakeAtual() {
+        if (currentlyShakingPawnIndex != -1) {
+            if (boardScreen != null) {
+                boardScreen.stopBoardPawnShake(currentlyShakingPawnIndex);
+            }
+            currentlyShakingPawnIndex = -1;
+        }
+    }
+
+    private void exibirMensagemEscolhaInicial() {
+        if (gameManager == null) return;
+
+        List<Integer> peoesValidos = new ArrayList<>();
+        for (int i = 0; i < 4; i++) {
+            if ("NORMAL".equalsIgnoreCase(getPawnState(i))) {
+                peoesValidos.add(getRealPawnNumber(i));
+            }
+        }
+
+        if (peoesValidos.isEmpty()) {
+            return;
+        }
+
+        String textoPeoes;
+        if (peoesValidos.size() == 1) {
+            textoPeoes = "o peão " + peoesValidos.get(0);
+        } else {
+            StringBuilder sb = new StringBuilder("os peões ");
+            for (int i = 0; i < peoesValidos.size(); i++) {
+                if (i > 0) {
+                    if (i == peoesValidos.size() - 1) {
+                        sb.append(" e ");
+                    } else {
+                        sb.append(", ");
+                    }
+                }
+                sb.append(peoesValidos.get(i));
+            }
+            textoPeoes = sb.toString();
+        }
+
+        gameManager.emitirStatus("👉 Escolha entre " + textoPeoes + ".", Color.WHITE);
+    }
+
+    public void onCentralPawnFocused(int pawnIndex) {
+        if (!awaitingPawnSelection) {
+            pararShakeAtual();
+            return;
+        }
+
+        pararShakeAtual();
+
+        if (this.selectedPawnIndex != -1 && this.selectedPawnIndex != pawnIndex) {
+            this.hasUserInteracted = true;
+        }
+
+        String state = getPawnState(pawnIndex);
+        int numeroPeao = getRealPawnNumber(pawnIndex);
+
+        if ("NORMAL".equalsIgnoreCase(state)) {
+            this.selectedPawnIndex = pawnIndex;
+
+            if (boardScreen != null) {
+                boardScreen.startBoardPawnShake(pawnIndex);
+                currentlyShakingPawnIndex = pawnIndex;
+            }
+
+            if (gameManager != null) {
+                gameManager.showMovementPreview(pawnIndex, pendingSteps, pendingEffect);
+                if (!gameManager.isMovimentoAutomaticoEmAndamento()) {
+                    if (hasUserInteracted) {
+                        gameManager.emitirStatus("♟️ Peão " + numeroPeao + " selecionado. Confirme sua jogada clicando nele!", Color.WHITE);
+                    } else {
+                        exibirMensagemEscolhaInicial();
+                    }
+                }
+            }
+        } else {
+            this.selectedPawnIndex = -1;
+            if (boardScreen != null) {
+                boardScreen.clearPreview();
+            }
+
+            if (gameManager != null && !gameManager.isMovimentoAutomaticoEmAndamento()) {
+                if (hasUserInteracted) {
+                    String mensagemStatus;
+                    if ("DOURADO".equalsIgnoreCase(state)) {
+                        mensagemStatus = "O peão " + numeroPeao + " já chegou ao final do percurso.";
+                    } else {
+                        if (gameManager.isPeaoNaBase(0, pawnIndex)) {
+                            mensagemStatus = "O peão " + numeroPeao + " está na base. Você precisa de 1 ou 6 para tirá-lo.";
+                        } else {
+                            mensagemStatus = "O peão " + numeroPeao + " não tem movimentos válidos nesta jogada.";
+                        }
+                    }
+                    gameManager.emitirStatus(mensagemStatus, new Color(230, 180, 80));
+                } else {
+                    exibirMensagemEscolhaInicial();
+                }
+            }
+        }
+    }
     
-    // Controla o cursor e os efeitos de Hover nos peões de referência (painel)
     public void onReferencePawnHoverEntered(int pawnIndex) {
         gui.components.ReferencePawn refPawn = (pawnControlContainer != null) ? pawnControlContainer.getReferencePawn(pawnIndex) : null;
         
-        // Se o painel estiver bloqueado, força o cursor padrão e barra a animação
         if (!awaitingPawnSelection) {
-            if (refPawn != null) refPawn.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
+            if (refPawn != null) refPawn.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             return; 
         }
         
-        // Se o peão estiver dourado ou desabilitado, impede a mãozinha e o shake
         String state = getPawnState(pawnIndex);
         if ("DOURADO".equalsIgnoreCase(state) || "DESABILITADO".equalsIgnoreCase(state)) {
-            if (refPawn != null) refPawn.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
+            if (refPawn != null) refPawn.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             return;
         }
         
-        // Caso passe nas validações, ativa a mãozinha e treme o peão correspondente no tabuleiro
         if (refPawn != null) {
-            refPawn.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.HAND_CURSOR));
-        }
-        
-        if (boardScreen != null) {
-            boardScreen.startBoardPawnShake(pawnIndex);
+            refPawn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         }
     }
 
     public void onReferencePawnHoverExited(int pawnIndex) {
-        if (boardScreen != null) {
-            boardScreen.stopBoardPawnShake(pawnIndex);
-        }
     }
 
-    // Controla o cursor e os efeitos de Hover nos peões físicos (tabuleiro)
     public void onBoardPawnHoverEntered(int pawnIndex) {
-        // Busca o peão correspondente ao jogador humano (ID 0) no tabuleiro
         gui.components.PlayerPawn boardPawn = (boardScreen != null) ? boardScreen.getPlayerPawn(0, pawnIndex) : null;
         
-        // Se o painel estiver bloqueado, força o cursor padrão no peão do tabuleiro e barra o wobble
         if (!awaitingPawnSelection) {
-            if (boardPawn != null) boardPawn.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
+            if (boardPawn != null) boardPawn.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             return; 
         }
         
-        // Se o peão estiver dourado ou desabilitado, impede a mãozinha e o wobble
         String state = getPawnState(pawnIndex);
         if ("DOURADO".equalsIgnoreCase(state) || "DESABILITADO".equalsIgnoreCase(state)) {
-            if (boardPawn != null) boardPawn.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
+            if (boardPawn != null) boardPawn.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             return;
         }
         
-        // Caso passe nas validações, ativa a mãozinha no tabuleiro e balança a referência no painel
         if (boardPawn != null) {
-            boardPawn.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.HAND_CURSOR));
+            boardPawn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         }
         
         if (pawnControlContainer != null) { 
@@ -119,57 +211,53 @@ public class PawnControlManager {
 
     public void onReferencePawnClicked(int pawnIndex) {
         if (!awaitingPawnSelection) {
-            System.out.println("[PawnControlManager] Clique recusado: Painel bloqueado visualmente.");
             return;
         }
 
         String state = getPawnState(pawnIndex);
         if ("DESABILITADO".equalsIgnoreCase(state) || "DOURADO".equalsIgnoreCase(state)) {
-            System.out.println("[PawnControlManager] Clique recusado: Peão inválido.");
+            if (!hasUserInteracted) {
+                hasUserInteracted = true;
+            }
+            onCentralPawnFocused(pawnIndex);
             return;
         }
 
-        if (this.selectedPawnIndex != pawnIndex) {
-            this.selectedPawnIndex = pawnIndex; 
-            System.out.println("[PawnControlManager] Peão " + pawnIndex + " selecionado.");
-            
-            if (gameManager != null) {
-                gameManager.showMovementPreview(pawnIndex, pendingSteps, pendingEffect);
-                
-                int numeroPeao = getRealPawnNumber(pawnIndex);
-                if (!gameManager.isMovimentoAutomaticoEmAndamento()) {
-                    gameManager.emitirStatus("♟️ Peão " + numeroPeao + " selecionado para andar. Confirme sua jogada clicando nele novamente!", java.awt.Color.WHITE);
-                }
-            }
-            return; 
+        if (!hasUserInteracted) {
+            this.hasUserInteracted = true;
+            onCentralPawnFocused(pawnIndex);
+            return;
         }
 
         if (this.selectedPawnIndex == pawnIndex) {
-            System.out.println("[PawnControlManager] Jogada CONFIRMADA para o peão " + pawnIndex + "!");
-
             if (this.gameManager != null) {
+                pararShakeAtual();
                 boolean movimentoRealizado = this.gameManager.moveChosenPawn(pawnIndex, this.pendingSteps, this.pendingEffect);
 
                 if (movimentoRealizado) {
                     this.awaitingPawnSelection = false;
+                    this.hasUserInteracted = false;
                     this.pendingSteps = 0;
                     this.pendingEffect = "";
                     this.selectedPawnIndex = -1;
                     
-                    // Bloqueia novamente o painel após concluir com sucesso
                     if (this.pawnControlContainer != null) {
                         this.pawnControlContainer.setLocked(true);
                     }
-                    System.out.println("[PawnControlManager] Turno encerrado com sucesso.");
                 } else {
                     this.selectedPawnIndex = -1;
                     if (this.boardScreen != null) {
                         this.boardScreen.clearPreview();
                     }
-                    System.out.println("[PawnControlManager] Movimento inválido.");
                 }
             }
+        } else {
+            onCentralPawnFocused(pawnIndex);
         }
+    }
+
+    public void onBoardPawnClicked(int pawnIndex) {
+        onReferencePawnClicked(pawnIndex);
     }
 
     public void preparePendingMovement(int steps, String effect) {
@@ -178,8 +266,10 @@ public class PawnControlManager {
             int furthestPawnIndex = this.gameManager.getFurthestPawnIndex(currentPlayerId);
             
             if (furthestPawnIndex != -1) {
+                pararShakeAtual();
                 this.gameManager.moveChosenPawn(furthestPawnIndex, steps, effect);
                 this.awaitingPawnSelection = false;
+                this.hasUserInteracted = false;
                 
                 if (currentPlayerId == 0 && this.gameManager.getTurnManager() != null) {
                     this.gameManager.getTurnManager().nextTurn();
@@ -196,16 +286,21 @@ public class PawnControlManager {
         this.pendingSteps = steps;
         this.pendingEffect = effect;
         this.awaitingPawnSelection = true;
-        this.selectedPawnIndex = -1; 
+        this.hasUserInteracted = false;
         
-        // Libera o painel visualmente para o clique do jogador humano
         if (this.pawnControlContainer != null) {
             this.pawnControlContainer.setLocked(false);
+            onCentralPawnFocused(this.pawnControlContainer.getCurrentIndex());
+        } else {
+            this.selectedPawnIndex = -1;
         }
-        System.out.println("[PawnControlManager] Aguardando seleção do peão. Painel liberado.");
     }
 
     public void resetHumanPawnsVisuals() {
+        this.awaitingPawnSelection = false;
+        this.hasUserInteracted = false;
+        this.selectedPawnIndex = -1;
+        pararShakeAtual();
         if (this.pawnControlContainer != null) {
             this.pawnControlContainer.resetAllPawnsToNormal();
         }
@@ -218,7 +313,6 @@ public class PawnControlManager {
         return pawnIndex + 1;
     }
 
-    // Retorna se o sistema está travado aguardando o clique em um peão válido
     public boolean isAwaitingPawnSelection() {
         return this.awaitingPawnSelection;
     }

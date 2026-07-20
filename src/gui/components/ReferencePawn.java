@@ -22,9 +22,7 @@ public class ReferencePawn extends JLabel {
     private ImageIcon disabledReferencePawnIcon; 
     private ImageIcon goldenReferencePawnIcon; 
     
-    // CORREÇÃO: Variável própria para controlar o ícone atual sem ativar o desenho padrão do JLabel
     private ImageIcon currentIcon; 
-    
     private double actualAngle = 0;
     private boolean isInclinedToRight = true;
     private Timer wobbleTimer;
@@ -32,30 +30,20 @@ public class ReferencePawn extends JLabel {
     private int pawnNumber;
     private double scale;
     
+    private boolean isCenterPawn = false;
+    private float alpha = 1.0f; // Controle dinâmico de transparência para a animação
+
     public ReferencePawn(String stdReferencePawnImgPath, String disabledReferencePawnImgPath, String goldenReferencePawnImgPath, int pawnNumber, double scale) {
         this.pawnNumber = pawnNumber;
         this.scale = scale;
 
-        int referencePawnWidth = (int) (40 * scale);
-        int referencePawnHeight = (int) (40 * scale);
+        int referencePawnWidth = (int) (50 * scale);
+        int referencePawnHeight = (int) (60 * scale);
 
-        this.stdReferencePawnIcon = ImageLoaderManager.loadIcon(
-            stdReferencePawnImgPath, 
-            referencePawnWidth, 
-            referencePawnHeight
-        );
-        this.disabledReferencePawnIcon = ImageLoaderManager.loadIcon( 
-            disabledReferencePawnImgPath, 
-            referencePawnWidth, 
-            referencePawnHeight
-        );
-        this.goldenReferencePawnIcon = ImageLoaderManager.loadIcon( 
-            goldenReferencePawnImgPath,
-            referencePawnWidth, 
-            referencePawnHeight
-        );
+        this.stdReferencePawnIcon = ImageLoaderManager.loadIcon(stdReferencePawnImgPath, referencePawnWidth, referencePawnHeight);
+        this.disabledReferencePawnIcon = ImageLoaderManager.loadIcon(disabledReferencePawnImgPath, referencePawnWidth, referencePawnHeight);
+        this.goldenReferencePawnIcon = ImageLoaderManager.loadIcon(goldenReferencePawnImgPath, referencePawnWidth, referencePawnHeight);
 
-        // CORREÇÃO: Define a imagem na nossa variável de controle em vez de usar setIcon()
         if (this.stdReferencePawnIcon != null) {
             this.currentIcon = this.stdReferencePawnIcon;
         }
@@ -82,10 +70,19 @@ public class ReferencePawn extends JLabel {
         });
     }
 
+    public void setCenterPawn(boolean isCenter) {
+        this.isCenterPawn = isCenter;
+        repaint();
+    }
+
+    public void setAlpha(float alpha) {
+        this.alpha = Math.max(0.0f, Math.min(1.0f, alpha));
+        repaint();
+    }
+
     public void setVisualState(String pawnState) {
         this.currentVisualState = pawnState; 
         
-        // CORREÇÃO: Atualiza a variável interna em vez do setIcon() do JLabel
         switch (pawnState) {
             case "NORMAL":
                 this.currentIcon = this.stdReferencePawnIcon;
@@ -99,13 +96,7 @@ public class ReferencePawn extends JLabel {
         }
 
         if (getMousePosition() != null) {
-            if ("DESABILITADO".equals(pawnState)) {
-                setCursor(Cursor.getDefaultCursor());
-            } else {
-                setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-            }
-        } else if ("DESABILITADO".equals(pawnState)) {
-            setCursor(Cursor.getDefaultCursor());
+            setCursor("DESABILITADO".equals(pawnState) ? Cursor.getDefaultCursor() : Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         }
 
         repaint(); 
@@ -127,68 +118,58 @@ public class ReferencePawn extends JLabel {
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g.create();
-        
-        // Chama o super no início. Como não há ícone definido no JLabel, ele limpa/prepara o componente sem sobrescrever nada
         super.paintComponent(g2);
         
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 
         int w = this.getWidth();
         int h = this.getHeight();
         int centerX = w / 2;
-        int centerY = h / 2;
+        int centerY = (h / 2) - (int)(6 * scale);
 
+        // Aplica o alpha dinâmico interpolado
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
+
+        // 1. DESENHO DO PEÃO
         if (this.currentIcon != null) {
-            // 1. Cria a imagem temporária transparente
-            java.awt.image.BufferedImage canvas = new java.awt.image.BufferedImage(w, h, java.awt.image.BufferedImage.TYPE_INT_ARGB);
-            Graphics2D gCanvas = canvas.createGraphics();
-            gCanvas.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            gCanvas.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-
-            // 2. Desenha o peão rotacionado no canvas temporário
-            gCanvas.rotate(Math.toRadians(actualAngle), centerX, centerY);
-            gCanvas.drawImage(this.currentIcon.getImage(), 0, 0, this);
-
-            // 3. Aplica a propriedade para "vazar/recortar" os pixels do peão
-            gCanvas.setComposite(AlphaComposite.getInstance(AlphaComposite.DST_OUT, 1.0f));
-
-            // 4. Configura e escreve o número (ele atuará apagando a área onde for desenhado)
-            String numStr = String.valueOf(this.pawnNumber);
-            gCanvas.setFont(new Font("SansSerif", Font.BOLD, (int) (22 * scale))); 
-            FontMetrics fm = gCanvas.getFontMetrics();
+            Graphics2D gPawn = (Graphics2D) g2.create();
+            gPawn.rotate(Math.toRadians(actualAngle), centerX, centerY);
             
-            int textX = (w - fm.stringWidth(numStr)) / 2;
-            int textY = (h + fm.getAscent() - fm.getDescent()) / 2 + (int)(2 * scale);
-
-            gCanvas.drawString(numStr, textX, textY);
-            gCanvas.dispose();
-
-            // 5. Renderiza a imagem final recortada diretamente na tela do jogo
-            g2.drawImage(canvas, 0, 0, null);
+            int imgW = (int) (w * 0.72);
+            int imgH = (int) (h * 0.73);
+            int imgX = (w - imgW) / 2;
+            int imgY = 2;
+            
+            gPawn.drawImage(this.currentIcon.getImage(), imgX, imgY, imgW, imgH, this);
+            gPawn.dispose();
         }
-        
+
+        // 2. BADGE/SELO NUMÉRICO NA BASE
+        int badgeRadius = (int) (Math.min(w, h) * 0.18);
+        int badgeX = centerX - badgeRadius;
+        int badgeY = h - (badgeRadius * 2) - 2;
+
+        g2.setColor(isCenterPawn ? new Color(212, 160, 23) : new Color(80, 80, 80));
+        g2.fillOval(badgeX, badgeY, badgeRadius * 2, badgeRadius * 2);
+
+        g2.setColor(Color.WHITE);
+        g2.drawOval(badgeX, badgeY, badgeRadius * 2, badgeRadius * 2);
+
+        g2.setColor(Color.WHITE);
+        g2.setFont(new Font("SansSerif", Font.BOLD, (int) (badgeRadius * 1.1)));
+        FontMetrics fm = g2.getFontMetrics();
+        String numStr = String.valueOf(this.pawnNumber);
+        int textX = centerX - (fm.stringWidth(numStr) / 2);
+        int textY = badgeY + badgeRadius + (fm.getAscent() / 2) - 2;
+        g2.drawString(numStr, textX, textY);
+
         g2.dispose();
     }
 
-    public int getPawnNumber() {
-        return this.pawnNumber;
-    }
-
-    public double getActualAngle() {
-        return this.actualAngle;
-    }
-
-    public void setActualAngle(double actualAngle) {
-        this.actualAngle = actualAngle;
-    }
-
-    public boolean isInclinedToRight() {
-        return this.isInclinedToRight;
-    }
-
-    public void setInclinedToRight(boolean isInclinedToRight) {
-        this.isInclinedToRight = isInclinedToRight; 
-    }
+    public int getPawnNumber() { return this.pawnNumber; }
+    public double getActualAngle() { return this.actualAngle; }
+    public void setActualAngle(double actualAngle) { this.actualAngle = actualAngle; }
+    public boolean isInclinedToRight() { return this.isInclinedToRight; }
+    public void setInclinedToRight(boolean isInclinedToRight) { this.isInclinedToRight = isInclinedToRight; }
 }
