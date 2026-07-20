@@ -3,6 +3,8 @@
 // Packages
 package gui.windows;
 
+import network.GameClient;
+
 public class WindowManager {
     // VARIÁVEIS DE INSTÂNCIA
     private MainScreenContainer mainPanel; // variável para armazenar a referência ao painel de fundo principal do jogo
@@ -77,5 +79,39 @@ public class WindowManager {
             mainPanel.revalidate();
             mainPanel.repaint();
         }
+    }
+
+    // Método para abrir a tela de Lobby Multiplayer
+    public void openLobbyMultiplayer() {
+        if (mainPanel != null && mainPanel.getComponentCount() > 0) {
+            if (mainPanel.getComponent(0) instanceof MainMenuScreen) {
+                MainMenuScreen mainMenuScreen = (MainMenuScreen) mainPanel.getComponent(0);
+                SubMenuContainer subMenuContainer = mainMenuScreen.getSubMenuContainer();
+                
+                // Instancia o Lobby passando o WindowManager
+                LobbyScreen lobbyScreen = new LobbyScreen(this); 
+                subMenuContainer.displaySubMenu(lobbyScreen);
+            }
+            mainPanel.revalidate();
+            mainPanel.repaint();
+        }
+    }
+
+    /**
+     * Inicia a tela do jogo em modo Multiplayer Online.
+     */
+    public void startOnlineGame(GameClient client, int myPlayerId, boolean[] slotIsCPU) {
+        // 1. Limpa o painel principal
+        mainPanel.removeAll();
+
+        // 2. Instancia o GameContainer com as informações de rede e a dificuldade padrão das CPUs
+        GameContainer gameContainer = new GameContainer(this, client, myPlayerId, slotIsCPU, "Médio");
+
+        // 3. Adiciona o container do jogo ao painel principal
+        mainPanel.add(gameContainer);
+
+        // 4. Atualiza a interface gráfica
+        mainPanel.revalidate();
+        mainPanel.repaint();
     }
 }

@@ -71,6 +71,7 @@ public class MainMenuScreen extends JPanel {
 
         // Adiciona a ação de clique para o botão "Novo Jogo", que irá abrir o menu de configuração do modo de jogo offline
         btnNewGame.addActionListener(new NewGameMenuAction(windowManager));
+        btnConnection.addActionListener(e -> windowManager.openLobbyMultiplayer());
 
         // Instancia o painel de mini-menu's (SubMenuContainer) e o adiciona ao painel principal do menu
         subMenuContainer = new SubMenuContainer(windowManager);

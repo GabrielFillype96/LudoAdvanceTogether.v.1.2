@@ -3,15 +3,16 @@
 // Package
 package gui.windows;
 
+// Imports internos
 import control.CPUIManager;
 import control.DeckManager;
 import control.GameManager;
-// Imports internos
 import control.PawnControlManager;
 import control.TurnManager;
 import gui.components.PlayerPawn;
 import gui.components.GameStatusBar; 
 import gui.events.BoardPawnMouseListener;
+import network.GameClient; // IMPORT DE REDE ADICIONADO
 
 // Imports externos
 import java.awt.Color;
@@ -29,6 +30,12 @@ public class GameContainer extends JPanel {
     private BoardScreen boardScreen;
     private GameStatusBar statusBar; 
     private static final double SCALE = 1.5;
+
+    // ATRIBUTOS DE REDE / MULTIPLAYER
+    private WindowManager windowManager;
+    private GameClient client;
+    private int myPlayerId;
+    private boolean[] slotIsCPU;
     
     // =========================================================================
     // DIMENSÕES E POSICIONAMENTOS RECALCULADOS PARA ELIMINAR O ESPAÇO VAZIO
@@ -64,30 +71,56 @@ public class GameContainer extends JPanel {
         (int) (400 * SCALE)
     );
     
-    // CORREÇÃO: Área dos peões subiu de Y=450 para Y=390, colando logo abaixo das cartas
+    // Área dos peões
     private static final Rectangle PAWN_CONTROL_AREA_BOUNDS = new Rectangle(
         (int) (680 * SCALE),
         (int) (400 * SCALE), 
         (int) (300 * SCALE), 
-        (int) (290 * SCALE)  // Altura expandida para preencher o restante do fundo (680 - 390)
+        (int) (290 * SCALE)
     );
     
     // Posicionamento interno aproximado com margens limpas
     private static final Rectangle STATUS_BAR_BOUNDS = new Rectangle(
         (int) (40 * SCALE),
-        (int) (8 * SCALE),   // Margem superior justa para colar próximo às cartas
+        (int) (8 * SCALE),
         (int) (220 * SCALE),
         (int) (46 * SCALE)  
     );
     private static final Rectangle PAWN_CONTROL_CONTAINER_BOUNDS = new Rectangle(
         (int) (40 * SCALE),
-        (int) (62 * SCALE),  // Segue o fluxo logo abaixo da nova barra de status
+        (int) (62 * SCALE),
         (int) (220 * SCALE),
         (int) (120 * SCALE)
     );
-    
 
-    // MODIFICADO: Construtor atualizado para aceitar a configuração dinâmica vinda do menu
+    // =========================================================================
+    // NOVO CONSTRUTOR MULTIPLAYER (GERENCIA A REDE E CHAMA O CONSTRUTOR PADRÃO)
+    // =========================================================================
+    public GameContainer(
+        WindowManager windowManager, 
+        GameClient client, 
+        int myPlayerId, 
+        boolean[] slotIsCPU, 
+        String cpuDifficulty
+    ) {
+        // Encadeia a inicialização utilizando as informações tratadas para cada vaga
+        this(
+            "Jogador 1" + (slotIsCPU != null && slotIsCPU.length > 0 && slotIsCPU[0] ? " (CPU)" : ""), "azul",
+            "Jogador 2" + (slotIsCPU != null && slotIsCPU.length > 1 && slotIsCPU[1] ? " (CPU)" : ""), "roxo",
+            "Jogador 3" + (slotIsCPU != null && slotIsCPU.length > 2 && slotIsCPU[2] ? " (CPU)" : ""), "rosa",
+            "Jogador 4" + (slotIsCPU != null && slotIsCPU.length > 3 && slotIsCPU[3] ? " (CPU)" : ""), "amarelo",
+            cpuDifficulty
+        );
+
+        this.windowManager = windowManager;
+        this.client = client;
+        this.myPlayerId = myPlayerId;
+        this.slotIsCPU = slotIsCPU;
+    }
+
+    // =========================================================================
+    // CONSTRUTOR PADRÃO (OFFLINE / INICIALIZAÇÃO COMPLETA DA INTERFACE)
+    // =========================================================================
     public GameContainer(
         String player1Name, String player1Color, 
         String player2Name, String player2Color, 
@@ -98,12 +131,11 @@ public class GameContainer extends JPanel {
         this.playerName = player1Name;
         this.cpuDifficulty = cpuDifficulty;
 
-        // Dimensões fixas para o painel dos cards
-        setBounds(GAME_CONTAINER_BOUNDS); // Tamanho do container do jogo (1470x1020)
-        setLayout(null); // Layout nulo torna o painel absoluto
-        setOpaque(false); // Fundo transparente para permitir a exibição do deck
+        setBounds(GAME_CONTAINER_BOUNDS);
+        setLayout(null);
+        setOpaque(false);
 
-        // MODIFICADO: Agora instancia a BoardScreen usando as strings reais enviadas do menu
+        // Instancia a BoardScreen mantendo-a focada apenas na exibição visual
         this.boardScreen = new BoardScreen(
             player1Name, player1Color, 
             player2Name, player2Color, 
@@ -111,16 +143,13 @@ public class GameContainer extends JPanel {
             player4Name, player4Color
         );
         
-        // =========================================================================
         // INTEGRAÇÃO DA MOLDURA: Encapsula o tabuleiro dentro do painel com moldura
-        // =========================================================================
         BoardWithFrame boardWithFrame = new BoardWithFrame(this.boardScreen, SCALE);
         boardWithFrame.setBounds(BOARD_FRAME_BOUNDS);
 
         // Instancia o manager global do jogo
         GameManager gameManager = new GameManager(this.boardScreen);
         
-
         CPUIManager cpuManager = new CPUIManager(gameManager);
         gameManager.setCPUIManager(cpuManager);
 
@@ -137,13 +166,13 @@ public class GameContainer extends JPanel {
         // Área reservada ao layout das cartas, controles e informações de jogador
         JPanel cardsArea = new JPanel();
         cardsArea.setBounds(CARDS_AREA_BOUNDS);
-        cardsArea.setBackground(new Color(255, 0, 16)); // Tom amadeirado escuro
+        cardsArea.setBackground(new Color(255, 0, 16));
         cardsArea.setLayout(null);
 
         // Instancia a validação das respostas através do clique do jogador
         CardAnswerValidation cardAnswerValidation = new CardAnswerValidation(gameManager);
 
-        // Instancia o "CardsContainer" que será responsável por conter e renderizar as cartas do jogo
+        // Instancia o "CardsContainer"
         CardsContainer cardsContainer = new CardsContainer(gameManager, cardAnswerValidation);
         cardsContainer.setBounds(CARDS_CONTAINER_BOUNDS);
         cardsContainer.setBackground(new Color(0, 255, 16));
@@ -155,7 +184,7 @@ public class GameContainer extends JPanel {
         // Área reservada ao layout do controle dos peões
         JPanel pawnControlArea = new JPanel();
         pawnControlArea.setBounds(PAWN_CONTROL_AREA_BOUNDS);
-        pawnControlArea.setBackground(new Color(38, 24, 16)); // Tom amadeirado escuro
+        pawnControlArea.setBackground(new Color(38, 24, 16));
         pawnControlArea.setLayout(null);
 
         // Instancia e adiciona a barra de status no painel de controle dos peões
@@ -166,14 +195,13 @@ public class GameContainer extends JPanel {
         gameManager.setGameStatusBar(statusBar);
         pawnControlArea.add(this.statusBar);
 
-        // Instancia o "PawnControlManager" para servir de parâmetro na instância do "PawnControlContainer"
+        // Instancia o "PawnControlManager"
         this.pawnControlManager = new PawnControlManager(this.boardScreen, gameManager);
 
         // Faz o GameManager "conhecer" o PawnControlManager
         gameManager.setPawnControlManager(this.pawnControlManager);
         
-        
-        // Instancia o "PawnControlContainer" que será responsável por conter e renderizar os peões de controle do jogo
+        // Instancia o "PawnControlContainer"
         PawnControlContainer pawnControlContainer = new PawnControlContainer(pawnControlManager, player1Color);
         pawnControlContainer.setBounds(PAWN_CONTROL_CONTAINER_BOUNDS);
         pawnControlContainer.setBackground(new Color(38, 24, 16));
@@ -195,16 +223,10 @@ public class GameContainer extends JPanel {
     
         // Adiciona os componentes ao container do jogo
         add(cardsArea);
-        add(boardWithFrame); // Adiciona a moldura completa (que já carrega o tabuleiro dentro)
+        add(boardWithFrame);
         add(pawnControlArea);
 
-        /*
-         * O GameContainer atua como orquestrador para unir a interface visual e as regras de jogo.
-         * Como a classe "BoardScreen" é puramente visual, ela não deve gerenciar dependências. 
-         * Portanto, extraímos cada peão do tabuleiro e injetamos o "PawnControlManager" diretamente 
-         * nos seus respectivos ouvintes de evento (BoardPawnMouseListener). 
-         * Isso elimina dependências circulares (antigo setter) e habilita a funcionalidade wobble perfeitamente.
-         */
+        // Configura os ouvintes dos peões
         for (int i = 0; i < 4; i++) {
             PlayerPawn playerPawn = boardScreen.getPlayerPawn(0, i);
             if (playerPawn != null) {
@@ -215,6 +237,6 @@ public class GameContainer extends JPanel {
 
     // Método getter para acessar as dimensões do GameContainer
     public static Rectangle getGameContainerBounds() {
-        return GAME_CONTAINER_BOUNDS; // Retorna as dimensões do GameContainer
+        return GAME_CONTAINER_BOUNDS;
     }
 }
