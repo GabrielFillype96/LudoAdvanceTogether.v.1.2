@@ -1,28 +1,28 @@
-// Classe responsável por construir o painel principal do jogo, onde o tabuleiro e as cartas serão exibidos
-
-// Package
 package gui.windows;
 
-// Imports internos
 import control.CPUIManager;
 import control.DeckManager;
 import control.GameManager;
 import control.PawnControlManager;
 import control.TurnManager;
 import gui.components.PlayerPawn;
+import gui.components.buttons.CustomButton;
 import gui.components.GameStatusBar; 
 import gui.events.BoardPawnMouseListener;
-import network.GameClient; // IMPORT DE REDE ADICIONADO
+import network.GameClient;
 
-// Imports externos
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Polygon;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
+import javax.swing.JButton;
 import javax.swing.JPanel;
-
 import actions.CardAnswerValidation;
 
 public class GameContainer extends JPanel {
-    // VARIÁVEIS DE INSTÂNCIA
     private String playerName;
     private String cpuDifficulty;
     private PawnControlManager pawnControlManager;
@@ -31,71 +31,26 @@ public class GameContainer extends JPanel {
     private GameStatusBar statusBar; 
     private static final double SCALE = 1.5;
 
-    // ATRIBUTOS DE REDE / MULTIPLAYER
+    private GameManager gameManager;
+    private TurnManager turnManager;
+
     private WindowManager windowManager;
     private GameClient client;
     private int myPlayerId;
     private boolean[] slotIsCPU;
     
-    // =========================================================================
-    // DIMENSÕES E POSICIONAMENTOS RECALCULADOS PARA ELIMINAR O ESPAÇO VAZIO
-    // =========================================================================
-    private static final Rectangle GAME_CONTAINER_BOUNDS = new Rectangle(
-        0, 
-        0, 
-        (int) (980 * SCALE), 
-        (int) (680 * SCALE)
-    );
+    private static final Rectangle GAME_CONTAINER_BOUNDS = new Rectangle(0, 0, (int) (980 * SCALE), (int) (680 * SCALE));
+    private static final Rectangle BOARD_FRAME_BOUNDS = new Rectangle(0, 0, (int) (680 * SCALE), (int) (680 * SCALE));
+    private static final Rectangle CARDS_AREA_BOUNDS = new Rectangle((int) (680 * SCALE), 0, (int) (300 * SCALE), (int) (400 * SCALE));
+    private static final Rectangle CARDS_CONTAINER_BOUNDS = new Rectangle(12, 0, (int) (300 * SCALE), (int) (400 * SCALE));
+    private static final Rectangle PAWN_CONTROL_AREA_BOUNDS = new Rectangle((int) (680 * SCALE), (int) (400 * SCALE), (int) (300 * SCALE), (int) (290 * SCALE));
+    private static final Rectangle STATUS_BAR_BOUNDS = new Rectangle((int) (40 * SCALE), (int) (8 * SCALE), (int) (220 * SCALE), (int) (46 * SCALE));
+    private static final Rectangle PAWN_CONTROL_CONTAINER_BOUNDS = new Rectangle((int) (40 * SCALE), (int) (62 * SCALE), (int) (220 * SCALE), (int) (120 * SCALE));
     
-    // A moldura ocupa de 0 a 680 de largura e altura
-    private static final Rectangle BOARD_FRAME_BOUNDS = new Rectangle(
-        0,
-        0,
-        (int) (680 * SCALE),
-        (int) (680 * SCALE)
-    );
+    // Posição do botão de menu abaixo do carrossel
+    private static final Rectangle MENU_BUTTON_BOUNDS = new Rectangle((int) (40 * SCALE), (int) (192 * SCALE), (int) (220 * SCALE), (int) (36 * SCALE));
 
-    // Área das cartas ajustada para 390px de altura útil
-    private static final Rectangle CARDS_AREA_BOUNDS = new Rectangle(
-        (int) (680 * SCALE), 
-        0, 
-        (int) (300 * SCALE), 
-        (int) (400 * SCALE) 
-    );
-    
-    // Container das cartas acompanhando a nova altura de 390px
-    private static final Rectangle CARDS_CONTAINER_BOUNDS = new Rectangle(
-        12, 
-        0, 
-        (int) (300 * SCALE), 
-        (int) (400 * SCALE)
-    );
-    
-    // Área dos peões
-    private static final Rectangle PAWN_CONTROL_AREA_BOUNDS = new Rectangle(
-        (int) (680 * SCALE),
-        (int) (400 * SCALE), 
-        (int) (300 * SCALE), 
-        (int) (290 * SCALE)
-    );
-    
-    // Posicionamento interno aproximado com margens limpas
-    private static final Rectangle STATUS_BAR_BOUNDS = new Rectangle(
-        (int) (40 * SCALE),
-        (int) (8 * SCALE),
-        (int) (220 * SCALE),
-        (int) (46 * SCALE)  
-    );
-    private static final Rectangle PAWN_CONTROL_CONTAINER_BOUNDS = new Rectangle(
-        (int) (40 * SCALE),
-        (int) (62 * SCALE),
-        (int) (220 * SCALE),
-        (int) (120 * SCALE)
-    );
-
-    // =========================================================================
-    // NOVO CONSTRUTOR MULTIPLAYER (GERENCIA A REDE E CHAMA O CONSTRUTOR PADRÃO)
-    // =========================================================================
+    // CONSTRUTOR MULTIPLAYER ONLINE
     public GameContainer(
         WindowManager windowManager, 
         GameClient client, 
@@ -103,8 +58,8 @@ public class GameContainer extends JPanel {
         boolean[] slotIsCPU, 
         String cpuDifficulty
     ) {
-        // Encadeia a inicialização utilizando as informações tratadas para cada vaga
         this(
+            windowManager,
             "Jogador 1" + (slotIsCPU != null && slotIsCPU.length > 0 && slotIsCPU[0] ? " (CPU)" : ""), "azul",
             "Jogador 2" + (slotIsCPU != null && slotIsCPU.length > 1 && slotIsCPU[1] ? " (CPU)" : ""), "roxo",
             "Jogador 3" + (slotIsCPU != null && slotIsCPU.length > 2 && slotIsCPU[2] ? " (CPU)" : ""), "rosa",
@@ -112,22 +67,29 @@ public class GameContainer extends JPanel {
             cpuDifficulty
         );
 
-        this.windowManager = windowManager;
         this.client = client;
         this.myPlayerId = myPlayerId;
         this.slotIsCPU = slotIsCPU;
+
+        if (this.client != null) {
+            this.client.setGameManager(this.gameManager);
+            this.gameManager.setGameClient(this.client);
+            this.turnManager.setGameClient(this.client);
+        }
+
+        configurarListenersDePeao(this.myPlayerId);
     }
 
-    // =========================================================================
-    // CONSTRUTOR PADRÃO (OFFLINE / INICIALIZAÇÃO COMPLETA DA INTERFACE)
-    // =========================================================================
+    // CONSTRUTOR PADRÃO / OFFLINE
     public GameContainer(
+        WindowManager windowManager,
         String player1Name, String player1Color, 
         String player2Name, String player2Color, 
         String player3Name, String player3Color, 
         String player4Name, String player4Color, 
         String cpuDifficulty
     ) {
+        this.windowManager = windowManager;
         this.playerName = player1Name;
         this.cpuDifficulty = cpuDifficulty;
 
@@ -135,7 +97,6 @@ public class GameContainer extends JPanel {
         setLayout(null);
         setOpaque(false);
 
-        // Instancia a BoardScreen mantendo-a focada apenas na exibição visual
         this.boardScreen = new BoardScreen(
             player1Name, player1Color, 
             player2Name, player2Color, 
@@ -143,71 +104,68 @@ public class GameContainer extends JPanel {
             player4Name, player4Color
         );
         
-        // INTEGRAÇÃO DA MOLDURA: Encapsula o tabuleiro dentro do painel com moldura
         BoardWithFrame boardWithFrame = new BoardWithFrame(this.boardScreen, SCALE);
         boardWithFrame.setBounds(BOARD_FRAME_BOUNDS);
 
-        // Instancia o manager global do jogo
-        GameManager gameManager = new GameManager(this.boardScreen);
+        this.gameManager = new GameManager(this.boardScreen);
         
-        CPUIManager cpuManager = new CPUIManager(gameManager);
-        gameManager.setCPUIManager(cpuManager);
+        CPUIManager cpuManager = new CPUIManager(this.gameManager);
+        this.gameManager.setCPUIManager(cpuManager);
 
-        TurnManager turnManager = new TurnManager(gameManager);
-        gameManager.setTurnManager(turnManager);
+        this.turnManager = new TurnManager(this.gameManager);
+        this.gameManager.setTurnManager(this.turnManager);
 
         cards.CardManager cardManager = new cards.CardManager();
         this.deckManager = new DeckManager(cardManager);
         this.deckManager.initializeDecks();
 
         cpuManager.setDeckManager(this.deckManager);
-        turnManager.setCPUIManager(cpuManager);
+        this.turnManager.setCPUIManager(cpuManager);
 
-        // Área reservada ao layout das cartas, controles e informações de jogador
         JPanel cardsArea = new JPanel();
         cardsArea.setBounds(CARDS_AREA_BOUNDS);
         cardsArea.setBackground(new Color(255, 0, 16));
         cardsArea.setLayout(null);
 
-        // Instancia a validação das respostas através do clique do jogador
-        CardAnswerValidation cardAnswerValidation = new CardAnswerValidation(gameManager);
+        CardAnswerValidation cardAnswerValidation = new CardAnswerValidation(this.gameManager);
 
-        // Instancia o "CardsContainer"
-        CardsContainer cardsContainer = new CardsContainer(gameManager, cardAnswerValidation);
+        CardsContainer cardsContainer = new CardsContainer(this.gameManager, cardAnswerValidation);
         cardsContainer.setBounds(CARDS_CONTAINER_BOUNDS);
         cardsContainer.setBackground(new Color(0, 255, 16));
         cardsArea.add(cardsContainer);
 
         cardsContainer.setDeckManager(this.deckManager);
-        cardsContainer.setTurnManager(turnManager);
+        cardsContainer.setTurnManager(this.turnManager);
 
-        // Área reservada ao layout do controle dos peões
         JPanel pawnControlArea = new JPanel();
         pawnControlArea.setBounds(PAWN_CONTROL_AREA_BOUNDS);
         pawnControlArea.setBackground(new Color(38, 24, 16));
         pawnControlArea.setLayout(null);
 
-        // Instancia e adiciona a barra de status no painel de controle dos peões
         this.statusBar = new GameStatusBar(SCALE);
         this.statusBar.setBounds(STATUS_BAR_BOUNDS);
-        turnManager.sortearPrimeiroJogador();
         
-        gameManager.setGameStatusBar(statusBar);
+        if (this.client == null) {
+            this.turnManager.sortearPrimeiroJogador();
+        }
+        
+        this.gameManager.setGameStatusBar(statusBar);
         pawnControlArea.add(this.statusBar);
 
-        // Instancia o "PawnControlManager"
-        this.pawnControlManager = new PawnControlManager(this.boardScreen, gameManager);
-
-        // Faz o GameManager "conhecer" o PawnControlManager
-        gameManager.setPawnControlManager(this.pawnControlManager);
+        this.pawnControlManager = new PawnControlManager(this.boardScreen, this.gameManager);
+        this.gameManager.setPawnControlManager(this.pawnControlManager);
         
-        // Instancia o "PawnControlContainer"
         PawnControlContainer pawnControlContainer = new PawnControlContainer(pawnControlManager, player1Color);
         pawnControlContainer.setBounds(PAWN_CONTROL_CONTAINER_BOUNDS);
         pawnControlContainer.setBackground(new Color(38, 24, 16));
         pawnControlArea.add(pawnControlContainer);
-        
-        // Força a atualização do fluxo gráfico do Swing
+
+        // BOTÃO DE MENU POSICIONADO ABAIXO DO CARROSSEL
+        CustomButton btnMenu = new CustomButton("MENU");
+        btnMenu.setBounds(MENU_BUTTON_BOUNDS);
+        btnMenu.addActionListener(e -> abrirMenuPausa());
+        pawnControlArea.add(btnMenu);
+
         cardsContainer.revalidate();
         cardsContainer.repaint();
         cardsArea.revalidate();
@@ -221,21 +179,69 @@ public class GameContainer extends JPanel {
         boardWithFrame.revalidate();
         boardWithFrame.repaint();
     
-        // Adiciona os componentes ao container do jogo
         add(cardsArea);
         add(boardWithFrame);
         add(pawnControlArea);
 
-        // Configura os ouvintes dos peões
-        for (int i = 0; i < 4; i++) {
-            PlayerPawn playerPawn = boardScreen.getPlayerPawn(0, i);
-            if (playerPawn != null) {
-                playerPawn.addMouseListener(new BoardPawnMouseListener(pawnControlManager, i));
-            }
-        }   
+        configurarListenersDePeao(0);
     }
 
-    // Método getter para acessar as dimensões do GameContainer
+    private JButton createMenuButton(String text) {
+        JButton button = new JButton(text) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+                int w = getWidth();
+                int h = getHeight();
+                int cut = 10;
+
+                Polygon polygon = new Polygon();
+                polygon.addPoint(0, 0);
+                polygon.addPoint(w - cut, 0);
+                polygon.addPoint(w, cut);
+                polygon.addPoint(w, h);
+                polygon.addPoint(0, h);
+
+                Color bg = getModel().isPressed() ? new Color(200, 200, 200) : 
+                          (getModel().isRollover() ? new Color(255, 255, 255) : new Color(240, 240, 240));
+                g2.setColor(bg);
+                g2.fillPolygon(polygon);
+
+                g2.dispose();
+                super.paintComponent(g);
+            }
+        };
+
+        button.setFont(new Font("Arial", Font.BOLD, 13));
+        button.setForeground(new Color(38, 24, 16));
+        button.setContentAreaFilled(false);
+        button.setFocusPainted(false);
+        button.setBorderPainted(false);
+        button.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        return button;
+    }
+
+    private void abrirMenuPausa() {
+        InGameMenuDialog menuDialog = new InGameMenuDialog(this, this.windowManager);
+        menuDialog.setVisible(true);
+    }
+
+    private void configurarListenersDePeao(int targetPlayerId) {
+        for (int i = 0; i < 4; i++) {
+            PlayerPawn playerPawn = boardScreen.getPlayerPawn(targetPlayerId, i);
+            if (playerPawn != null) {
+                for (java.awt.event.MouseListener ml : playerPawn.getMouseListeners()) {
+                    if (ml instanceof BoardPawnMouseListener) {
+                        playerPawn.removeMouseListener(ml);
+                    }
+                }
+                playerPawn.addMouseListener(new BoardPawnMouseListener(pawnControlManager, i));
+            }
+        }
+    }
+
     public static Rectangle getGameContainerBounds() {
         return GAME_CONTAINER_BOUNDS;
     }

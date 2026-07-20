@@ -14,9 +14,8 @@ public class TurnManager {
     private CardsContainer cardsContainer;
     private GameClient gameClient;
 
-    // Definição de cores para manter o padrão visual do status
     private static final Color COLOR_INFO = Color.WHITE;
-    private static final Color COLOR_WARNING = new Color(241, 196, 15); // Amarelo
+    private static final Color COLOR_WARNING = new Color(241, 196, 15);
 
     public TurnManager(GameManager gameManager) {
         this.gameManager = gameManager;
@@ -122,8 +121,9 @@ public class TurnManager {
         return currentTurn;
     }
 
+    // ALTERAÇÃO: Checa se é a vez do jogador local (online ou offline)
     public boolean isHumanTurn() {
-        return this.currentTurn == 0;
+        return isMyTurn();
     }
 
     public void nextTurn() {
@@ -138,7 +138,6 @@ public class TurnManager {
         System.out.println("[TurnManager] Fim de turno. A vez agora é do Jogador: " + currentTurn);
         System.out.println("=================================");
         
-        // Sincroniza a troca de turno via rede se a jogada pertencia ao jogador local
         if (gameClient != null && gameClient.getMyPlayerId() == previousTurn) {
             gameClient.send(new NetworkMessage("NEXT_TURN", gameClient.getMyPlayerId(), String.valueOf(this.currentTurn)));
         }

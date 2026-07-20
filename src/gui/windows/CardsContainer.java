@@ -58,7 +58,7 @@ public class CardsContainer extends JPanel {
         this.setComponentZOrder(this.cardDeckBackground, 0); 
         this.setComponentZOrder(this.deckStackBackground, 1); 
 
-        // Cria o adaptador único para escutar cliques, entradas e movimentos do mouse
+        // Adaptador único para escutar cliques, entradas e movimentos do mouse
         java.awt.event.MouseAdapter deckMouseAdapter = new java.awt.event.MouseAdapter() {
            @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
@@ -66,8 +66,8 @@ public class CardsContainer extends JPanel {
                     // TRAVA DE SEGURANÇA: Cancela o clique se o jogo estiver processando animações, sorteios ou peões
                     if (!gameManager.canPlayerDrawCard()) return;
 
-                    // Bloqueia clique se não for a vez do humano
-                    if (turnManager.getCurrentTurn() != 0) return;
+                    // ALTERAÇÃO: Bloqueia clique se não for o turno do jogador local na rede
+                    if (!turnManager.isMyTurn()) return;
 
                     System.out.println("[CardsContainer] Clique detectado no baralho.");
                     if (activeCard == null) {
@@ -85,7 +85,6 @@ public class CardsContainer extends JPanel {
 
             @Override
             public void mouseMoved(java.awt.event.MouseEvent e) {
-                // CORREÇÃO: Qualquer micro-movimento do mouse recalcula se ainda é o turno do humano
                 updateDeckCursor();
             }
 
@@ -95,24 +94,18 @@ public class CardsContainer extends JPanel {
             }
         };
 
-        // Registra o adaptador nas duas frentes de escuta do baralho
         this.cardDeckBackground.addMouseListener(deckMouseAdapter);
         this.cardDeckBackground.addMouseMotionListener(deckMouseAdapter);
         
-        // Força o cursor padrão inicial seguro
         updateDeckCursor();
     }
 
-    /**
-     * CORREÇÃO CENTRAL: Controla rigidamente o cursor do baralho baseado no turno real do jogo.
-     * Pode ser chamada internamente ou externamente quando os turnos mudarem.
-     */
     public void updateDeckCursor() {
         if (this.cardDeckBackground == null) return;
         
-        // Só ganha a mãozinha se o GameManager liberar a segurança E for o turno do humano E não houver carta aberta
         boolean segurancaLiberada = (this.gameManager != null && this.gameManager.canPlayerDrawCard());
-        boolean ehTurnoDoHumano = (this.turnManager != null && this.turnManager.getCurrentTurn() == 0);
+        // ALTERAÇÃO: Valida se é a vez do jogador local na rede
+        boolean ehTurnoDoHumano = (this.turnManager != null && this.turnManager.isMyTurn());
         
         if (segurancaLiberada && ehTurnoDoHumano && this.activeCard == null) {
             this.cardDeckBackground.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -138,7 +131,6 @@ public class CardsContainer extends JPanel {
         if (this.cardDeckBackground != null && this.activeCard == null) {
             this.cardDeckBackground.startTurnHighlight();
             
-            // Força a checagem caso o mouse já estivesse posicionado aqui antes do turno começar
             if (this.cardDeckBackground.getMousePosition() != null) {
                 updateDeckCursor();
             }
@@ -152,8 +144,10 @@ public class CardsContainer extends JPanel {
         }
 
         int activePlayerId = this.turnManager.getCurrentTurn();
-        if (activePlayerId != 0) {
-            System.out.println("[CardsContainer] Não é a vez do jogador humano. Ignore o clique.");
+        
+        // ALTERAÇÃO: Impede saques se não for a vez do jogador local
+        if (!this.turnManager.isMyTurn()) {
+            System.out.println("[CardsContainer] Não é a vez do jogador local. Ignorando o clique.");
             return;
         }
 
@@ -273,7 +267,6 @@ public class CardsContainer extends JPanel {
                 this.cardDeckBackground.setVisible(true);
                 this.setComponentZOrder(this.cardDeckBackground, 0); 
 
-                // Atualiza o cursor assim que a carta é limpa da tela
                 updateDeckCursor();
 
                 this.revalidate();

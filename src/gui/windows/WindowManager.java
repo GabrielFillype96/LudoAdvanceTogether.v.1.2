@@ -1,52 +1,51 @@
 // Classe responsável por gerenciar as janelas e transições entre telas
 
-// Packages
 package gui.windows;
 
 import network.GameClient;
 
 public class WindowManager {
     // VARIÁVEIS DE INSTÂNCIA
-    private MainScreenContainer mainPanel; // variável para armazenar a referência ao painel de fundo principal do jogo
+    private MainScreenContainer mainPanel; // referência ao painel de fundo principal
+
+    // Armazena as configurações do último jogo offline para permitir reiniciar a partida
+    private String lastP1Name, lastP1Color;
+    private String lastP2Name, lastP2Color;
+    private String lastP3Name, lastP3Color;
+    private String lastP4Name, lastP4Color;
+    private String lastDifficulty;
 
     /**
-    * @param MainScreenContainer Tela principal do jogo[cite: 13]
-    * Construtor da classe "WindowManager" que recebe a "MainScreenContainer" para podermos adicionar coisas nela[cite: 13]
+    * @param mainPanel Tela principal do jogo
     */
     public WindowManager(MainScreenContainer mainPanel) {
         this.mainPanel = mainPanel;
     }
 
-    // Método para abrir o menu do modo de jogo offline (NewGameMenuScreen)[cite: 13]
+    // Método para abrir o menu do modo de jogo offline (NewGameMenuScreen)
     public void openMenuOffline() {
         System.out.println(
             "[WindowManager] Criando e centralizando o NewGameMenuScreen (Menu Offline)..."
         );
     
-        // Verifica se o "mainPanel" não é nulo antes de tentar adicionar o menu[cite: 13]
         if (mainPanel != null && mainPanel.getComponentCount() > 0) {
-            // Se o primeiro componente do "MainPanel" for uma instância de "MainMenuScreen", adiciona o menu do modo de jogo offline ao painel de opções do menu principal[cite: 13]
            if (mainPanel.getComponent(0) instanceof MainMenuScreen) {
-                // Pega o componente do menu principal (MainMenuScreen) e transformo ele para o tipo "MainMenuScreen" para acessar seus métodos[cite: 13]
                 MainMenuScreen mainMenuScreen = (MainMenuScreen) mainPanel.getComponent(0);
                 
-                SubMenuContainer subMenuContainer = mainMenuScreen.getSubMenuContainer(); // Pega o painel de opções do menu[cite: 13]
-                NewGameMenuScreen offlineMenuGameMode = new NewGameMenuScreen(this, subMenuContainer); // Cria o menu do modo de jogo offline passando o painel de opções do menu principal para o construtor[cite: 13]
-                subMenuContainer.displaySubMenu(offlineMenuGameMode); // Exibe o menu do modo de jogo offline no painel de opções do menu principal[cite: 13]
-
+                SubMenuContainer subMenuContainer = mainMenuScreen.getSubMenuContainer();
+                NewGameMenuScreen offlineMenuGameMode = new NewGameMenuScreen(this, subMenuContainer);
+                subMenuContainer.displaySubMenu(offlineMenuGameMode);
             }
-            // Atualiza o Swing para redesenhar a tela imediatamente com o novo menu visível[cite: 13]
             mainPanel.revalidate();
             mainPanel.repaint();
         } else {
-            // Se o "mainPanel" for "null", imprime um erro no console para ajudar na depuração[cite: 13]
             System.err.println(
                 "[WindowManager Erro] O plano de fundo está nulo!"
             );
         }
     }
 
-    // MODIFICADO: Método atualizado para receber todos os dados customizados dos jogadores
+    // Método para iniciar o jogo offline com dados customizados
     public void startOfflineGameMode(
         String player1Name, String player1Color,
         String player2Name, String player2Color,
@@ -54,17 +53,27 @@ public class WindowManager {
         String player4Name, String player4Color,
         String difficulty
     ) {
-        // Imprime no console para confirmar que a transição está sendo iniciada[cite: 13]
+        // Salva as configurações atuais para permitir reiniciar a partida
+        this.lastP1Name = player1Name;
+        this.lastP1Color = player1Color;
+        this.lastP2Name = player2Name;
+        this.lastP2Color = player2Color;
+        this.lastP3Name = player3Name;
+        this.lastP3Color = player3Color;
+        this.lastP4Name = player4Name;
+        this.lastP4Color = player4Color;
+        this.lastDifficulty = difficulty;
+
         System.out.println(
             "[WindowManager] Iniciando transição para a tela de jogo..."
         );
 
         if (mainPanel != null) {
-            // Se o "mainPanel" for diferente de "null", inicia a transição para a tela de jogo ("GameContainer")[cite: 13]
-            mainPanel.removeAll(); // Limpa o plano de fundo para remover o menu e preparar para a tela de jogo[cite: 13]
+            mainPanel.removeAll();
 
-            // MODIFICADO: Cria a tela de jogo ("GameContainer") passando todos os parâmetros recebidos do menu
+            // Instancia o GameContainer passando o WindowManager (this) como primeiro argumento
             GameContainer gameScreen = new GameContainer(
+                this,
                 player1Name, player1Color,
                 player2Name, player2Color,
                 player3Name, player3Color,
@@ -72,10 +81,32 @@ public class WindowManager {
                 difficulty
             );
 
-            // Adiciona a tela de jogo ao plano de fundo[cite: 13]
             mainPanel.add(gameScreen);
+            mainPanel.revalidate();
+            mainPanel.repaint();
+        }
+    }
 
-            // Força o Swing a revalidar a árvore de componentes e redesenhar o monitor[cite: 13]
+    // Reinicia a partida offline utilizando as mesmas configurações
+    public void iniciarNovoJogoOffline() {
+        if (lastP1Name != null) {
+            startOfflineGameMode(
+                lastP1Name, lastP1Color,
+                lastP2Name, lastP2Color,
+                lastP3Name, lastP3Color,
+                lastP4Name, lastP4Color,
+                lastDifficulty
+            );
+        } else {
+            openMenuOffline();
+        }
+    }
+
+    // Retorna para a tela do menu principal
+    public void exibirMenuPrincipal() {
+        if (mainPanel != null) {
+            mainPanel.removeAll();
+            mainPanel.add(new MainMenuScreen(this));
             mainPanel.revalidate();
             mainPanel.repaint();
         }
@@ -88,7 +119,6 @@ public class WindowManager {
                 MainMenuScreen mainMenuScreen = (MainMenuScreen) mainPanel.getComponent(0);
                 SubMenuContainer subMenuContainer = mainMenuScreen.getSubMenuContainer();
                 
-                // Instancia o Lobby passando o WindowManager
                 LobbyScreen lobbyScreen = new LobbyScreen(this); 
                 subMenuContainer.displaySubMenu(lobbyScreen);
             }
@@ -101,16 +131,11 @@ public class WindowManager {
      * Inicia a tela do jogo em modo Multiplayer Online.
      */
     public void startOnlineGame(GameClient client, int myPlayerId, boolean[] slotIsCPU) {
-        // 1. Limpa o painel principal
         mainPanel.removeAll();
 
-        // 2. Instancia o GameContainer com as informações de rede e a dificuldade padrão das CPUs
         GameContainer gameContainer = new GameContainer(this, client, myPlayerId, slotIsCPU, "Médio");
 
-        // 3. Adiciona o container do jogo ao painel principal
         mainPanel.add(gameContainer);
-
-        // 4. Atualiza a interface gráfica
         mainPanel.revalidate();
         mainPanel.repaint();
     }
