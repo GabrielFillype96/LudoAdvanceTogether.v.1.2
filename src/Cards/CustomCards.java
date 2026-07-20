@@ -548,6 +548,16 @@ public class CustomCards extends JPanel {
                 g2.setPaint(gradientOuro);
                 
             } else if ("AZAR".equalsIgnoreCase(this.cardType)) {
+                // BRONZE ACOBREADO
+                Color[] colorsBronze = {
+                    Color.decode("#593114"),
+                    Color.decode("#DDA066"),
+                    Color.decode("#8C5026")
+                };
+                LinearGradientPaint gradientBronze = new LinearGradientPaint(start, end, dist, colorsBronze);
+                g2.setPaint(gradientBronze);
+                
+            } else if ("SACANEAR".equalsIgnoreCase(this.cardType) || "PEGADINHA".equalsIgnoreCase(this.cardType)) {
                 // PRATA POLIDA
                 Color[] colorsPrata = {
                     Color.decode("#707070"),
@@ -557,18 +567,8 @@ public class CustomCards extends JPanel {
                 LinearGradientPaint gradientPrata = new LinearGradientPaint(start, end, dist, colorsPrata);
                 g2.setPaint(gradientPrata);
                 
-            } else if ("SACANEAR".equalsIgnoreCase(this.cardType) || "PEGADINHA".equalsIgnoreCase(this.cardType)) {
-                // BRONZE ACOBREADO (Suporta tanto "SACANEAR" quanto "PEGADINHA")
-                Color[] colorsBronze = {
-                    Color.decode("#593114"),
-                    Color.decode("#DDA066"),
-                    Color.decode("#8C5026")
-                };
-                LinearGradientPaint gradientBronze = new LinearGradientPaint(start, end, dist, colorsBronze);
-                g2.setPaint(gradientBronze);
-                
             } else {
-                // COR DE SEGURANÇA (Caso venha um tipo especial desconhecido)
+                // COR DE SEGURANÇA
                 Color[] colorsPadrao = {
                     Color.decode("#3A3D40"),
                     Color.decode("#686C70"),

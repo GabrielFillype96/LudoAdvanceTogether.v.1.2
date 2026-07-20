@@ -26,7 +26,9 @@ public class PawnControlContainer extends JPanel {
     private String goldenPawnImgPath = "/assets/peaoAmarelo_90x90.png"; 
     private ReferencePawn[] pawnLabels;
     private static final double SCALE = 1.5;
+    
     private boolean locked = true;
+    private boolean carouselLocked = false; // TRAVA ADICIONADA: Impede a navegação do carrossel
     
     // Controle do Carrossel e Animação
     private int currentIndex = 0;
@@ -87,8 +89,8 @@ public class PawnControlContainer extends JPanel {
             pawnLabels[i].addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    // TRAVA APLICADA: só permite rolar o carrossel ao clicar no peão se NÃO estiver bloqueado (locked)
-                    if (!locked && pIndex != currentIndex && !isAnimating) {
+                    // TRAVA APLICADA: Só gira o carrossel se NÃO estiver travado globalmente E a navegação do carrossel estiver liberada
+                    if (!locked && !carouselLocked && pIndex != currentIndex && !isAnimating) {
                         int dir = (pIndex - currentIndex + 4) % 4 == 1 ? 1 : -1;
                         navegarComAnimacao(dir);
                     }
@@ -180,8 +182,8 @@ public class PawnControlContainer extends JPanel {
     }
 
     private void navegarComAnimacao(int direcao) {
-        // TRAVA APLICADA: se estiver bloqueado (locked) ou já animando, ignora o comando
-        if (locked || isAnimating) return;
+        // TRAVA APLICADA: Se o carrossel estiver bloqueado, ignora a animação
+        if (locked || carouselLocked || isAnimating) return;
         isAnimating = true;
 
         int oldIndex = currentIndex;
@@ -245,12 +247,46 @@ public class PawnControlContainer extends JPanel {
         animTimer.start();
     }
 
+    /**
+     * Define a trava de rotação do carrossel mantendo os botões desativados.
+     */
+    public void setCarouselLocked(boolean carouselLocked) {
+        this.carouselLocked = carouselLocked;
+        atualizarEstadoBotoes();
+    }
+
+    public boolean isCarouselLocked() {
+        return this.carouselLocked;
+    }
+
+    /**
+     * Utilitário para ser chamado antes de uma jogada automática:
+     * Centraliza o peão desejado e trava a navegação do carrossel.
+     */
+    public void focarPeaoEBloquearCarrossel(int pawnIndex) {
+        if (pawnIndex >= 0 && pawnIndex < 4) {
+            this.currentIndex = pawnIndex;
+            posicionarEstatico();
+            setCarouselLocked(true);
+        }
+    }
+
+    private void atualizarEstadoBotoes() {
+        boolean ativo = !locked && !carouselLocked;
+        btnLeft.setEnabled(ativo);
+        btnRight.setEnabled(ativo);
+    }
+
     public void setLocked(boolean locked) {
         this.locked = locked;
-        setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         
-        btnLeft.setEnabled(!locked);
-        btnRight.setEnabled(!locked);
+        // Ao destravar completamente, reseta a trava do carrossel
+        if (!locked) {
+            this.carouselLocked = false;
+        }
+
+        setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+        atualizarEstadoBotoes();
 
         for (int i = 0; i < 4; i++) {
             ReferencePawn pawn = pawnLabels[i];
