@@ -28,7 +28,7 @@ public class TurnManager {
 
     public boolean isMyTurn() {
         if (this.gameClient == null) {
-            return this.currentTurn == 0; // Modo offline: Jogador local é o ID 0
+            return this.currentTurn == 0;
         }
         return this.gameClient.getMyPlayerId() == this.currentTurn;
     }
@@ -121,7 +121,6 @@ public class TurnManager {
         return currentTurn;
     }
 
-    // ALTERAÇÃO: Checa se é a vez do jogador local (online ou offline)
     public boolean isHumanTurn() {
         return isMyTurn();
     }
@@ -132,6 +131,12 @@ public class TurnManager {
         }
 
         int previousTurn = this.currentTurn;
+
+        // DECREMENTA O COOLDOWN DO JOGADOR QUE ACABOU DE JOGAR
+        if (this.gameManager != null) {
+            this.gameManager.decrementAzarCooldown(previousTurn);
+        }
+
         this.currentTurn = (this.currentTurn + 1) % 4;
 
         System.out.println("\n=================================");

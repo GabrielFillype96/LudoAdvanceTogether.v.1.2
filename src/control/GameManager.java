@@ -17,12 +17,17 @@ public class GameManager {
     private PawnControlManager pawnControlManager;
     private TurnManager turnManager;
     private CPUIManager cpuIManager;
+    private DeckManager deckManager;
     private GameStatusBar gameStatusBar;
     private GameClient gameClient;
     private boolean movimentoAutomaticoEmAndamento = false;
     private String currentCardType = "";
     private boolean sorteioInicialAtivo = true;
     private boolean jogadaEmAndamento = false;
+
+    // Configuração de Dificuldade e Cooldown
+    private String gameDifficulty = "MEDIO"; // FACIL, MEDIO, DIFICIL
+    private int[] azarCooldown = new int[4];
 
     private static final int DELAY_ERRO_E_AVISOS = 3000;
     private static final int DELAY_ACAO_TEXTO = 2500;
@@ -44,6 +49,65 @@ public class GameManager {
 
     public GameManager(BoardScreen boardScreen) {
         this.boardScreen = boardScreen;
+    }
+
+    public void setDeckManager(DeckManager deckManager) {
+        this.deckManager = deckManager;
+        if (this.deckManager != null) {
+            this.deckManager.setGameManager(this);
+        }
+    }
+
+    public DeckManager getDeckManager() {
+        return this.deckManager;
+    }
+
+    // GESTÃO DE DIFICULDADE E COOLDOWN DA CARTA DE AZAR
+    public void setGameDifficulty(String difficulty) {
+        if (difficulty != null && !difficulty.trim().isEmpty()) {
+            this.gameDifficulty = difficulty.toUpperCase().trim();
+            System.out.println("[GameManager] Dificuldade configurada para: " + this.gameDifficulty);
+        }
+    }
+
+    public String getGameDifficulty() {
+        return this.gameDifficulty;
+    }
+
+    public int getCooldownTurnsByDifficulty() {
+        switch (this.gameDifficulty) {
+            case "FACIL":
+            case "FÁCIL":
+                return 5;
+            case "DIFICIL":
+            case "DIFÍCIL":
+                return 3;
+            case "MEDIO":
+            case "MÉDIO":
+            default:
+                return 4;
+        }
+    }
+
+    public boolean isAzarInCooldown(int playerId) {
+        if (playerId >= 0 && playerId < 4) {
+            return azarCooldown[playerId] > 0;
+        }
+        return false;
+    }
+
+    public void triggerAzarCooldown(int playerId) {
+        if (playerId >= 0 && playerId < 4) {
+            azarCooldown[playerId] = getCooldownTurnsByDifficulty();
+            System.out.println("[GameManager] Cooldown de AZAR ativado para o Jogador " + playerId + ": " + azarCooldown[playerId] + " turnos.");
+        }
+    }
+
+    public void decrementAzarCooldown(int playerId) {
+        if (playerId >= 0 && playerId < 4 && azarCooldown[playerId] > 0) {
+            azarCooldown[playerId]--;
+            System.out.println("[GameManager] Cooldown de AZAR do Jogador " + playerId + " decrementado. Restantes: " + azarCooldown[playerId]);
+        }
     }
 
     public void setGameClient(GameClient gameClient) {
@@ -124,6 +188,12 @@ public class GameManager {
         }
         
         this.currentCardType = cardType;
+
+        // ATIVA O COOLDOWN DE AZAR ASSIM QUE A CARTA É PROCESSADA
+        if ("AZAR".equalsIgnoreCase(cardType)) {
+            triggerAzarCooldown(activePlayerId);
+        }
+
         String nomeJogador = getPlayerNameById(activePlayerId);
 
         PlayerPawn p1 = boardScreen.getPlayerPawn(activePlayerId, 0);
@@ -189,7 +259,7 @@ public class GameManager {
                         int peaoAzarado = getFurthestPawnIndex(activePlayerId);
                         
                         if (peaoAzarado == -1) {
-                            emitirStatus("🍀 Que sorte! Você não tem peões no tabuleiro para retroceder.", COLOR_SUCCESS);
+                            emitirStatus("🛡️ PROTEGIDO! Seus peões estão salvos na Base ou na Zona Segura!", COLOR_SUCCESS);
                             Timer delaySorte = new Timer(DELAY_ACAO_TEXTO, eS -> {
                                 if (this.turnManager != null) this.turnManager.nextTurn();
                             });
@@ -251,7 +321,7 @@ public class GameManager {
                             if ("AZAR".equalsIgnoreCase(cardType)) {
                                 int peaoAzarado = getFurthestPawnIndex(activePlayerId);
                                 if (peaoAzarado == -1) {
-                                    emitirStatus("🤖 " + nomeJogador + " não tem peões no tabuleiro para retroceder.", COLOR_INFO);
+                                    emitirStatus("🛡️ " + nomeJogador + " está protegido na Zona Segura ou na Base e não retrocede!", COLOR_INFO);
                                     Timer delayTurno = new Timer(DELAY_ERRO_E_AVISOS, eT -> { if (this.turnManager != null) this.turnManager.nextTurn(); });
                                     delayTurno.setRepeats(false);
                                     delayTurno.start();
@@ -351,7 +421,7 @@ public class GameManager {
         Point[] pawnPath = boardScreen.getCaminhoCasas(activePlayerId);
         if (pawnPath == null || jogoFinalizado) return peoesValidos;
 
-        boolean isBackwards = "VOLTAR".equalsIgnoreCase(cardEffect) || "RETRÓGRADO".equalsIgnoreCase(cardEffect);
+        boolean isBackwards = "VOLTAR".equalsIgnoreCase(cardEffect) || "RETRÓGRADO".equalsIgnoreCase(cardEffect) || "RETROCEDER".equalsIgnoreCase(cardEffect);
         int localCardValue = isBackwards ? -cardValue : cardValue;
         
         for (int i = 0; i < 4; i++) {
@@ -361,6 +431,11 @@ public class GameManager {
             int pos = pawn.getPawnCurrentPos();
             
             if (pos >= pawnPath.length - 1) {
+                if (activePlayerId == 0) this.pawnControlManager.updatePawnVisualState(i, "DESABILITADO");
+                continue;
+            }
+
+            if (isBackwards && pos >= 4 && isZonaSegura(pawnPath[pos])) {
                 if (activePlayerId == 0) this.pawnControlManager.updatePawnVisualState(i, "DESABILITADO");
                 continue;
             }
@@ -548,7 +623,6 @@ public class GameManager {
         
         if (pawnActualPosition >= pawnPath.length - 1) return false;
 
-        // Transmite a jogada via rede se for a vez do jogador local
         if (gameClient != null && turnManager != null && turnManager.isMyTurn()) {
             String payload = pawnIndex + ":" + cardValue + ":" + (cardEffect != null ? cardEffect : "");
             gameClient.send(new NetworkMessage("MOVE_PAWN", gameClient.getMyPlayerId(), payload));
@@ -619,7 +693,7 @@ public class GameManager {
             return;
         }
 
-        boolean isBackwards = "VOLTAR".equalsIgnoreCase(cardEffect) || "RETRÓGRADO".equalsIgnoreCase(cardEffect);
+        boolean isBackwards = "VOLTAR".equalsIgnoreCase(cardEffect) || "RETRÓGRADO".equalsIgnoreCase(cardEffect) || "RETROCEDER".equalsIgnoreCase(cardEffect);
         int localCardValue = cardValue;
         if (isBackwards && localCardValue > 0) localCardValue = -localCardValue;
 
@@ -861,12 +935,19 @@ public class GameManager {
     public int getFurthestPawnIndex(int playerId) {
         int furthestPawn = -1;
         int maxPosition = -1;
+        Point[] pawnPath = (boardScreen != null) ? boardScreen.getCaminhoCasas(playerId) : null;
 
         for (int i = 0; i < 4; i++) {
             PlayerPawn pawn = boardScreen.getPlayerPawn(playerId, i);
-            if (pawn != null) {
+            if (pawn != null && pawnPath != null) {
                 int pos = pawn.getPawnCurrentPos();
-                if (pos >= 4 && pos < boardScreen.getCaminhoCasas(playerId).length - 1) {
+                if (pos >= 4 && pos < pawnPath.length - 1) {
+                    Point currentPoint = pawnPath[pos];
+                    
+                    if (isZonaSegura(currentPoint)) {
+                        continue;
+                    }
+
                     if (pos > maxPosition) {
                         maxPosition = pos;
                         furthestPawn = i;
@@ -895,7 +976,7 @@ public class GameManager {
         if (movimentoAutomaticoEmAndamento) return false;
         if (timerAnimation != null && timerAnimation.isRunning()) return false;
         if (pawnControlManager != null && pawnControlManager.isAwaitingPawnSelection()) return false;
-        if (turnManager != null && !turnManager.isMyTurn()) return false; // Impede interações fora do turno local
+        if (turnManager != null && !turnManager.isMyTurn()) return false;
         return true;
     }
 

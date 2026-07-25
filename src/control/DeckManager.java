@@ -8,11 +8,11 @@ import java.util.List;
 
 public class DeckManager {
     
-    // Arrays para guardar as listas de cada um dos 4 jogadores (IDs 0 a 3)
     private List<CustomCards>[] drawPiles;    // Montes de Compra
     private List<CustomCards>[] discardPiles; // Montes de Descarte
     
     private CardManager cardManager;
+    private GameManager gameManager;
 
     @SuppressWarnings("unchecked")
     public DeckManager(CardManager cardManager) {
@@ -20,46 +20,41 @@ public class DeckManager {
         this.drawPiles = new ArrayList[4];
         this.discardPiles = new ArrayList[4];
 
-        // Inicializa as listas para os 4 jogadores
         for (int i = 0; i < 4; i++) {
             this.drawPiles[i] = new ArrayList<>();
             this.discardPiles[i] = new ArrayList<>();
         }
     }
 
-    /**
-     * Inicializa os 4 baralhos individuais com instâncias ÚNICAS de cartas.
-     */
+    public void setGameManager(GameManager gameManager) {
+        this.gameManager = gameManager;
+    }
+
     public void initializeDecks() {
         for (int i = 0; i < 4; i++) {
             this.drawPiles[i].clear();
             this.discardPiles[i].clear();
             
-            // ATENÇÃO: Carregamos as cartas diretamente dentro do loop!
-            // Isso obriga o sistema a ler o JSON 4 vezes e criar 4 conjuntos 
-            // totalmente independentes, blindando a memória do Java.
             this.drawPiles[i].addAll(cardManager.loadCard("FÁCIL"));
             this.drawPiles[i].addAll(cardManager.loadCard("MÉDIO"));
             this.drawPiles[i].addAll(cardManager.loadCard("DIFÍCIL"));
             this.drawPiles[i].addAll(cardManager.loadCard("SORTE"));
             this.drawPiles[i].addAll(cardManager.loadCard("AZAR"));
             
-            // Embaralha o baralho individual do jogador 'i'
             java.util.Collections.shuffle(this.drawPiles[i]);
             System.out.println("[DeckManager] Baralho do Jogador " + i + " inicializado com " + this.drawPiles[i].size() + " cartas!");
         }
     }
 
-    /*
-     * Puxa a carta do topo filtrando por cartas válidas baseadas no estado dos peões.
-    */
+    /**
+     * Puxa a carta do topo filtrando por cartas válidas baseadas no estado dos peões e no Cooldown de Azar.
+     */
     public CustomCards drawCard(int playerId, boolean allPawnsInBase) {
         if (playerId < 0 || playerId >= 4) return null;
 
         List<CustomCards> drawPile = drawPiles[playerId];
         List<CustomCards> discardPile = discardPiles[playerId];
 
-        // Se o baralho estiver vazio, junta o descarte e reembaralha
         if (drawPile.isEmpty()) {
             if (discardPile.isEmpty()) return null;
             drawPile.addAll(discardPile);
@@ -67,17 +62,22 @@ public class DeckManager {
             Collections.shuffle(drawPile);
         }
 
-        // Busca do topo para baixo a PRIMEIRA carta válida para o estado atual
         for (int i = 0; i < drawPile.size(); i++) {
             CustomCards card = drawPile.get(i);
             String tipoCarta = card.getCardType();
 
             boolean ehSorteOuAzar = "SORTE".equalsIgnoreCase(tipoCarta) || "AZAR".equalsIgnoreCase(tipoCarta);
             boolean ehPegadinha = "PEGADINHA".equalsIgnoreCase(tipoCarta);
+            boolean ehAzar = "AZAR".equalsIgnoreCase(tipoCarta);
             boolean devePular = false;
 
+            // FILTRAGEM DE COOLDOWN DE AZAR (Por dificuldade)
+            if (ehAzar && gameManager != null && gameManager.isAzarInCooldown(playerId)) {
+                devePular = true;
+            }
+
             // FILTRAGEM DE INÍCIO DE JOGO (Todos na base)
-            if (allPawnsInBase) {
+            if (!devePular && allPawnsInBase) {
                 if (ehSorteOuAzar) {
                     devePular = true; // Pula Sorte/Azar na base
                 } else if (!ehPegadinha) {
@@ -98,20 +98,14 @@ public class DeckManager {
                 }
             }
 
-            // Se a carta for válida, remove diretamente do índice 'i' e retorna
-            // As cartas puladas continuam intactas no topo do baralho!
             if (!devePular) {
                 return drawPile.remove(i);
             }
         }
 
-        // Caso de emergência: se não houver NENHUMA carta de valor 1 ou 6 no baralho todo,
-        // retira a do topo para não travar o jogo.
         return drawPile.remove(0);
     }
-    /**
-     * Envia uma carta respondida/usada para a pilha de descarte do jogador correspondente.
-     */
+
     public void discardCard(int playerId, CustomCards card) {
         if (playerId < 0 || playerId >= 4 || card == null) return;
         
