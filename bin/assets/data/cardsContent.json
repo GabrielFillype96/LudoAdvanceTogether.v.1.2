@@ -2664,11 +2664,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "O que é o Protocolo Sinal Vermelho e como funciona?",
     "alternativas": [
-      "Sistema em que a mulher em situação de violência pode fazer um 'X' vermelho na palma da mão ao chegar em uma farmácia ou serviço de saúde para pedir socorro discretamente",
+      "Situação em que a vítima de violência pode fazer um 'X' vermelho na palma da mão ao chegar em uma farmácia ou serviço de saúde para pedir socorro discretamente",
       "Protocolo policial que determina o grau de urgência no atendimento de ocorrências de violência doméstica",
       "Código secreto usado por mulheres nas redes sociais para identificar casos de violência em comunidades digitais"
     ],
-    "respostaCorreta": "Sistema em que a mulher em situação de violência pode fazer um 'X' vermelho na palma da mão ao chegar em uma farmácia ou serviço de saúde para pedir socorro discretamente",
+    "respostaCorreta": "Situação em que a vítima de violência pode fazer um 'X' vermelho na palma da mão ao chegar em uma farmácia ou serviço de saúde para pedir socorro discretamente",
     "efeito": "AVANÇAR",
     "valorEfeito": "3/6",
     "iconePeao": ""
@@ -2712,11 +2712,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente o fenômeno do 'ciclo do abuso' e por que ele dificulta a saída da vítima do relacionamento?",
     "alternativas": [
-      "O ciclo alterna fases de tensão, agressão e reconciliação, criando vínculos emocionais confusos que fazem a vítima acreditar que o agressor vai mudar",
+      "O ciclo de tensão, agressão e reconciliação cria vínculos confusos, gerando na vítima a falsa esperança de mudança",
       "O ciclo é um processo linear em que a violência aumenta progressivamente até a vítima pedir ajuda ou o agressor ser preso",
       "O ciclo se refere ao processo burocrático de registros de ocorrências e arquivamentos que desestimula a denúncia"
     ],
-    "respostaCorreta": "O ciclo alterna fases de tensão, agressão e reconciliação, criando vínculos emocionais confusos que fazem a vítima acreditar que o agressor vai mudar",
+    "respostaCorreta": "O ciclo de tensão, agressão e reconciliação cria vínculos confusos, gerando na vítima a falsa esperança de mudança",
     "efeito": "AVANÇAR",
     "valorEfeito": "4/6",
     "iconePeao": ""
@@ -2792,11 +2792,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente o papel do profissional de assistência social no atendimento a mulheres em situação de violência?",
     "alternativas": [
-      "Realizar escuta qualificada, elaborar estudo social, articular a rede de proteção e acompanhar a mulher no acesso a serviços de saúde, justiça e habitação",
+      "Realizar escuta qualificada, estudo social e articular a rede para garantir acesso a saúde, justiça e habitação",
       "Emitir laudos periciais para subsidiar ações criminais contra o agressor em substituição ao laudo médico",
       "Aplicar medidas de proteção à vítima com força coercitiva similar às medidas protetivas judiciais"
     ],
-    "respostaCorreta": "Realizar escuta qualificada, elaborar estudo social, articular a rede de proteção e acompanhar a mulher no acesso a serviços de saúde, justiça e habitação",
+    "respostaCorreta": "Realizar escuta qualificada, estudo social e articular a rede para garantir acesso a saúde, justiça e habitação",
     "efeito": "AVANÇAR",
     "valorEfeito": "3/6",
     "iconePeao": ""
@@ -2808,11 +2808,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "O que é feminicídio não íntimo e como ele se distingue do feminicídio íntimo?",
     "alternativas": [
-      "Feminicídio não íntimo é praticado por homem sem vínculo afetivo com a vítima, como clientes de prostituição ou aggressores desconhecidos, enquanto o íntimo é cometido por parceiro ou ex-parceiro",
-      "Feminicídio não íntimo é o cometido por mulheres contra outras mulheres por questões patrimoniais, enquanto o íntimo envolve sempre parceiros do sexo masculino",
-      "Feminicídio não íntimo se refere a mortes em contexto de guerra ou conflito político, sem relação com violência de gênero doméstica"
+      "Feminicídio não íntimo é praticado por homem sem vínculo afetivo com a vítima, enquanto o íntimo é cometido por parceiro ou ex-parceiro",
+      "Feminicídio não íntimo é o cometido por mulheres contra outras mulheres, enquanto o íntimo envolve sempre parceiros do sexo masculino",
+      "Feminicídio não íntimo se refere a mortes em contexto de guerra, sem relação com violência de gênero doméstica"
     ],
-    "respostaCorreta": "Feminicídio não íntimo é praticado por homem sem vínculo afetivo com a vítima, como clientes de prostituição ou aggressores desconhecidos, enquanto o íntimo é cometido por parceiro ou ex-parceiro",
+    "respostaCorreta": "Feminicídio não íntimo é praticado por homem sem vínculo afetivo com a vítima, enquanto o íntimo é cometido por parceiro ou ex-parceiro",
     "efeito": "AVANÇAR",
     "valorEfeito": "4/6",
     "iconePeao": ""
@@ -2872,11 +2872,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente o que é o abuso emocional em relacionamentos íntimos?",
     "alternativas": [
-      "Padrão sistemático de condutas que inclui humilhações, críticas constantes, manipulação, ameaças e controle, visando destruir a autoestima e autonomia da vítima",
+      "Condutas sistemáticas de humilhação, manipulação e controle que destroem a autoestima e a autonomia da vítima",
       "Conflitos emocionais pontuais decorrentes de estresse e problemas externos ao relacionamento",
       "Expressão de insatisfação emocional por parte de um dos parceiros que afeta temporariamente a dinâmica do casal"
     ],
-    "respostaCorreta": "Padrão sistemático de condutas que inclui humilhações, críticas constantes, manipulação, ameaças e controle, visando destruir a autoestima e autonomia da vítima",
+    "respostaCorreta": "Condutas sistemáticas de humilhação, manipulação e controle que destroem a autoestima e a autonomia da vítima",
     "efeito": "AVANÇAR",
     "valorEfeito": "3/6",
     "iconePeao": ""
@@ -2888,11 +2888,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente o que é a Delegacia Online da Mulher e qual é sua função?",
     "alternativas": [
-      "Plataforma digital que permite à mulher registrar boletim de ocorrência de violência doméstica pela internet, sem necessidade de ir presencialmente à delegacia",
+      "Plataforma digital que permite à mulher registrar boletim de ocorrência de violência doméstica pela internet",
       "Sistema de monitoramento online de agressores com tornozeleira eletrônica acessado pelas vítimas por aplicativo",
       "Portal exclusivo para advogados e defensores públicos protocolar pedidos de medidas protetivas em nome de clientes"
     ],
-    "respostaCorreta": "Plataforma digital que permite à mulher registrar boletim de ocorrência de violência doméstica pela internet, sem necessidade de ir presencialmente à delegacia",
+    "respostaCorreta": "Plataforma digital que permite à mulher registrar boletim de ocorrência de violência doméstica pela internet",
     "efeito": "AVANÇAR",
     "valorEfeito": "3/6",
     "iconePeao": ""
@@ -2904,11 +2904,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente o que são as Casas da Mulher Brasileira?",
     "alternativas": [
-      "Equipamentos públicos que reúnem em um mesmo espaço serviços de atendimento integrado à mulher em situação de violência, como acolhimento, assistência social, defensoria, delegacia e vara judicial",
+      "Equipamentos públicos de atendimento integrado à mulher em situação de violência, reunindo serviços sociais, policiais e jurídicos",
       "Residências comunitárias mantidas por ONGs para abrigar mulheres em situação de rua sem histórico de violência doméstica",
       "Centros culturais criados pelo governo federal para promover a autonomia econômica de mulheres em vulnerabilidade social"
     ],
-    "respostaCorreta": "Equipamentos públicos que reúnem em um mesmo espaço serviços de atendimento integrado à mulher em situação de violência, como acolhimento, assistência social, defensoria, delegacia e vara judicial",
+    "respostaCorreta": "Equipamentos públicos de atendimento integrado à mulher em situação de violência, reunindo serviços sociais, policiais e jurídicos",
     "efeito": "AVANÇAR",
     "valorEfeito": "4/6",
     "iconePeao": ""
@@ -2921,8 +2921,8 @@
     "enunciado": "Qual das alternativas abaixo melhor explica por que a impunidade do agressor contribui para a perpetuação da violência doméstica?",
     "alternativas": [
       "A ausência de consequências legais reforça a sensação de poder do agressor, enfraquece a confiança da vítima nas instituições e diminui a probabilidade de novas denúncias",
-      "A impunidade ocorre apenas nos casos em que a vítima não comparece ao fórum, sendo totalmente evitável por iniciativa da própria mulher",
-      "A impunidade é um problema exclusivo de pequenas cidades sem delegacia especializada e não ocorre nas grandes capitais brasileiras"
+      "A impunidade ocorre apenas nos casos em que a vítima não comparece ao fórum",
+      "A impunidade é um problema exclusivo de pequenas cidades sem delegacia especializada e não ocorre nas grandes capitais"
     ],
     "respostaCorreta": "A ausência de consequências legais reforça a sensação de poder do agressor, enfraquece a confiança da vítima nas instituições e diminui a probabilidade de novas denúncias",
     "efeito": "AVANÇAR",
@@ -3177,11 +3177,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente o papel da ONU Mulheres no contexto do combate à violência de gênero no Brasil?",
     "alternativas": [
-      "Entidade da ONU que promove a igualdade de gênero e o empoderamento feminino, apoiando governos e a sociedade civil na formulação de políticas públicas de prevenção e enfrentamento à violência",
+      "Entidade da ONU que promove a igualdade de gênero e apoia políticas públicas de enfrentamento à violência contra a mulher",
       "Órgão internacional com poder de polícia que pode prender agressores de mulheres em território brasileiro por requisição direta",
-      "Tribunal internacional especializado no julgamento de feminicídios e crimes de violência sexual ao qual as vítimas brasileiras podem recorrer diretamente"
+      "Tribunal internacional acessível a vítimas brasileiras para o julgamento de feminicídios e violência sexual"
     ],
-    "respostaCorreta": "Entidade da ONU que promove a igualdade de gênero e o empoderamento feminino, apoiando governos e a sociedade civil na formulação de políticas públicas de prevenção e enfrentamento à violência",
+    "respostaCorreta": "Entidade da ONU que promove a igualdade de gênero e apoia políticas públicas de enfrentamento à violência contra a mulher",
     "efeito": "AVANÇAR",
     "valorEfeito": "6/6",
     "iconePeao": ""
@@ -3209,11 +3209,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente o que é a perspectiva interseccional e por que ela é fundamental para políticas de enfrentamento à violência contra a mulher?",
     "alternativas": [
-      "A perspectiva interseccional reconhece que raça, classe, gênero, deficiência e outros marcadores se combinam, produzindo experiências específicas de violência que exigem respostas diferenciadas das políticas públicas",
-      "A perspectiva interseccional defende que todas as formas de discriminação devem ser tratadas de forma separada e hierarquizada, priorizando o gênero sobre os demais fatores",
-      "A perspectiva interseccional é uma abordagem teórica sem impacto prático nas políticas de segurança pública e nas dinâmicas do atendimento à mulher em situação de violência"
+      "Perspectiva que reconhece raça, classe, gênero, deficiência e outros marcadores, exigindo respostas diferenciadas das políticas públicas",
+      "Perspectiva que defende que todas as formas de discriminação devem ser tratadas de forma separada e hierarquizada",
+      "Perspectiva teórica sem impacto prático nas políticas de segurança pública e nas dinâmicas do atendimento à mulher em situação de violência"
     ],
-    "respostaCorreta": "A perspectiva interseccional reconhece que raça, classe, gênero, deficiência e outros marcadores se combinam, produzindo experiências específicas de violência que exigem respostas diferenciadas das políticas públicas",
+    "respostaCorreta": "Perspectiva que reconhece raça, classe, gênero, deficiência e outros marcadores, exigindo respostas diferenciadas das políticas públicas",
     "efeito": "AVANÇAR",
     "valorEfeito": "6/6",
     "iconePeao": ""
@@ -3225,11 +3225,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente a função do monitoramento eletrônico do agressor (tornozeleira) como instrumento de proteção da vítima?",
     "alternativas": [
-      "Permite rastrear a localização do agressor em tempo real para garantir que ele respeite a distância mínima determinada pelo juiz em relação à vítima, acionando alerta em caso de violação",
-      "Dispositivo que restringe fisicamente os movimentos do agressor por meio de choque elétrico quando ele tenta se aproximar da vítima",
-      "Equipamento de uso voluntário pelo agressor como alternativa à prisão preventiva, sem monitoramento ativo por parte das autoridades"
+      "Permite rastrear a localização do agressor em tempo real para garantir que ele respeite a distância mínima determinada em relação à vítima",
+      "Dispositivo que restringe fisicamente os movimentos do agressor por meio de choque elétrico quando ele se aproximar da vítima",
+      "Equipamento de uso voluntário pelo agressor como alternativa à prisão preventivas"
     ],
-    "respostaCorreta": "Permite rastrear a localização do agressor em tempo real para garantir que ele respeite a distância mínima determinada pelo juiz em relação à vítima, acionando alerta em caso de violação",
+    "respostaCorreta": "Permite rastrear a localização do agressor em tempo real para garantir que ele respeite a distância mínima determinada em relação à vítima",
     "efeito": "AVANÇAR",
     "valorEfeito": "5/6",
     "iconePeao": ""
@@ -3241,11 +3241,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente o conceito jurídico de violência doméstica estrutural e sua relação com a responsabilidade do Estado?",
     "alternativas": [
-      "Violência enraizada em estruturas sociais, culturais e institucionais que o Estado tem o dever de combater por meio de políticas públicas, legislação e educação, sendo responsabilizado internacionalmente pela sua omissão",
-      "Violência praticada por agentes públicos dentro de instalações do Estado, como presídios e hospitais, que gera responsabilidade civil objetiva",
+      "Violência enraizada em estruturas sociais, culturais e institucionais que o Estado tem o dever de combater por meio de políticas públicas, legislação e educação",
+      "Violência praticada por agentes públicos, que gera responsabilidade civil objetiva",
       "Modalidade de violência reconhecida apenas no direito internacional, sem correspondência na legislação brasileira vigente"
     ],
-    "respostaCorreta": "Violência enraizada em estruturas sociais, culturais e institucionais que o Estado tem o dever de combater por meio de políticas públicas, legislação e educação, sendo responsabilizado internacionalmente pela sua omissão",
+    "respostaCorreta": "Violência enraizada em estruturas sociais, culturais e institucionais que o Estado tem o dever de combater por meio de políticas públicas, legislação e educação",
     "efeito": "AVANÇAR",
     "valorEfeito": "6/6",
     "iconePeao": ""

@@ -5,8 +5,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import actions.CardAnswerValidation;
-
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
@@ -24,70 +22,73 @@ public class CardManager {
      */
     public List<CustomCards> loadCard(String filtro) {
         List<CustomCards> cartasFiltradas = new ArrayList<>();
+        
+        if (filtro == null) {
+            System.err.println("[CardManager] Aviso: O filtro informado é nulo.");
+            return cartasFiltradas;
+        }
+
+        String filtroUpper = filtro.toUpperCase();
         Gson gson = new Gson();
 
-        try {
-            // Abre o arquivo JSON armazenado dentro da pasta de recursos (assets)
-            var inputStream = CardManager.class.getResourceAsStream(CAMINHO_JSON);
-            if (inputStream == null) {
-                System.err.println("[CardManager] Erro: Arquivo JSON não encontrado em: " + CAMINHO_JSON);
-                return cartasFiltradas; 
-            }
+        var inputStream = CardManager.class.getResourceAsStream(CAMINHO_JSON);
+        if (inputStream == null) {
+            System.err.println("[CardManager] Erro: Arquivo JSON não encontrado em: " + CAMINHO_JSON);
+            return cartasFiltradas; 
+        }
 
-            // Lê o arquivo garantindo suporte a acentos (UTF-8)
-            Reader reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+        // Try-with-resources garante o fechamento automático do reader mesmo em caso de exceção
+        try (Reader reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8)) {
             
-            // Converte o texto JSON em um Array de objetos interativos
             JsonArray jsonArray = gson.fromJson(reader, JsonArray.class);
+            if (jsonArray == null) return cartasFiltradas;
 
-            // Varre cada objeto dentro do array do JSON
             for (JsonElement elemento : jsonArray) {
                 JsonObject obj = elemento.getAsJsonObject();
 
-                // Extrai os dados básicos de texto e controle
-                int id = obj.get("id").getAsInt();
-                String tipoGeral = obj.get("tipoGeral").getAsString().toUpperCase();
-                String enunciado = obj.get("enunciado").getAsString();
-                String efeito = obj.get("efeito").getAsString();
-                String valorEfeito = obj.get("valorEfeito").getAsString();
-                String iconePeao = obj.get("iconePeao").getAsString();
-                String dificuldade = obj.get("dificuldade").getAsString().toUpperCase();
-                String tipoPergunta = obj.get("tipoPergunta").getAsString().toUpperCase();
-                String respostaCorreta = obj.get("respostaCorreta").getAsString();
+                // Extrai apenas os campos universais (presentes em todas as cartas)
+                int id = obj.has("id") ? obj.get("id").getAsInt() : -1;
+                String tipoGeral = obj.has("tipoGeral") ? obj.get("tipoGeral").getAsString().toUpperCase() : "";
+                String enunciado = obj.has("enunciado") ? obj.get("enunciado").getAsString() : "";
+                String efeito = obj.has("efeito") ? obj.get("efeito").getAsString() : "";
+                String valorEfeito = obj.has("valorEfeito") ? obj.get("valorEfeito").getAsString() : "";
+                String iconePeao = obj.has("iconePeao") ? obj.get("iconePeao").getAsString() : "";
+                String dificuldade = obj.has("dificuldade") ? obj.get("dificuldade").getAsString().toUpperCase() : "";
 
-                // Verifica se a carta atual corresponde ao filtro que estamos buscando
-                boolean correspondeAoFiltro = tipoGeral.equals(filtro.toUpperCase()) || dificuldade.equals(filtro.toUpperCase());
+                // Verifica correspondência do filtro
+                boolean correspondeAoFiltro = tipoGeral.equals(filtroUpper) || dificuldade.equals(filtroUpper);
                 
                 if (correspondeAoFiltro) {
                     CustomCards novaCarta;
 
-                    // Decide qual Construtor da carta chamar com base no tipo
-                    if (tipoGeral.equals("PERGUNTA")) {
-                        if (tipoPergunta.equals("SIM_NAO")) {
-                            // Construtor 2: Pergunta Sim / Não (Adicionado cardAnswerValidation no final)
+                    if ("PERGUNTA".equals(tipoGeral)) {
+                        String tipoPergunta = obj.has("tipoPergunta") ? obj.get("tipoPergunta").getAsString().toUpperCase() : "";
+                        String respostaCorreta = obj.has("respostaCorreta") ? obj.get("respostaCorreta").getAsString() : "";
+
+                        if ("SIM_NAO".equals(tipoPergunta)) {
+                            // Construtor: Pergunta Sim / Não
                             novaCarta = new CustomCards(id, tipoGeral, enunciado, efeito, valorEfeito, iconePeao, dificuldade, respostaCorreta);
                         } else {
-                            // Construtor 3: Múltipla Escolha
-                            JsonArray arrayAlternativas = obj.getAsJsonArray("alternativas");
-                            String[] alternativas = new String[arrayAlternativas.size()];
-                            for (int i = 0; i < arrayAlternativas.size(); i++) {
-                                alternativas[i] = arrayAlternativas.get(i).getAsString();
+                            // Construtor: Múltipla Escolha
+                            String[] alternativas = new String[0];
+                            if (obj.has("alternativas") && obj.get("alternativas").isJsonArray()) {
+                                JsonArray arrayAlt = obj.getAsJsonArray("alternativas");
+                                alternativas = new String[arrayAlt.size()];
+                                for (int i = 0; i < arrayAlt.size(); i++) {
+                                    alternativas[i] = arrayAlt.get(i).getAsString();
+                                }
                             }
                             
-                            // Construtor 3 (Adicionado cardAnswerValidation no final)
                             novaCarta = new CustomCards(id, tipoGeral, enunciado, efeito, valorEfeito, iconePeao, dificuldade, alternativas, respostaCorreta);
                         }
                     } else {
-                        // Construtor 1: Cartas Especiais (Adicionado cardAnswerValidation no final)
+                        // Construtor: Cartas Especiais (Sorte/Azar/etc.)
                         novaCarta = new CustomCards(id, tipoGeral, enunciado, efeito, valorEfeito, iconePeao);
                     }
 
-                    // Adiciona a carta gerada à nossa lista de retorno
                     cartasFiltradas.add(novaCarta);
                 }
             }
-            
-            reader.close();
         } catch (Exception e) {
             System.err.println("[CardManager] Erro crítico ao processar o JSON: " + e.getMessage());
             e.printStackTrace();

@@ -26,7 +26,7 @@ public class GameManager {
     private boolean jogadaEmAndamento = false;
 
     // Configuração de Dificuldade e Cooldown
-    private String gameDifficulty = "MEDIO"; // FACIL, MEDIO, DIFICIL
+    private String gameDifficulty = "MEDIO"; 
     private int[] azarCooldown = new int[4];
 
     private static final int DELAY_ERRO_E_AVISOS = 3000;
@@ -62,7 +62,6 @@ public class GameManager {
         return this.deckManager;
     }
 
-    // GESTÃO DE DIFICULDADE E COOLDOWN DA CARTA DE AZAR
     public void setGameDifficulty(String difficulty) {
         if (difficulty != null && !difficulty.trim().isEmpty()) {
             this.gameDifficulty = difficulty.toUpperCase().trim();
@@ -189,7 +188,6 @@ public class GameManager {
         
         this.currentCardType = cardType;
 
-        // ATIVA O COOLDOWN DE AZAR ASSIM QUE A CARTA É PROCESSADA
         if ("AZAR".equalsIgnoreCase(cardType)) {
             triggerAzarCooldown(activePlayerId);
         }
@@ -199,10 +197,14 @@ public class GameManager {
         PlayerPawn p1 = boardScreen.getPlayerPawn(activePlayerId, 0);
         Point[] mapaCasas = boardScreen.getCaminhoCasas(activePlayerId);
 
-        if (p1 == null || mapaCasas == null) return;
+        if (p1 == null || mapaCasas == null) {
+            setJogadaEmAndamento(false);
+            return;
+        }
 
         if ("PEGADINHA".equalsIgnoreCase(cardType) && activePlayerId == 0) {
             emitirStatus("🃏 Seu espertinho! Escolha um jogador para sacanear.", COLOR_ACTION);
+            // Mantém jogadaEmAndamento = true até que o clique na GUI resolva a pegadinha
             return;
         }
 
@@ -216,9 +218,7 @@ public class GameManager {
                 emitirStatus("❌ " + nomeJogador + " errou a resposta e perdeu a vez!", COLOR_ERROR);
             }
 
-            Timer delayErro = new Timer(DELAY_ERRO_E_AVISOS, eErro -> {
-                if (this.turnManager != null) this.turnManager.nextTurn();
-            });
+            Timer delayErro = new Timer(DELAY_ERRO_E_AVISOS, eErro -> passarTurnoGarantido());
             delayErro.setRepeats(false);
             delayErro.start();
             return;
@@ -242,9 +242,7 @@ public class GameManager {
                         } else {
                             emitirStatus("🚨 PENALIDADE! " + nomeJogador + " tirou três 6s seguidos e perdeu a vez!", COLOR_ERROR);
                         }
-                        Timer delayPenalidade = new Timer(DELAY_ERRO_E_AVISOS, ePen -> {
-                            if (this.turnManager != null) this.turnManager.nextTurn();
-                        });
+                        Timer delayPenalidade = new Timer(DELAY_ERRO_E_AVISOS, ePen -> passarTurnoGarantido());
                         delayPenalidade.setRepeats(false);
                         delayPenalidade.start();
                         return; 
@@ -260,9 +258,7 @@ public class GameManager {
                         
                         if (peaoAzarado == -1) {
                             emitirStatus("🛡️ PROTEGIDO! Seus peões estão salvos na Base ou na Zona Segura!", COLOR_SUCCESS);
-                            Timer delaySorte = new Timer(DELAY_ACAO_TEXTO, eS -> {
-                                if (this.turnManager != null) this.turnManager.nextTurn();
-                            });
+                            Timer delaySorte = new Timer(DELAY_ACAO_TEXTO, eS -> passarTurnoGarantido());
                             delaySorte.setRepeats(false);
                             delaySorte.start();
                             return;
@@ -314,7 +310,7 @@ public class GameManager {
 
                         Timer delayAcaoCPU = new Timer(DELAY_ACAO_TEXTO, eAcao -> {
                             if ("PEGADINHA".equalsIgnoreCase(cardType)) {
-                                if (this.turnManager != null) this.turnManager.nextTurn();
+                                passarTurnoGarantido();
                                 return;
                             }
                             
@@ -322,7 +318,7 @@ public class GameManager {
                                 int peaoAzarado = getFurthestPawnIndex(activePlayerId);
                                 if (peaoAzarado == -1) {
                                     emitirStatus("🛡️ " + nomeJogador + " está protegido na Zona Segura ou na Base e não retrocede!", COLOR_INFO);
-                                    Timer delayTurno = new Timer(DELAY_ERRO_E_AVISOS, eT -> { if (this.turnManager != null) this.turnManager.nextTurn(); });
+                                    Timer delayTurno = new Timer(DELAY_ERRO_E_AVISOS, eT -> passarTurnoGarantido());
                                     delayTurno.setRepeats(false);
                                     delayTurno.start();
                                     return;
@@ -333,9 +329,7 @@ public class GameManager {
 
                             if (peoesDisponiveis.isEmpty()) {
                                 emitirStatus("🤖 " + nomeJogador + " não tem movimentos válidos.", COLOR_INFO);
-                                Timer delayTurno = new Timer(DELAY_ERRO_E_AVISOS, eTurno -> {
-                                    if (this.turnManager != null) this.turnManager.nextTurn();
-                                });
+                                Timer delayTurno = new Timer(DELAY_ERRO_E_AVISOS, eTurno -> passarTurnoGarantido());
                                 delayTurno.setRepeats(false);
                                 delayTurno.start();
                                 return;
@@ -361,9 +355,7 @@ public class GameManager {
                             if (peoesDisponiveis.isEmpty()) {
                                 consecutiveSixesCounters[activePlayerId] = 0; 
                                 emitirStatus("⚠️ Infelizmente, não há peões disponíveis para jogar.", COLOR_WARNING);
-                                Timer delayTurno = new Timer(DELAY_ERRO_E_AVISOS, eTurno -> {
-                                    if (this.turnManager != null) this.turnManager.nextTurn();
-                                });
+                                Timer delayTurno = new Timer(DELAY_ERRO_E_AVISOS, eTurno -> passarTurnoGarantido());
                                 delayTurno.setRepeats(false);
                                 delayTurno.start();
                                 return;
@@ -392,7 +384,17 @@ public class GameManager {
                 }
             } catch (NumberFormatException e) {
                 System.err.println("[GameManager] Erro de conversão: " + cardValue);
+                passarTurnoGarantido();
             }
+        }
+    }
+
+    private void passarTurnoGarantido() {
+        setJogadaEmAndamento(false);
+        int activePlayerId = (this.turnManager != null) ? this.turnManager.getCurrentTurn() : 0;
+        decrementAzarCooldown(activePlayerId); // Decrementa cooldown de Azar na troca de turno
+        if (this.turnManager != null) {
+            this.turnManager.nextTurn();
         }
     }
 
@@ -762,6 +764,7 @@ public class GameManager {
             
             if (peoesNoCentro == 4) {
                 jogoFinalizado = true; 
+                setJogadaEmAndamento(false);
                 
                 String mensagemVitoria = (activePlayerId == 0) ? 
                     "🎉👑 PARABÉNS! Você levou todos os 4 peões ao Centro e VENCEU O JOGO!" :
@@ -784,14 +787,12 @@ public class GameManager {
         if (passarVez && this.turnManager != null) {
             consecutiveSixesCounters[activePlayerId] = 0; 
             
-            Timer delayTransicaoTurno = new Timer(DELAY_FINAL_TURNO, eFim -> {
-                this.turnManager.nextTurn();
-            });
+            Timer delayTransicaoTurno = new Timer(DELAY_FINAL_TURNO, eFim -> passarTurnoGarantido());
             delayTransicaoTurno.setRepeats(false);
             delayTransicaoTurno.start();
             
         } else if (!passarVez && this.turnManager != null) {
-            
+            setJogadaEmAndamento(false);
             Timer delayTransicaoExtra = new Timer(DELAY_FINAL_TURNO, eExtra -> {
                 this.turnManager.processExtraTurn();
             });
@@ -801,9 +802,12 @@ public class GameManager {
     }
 
     private void verificarCaptura(int activePlayerId, int destIndex) {
-        if (jogoFinalizado) return;
+        if (jogoFinalizado || boardScreen == null) return;
         
-        Point destPoint = boardScreen.getCaminhoCasas(activePlayerId)[destIndex];
+        Point[] caminhoActive = boardScreen.getCaminhoCasas(activePlayerId);
+        if (caminhoActive == null || destIndex >= caminhoActive.length) return;
+
+        Point destPoint = caminhoActive[destIndex];
 
         if (isZonaSegura(destPoint)) {
             System.out.println("[GameManager] Peão pousou em Zona Segura! Captura desativada.");
@@ -818,12 +822,13 @@ public class GameManager {
                 if (enemyPawn == null) continue;
 
                 int enemyPos = enemyPawn.getPawnCurrentPos();
+                Point[] caminhoInimigo = boardScreen.getCaminhoCasas(p);
                 
-                if (enemyPos < 4 || enemyPos >= boardScreen.getCaminhoCasas(p).length - 1) {
+                if (caminhoInimigo == null || enemyPos < 4 || enemyPos >= caminhoInimigo.length - 1) {
                     continue; 
                 }
 
-                Point enemyPoint = boardScreen.getCaminhoCasas(p)[enemyPos];
+                Point enemyPoint = caminhoInimigo[enemyPos];
 
                 if (destPoint.x == enemyPoint.x && destPoint.y == enemyPoint.y) {
                     
@@ -835,9 +840,7 @@ public class GameManager {
                     emitirStatus("⚔️ ATAQUE! " + atacante + " capturou o " + vitima + "!", COLOR_ACTION);
                     
                     enemyPawn.setPawnCurrentPos(i);
-                    if (boardScreen != null) {
-                        boardScreen.repositionAllPawns();
-                    }
+                    boardScreen.repositionAllPawns();
                 }
             }
         }
@@ -854,7 +857,7 @@ public class GameManager {
             if (pawn == null) continue;
 
             int posAtual = pawn.getPawnCurrentPos();
-            int posDestino = posAtual + cardValue; 
+            int posDestino = (posAtual < 4) ? 4 : (posAtual + cardValue); 
             
             if (posDestino >= this.boardScreen.getCaminhoCasas(cpuId).length) {
                 if (this.usarReboteCentro) {
@@ -923,6 +926,7 @@ public class GameManager {
 
     public void resetHumanPawnsVisuals() {
         this.movimentoAutomaticoEmAndamento = false;
+        this.jogadaEmAndamento = false; // Garante o reset do estado do turno humano
         if (this.pawnControlManager != null) {
             this.pawnControlManager.resetHumanPawnsVisuals();
         }

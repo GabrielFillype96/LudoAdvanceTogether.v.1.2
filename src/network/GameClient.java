@@ -100,4 +100,25 @@ public class GameClient {
     public void setWindowManager(gui.windows.WindowManager windowManager) {
         this.windowManager = windowManager;
     }
+
+    public void disconnect() {
+        try {
+            if (out != null) {
+                out.close();
+                out = null;
+            }
+            if (in != null) {
+                in.close();
+                in = null;
+            }
+            if (socket != null && !socket.isClosed()) {
+                socket.close();
+                socket = null;
+            }
+            myPlayerId = -1;
+            System.out.println("[Cliente] Desconectado do servidor.");
+        } catch (Exception e) {
+            System.err.println("[Cliente] Erro ao fechar conexão: " + e.getMessage());
+        }
+    }
 }

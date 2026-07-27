@@ -142,8 +142,26 @@ public class LobbyScreen extends JPanel {
         });
 
         btnVoltar.addActionListener(e -> {
+            // 1. Desconecta o cliente se houver conexão ativa
+            if (client != null) {
+                client.disconnect();
+            }
+
+            // 2. Encerra o servidor caso tenha sido iniciado nesta máquina
+            if (server != null) {
+                server.stopServer();
+                server = null;
+            }
+
+            // 3. Reseta os componentes da interface
+            btnCriarSala.setEnabled(true);
+            btnConectar.setEnabled(true);
+            txtIpServer.setEnabled(true);
+            btnIniciarJogo.setEnabled(false);
+
+            // 4. Retorna ao menu principal utilizando o método correto do WindowManager
             if (windowManager != null) {
-                // Adicione a ação de voltar aqui se necessário
+                windowManager.exibirMenuPrincipal();
             }
         });
 

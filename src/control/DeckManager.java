@@ -8,21 +8,21 @@ import java.util.List;
 
 public class DeckManager {
     
-    private List<CustomCards>[] drawPiles;    // Montes de Compra
-    private List<CustomCards>[] discardPiles; // Montes de Descarte
+    // Substituído array bruto por List<List<...>> para evitar avisos de generics
+    private List<List<CustomCards>> drawPiles;    // Montes de Compra
+    private List<List<CustomCards>> discardPiles; // Montes de Descarte
     
     private CardManager cardManager;
     private GameManager gameManager;
 
-    @SuppressWarnings("unchecked")
     public DeckManager(CardManager cardManager) {
         this.cardManager = cardManager;
-        this.drawPiles = new ArrayList[4];
-        this.discardPiles = new ArrayList[4];
+        this.drawPiles = new ArrayList<>();
+        this.discardPiles = new ArrayList<>();
 
         for (int i = 0; i < 4; i++) {
-            this.drawPiles[i] = new ArrayList<>();
-            this.discardPiles[i] = new ArrayList<>();
+            this.drawPiles.add(new ArrayList<>());
+            this.discardPiles.add(new ArrayList<>());
         }
     }
 
@@ -31,18 +31,22 @@ public class DeckManager {
     }
 
     public void initializeDecks() {
+        // Carrega todas as cartas uma única vez para otimizar desempenho
+        List<CustomCards> todasAsCartas = cardManager.loadCard(""); 
+
         for (int i = 0; i < 4; i++) {
-            this.drawPiles[i].clear();
-            this.discardPiles[i].clear();
+            this.drawPiles.get(i).clear();
+            this.discardPiles.get(i).clear();
             
-            this.drawPiles[i].addAll(cardManager.loadCard("FÁCIL"));
-            this.drawPiles[i].addAll(cardManager.loadCard("MÉDIO"));
-            this.drawPiles[i].addAll(cardManager.loadCard("DIFÍCIL"));
-            this.drawPiles[i].addAll(cardManager.loadCard("SORTE"));
-            this.drawPiles[i].addAll(cardManager.loadCard("AZAR"));
+            // Adiciona cópias ou recarrega o deck do jogador de forma limpa
+            this.drawPiles.get(i).addAll(cardManager.loadCard("FÁCIL"));
+            this.drawPiles.get(i).addAll(cardManager.loadCard("MÉDIO"));
+            this.drawPiles.get(i).addAll(cardManager.loadCard("DIFÍCIL"));
+            this.drawPiles.get(i).addAll(cardManager.loadCard("SORTE"));
+            this.drawPiles.get(i).addAll(cardManager.loadCard("AZAR"));
             
-            java.util.Collections.shuffle(this.drawPiles[i]);
-            System.out.println("[DeckManager] Baralho do Jogador " + i + " inicializado com " + this.drawPiles[i].size() + " cartas!");
+            Collections.shuffle(this.drawPiles.get(i));
+            System.out.println("[DeckManager] Baralho do Jogador " + i + " inicializado com " + this.drawPiles.get(i).size() + " cartas!");
         }
     }
 
@@ -52,9 +56,10 @@ public class DeckManager {
     public CustomCards drawCard(int playerId, boolean allPawnsInBase) {
         if (playerId < 0 || playerId >= 4) return null;
 
-        List<CustomCards> drawPile = drawPiles[playerId];
-        List<CustomCards> discardPile = discardPiles[playerId];
+        List<CustomCards> drawPile = drawPiles.get(playerId);
+        List<CustomCards> discardPile = discardPiles.get(playerId);
 
+        // Se o monte de compra estiver vazio, reabastece com o descarte
         if (drawPile.isEmpty()) {
             if (discardPile.isEmpty()) return null;
             drawPile.addAll(discardPile);
@@ -64,14 +69,14 @@ public class DeckManager {
 
         for (int i = 0; i < drawPile.size(); i++) {
             CustomCards card = drawPile.get(i);
-            String tipoCarta = card.getCardType();
+            String tipoCarta = card.getCardType() != null ? card.getCardType() : "";
 
             boolean ehSorteOuAzar = "SORTE".equalsIgnoreCase(tipoCarta) || "AZAR".equalsIgnoreCase(tipoCarta);
             boolean ehPegadinha = "PEGADINHA".equalsIgnoreCase(tipoCarta);
             boolean ehAzar = "AZAR".equalsIgnoreCase(tipoCarta);
             boolean devePular = false;
 
-            // FILTRAGEM DE COOLDOWN DE AZAR (Por dificuldade)
+            // FILTRAGEM DE COOLDOWN DE AZAR
             if (ehAzar && gameManager != null && gameManager.isAzarInCooldown(playerId)) {
                 devePular = true;
             }
@@ -79,21 +84,12 @@ public class DeckManager {
             // FILTRAGEM DE INÍCIO DE JOGO (Todos na base)
             if (!devePular && allPawnsInBase) {
                 if (ehSorteOuAzar) {
-                    devePular = true; // Pula Sorte/Azar na base
+                    devePular = true;
                 } else if (!ehPegadinha) {
-                    int valorDado = 0;
-                    try {
-                        String cardValueTreated = card.getCardValueText().trim();
-                        if (cardValueTreated.contains("/")) {
-                            cardValueTreated = cardValueTreated.split("/")[0].trim();
-                        }
-                        valorDado = Math.abs(Integer.parseInt(cardValueTreated));
-                    } catch (Exception e) {
-                        System.err.println("[DeckManager] Erro ao processar valor da carta: " + e.getMessage());
-                    }
+                    int valorDado = extrairValorNumerico(card.getCardValueText());
 
                     if (valorDado != 1 && valorDado != 6) {
-                        devePular = true; // Pula cartas com valor diferente de 1 ou 6
+                        devePular = true;
                     }
                 }
             }
@@ -103,13 +99,37 @@ public class DeckManager {
             }
         }
 
-        return drawPile.remove(0);
+        // Se nenhuma carta válida foi encontrada para o estado atual (ex: todos na base sem 1 ou 6 no deck)
+        // Retorna null para indicar que não há cartas jogáveis no momento.
+        System.out.println("[DeckManager] Nenhuma carta válida encontrada no monte para o Jogador " + playerId);
+        return null;
     }
 
     public void discardCard(int playerId, CustomCards card) {
         if (playerId < 0 || playerId >= 4 || card == null) return;
         
-        discardPiles[playerId].add(card);
+        discardPiles.get(playerId).add(card);
         System.out.println("[DeckManager] Carta movida para o descarte do Jogador " + playerId);
+    }
+
+    /**
+     * Extrai com segurança o primeiro valor numérico de uma string de valor da carta.
+     */
+    private int extrairValorNumerico(String text) {
+        if (text == null || text.trim().isEmpty()) return 0;
+        
+        try {
+            String tratado = text.trim();
+            if (tratado.contains("/")) {
+                tratado = tratado.split("/")[0].trim();
+            }
+            // Remove tudo que não for dígito
+            String apenasDigitos = tratado.replaceAll("[^0-9]", "");
+            if (apenasDigitos.isEmpty()) return 0;
+            
+            return Math.abs(Integer.parseInt(apenasDigitos));
+        } catch (Exception e) {
+            return 0;
+        }
     }
 }

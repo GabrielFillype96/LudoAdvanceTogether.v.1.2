@@ -11,10 +11,7 @@ public class CPUIManager {
     private GameManager gameManager;
     private DeckManager deckManager; 
     
-    // Armazena a dificuldade global escolhida pelo jogador no menu ("FÁCIL", "MÉDIO", "DIFÍCIL")
     private String jogoDificuldade = "MÉDIO";
-    
-    // Vetor que guardará a personalidade fixa sorteada para cada CPU (índices 1, 2 e 3)
     private String[] personalidadesCPUs = new String[4];
     private Random random = new Random();
 
@@ -25,7 +22,13 @@ public class CPUIManager {
 
     public void setJogoDificuldade(String dificuldade) {
         if (dificuldade != null && !dificuldade.trim().isEmpty()) {
-            this.jogoDificuldade = dificuldade.trim().toUpperCase();
+            String difNormalizada = dificuldade.trim().toUpperCase();
+            // Normaliza entradas sem acento para garantir compatibilidade no switch
+            if (difNormalizada.equals("FACIL")) difNormalizada = "FÁCIL";
+            if (difNormalizada.equals("MEDIO")) difNormalizada = "MÉDIO";
+            if (difNormalizada.equals("DIFICIL")) difNormalizada = "DIFÍCIL";
+
+            this.jogoDificuldade = difNormalizada;
         }
         System.out.println("[CPUIManager] Dificuldade do Jogo configurada para: " + this.jogoDificuldade);
     }
@@ -61,37 +64,42 @@ public class CPUIManager {
         System.out.println("[CPUIManager] Iniciando o raciocínio da CPU " + cpuId + "...");
 
         Timer cpuTimer = new Timer(1800, e -> {
-            if (this.deckManager != null) {
-
-                boolean todosNaBase = (gameManager.getFurthestPawnIndex(cpuId) == -1);
-                CustomCards carta = this.deckManager.drawCard(cpuId, todosNaBase);
-                
-                if (carta != null) {
-                    System.out.println("[CPUIManager] A CPU " + cpuId + " puxou a carta ID: " + carta.getCardID());
-                    boolean acertou = true;
-                    
-                    if ("SORTE".equalsIgnoreCase(carta.getCardType()) || "AZAR".equalsIgnoreCase(carta.getCardType())) {
-                        System.out.println("[CPUIManager] A CPU tirou uma carta de " + carta.getCardType() + "!");
-                        acertou = true; 
-                    } else {
-                        // === CORREÇÃO: Passando a DIFICULDADE da carta e não o TIPO ===
-                        acertou = calcularAcertoCPU(carta.getDificuldade()); 
-                        System.out.println("[CPUIManager] CPU puxou pergunta (" + carta.getDificuldade() + ") no modo [" + jogoDificuldade + "] e... " + (acertou ? "ACERTOU!" : "ERROU!"));
-                    }
-                    
-                    try {
-                        this.gameManager.cardResultVerification(acertou, carta.getCardValueText(), carta.getCardEffect(), carta.getCardType());
-                    } catch (Exception ex) {
-                        System.err.println("[CPUIManager] Erro inesperado na carta: " + ex.getMessage());
-                        this.gameManager.getTurnManager().nextTurn(); 
-                    } finally {
-                        this.deckManager.discardCard(cpuId, carta);
-                    }
-                    
-                } else {
-                    System.err.println("[CPUIManager] Erro: A CPU não encontrou cartas no deck.");
+            // CORREÇÃO: Tratamento para evitar congelar o jogo caso deckManager seja nulo
+            if (this.deckManager == null) {
+                System.err.println("[CPUIManager] Erro Crítico: DeckManager não foi inicializado!");
+                if (this.gameManager != null && this.gameManager.getTurnManager() != null) {
                     this.gameManager.getTurnManager().nextTurn();
                 }
+                return;
+            }
+
+            boolean todosNaBase = (gameManager.getFurthestPawnIndex(cpuId) == -1);
+            CustomCards carta = this.deckManager.drawCard(cpuId, todosNaBase);
+            
+            if (carta != null) {
+                System.out.println("[CPUIManager] A CPU " + cpuId + " puxou a carta ID: " + carta.getCardID());
+                boolean acertou;
+                
+                if ("SORTE".equalsIgnoreCase(carta.getCardType()) || "AZAR".equalsIgnoreCase(carta.getCardType())) {
+                    System.out.println("[CPUIManager] A CPU tirou uma carta de " + carta.getCardType() + "!");
+                    acertou = true; 
+                } else {
+                    acertou = calcularAcertoCPU(carta.getDificuldade()); 
+                    System.out.println("[CPUIManager] CPU puxou pergunta (" + carta.getDificuldade() + ") no modo [" + jogoDificuldade + "] e... " + (acertou ? "ACERTOU!" : "ERROU!"));
+                }
+                
+                try {
+                    this.gameManager.cardResultVerification(acertou, carta.getCardValueText(), carta.getCardEffect(), carta.getCardType());
+                } catch (Exception ex) {
+                    System.err.println("[CPUIManager] Erro inesperado na carta: " + ex.getMessage());
+                    this.gameManager.getTurnManager().nextTurn(); 
+                } finally {
+                    this.deckManager.discardCard(cpuId, carta);
+                }
+                
+            } else {
+                System.err.println("[CPUIManager] Erro: A CPU não encontrou cartas no deck.");
+                this.gameManager.getTurnManager().nextTurn();
             }
         });
         
@@ -108,19 +116,14 @@ public class CPUIManager {
             return;
         }
 
-        String personalidade = "PADRAO";
-        if (cpuId >= 1 && cpuId < this.personalidadesCPUs.length) {
-            personalidade = this.personalidadesCPUs[cpuId];
-        }
-        
+        String personalidade = getCPUPersonality(cpuId);
         int peaoEscolhido;
 
-        // Na dificuldade FÁCIL do jogo, a CPU tem 35% de chance de fazer uma escolha aleatória (erro tático)
+        // Na dificuldade FÁCIL do jogo, a CPU tem 35% de chance de fazer uma escolha aleatória
         if ("FÁCIL".equalsIgnoreCase(this.jogoDificuldade) && random.nextDouble() <= 0.35) {
             peaoEscolhido = peoesDisponiveis.get(random.nextInt(peoesDisponiveis.size()));
             System.out.println("[CPUIManager] CPU " + cpuId + " cometeu um descuido tático (Modo Fácil) e escolheu o peão: " + peaoEscolhido);
         } else {
-            // Em dificuldades normais/altas, calcula a melhor jogada via GameManager
             peaoEscolhido = this.gameManager.escolherMelhorPeaoParaCPU(cpuId, peoesDisponiveis, cardValue, personalidade);
             System.out.println("[CPUIManager] A CPU " + cpuId + " (" + personalidade + ") calculou e decidiu mover o peão índice: " + peaoEscolhido);
         }
@@ -141,40 +144,33 @@ public class CPUIManager {
         movimentoTimer.start();
     }
 
-    /**
-     * Calcula se a CPU acertou a pergunta combinando a dificuldade da CARTA
-     * com a dificuldade escolhida para o JOGO no menu.
-     */
     private boolean calcularAcertoCPU(String dificuldadeCarta) {
         double chance = random.nextDouble(); 
         String difCarta = (dificuldadeCarta != null) ? dificuldadeCarta.toUpperCase() : "MÉDIO";
 
         switch (this.jogoDificuldade) {
             case "FÁCIL":
-                // Jogo Fácil: CPU erra mais
                 if (difCarta.contains("FÁCIL") || difCarta.contains("FACIL")) return chance <= 0.70;
                 if (difCarta.contains("MÉDIO") || difCarta.contains("MEDIO")) return chance <= 0.40;
-                return chance <= 0.15; // Difícil
+                return chance <= 0.15;
 
             case "DIFÍCIL":
-                // Jogo Difícil: CPU erra raramente
                 if (difCarta.contains("FÁCIL") || difCarta.contains("FACIL")) return chance <= 0.98;
                 if (difCarta.contains("MÉDIO") || difCarta.contains("MEDIO")) return chance <= 0.80;
-                return chance <= 0.50; // Difícil
+                return chance <= 0.50;
 
             case "MÉDIO":
             default:
-                // Jogo Médio: Equilibrado
                 if (difCarta.contains("FÁCIL") || difCarta.contains("FACIL")) return chance <= 0.85;
                 if (difCarta.contains("MÉDIO") || difCarta.contains("MEDIO")) return chance <= 0.60;
-                return chance <= 0.30; // Difícil
+                return chance <= 0.30;
         }
     }
 
     public String getCPUPersonality(int cpuId) {
-        if (cpuId >= 0 && cpuId < this.personalidadesCPUs.length) {
+        if (cpuId >= 1 && cpuId < this.personalidadesCPUs.length && this.personalidadesCPUs[cpuId] != null) {
             return this.personalidadesCPUs[cpuId];
         }
-        return "PADRAO";
+        return "PADRAO"; // Retorna PADRAO em vez de null para o jogador (0) ou IDs inválidos
     }
 }

@@ -91,7 +91,7 @@ public class TurnManager {
                             Timer delayHumano = new Timer(1500, ev -> startHumanTurn());
                             delayHumano.setRepeats(false);
                             delayHumano.start();
-                        } else {
+                        } else if (this.gameClient == null) {
                             Timer delayCPU = new Timer(1500, ev -> startCPUTurn(false));
                             delayCPU.setRepeats(false);
                             delayCPU.start();
@@ -149,7 +149,8 @@ public class TurnManager {
 
         if (isMyTurn()) {
             startHumanTurn();
-        } else {
+        } else if (this.gameClient == null) {
+            // CORREÇÃO: Dispara CPU apenas em partidas puramente locais (sem cliente de rede ativo)
             startCPUTurn(false);
         }
     }
@@ -213,7 +214,7 @@ public class TurnManager {
         
         if (isMyTurn()) {
             startHumanTurn();
-        } else {
+        } else if (this.gameClient == null) {
             startCPUTurn(true);
         }
     }

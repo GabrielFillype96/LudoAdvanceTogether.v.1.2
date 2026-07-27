@@ -53,6 +53,20 @@ public class GameServer {
         }).start();
     }
 
+    /**
+     * Encerra o socket do servidor e fecha as conexões ativas.
+     */
+    public void stopServer() {
+        try {
+            if (serverSocket != null && !serverSocket.isClosed()) {
+                serverSocket.close();
+                System.out.println("[Servidor] Servidor encerrado com sucesso.");
+            }
+        } catch (Exception e) {
+            System.err.println("[Servidor] Erro ao encerrar servidor: " + e.getMessage());
+        }
+    }
+
     private int getNextAvailableSlot() {
         for (int i = 0; i < slotIsCPU.length; i++) {
             if (slotIsCPU[i]) {

@@ -240,15 +240,11 @@ public class PawnControlManager {
         if (this.selectedPawnIndex == pawnIndex) {
             if (this.gameManager != null) {
                 pararShakeAtual();
+                
+                // CORREÇÃO: O envio de rede do MOVE_PAWN é feito exclusivamente dentro do moveChosenPawn
                 boolean movimentoRealizado = this.gameManager.moveChosenPawn(pawnIndex, this.pendingSteps, this.pendingEffect);
 
                 if (movimentoRealizado) {
-                    // Notifica a rede sobre o movimento realizado
-                    if (gameClient != null) {
-                        String payload = pawnIndex + ":" + this.pendingSteps + ":" + this.pendingEffect;
-                        gameClient.send(new NetworkMessage("MOVE_PAWN", gameClient.getMyPlayerId(), payload));
-                    }
-
                     this.awaitingPawnSelection = false;
                     this.hasUserInteracted = false;
                     this.pendingSteps = 0;
@@ -285,9 +281,8 @@ public class PawnControlManager {
                 this.awaitingPawnSelection = false;
                 this.hasUserInteracted = false;
                 
-                if (currentPlayerId == 0 && this.gameManager.getTurnManager() != null) {
-                    this.gameManager.getTurnManager().nextTurn();
-                }
+                // CORREÇÃO: Removido nextTurn() prematuro daqui.
+                // O encerramento da animação do peão no GameManager cuidará da passagem do turno.
                 return;
             } else {
                 if (this.gameManager.getTurnManager() != null) {
