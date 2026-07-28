@@ -4,7 +4,7 @@
     "tipoGeral": "PERGUNTA",
     "dificuldade": "FÁCIL",
     "tipoPergunta": "SIM_NAO",
-    "enunciado": "'Em briga de marido e mulher, não se mete a colher'. Isso é correto?",
+    "enunciado": "Em briga de marido e mulher, não se mete a colher'. Isso é correto?",
     "alternativas": [],
     "respostaCorreta": "Não",
     "efeito": "AVANÇAR",
@@ -3193,11 +3193,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente a diferença entre ação penal pública condicionada e incondicionada no contexto da violência doméstica?",
     "alternativas": [
-      "Na condicionada, o Ministério Público depende da representação da vítima para agir; na incondicionada, pode agir independentemente da vontade da vítima — sendo esta a regra nos crimes de lesão corporal em contexto doméstico",
-      "Nas duas modalidades, o Ministério Público precisa aguardar a vítima formalizar o desejo de processar o agressor em qualquer tipo de crime doméstico",
-      "A distinção não se aplica à violência doméstica, pois todos esses crimes exigem sempre queixa-crime apresentada pela própria vítima"
+      "Na condicionada, o Ministério Público depende da representação da vítima para agir; na incondicionada, pode agir independentemente da vontade da vítima",
+      "Nas duas modalidades, o Ministério Público precisa aguardar a vítima formalizar o desejo de processar o agressor",
+      "A distinção não se aplica à violência doméstica, pois todos esses crimes exigem sempre queixa-crime"
     ],
-    "respostaCorreta": "Na condicionada, o Ministério Público depende da representação da vítima para agir; na incondicionada, pode agir independentemente da vontade da vítima — sendo esta a regra nos crimes de lesão corporal em contexto doméstico",
+    "respostaCorreta": "Na condicionada, o Ministério Público depende da representação da vítima para agir; na incondicionada, pode agir independentemente da vontade da vítima",
     "efeito": "AVANÇAR",
     "valorEfeito": "5/6",
     "iconePeao": ""

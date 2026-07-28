@@ -3,9 +3,7 @@ package control;
 import gui.windows.PawnControlContainer;
 import gui.windows.BoardScreen;
 import network.GameClient;
-import network.NetworkMessage;
 
-import java.awt.Color;
 import java.awt.Cursor;
 import java.util.ArrayList;
 import java.util.List;
@@ -104,7 +102,7 @@ public class PawnControlManager {
             textoPeoes = sb.toString();
         }
 
-        gameManager.emitirStatus("👉 Escolha entre " + textoPeoes + ".", Color.WHITE);
+        gameManager.emitirStatus(GameStatusManager.ESCOLHA_PEOES, textoPeoes);
     }
 
     public void onCentralPawnFocused(int pawnIndex) {
@@ -134,7 +132,7 @@ public class PawnControlManager {
                 gameManager.showMovementPreview(pawnIndex, pendingSteps, pendingEffect);
                 if (!gameManager.isMovimentoAutomaticoEmAndamento()) {
                     if (hasUserInteracted) {
-                        gameManager.emitirStatus("♟️ Peão " + numeroPeao + " selecionado. Confirme sua jogada clicando nele!", Color.WHITE);
+                        gameManager.emitirStatus(GameStatusManager.PEAO_SELECIONADO, numeroPeao);
                     } else {
                         exibirMensagemEscolhaInicial();
                     }
@@ -148,17 +146,15 @@ public class PawnControlManager {
 
             if (gameManager != null && !gameManager.isMovimentoAutomaticoEmAndamento()) {
                 if (hasUserInteracted) {
-                    String mensagemStatus;
                     if ("DOURADO".equalsIgnoreCase(state)) {
-                        mensagemStatus = "O peão " + numeroPeao + " já chegou ao final do percurso.";
+                        gameManager.emitirStatus(GameStatusManager.PEAO_FINALIZADO, numeroPeao);
                     } else {
                         if (gameManager.isPeaoNaBase(0, pawnIndex)) {
-                            mensagemStatus = "O peão " + numeroPeao + " está na base. Você precisa de 1 ou 6 para tirá-lo.";
+                            gameManager.emitirStatus(GameStatusManager.PEAO_NA_BASE, numeroPeao);
                         } else {
-                            mensagemStatus = "O peão " + numeroPeao + " não tem movimentos válidos nesta jogada.";
+                            gameManager.emitirStatus(GameStatusManager.PEAO_SEM_MOVIMENTO, numeroPeao);
                         }
                     }
-                    gameManager.emitirStatus(mensagemStatus, new Color(230, 180, 80));
                 } else {
                     exibirMensagemEscolhaInicial();
                 }
@@ -241,7 +237,6 @@ public class PawnControlManager {
             if (this.gameManager != null) {
                 pararShakeAtual();
                 
-                // CORREÇÃO: O envio de rede do MOVE_PAWN é feito exclusivamente dentro do moveChosenPawn
                 boolean movimentoRealizado = this.gameManager.moveChosenPawn(pawnIndex, this.pendingSteps, this.pendingEffect);
 
                 if (movimentoRealizado) {
@@ -280,9 +275,6 @@ public class PawnControlManager {
                 this.gameManager.moveChosenPawn(furthestPawnIndex, steps, effect);
                 this.awaitingPawnSelection = false;
                 this.hasUserInteracted = false;
-                
-                // CORREÇÃO: Removido nextTurn() prematuro daqui.
-                // O encerramento da animação do peão no GameManager cuidará da passagem do turno.
                 return;
             } else {
                 if (this.gameManager.getTurnManager() != null) {

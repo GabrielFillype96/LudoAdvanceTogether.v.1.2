@@ -1,15 +1,20 @@
 package gui.components;
 
+import control.GameStatusManager;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GameStatusBar extends JPanel {
     private String message = "";
     private Color baseColor = Color.WHITE;
+    private String currentIconPath = null;
+    private ImageIcon currentIcon = null; // Guardará a imagem/GIF carregado
     private int alpha = 0; 
     private final Timer fadeTimer;
     private final Timer rollTimer; 
@@ -22,9 +27,6 @@ public class GameStatusBar extends JPanel {
         this.scale = scale;
         setOpaque(false);
         
-        // =========================================================================
-        // ALTURA AMPLIADA: De 32 para 46 para permitir duas linhas confortavelmente
-        // =========================================================================
         int width = (int) (220 * scale);
         int height = (int) (46 * scale);
         setPreferredSize(new Dimension(width, height));
@@ -54,7 +56,15 @@ public class GameStatusBar extends JPanel {
         });
     }
 
+    public void updateStatus(GameStatusManager status, Object... args) {
+        updateStatus(status.format(args), status.getColor(), status.getIconPath());
+    }
+
     public void updateStatus(String newMessage, Color color) {
+        updateStatus(newMessage, color, null);
+    }
+
+    public void updateStatus(String newMessage, Color color, String iconPath) {
         if (fadeTimer.isRunning()) fadeTimer.stop();
         if (rollTimer.isRunning()) rollTimer.stop();
         
@@ -62,6 +72,22 @@ public class GameStatusBar extends JPanel {
         this.offsetY = 0;
         this.message = newMessage.toUpperCase();
         this.baseColor = color;
+        this.currentIconPath = iconPath;
+
+        // Carrega o ícone/GIF a partir dos recursos
+        if (iconPath != null && !iconPath.isEmpty()) {
+            URL url = getClass().getResource(iconPath);
+            if (url != null) {
+                this.currentIcon = new ImageIcon(url);
+                // Garante que GIFs continuem animando no Swing
+                this.currentIcon.setImageObserver(this); 
+            } else {
+                this.currentIcon = null;
+            }
+        } else {
+            this.currentIcon = null;
+        }
+
         this.alpha = 0; 
         repaint();
         fadeTimer.start(); 
@@ -74,6 +100,8 @@ public class GameStatusBar extends JPanel {
         this.animType = 1; 
         this.message = newMessage.toUpperCase();
         this.baseColor = color;
+        this.currentIconPath = null;
+        this.currentIcon = null;
         this.alpha = 255; 
         this.offsetY = getHeight(); 
         
@@ -90,28 +118,33 @@ public class GameStatusBar extends JPanel {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
-        // 1. ANIMAÇÃO DE COR & BRILHO REATIVO
         Color animatedColor = (animType == 0) ? new Color(baseColor.getRed(), baseColor.getGreen(), baseColor.getBlue(), alpha) : baseColor;
 
-        // Fundo estilo "Gamer Glass" (Fundo ultra escuro e bem visível)
+        // Fundo
         g2.setColor(new Color(15, 15, 20, 230));
         g2.fillRoundRect(0, 0, getWidth(), getHeight(), getHeight(), getHeight());
 
-        // Borda com Neon sutil que brilha na cor do evento (Ex: Vermelho se errou, Verde se acertou)
+        // Borda
         g2.setStroke(new BasicStroke(1.5f));
         g2.setColor(new Color(animatedColor.getRed(), animatedColor.getGreen(), animatedColor.getBlue(), Math.min(alpha, 130)));
         g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, getHeight(), getHeight());
 
-        // 2. CONFIGURAÇÃO DO TEXTO MODERNO
         g2.setColor(animatedColor);
-        g2.setFont(new Font("SansSerif", Font.BOLD, (int) (11 * scale)));
+
+        // Define a fonte para o texto
+        Font font = new Font("SansSerif", Font.BOLD, (int) (11 * scale));
+        g2.setFont(font);
         FontMetrics metrics = g2.getFontMetrics();
 
-        // 3. ALGORITMO DE QUEBRA AUTOMÁTICA DE TEXTO (WORD WRAP)
+        // Configurações da Imagem
+        int iconSize = (int) (24 * scale);
+        int iconSpacing = (currentIcon != null) ? (int) (8 * scale) : 0;
+        int maxLineWidth = getWidth() - (int) (30 * scale) - (currentIcon != null ? (iconSize + iconSpacing) : 0);
+
+        // Quebra de texto por linhas
         List<String> lines = new ArrayList<>();
         String[] words = message.split(" ");
         StringBuilder currentLine = new StringBuilder();
-        int maxLineWidth = getWidth() - (int) (30 * scale); // Margem de segurança interna da pílula
 
         for (String word : words) {
             String testLine = (currentLine.length() == 0) ? word : currentLine + " " + word;
@@ -130,17 +163,36 @@ public class GameStatusBar extends JPanel {
             lines.add(currentLine.toString());
         }
 
-        // 4. RENDERIZAÇÃO CENTRALIZADA MULTILINHA COM MÁSCARA ANIMADA
-        g2.setClip(0, 0, getWidth(), getHeight()); // Previne o texto de vazar para fora ao rolar
+        g2.setClip(0, 0, getWidth(), getHeight());
 
         int lineHeight = metrics.getHeight();
         int totalTextHeight = lines.size() * lineHeight;
-        // Calcula o ponto Y inicial para que o bloco completo de linhas fique perfeitamente centralizado verticalmente
         int startY = ((getHeight() - totalTextHeight) / 2) + metrics.getAscent();
 
+        // Aplica transparência da animação para a imagem se necessário
+        if (animType == 0) {
+            float floatAlpha = alpha / 255.0f;
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, floatAlpha));
+        }
+
+        // Desenhar Ícone (se existir)
+        int textXOffset = 0;
+        if (currentIcon != null) {
+            int iconX = (int) (12 * scale);
+            int iconY = (getHeight() - iconSize) / 2 + offsetY;
+            g2.drawImage(currentIcon.getImage(), iconX, iconY, iconSize, iconSize, this);
+            textXOffset = iconX + iconSize + iconSpacing;
+        }
+
+        // Desenhar Texto
         for (int i = 0; i < lines.size(); i++) {
             String line = lines.get(i);
-            int textX = (getWidth() - metrics.stringWidth(line)) / 2; // Centraliza linha por linha horizontalmente
+            int textX;
+            if (currentIcon != null) {
+                textX = textXOffset; // Alinhado à direita da imagem
+            } else {
+                textX = (getWidth() - metrics.stringWidth(line)) / 2; // Centralizado
+            }
             int textY = startY + (i * lineHeight) + offsetY;
             g2.drawString(line, textX, textY);
         }

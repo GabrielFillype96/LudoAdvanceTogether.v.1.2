@@ -25,7 +25,6 @@ public class GameManager {
     private boolean sorteioInicialAtivo = true;
     private boolean jogadaEmAndamento = false;
 
-    // Configuração de Dificuldade e Cooldown
     private String gameDifficulty = "MEDIO"; 
     private int[] azarCooldown = new int[4];
 
@@ -34,12 +33,6 @@ public class GameManager {
     private static final int DELAY_MOVIMENTO_AUTO = 2000;
     private static final int DELAY_FINAL_TURNO = 3500;
 
-    private static final Color COLOR_INFO = Color.WHITE;
-    private static final Color COLOR_SUCCESS = new Color(46, 204, 113);
-    private static final Color COLOR_WARNING = new Color(241, 196, 15);
-    private static final Color COLOR_ERROR = new Color(231, 76, 60);
-    private static final Color COLOR_ACTION = new Color(230, 126, 34);
-    
     private int[] consecutiveSixesCounters = new int[4]; 
     private boolean jogoFinalizado = false;
 
@@ -129,6 +122,12 @@ public class GameManager {
         this.gameStatusBar = gameStatusBar;
     }
 
+    public void emitirStatus(GameStatusManager status, Object... args) {
+        if (this.gameStatusBar != null) {
+            this.gameStatusBar.updateStatus(status, args);
+        }
+    }
+
     public void emitirStatus(String mensagem, Color cor) {
         if (this.gameStatusBar != null) {
             this.gameStatusBar.updateStatus(mensagem, cor);
@@ -203,8 +202,7 @@ public class GameManager {
         }
 
         if ("PEGADINHA".equalsIgnoreCase(cardType) && activePlayerId == 0) {
-            emitirStatus("🃏 Seu espertinho! Escolha um jogador para sacanear.", COLOR_ACTION);
-            // Mantém jogadaEmAndamento = true até que o clique na GUI resolva a pegadinha
+            emitirStatus(GameStatusManager.CARTA_PEGADINHA);
             return;
         }
 
@@ -213,9 +211,9 @@ public class GameManager {
             consecutiveSixesCounters[activePlayerId] = 0; 
             
             if (activePlayerId == 0) {
-                emitirStatus("❌ Resposta incorreta! Você perdeu a vez.", COLOR_ERROR);
+                emitirStatus(GameStatusManager.RESPOSTA_INCORRETA_SELF);
             } else {
-                emitirStatus("❌ " + nomeJogador + " errou a resposta e perdeu a vez!", COLOR_ERROR);
+                emitirStatus(GameStatusManager.RESPOSTA_INCORRETA_OTHER, nomeJogador);
             }
 
             Timer delayErro = new Timer(DELAY_ERRO_E_AVISOS, eErro -> passarTurnoGarantido());
@@ -238,9 +236,9 @@ public class GameManager {
                     if (consecutiveSixesCounters[activePlayerId] == 3) {
                         consecutiveSixesCounters[activePlayerId] = 0; 
                         if (activePlayerId == 0) {
-                            emitirStatus("🚨 PENALIDADE! Três 6s seguidos. Você perdeu a vez!", COLOR_ERROR);
+                            emitirStatus(GameStatusManager.PENALIDADE_SEIS_SELF);
                         } else {
-                            emitirStatus("🚨 PENALIDADE! " + nomeJogador + " tirou três 6s seguidos e perdeu a vez!", COLOR_ERROR);
+                            emitirStatus(GameStatusManager.PENALIDADE_SEIS_OTHER, nomeJogador);
                         }
                         Timer delayPenalidade = new Timer(DELAY_ERRO_E_AVISOS, ePen -> passarTurnoGarantido());
                         delayPenalidade.setRepeats(false);
@@ -257,14 +255,14 @@ public class GameManager {
                         int peaoAzarado = getFurthestPawnIndex(activePlayerId);
                         
                         if (peaoAzarado == -1) {
-                            emitirStatus("🛡️ PROTEGIDO! Seus peões estão salvos na Base ou na Zona Segura!", COLOR_SUCCESS);
+                            emitirStatus(GameStatusManager.AZAR_PROTEGIDO_SELF);
                             Timer delaySorte = new Timer(DELAY_ACAO_TEXTO, eS -> passarTurnoGarantido());
                             delaySorte.setRepeats(false);
                             delaySorte.start();
                             return;
                         }
 
-                        emitirStatus("💀 O peão azarado " + (peaoAzarado + 1) + " vai retroceder " + Math.abs(valorDado) + " casas!", COLOR_ERROR);
+                        emitirStatus(GameStatusManager.AZAR_MOVER_SELF, peaoAzarado + 1, Math.abs(valorDado));
                         
                         Timer delayAzar = new Timer(DELAY_ACAO_TEXTO, eAzar -> moveChosenPawn(peaoAzarado, valorDado, cardEffect));
                         delayAzar.setRepeats(false);
@@ -288,23 +286,23 @@ public class GameManager {
 
                         if ("SORTE".equalsIgnoreCase(cardType)) {
                             if (vaiSairDaBase) {
-                                emitirStatus("🍀 " + nomeJogador + " está com sorte e vai colocar um peão em jogo!", COLOR_SUCCESS);
+                                emitirStatus(GameStatusManager.SORTE_SAIR_BASE, nomeJogador);
                             } else {
-                                emitirStatus("🍀 " + nomeJogador + " está com sorte e vai avançar " + valorDado + " casas!", COLOR_SUCCESS);
+                                emitirStatus(GameStatusManager.SORTE_AVANCAR, nomeJogador, valorDado);
                             }
                         } 
                         else if ("AZAR".equalsIgnoreCase(cardType)) {
-                            emitirStatus("💀 " + nomeJogador + " deu azar e terá que retroceder " + Math.abs(valorDado) + " casas!", COLOR_ERROR);
+                            emitirStatus(GameStatusManager.AZAR_RETROCEDER, nomeJogador, Math.abs(valorDado));
                         } 
                         else if ("PEGADINHA".equalsIgnoreCase(cardType)) {
-                            emitirStatus("🃏 " + nomeJogador + " vai usar uma Pegadinha contra outro jogador!", COLOR_ACTION);
+                            emitirStatus(GameStatusManager.PEGADINHA_USA_CPU, nomeJogador);
                         } 
                         else {
                             if (vaiSairDaBase) {
-                                emitirStatus("🧠 " + nomeJogador + " acertou a resposta e vai colocar um peão em jogo!", COLOR_SUCCESS);
+                                emitirStatus(GameStatusManager.DESAFIO_SAIR_BASE, nomeJogador);
                             } else {
                                 String acaoVerbo = "AVANÇAR".equalsIgnoreCase(cardEffect) ? "avançar" : "retroceder";
-                                emitirStatus("🧠 " + nomeJogador + " acertou a resposta e vai " + acaoVerbo + " " + valorDado + " casas!", COLOR_SUCCESS);
+                                emitirStatus(GameStatusManager.DESAFIO_MOVER, nomeJogador, acaoVerbo, valorDado);
                             }
                         }
 
@@ -317,7 +315,7 @@ public class GameManager {
                             if ("AZAR".equalsIgnoreCase(cardType)) {
                                 int peaoAzarado = getFurthestPawnIndex(activePlayerId);
                                 if (peaoAzarado == -1) {
-                                    emitirStatus("🛡️ " + nomeJogador + " está protegido na Zona Segura ou na Base e não retrocede!", COLOR_INFO);
+                                    emitirStatus(GameStatusManager.AZAR_PROTEGIDO_OTHER, nomeJogador);
                                     Timer delayTurno = new Timer(DELAY_ERRO_E_AVISOS, eT -> passarTurnoGarantido());
                                     delayTurno.setRepeats(false);
                                     delayTurno.start();
@@ -328,7 +326,7 @@ public class GameManager {
                             }
 
                             if (peoesDisponiveis.isEmpty()) {
-                                emitirStatus("🤖 " + nomeJogador + " não tem movimentos válidos.", COLOR_INFO);
+                                emitirStatus(GameStatusManager.SEM_MOVIMENTOS_CPU, nomeJogador);
                                 Timer delayTurno = new Timer(DELAY_ERRO_E_AVISOS, eTurno -> passarTurnoGarantido());
                                 delayTurno.setRepeats(false);
                                 delayTurno.start();
@@ -346,31 +344,29 @@ public class GameManager {
                         boolean ehCartaSorte = "SORTE".equalsIgnoreCase(cardType);
                         
                         if (ehCartaSorte) {
-                            emitirStatus("🍀 Parece que alguém aqui tem muita sorte!", COLOR_SUCCESS);
+                            emitirStatus(GameStatusManager.SORTE_HUMANO);
                         } else {
-                            emitirStatus("🎉 Parabéns, você acertou a resposta!", COLOR_SUCCESS);
+                            emitirStatus(GameStatusManager.ACERTO_HUMANO);
                         }
                         
                         Timer delayPosAcerto = new Timer(DELAY_ACAO_TEXTO, eDelay -> {
                             if (peoesDisponiveis.isEmpty()) {
                                 consecutiveSixesCounters[activePlayerId] = 0; 
-                                emitirStatus("⚠️ Infelizmente, não há peões disponíveis para jogar.", COLOR_WARNING);
+                                emitirStatus(GameStatusManager.SEM_PEOES_DISPONIVEIS);
                                 Timer delayTurno = new Timer(DELAY_ERRO_E_AVISOS, eTurno -> passarTurnoGarantido());
                                 delayTurno.setRepeats(false);
                                 delayTurno.start();
                                 return;
                             }
-                            
-                            Color corDestaque = ehCartaSorte ? COLOR_SUCCESS : COLOR_INFO;
 
                             if (peoesDisponiveis.size() == 1) {
                                 int peaoAutomatico = peoesDisponiveis.get(0);
                                 int numeroReal = (this.pawnControlManager != null) ? this.pawnControlManager.getRealPawnNumber(peaoAutomatico) : (peaoAutomatico + 1);
                                 
                                 if (ehCartaSorte) {
-                                    emitirStatus("🤖 Movendo o peão sortudo " + numeroReal + " automaticamente...", corDestaque);
+                                    emitirStatus(GameStatusManager.AUTO_MOVE_SORTE, numeroReal);
                                 } else {
-                                    emitirStatus("🤖 Apenas o peão " + numeroReal + " está disponível. Movendo automaticamente...", corDestaque);
+                                    emitirStatus(GameStatusManager.AUTO_MOVE_UNICO, numeroReal);
                                 }
                                 executarMovimentoAutomaticoHumano(peaoAutomatico, valorDado, cardEffect);
                             } 
@@ -392,7 +388,7 @@ public class GameManager {
     private void passarTurnoGarantido() {
         setJogadaEmAndamento(false);
         int activePlayerId = (this.turnManager != null) ? this.turnManager.getCurrentTurn() : 0;
-        decrementAzarCooldown(activePlayerId); // Decrementa cooldown de Azar na troca de turno
+        decrementAzarCooldown(activePlayerId); 
         if (this.turnManager != null) {
             this.turnManager.nextTurn();
         }
@@ -651,7 +647,7 @@ public class GameManager {
                 return true; 
             } else {
                 if (activePlayerId == 0) {
-                    emitirStatus("❌ Movimento inválido! Esse peão precisa de 1 ou 6 para sair da base.", COLOR_ERROR);
+                    emitirStatus(GameStatusManager.BASE_SAIDA_INVALIDA);
                 }
                 return false; 
             }
@@ -752,7 +748,7 @@ public class GameManager {
             }
             peao.updatePawnVisual(boardScreen.getGoldenPawnImagePath(activePlayerId));
 
-            emitirStatus("🏆 INCRÍVEL! O peão " + (pawnIndex + 1) + " de " + peao.getPlayerName() + " chegou ao Centro!", COLOR_SUCCESS);
+            emitirStatus(GameStatusManager.CHEGOU_CENTRO, pawnIndex + 1, peao.getPlayerName());
                 
             int peoesNoCentro = 0;
             for (int i = 0; i < 4; i++) {
@@ -766,20 +762,20 @@ public class GameManager {
                 jogoFinalizado = true; 
                 setJogadaEmAndamento(false);
                 
-                String mensagemVitoria = (activePlayerId == 0) ? 
-                    "🎉👑 PARABÉNS! Você levou todos os 4 peões ao Centro e VENCEU O JOGO!" :
-                    "🤖 FIM DE JOGO! A " + peao.getPlayerName() + " venceu a partida.";
-
-                emitirStatus(mensagemVitoria, COLOR_SUCCESS);
+                if (activePlayerId == 0) {
+                    emitirStatus(GameStatusManager.VITORIA_HUMANO);
+                } else {
+                    emitirStatus(GameStatusManager.VITORIA_CPU, peao.getPlayerName());
+                }
                 return;
             }
         }
 
         if (ganhouTurnoExtra) {
             if (activePlayerId == 0) {
-                emitirStatus("🎲 Turno Bônus! Você tirou 6 e poderá realizar uma nova jogada.", COLOR_SUCCESS);
+                emitirStatus(GameStatusManager.BONUS_SEIS_HUMANO);
             } else {
-                emitirStatus("🤖 " + getPlayerNameById(activePlayerId) + " tirou um '6' e ganhou turno extra!", COLOR_INFO);
+                emitirStatus(GameStatusManager.BONUS_SEIS_CPU, getPlayerNameById(activePlayerId));
             }
             passarVez = false; 
         }
@@ -837,7 +833,7 @@ public class GameManager {
                     String atacante = (activePlayerId == 0) ? "Você" : getPlayerNameById(activePlayerId);
                     String vitima = (p == 0) ? "seu peão" : "peão de " + getPlayerNameById(p);
                     
-                    emitirStatus("⚔️ ATAQUE! " + atacante + " capturou o " + vitima + "!", COLOR_ACTION);
+                    emitirStatus(GameStatusManager.ATAQUE_CAPTURAR, atacante, vitima);
                     
                     enemyPawn.setPawnCurrentPos(i);
                     boardScreen.repositionAllPawns();
@@ -926,7 +922,7 @@ public class GameManager {
 
     public void resetHumanPawnsVisuals() {
         this.movimentoAutomaticoEmAndamento = false;
-        this.jogadaEmAndamento = false; // Garante o reset do estado do turno humano
+        this.jogadaEmAndamento = false; 
         if (this.pawnControlManager != null) {
             this.pawnControlManager.resetHumanPawnsVisuals();
         }

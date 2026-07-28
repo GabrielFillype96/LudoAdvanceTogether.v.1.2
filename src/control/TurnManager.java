@@ -14,9 +14,6 @@ public class TurnManager {
     private CardsContainer cardsContainer;
     private GameClient gameClient;
 
-    private static final Color COLOR_INFO = Color.WHITE;
-    private static final Color COLOR_WARNING = new Color(241, 196, 15);
-
     public TurnManager(GameManager gameManager) {
         this.gameManager = gameManager;
         this.currentTurn = 0; 
@@ -46,7 +43,7 @@ public class TurnManager {
             startHumanTurn();
         } else if (this.gameManager != null) {
             String nome = this.gameManager.getPlayerNameById(this.currentTurn);
-            this.gameManager.emitirStatus("Vez de " + nome + "...", COLOR_INFO);
+            this.gameManager.emitirStatus(GameStatusManager.VEZ_DE_JOGADOR, nome);
         }
     }
 
@@ -54,14 +51,13 @@ public class TurnManager {
         if (this.gameManager == null) return;
 
         Color corAlerta = new Color(241, 196, 15);  
-        Color corSucesso = new Color(46, 204, 113); 
 
         javax.swing.SwingUtilities.invokeLater(() -> {
-            this.gameManager.emitirStatus("LUDO: ADVANCE TOGETHER", COLOR_INFO);
+            this.gameManager.emitirStatus(GameStatusManager.TITULO_JOGO);
         });
 
         Timer timerAviso = new Timer(2000, eAviso -> {
-            this.gameManager.emitirStatus("Sorteando o jogador inicial...", corAlerta);
+            this.gameManager.emitirStatus(GameStatusManager.SORTEANDO_JOGADOR);
 
             Timer timerDelayRoleta = new Timer(1500, eRoleta -> {
                 
@@ -85,7 +81,7 @@ public class TurnManager {
                         this.currentTurn = (int) (Math.random() * 4);
                         String nomeVencedor = (this.currentTurn == 0) ? "Você" : this.gameManager.getPlayerNameById(this.currentTurn);
                         
-                        this.gameManager.emitirStatus("🎉 Começa com " + nomeVencedor + "!", corSucesso);
+                        this.gameManager.emitirStatus(GameStatusManager.INICIO_VENCEDOR, nomeVencedor);
 
                         if (this.currentTurn == 0) {
                             Timer delayHumano = new Timer(1500, ev -> startHumanTurn());
@@ -132,7 +128,6 @@ public class TurnManager {
 
         int previousTurn = this.currentTurn;
 
-        // DECREMENTA O COOLDOWN DO JOGADOR QUE ACABOU DE JOGAR
         if (this.gameManager != null) {
             this.gameManager.decrementAzarCooldown(previousTurn);
         }
@@ -150,7 +145,6 @@ public class TurnManager {
         if (isMyTurn()) {
             startHumanTurn();
         } else if (this.gameClient == null) {
-            // CORREÇÃO: Dispara CPU apenas em partidas puramente locais (sem cliente de rede ativo)
             startCPUTurn(false);
         }
     }
@@ -161,7 +155,7 @@ public class TurnManager {
         if (this.gameManager != null) {
             this.gameManager.setJogadaEmAndamento(false);
             this.gameManager.resetHumanPawnsVisuals();
-            this.gameManager.emitirStatus("🎲 Sua vez! Clique no deck para revelar sua carta.", COLOR_INFO);
+            this.gameManager.emitirStatus(GameStatusManager.SUA_VEZ_COMPRA);
         }
         
         if (this.cardsContainer != null) {
@@ -179,11 +173,11 @@ public class TurnManager {
         System.out.println("[TurnManager] Iniciando sequência de turno para: " + nomeCPU);
         
         if (!ehTurnoExtra) {
-            this.gameManager.emitirStatus("Turno de " + nomeCPU, COLOR_INFO);
+            this.gameManager.emitirStatus(GameStatusManager.TURNO_CPU_INICIO, nomeCPU);
         }
 
         Timer timerPensando = new Timer(1800, ePensando -> {
-            this.gameManager.emitirStatus("🤖 " + nomeCPU + " está pensando...", COLOR_WARNING);
+            this.gameManager.emitirStatus(GameStatusManager.CPU_PENSANDO, nomeCPU);
 
             Timer timerPuxarCarta = new Timer(1500, ePuxar -> executarAcaoCPU());
             timerPuxarCarta.setRepeats(false);

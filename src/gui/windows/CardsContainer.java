@@ -2,6 +2,7 @@ package gui.windows;
 
 import cards.CustomCards;
 import control.GameManager;
+import control.GameStatusManager;
 import control.DeckManager;
 import control.TurnManager;
 import gui.components.CardDeckBackground;
@@ -9,22 +10,20 @@ import gui.components.DeckStackBackground;
 import gui.components.buttons.cardsButton.CardOptionButton;
 import actions.CardAnswerValidation;
 
-import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.event.ActionListener;
 import javax.swing.JPanel;
 
 public class CardsContainer extends JPanel {
-    private CustomCards activeCard;                  // Camada 1 (Topo/Frente)
-    private CardDeckBackground cardDeckBackground;   // Camada 2 (Meio/Costas)
-    private DeckStackBackground deckStackBackground; // Camada 3 (Base/Pilha)
+    private CustomCards activeCard;                  
+    private CardDeckBackground cardDeckBackground;   
+    private DeckStackBackground deckStackBackground; 
     
     private GameManager gameManager;
     private CardAnswerValidation cardAnswerValidation;
     
     private DeckManager deckManager;
     private TurnManager turnManager;
-    private static final Color COLOR_ACTION = new Color(230, 126, 34);
     
     private static final double SCALE = 1.5; 
 
@@ -58,15 +57,11 @@ public class CardsContainer extends JPanel {
         this.setComponentZOrder(this.cardDeckBackground, 0); 
         this.setComponentZOrder(this.deckStackBackground, 1); 
 
-        // Adaptador único para escutar cliques, entradas e movimentos do mouse
         java.awt.event.MouseAdapter deckMouseAdapter = new java.awt.event.MouseAdapter() {
            @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
                 if (gameManager != null && gameManager.getTurnManager() != null) {
-                    // TRAVA DE SEGURANÇA: Cancela o clique se o jogo estiver processando animações, sorteios ou peões
                     if (!gameManager.canPlayerDrawCard()) return;
-
-                    // ALTERAÇÃO: Bloqueia clique se não for o turno do jogador local na rede
                     if (!turnManager.isMyTurn()) return;
 
                     System.out.println("[CardsContainer] Clique detectado no baralho.");
@@ -104,7 +99,6 @@ public class CardsContainer extends JPanel {
         if (this.cardDeckBackground == null) return;
         
         boolean segurancaLiberada = (this.gameManager != null && this.gameManager.canPlayerDrawCard());
-        // ALTERAÇÃO: Valida se é a vez do jogador local na rede
         boolean ehTurnoDoHumano = (this.turnManager != null && this.turnManager.isMyTurn());
         
         if (segurancaLiberada && ehTurnoDoHumano && this.activeCard == null) {
@@ -145,7 +139,6 @@ public class CardsContainer extends JPanel {
 
         int activePlayerId = this.turnManager.getCurrentTurn();
         
-        // ALTERAÇÃO: Impede saques se não for a vez do jogador local
         if (!this.turnManager.isMyTurn()) {
             System.out.println("[CardsContainer] Não é a vez do jogador local. Ignorando o clique.");
             return;
@@ -171,15 +164,15 @@ public class CardsContainer extends JPanel {
         );
         
         if (this.gameManager != null) {
-            String tipoCarta = this.activeCard.getCardType();
+            String tipoCarta = this.activeCard.getCardType();   
             if ("PERGUNTA".equalsIgnoreCase(tipoCarta)) {
-                this.gameManager.emitirStatus("🧠 Desafio! Selecione a alternativa correta.", java.awt.Color.WHITE);
+                this.gameManager.emitirStatus(GameStatusManager.CARTA_PERGUNTA);
             } else if ("SORTE".equalsIgnoreCase(tipoCarta)) {
-                this.gameManager.emitirStatus("🍀 Parece que alguém aqui tem muita sorte!", java.awt.Color.GREEN);
+                this.gameManager.emitirStatus(GameStatusManager.CARTA_SORTE);
             } else if ("AZAR".equalsIgnoreCase(tipoCarta)) {
-                this.gameManager.emitirStatus("💀 Que azar! Parece que alguém vai voltar algumas casas!", java.awt.Color.RED);
+                this.gameManager.emitirStatus(GameStatusManager.CARTA_AZAR);
             } else if ("PEGADINHA".equalsIgnoreCase(tipoCarta)) {
-                this.gameManager.emitirStatus("🃏 Seu espertinho! Escolha um jogador para sacanear.", COLOR_ACTION);
+                this.gameManager.emitirStatus(GameStatusManager.CARTA_PEGADINHA);
             }
         }
     
