@@ -15,6 +15,7 @@ import java.awt.RenderingHints;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,6 +23,14 @@ import java.util.Map;
 import javax.swing.JPanel;
 
 public class BoardScreen extends JPanel {
+
+    // --- REUTILIZAÇÃO DE ESTRUTURAS DE DESENHO (Evita GC Lag) ---
+    private static final Polygon STAR_SHAPE = createStarPolygon(12);
+    private static final Color COLOR_STAR_FILL = new Color(255, 215, 0, 220);
+    private static final Color COLOR_STAR_BORDER = new Color(180, 80, 0);
+
+    // Buffer da Imagem Estática do Tabuleiro
+    private BufferedImage boardBuffer = null;
 
     private String player1Name, player2Name, player3Name, player4Name;
     private String player1Color, player2Color, player3Color, player4Color;
@@ -83,10 +92,24 @@ public class BoardScreen extends JPanel {
         this.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
+                boardBuffer = null; // Invalida o buffer para recriar com a nova resolução
                 repositionPlayerSlots();
                 repositionAllPawns();
             }
         });
+    }
+
+    private static Polygon createStarPolygon(int radius) {
+        int[] xPoints = new int[10];
+        int[] yPoints = new int[10];
+        double angle = Math.PI / 2;
+        for (int i = 0; i < 10; i++) {
+            double r = (i % 2 == 0) ? radius : radius / 2.0;
+            xPoints[i] = (int) (Math.cos(angle) * r);
+            yPoints[i] = (int) (-Math.sin(angle) * r);
+            angle += Math.PI / 5;
+        }
+        return new Polygon(xPoints, yPoints, 10);
     }
 
     private double getDynamicScale() {
@@ -253,33 +276,25 @@ public class BoardScreen extends JPanel {
         player4Path = new Point[pathLength];
 
         // 1. Spawns das Bases (Casas Iniciais 0..3)
-        // Disposição Isométrica em Tela:
-        // [0] Esquerda (Peão 1) | [1] Ao lado/Topo (Peão 2)
-        // [2] Embaixo (Peão 3)  | [3] Ao lado/Direita (Peão 4)
+        player1Path[0] = new Point(440, 520);
+        player1Path[1] = new Point(440, 440);
+        player1Path[2] = new Point(520, 520);
+        player1Path[3] = new Point(520, 440);
 
-        // P1: Roxo (Base Inferior)
-        player1Path[0] = new Point(440, 520); // Peão 1: Borda Esquerda
-        player1Path[1] = new Point(440, 440); // Peão 2: Ao lado do Peão 1
-        player1Path[2] = new Point(520, 520); // Peão 3: Embaixo do Peão 1
-        player1Path[3] = new Point(520, 440); // Peão 4: Ao lado do Peão 3
+        player2Path[0] = new Point(80, 520);
+        player2Path[1] = new Point(80, 440);
+        player2Path[2] = new Point(160, 520);
+        player2Path[3] = new Point(160, 440);
 
-        // P2: Azul (Base Esquerda)
-        player2Path[0] = new Point(80, 520);  // Peão 1: Borda Esquerda
-        player2Path[1] = new Point(80, 440);  // Peão 2: Ao lado do Peão 1
-        player2Path[2] = new Point(160, 520); // Peão 3: Embaixo do Peão 1
-        player2Path[3] = new Point(160, 440); // Peão 4: Ao lado do Peão 3
+        player3Path[0] = new Point(80, 160);
+        player3Path[1] = new Point(80, 80);
+        player3Path[2] = new Point(160, 160);
+        player3Path[3] = new Point(160, 80);
 
-        // P3: Amarelo (Base Superior)
-        player3Path[0] = new Point(80, 160);  // Peão 1: Borda Esquerda
-        player3Path[1] = new Point(80, 80);   // Peão 2: Ao lado do Peão 1
-        player3Path[2] = new Point(160, 160); // Peão 3: Embaixo do Peão 1
-        player3Path[3] = new Point(160, 80);  // Peão 4: Ao lado do Peão 3
-
-        // P4: Rosa (Base Direita)
-        player4Path[0] = new Point(440, 160); // Peão 1: Borda Esquerda
-        player4Path[1] = new Point(440, 80);  // Peão 2: Ao lado do Peão 1
-        player4Path[2] = new Point(520, 160); // Peão 3: Embaixo do Peão 1
-        player4Path[3] = new Point(520, 80);  // Peão 4: Ao lado do Peão 3
+        player4Path[0] = new Point(440, 160);
+        player4Path[1] = new Point(440, 80);
+        player4Path[2] = new Point(520, 160);
+        player4Path[3] = new Point(520, 80);
 
         // 2. Trilha Principal do Tabuleiro
         Point[] circuitoTrilha = new Point[] {
@@ -325,16 +340,19 @@ public class BoardScreen extends JPanel {
         }
     }
 
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        Graphics2D g2 = (Graphics2D) g.create();
+    /**
+     * Renders all non-changing graphics (Wood frame, Grid, Triangles, Safe Stars)
+     * to an off-screen BufferedImage to prevent severe CPU lag during pulsing animation.
+     */
+    private void renderBoardToBuffer() {
+        int panelW = getWidth() > 0 ? getWidth() : 1000;
+        int panelH = getHeight() > 0 ? getHeight() : 800;
+
+        boardBuffer = new BufferedImage(panelW, panelH, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2 = boardBuffer.createGraphics();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        int panelW = getWidth();
-        int panelH = getHeight();
         double scale = getDynamicScale();
-        
         int centerX = panelW / 2;
         int centerY = panelH / 2 + (int)(15 * scale);
 
@@ -551,6 +569,21 @@ public class BoardScreen extends JPanel {
     }
 
     @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
+        // Se o buffer for nulo ou a janela mudou de tamanho, gera a imagem estática
+        if (boardBuffer == null || boardBuffer.getWidth() != getWidth() || boardBuffer.getHeight() != getHeight()) {
+            renderBoardToBuffer();
+        }
+
+        // Desenha a imagem pré-renderizada instantaneamente
+        if (boardBuffer != null) {
+            g.drawImage(boardBuffer, 0, 0, null);
+        }
+    }
+
+    @Override
     protected void paintChildren(Graphics g) {
         // 1. Desenha os peões reais
         for (int i = getComponentCount() - 1; i >= 0; i--) {
@@ -671,22 +704,15 @@ public class BoardScreen extends JPanel {
     }
 
     private void desenharEstrelaSafeZone(Graphics2D g2d, int centerX, int centerY) {
-        int radius = 12;
-        int[] xPoints = new int[10];
-        int[] yPoints = new int[10];
-        double angle = Math.PI / 2;
+        AffineTransform oldTx = g2d.getTransform();
+        g2d.translate(centerX, centerY);
 
-        for (int i = 0; i < 10; i++) {
-            double r = (i % 2 == 0) ? radius : radius / 2.0;
-            xPoints[i] = centerX + (int) (Math.cos(angle) * r);
-            yPoints[i] = centerY - (int) (Math.sin(angle) * r);
-            angle += Math.PI / 5;
-        }
+        g2d.setColor(COLOR_STAR_FILL); 
+        g2d.fill(STAR_SHAPE);
+        g2d.setColor(COLOR_STAR_BORDER); 
+        g2d.draw(STAR_SHAPE);
 
-        g2d.setColor(new Color(255, 215, 0, 220)); 
-        g2d.fillPolygon(xPoints, yPoints, 10);
-        g2d.setColor(new Color(180, 80, 0)); 
-        g2d.drawPolygon(xPoints, yPoints, 10);
+        g2d.setTransform(oldTx);
     }
 
     private void addPlayerNameSlots() {
@@ -730,7 +756,7 @@ public class BoardScreen extends JPanel {
     }   
 
     private void sortPawnsByDepth() {
-        List<PlayerPawn> allPawns = new ArrayList<>();
+        List<PlayerPawn> allPawns = new ArrayList<>(16);
         for (int p = 0; p < 4; p++) {
             for (int i = 0; i < 4; i++) {
                 if (playersPawns[p][i] != null) {
@@ -744,7 +770,12 @@ public class BoardScreen extends JPanel {
         int totalPawns = allPawns.size();
         for (int i = 0; i < totalPawns; i++) {
             PlayerPawn pawn = allPawns.get(i);
-            setComponentZOrder(pawn, totalPawns - 1 - i);
+            int targetZ = totalPawns - 1 - i;
+            
+            // Só inverte a ordem Z se a profundidade tiver mudado
+            if (getComponentZOrder(pawn) != targetZ) {
+                setComponentZOrder(pawn, targetZ);
+            }
         }
     }
 

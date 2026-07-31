@@ -13,7 +13,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
         System.setProperty("sun.java2d.uiScale", "1");
             
-        SwingUtilities.invokeLater(() -> {
+        SwingUtilities.invokeLater(() -> { 
             JFrame janela = new JFrame("Jogo de Ludo - Advance Together");
 
             ImageIcon appIcon = ImageLoaderManager.loadIcon("/assets/img/gameIcon.png");

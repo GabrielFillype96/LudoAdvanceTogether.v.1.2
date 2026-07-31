@@ -8,14 +8,23 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GameServer {
     private static final int PORT = 12345;
     private ServerSocket serverSocket;
-    private final List<ClientHandler> clients = new ArrayList<>();
     
-    // true = Vazio/CPU, false = Jogador Humano Conectado
-    private final boolean[] slotIsCPU = new boolean[]{true, true, true, true}; 
+    // CopyOnWriteArrayList para evitar ConcurrentModificationException durante iterações de broadcast/encerramento
+    private final List<ClientHandler> clients = new CopyOnWriteArrayList<>();
+    
+    // Lista de informações dos 4 jogadores
+    private final PlayerInfo[] players = new PlayerInfo[]{
+        new PlayerInfo(0, "Jogador 1 (CPU)", 0, true),
+        new PlayerInfo(1, "Jogador 2 (CPU)", 1, true),
+        new PlayerInfo(2, "Jogador 3 (CPU)", 2, true),
+        new PlayerInfo(3, "Jogador 4 (CPU)", 3, true)
+    };
+    
     private final Gson gson = new Gson();
 
     public void start() {
@@ -29,64 +38,69 @@ public class GameServer {
                     int assignedId = getNextAvailableSlot();
 
                     if (assignedId != -1) {
-                        slotIsCPU[assignedId] = false; // Marca o slot como ocupado por um humano
+                        players[assignedId].setCPU(false);
+                        players[assignedId].setName("Jogador " + (assignedId + 1));
                         
                         ClientHandler handler = new ClientHandler(socket, assignedId);
                         clients.add(handler);
                         new Thread(handler).start();
 
-                        // 1. Envia o ID individual para o cliente recém-conectado
                         handler.sendRaw("ASSIGN_ID:" + assignedId);
-
-                        // 2. Transmite o estado atualizado do Lobby para TODOS os clientes
                         broadcastLobbyUpdate();
                         
                         System.out.println("[Servidor] Jogador conectado no Slot " + assignedId);
                     } else {
-                        System.out.println("[Servidor] Tentativa de conexão recusada: Sala cheia.");
                         socket.close();
                     }
                 }
             } catch (Exception e) {
-                System.err.println("[Servidor] Erro no servidor: " + e.getMessage());
+                System.out.println("[Servidor] Encerrado.");
             }
         }).start();
     }
 
     /**
-     * Encerra o socket do servidor e fecha as conexões ativas.
+     * Notifica todos os clientes que a sala foi desfeita e encerra o servidor.
      */
     public void stopServer() {
         try {
+            // Notifica os clientes que a sala foi encerrada pelo Host
+            NetworkMessage disbandMsg = new NetworkMessage("DISBAND", 0, "A sala foi desfeita pelo Host.");
+            broadcast(disbandMsg);
+
+            // Encerra a conexão de todos os clientes
+            for (ClientHandler client : clients) {
+                client.closeConnection();
+            }
+            clients.clear();
+
             if (serverSocket != null && !serverSocket.isClosed()) {
                 serverSocket.close();
-                System.out.println("[Servidor] Servidor encerrado com sucesso.");
             }
+            System.out.println("[Servidor] Servidor e sala encerrados.");
         } catch (Exception e) {
-            System.err.println("[Servidor] Erro ao encerrar servidor: " + e.getMessage());
+            System.err.println("[Servidor] Erro ao fechar: " + e.getMessage());
         }
     }
 
     private int getNextAvailableSlot() {
-        for (int i = 0; i < slotIsCPU.length; i++) {
-            if (slotIsCPU[i]) {
+        for (int i = 0; i < players.length; i++) {
+            if (players[i].isCPU()) {
                 return i;
             }
         }
         return -1;
     }
 
-    // --- MÉTODOS DO SERVIDOR ---
-
-    public void startGame() {
-        String payload = gson.toJson(slotIsCPU);
-        NetworkMessage msg = new NetworkMessage("START_GAME", -1, payload);
+    public void broadcastLobbyUpdate() {
+        String payload = gson.toJson(players);
+        NetworkMessage msg = new NetworkMessage("LOBBY_UPDATE", -1, payload);
         broadcast(msg);
     }
 
-    public void broadcastLobbyUpdate() {
-        String payload = gson.toJson(slotIsCPU);
-        NetworkMessage msg = new NetworkMessage("LOBBY_UPDATE", -1, payload);
+    public void startGame() {
+        String payload = gson.toJson(players);
+        NetworkMessage msg = new NetworkMessage("START_GAME", -1, payload);
         broadcast(msg);
     }
 
@@ -96,8 +110,6 @@ public class GameServer {
             client.sendRaw(json);
         }
     }
-
-    // --- CLASSE INTERNA PARA TRATAR CLIENTES ---
 
     private class ClientHandler implements Runnable {
         private final Socket socket;
@@ -117,8 +129,16 @@ public class GameServer {
         }
 
         public void sendRaw(String text) {
-            if (out != null) {
-                out.println(text);
+            if (out != null) out.println(text);
+        }
+
+        public void closeConnection() {
+            try {
+                if (socket != null && !socket.isClosed()) {
+                    socket.close();
+                }
+            } catch (Exception e) {
+                // Silencia exceções ao fechar conexões
             }
         }
 
@@ -129,11 +149,19 @@ public class GameServer {
                 while ((line = in.readLine()) != null) {
                     NetworkMessage msg = gson.fromJson(line, NetworkMessage.class);
                     
-                    // Repassa as mensagens do jogo para todos
-                    broadcast(msg);
+                    if ("REQUEST_START_GAME".equals(msg.getType())) {
+                        startGame();
+                    } else if ("UPDATE_PLAYER_INFO".equals(msg.getType())) {
+                        PlayerInfo updatedInfo = gson.fromJson(msg.getPayload(), PlayerInfo.class);
+                        players[playerId].setName(updatedInfo.getName());
+                        players[playerId].setColorIndex(updatedInfo.getColorIndex());
+                        broadcastLobbyUpdate();
+                    } else {
+                        broadcast(msg);
+                    }
                 }
             } catch (Exception e) {
-                System.out.println("[Servidor] Conexão encerrada com o Jogador " + playerId);
+                System.out.println("[Servidor] Cliente " + playerId + " desconectou.");
             } finally {
                 disconnect();
             }
@@ -142,11 +170,17 @@ public class GameServer {
         private void disconnect() {
             try {
                 clients.remove(this);
-                slotIsCPU[playerId] = true; // Libera a vaga no servidor
-                socket.close();
-                
-                // Notifica os jogadores restantes sobre a desconexão
-                broadcastLobbyUpdate();
+                players[playerId].setCPU(true);
+                players[playerId].setName("Jogador " + (playerId + 1) + " (CPU)");
+                closeConnection();
+
+                // Se quem desconectou foi o Host (Slot 0), encerra a sala para todos os demais
+                if (playerId == 0) {
+                    System.out.println("[Servidor] Host desconectou. Encerrando a sala...");
+                    stopServer();
+                } else {
+                    broadcastLobbyUpdate();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }

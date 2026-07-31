@@ -5,11 +5,13 @@ import gui.components.buttons.*;
 import actions.NewGameMenuAction;
 
 // Imports externos
+import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Rectangle;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 public class MainMenuScreen extends JPanel {
     private SubMenuContainer subMenuContainer; 
@@ -74,25 +76,45 @@ public class MainMenuScreen extends JPanel {
         
         add(subMenuContainer); 
 
-        // --- AÇÕES DOS BOTÕES COM SINCRO DE SELEÇÃO VISUAL ---
+        // --- AÇÕES DOS BOTÕES COM SINCRO DE SELEÇÃO REAL ---
         NewGameMenuAction newGameAction = new NewGameMenuAction(windowManager);
         
         btnNewGame.addActionListener(e -> {
-            selecionarBotao(btnNewGame);
             newGameAction.actionPerformed(e);
+            sincronizarSelecaoComSubMenu();
         });
 
         btnConnection.addActionListener(e -> {
-            selecionarBotao(btnConnection);
             windowManager.openLobbyMultiplayer();
+            sincronizarSelecaoComSubMenu();
         });
 
         btnAbout.addActionListener(e -> {
-            selecionarBotao(btnAbout);
             subMenuContainer.exibirSobreMenu();
+            sincronizarSelecaoComSubMenu();
         });
 
         btnExit.addActionListener(e -> System.exit(0));
+
+        // Garante que a seleção inicial reflita a tela carregada por padrão
+        SwingUtilities.invokeLater(this::sincronizarSelecaoComSubMenu);
+    }
+
+    /**
+     * Sincroniza a seleção visual dos botões laterais verificando qual 
+     * submenu realmente está visível no container.
+     */
+    public void sincronizarSelecaoComSubMenu() {
+        if (subMenuContainer != null && subMenuContainer.getComponentCount() > 0) {
+            Component comp = subMenuContainer.getComponent(0);
+            if (comp instanceof LobbyScreen) {
+                selecionarBotao(btnConnection);
+            } else if (comp instanceof NewGameMenuScreen) {
+                selecionarBotao(btnNewGame);
+            } else if (comp != null) {
+                selecionarBotao(btnAbout);
+            }
+        }
     }
 
     /**
