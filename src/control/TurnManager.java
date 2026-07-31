@@ -37,6 +37,11 @@ public class TurnManager {
         if (this.gameManager != null) {
             this.gameManager.resetHumanPawnsVisuals();
             this.gameManager.setJogadaEmAndamento(false);
+            
+            // --- ATUALIZAÇÃO VISUAL DO SLOT ---
+            if (this.gameManager.getBoardScreen() != null) {
+                this.gameManager.getBoardScreen().updateActivePlayerSlot(this.currentTurn);
+            }
         }
 
         if (isMyTurn()) {
@@ -79,6 +84,12 @@ public class TurnManager {
                         this.gameManager.setSorteioInicialAtivo(false);
                         
                         this.currentTurn = (int) (Math.random() * 4);
+                        
+                        // --- ATUALIZAÇÃO VISUAL DO SLOT APÓS SORTEIO ---
+                        if (this.gameManager.getBoardScreen() != null) {
+                            this.gameManager.getBoardScreen().updateActivePlayerSlot(this.currentTurn);
+                        }
+
                         String nomeVencedor = (this.currentTurn == 0) ? "Você" : this.gameManager.getPlayerNameById(this.currentTurn);
                         
                         this.gameManager.emitirStatus(GameStatusManager.INICIO_VENCEDOR, nomeVencedor);
@@ -133,6 +144,11 @@ public class TurnManager {
         }
 
         this.currentTurn = (this.currentTurn + 1) % 4;
+
+        // --- ATUALIZAÇÃO VISUAL DO SLOT DO PRÓXIMO JOGADOR ---
+        if (this.gameManager != null && this.gameManager.getBoardScreen() != null) {
+            this.gameManager.getBoardScreen().updateActivePlayerSlot(this.currentTurn);
+        }
 
         System.out.println("\n=================================");
         System.out.println("[TurnManager] Fim de turno. A vez agora é do Jogador: " + currentTurn);
@@ -200,6 +216,11 @@ public class TurnManager {
         System.out.println("\n=================================");
         System.out.println("[TurnManager] TURNO EXTRA! A vez continua com o Jogador: " + currentTurn);
         System.out.println("=================================");
+
+        // --- MANTO/REFORÇO VISUAL DO SLOT NO TURNO EXTRA ---
+        if (this.gameManager != null && this.gameManager.getBoardScreen() != null) {
+            this.gameManager.getBoardScreen().updateActivePlayerSlot(this.currentTurn);
+        }
 
         if (this.currentTurn == 0 && this.gameManager != null) {
             this.gameManager.setJogadaEmAndamento(false);

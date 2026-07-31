@@ -51,34 +51,12 @@ public class PawnControlContainer extends JPanel {
         setLayout(null);    
 
         if (playerColor == null) playerColor = "azul";
-        switch (playerColor.toLowerCase()) {
-            case "roxo":
-                this.stdPawnImgPath = "/assets/img/purplePawn_90x90.png";
-                this.goldenPawnImgPath = "/assets/img/purplePawnWinner_90x90.png";
-                break;
-            case "rosa":
-                this.stdPawnImgPath = "/assets/img/pinkPawn_90x90.png";
-                this.goldenPawnImgPath = "/assets/img/pinkPawnWinner_90x90.png";
-                break;
-            case "amarelo":
-                this.stdPawnImgPath = "/assets/img/yellowPawn_90x90.png";
-                this.goldenPawnImgPath = "/assets/img/yellowPawnWinner_90x90.png";
-                break;
-            default:
-                this.stdPawnImgPath = "/assets/img/bluePawn_90x90.png";
-                this.goldenPawnImgPath = "/assets/img/bluePawnWinner_90x90.png";
-                break;
-        }
-
-        this.disabledPawnImgPath = "/assets/img/greyPawn_90x90.png"; 
-        this.goldenPawnImgPath = "/assets/peaoAmarelo_90x90.png"; 
 
         this.pawnLabels = new ReferencePawn[4];
         for (int i = 0; i < 4; i++) {
+            // Constrói o peão usando desenho vetorial unificado
             pawnLabels[i] = new ReferencePawn(
-                this.stdPawnImgPath, 
-                this.disabledPawnImgPath, 
-                this.goldenPawnImgPath, 
+                playerColor, 
                 i + 1, 
                 SCALE
             );
@@ -89,7 +67,6 @@ public class PawnControlContainer extends JPanel {
             pawnLabels[i].addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    // TRAVA APLICADA: Só gira o carrossel se NÃO estiver travado globalmente E a navegação do carrossel estiver liberada
                     if (!locked && !carouselLocked && pIndex != currentIndex && !isAnimating) {
                         int dir = (pIndex - currentIndex + 4) % 4 == 1 ? 1 : -1;
                         navegarComAnimacao(dir);

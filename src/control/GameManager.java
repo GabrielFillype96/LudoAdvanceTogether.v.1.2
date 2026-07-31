@@ -8,6 +8,8 @@ import network.NetworkMessage;
 
 import java.awt.Color;
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.Timer;
 
 public class GameManager {
@@ -41,6 +43,14 @@ public class GameManager {
     private boolean usarReboteCentro = true; 
 
     public GameManager(BoardScreen boardScreen) {
+        this.boardScreen = boardScreen;
+    }
+
+    public BoardScreen getBoardScreen() {
+        return this.boardScreen;
+    }
+
+    public void setBoardScreen(BoardScreen boardScreen) {
         this.boardScreen = boardScreen;
     }
 
@@ -231,20 +241,8 @@ public class GameManager {
 
                 int valorDado = Integer.parseInt(cardValueTreated);
 
-                if (Math.abs(valorDado) == 6 && !"SORTE".equalsIgnoreCase(cardType)) {
+                if (Math.abs(valorDado) == 6 && !"SORTE".equalsIgnoreCase(cardType) && !"AZAR".equalsIgnoreCase(cardType)) {
                     consecutiveSixesCounters[activePlayerId]++;
-                    if (consecutiveSixesCounters[activePlayerId] == 3) {
-                        consecutiveSixesCounters[activePlayerId] = 0; 
-                        if (activePlayerId == 0) {
-                            emitirStatus(GameStatusManager.PENALIDADE_SEIS_SELF);
-                        } else {
-                            emitirStatus(GameStatusManager.PENALIDADE_SEIS_OTHER, nomeJogador);
-                        }
-                        Timer delayPenalidade = new Timer(DELAY_ERRO_E_AVISOS, ePen -> passarTurnoGarantido());
-                        delayPenalidade.setRepeats(false);
-                        delayPenalidade.start();
-                        return; 
-                    }
                 } else {
                     consecutiveSixesCounters[activePlayerId] = 0; 
                 }
@@ -270,7 +268,7 @@ public class GameManager {
                         return;
                     }
 
-                    java.util.List<Integer> peoesDisponiveis = updatePlayablePawns(valorDado, cardEffect, activePlayerId);
+                    List<Integer> peoesDisponiveis = updatePlayablePawns(valorDado, cardEffect, activePlayerId);
                     
                     if (activePlayerId > 0) {
                         boolean vaiSairDaBase = false;
@@ -387,8 +385,6 @@ public class GameManager {
 
     private void passarTurnoGarantido() {
         setJogadaEmAndamento(false);
-        int activePlayerId = (this.turnManager != null) ? this.turnManager.getCurrentTurn() : 0;
-        decrementAzarCooldown(activePlayerId); 
         if (this.turnManager != null) {
             this.turnManager.nextTurn();
         }
@@ -397,25 +393,31 @@ public class GameManager {
     private void executarMovimentoAutomaticoHumano(int peaoIndex, int valorDado, String cardEffect) {
         this.movimentoAutomaticoEmAndamento = true;
 
-        this.pawnControlManager.preparePendingMovement(valorDado, cardEffect);
-        this.pawnControlManager.onReferencePawnHoverEntered(peaoIndex);
-        this.pawnControlManager.onBoardPawnHoverEntered(peaoIndex);
-        
+        if (this.pawnControlManager != null) {
+            this.pawnControlManager.resetHumanPawnsVisuals();
+        }
+
         showMovementPreview(peaoIndex, valorDado, cardEffect);
         
         Timer atrasoDramatico = new Timer(DELAY_MOVIMENTO_AUTO, e -> {
-            pawnControlManager.onReferencePawnHoverExited(peaoIndex);
-            pawnControlManager.onBoardPawnHoverExit(peaoIndex);
-            
+            if (this.boardScreen != null) {
+                this.boardScreen.clearPreview();
+            }
+
             moveChosenPawn(peaoIndex, valorDado, cardEffect);
+
+            if (this.pawnControlManager != null) {
+                this.pawnControlManager.resetHumanPawnsVisuals();
+            }
+
             this.movimentoAutomaticoEmAndamento = false; 
         });
         atrasoDramatico.setRepeats(false); 
         atrasoDramatico.start();
     }
 
-    private java.util.List<Integer> updatePlayablePawns(int cardValue, String cardEffect, int activePlayerId) {
-        java.util.List<Integer> peoesValidos = new java.util.ArrayList<>();
+    private List<Integer> updatePlayablePawns(int cardValue, String cardEffect, int activePlayerId) {
+        List<Integer> peoesValidos = new ArrayList<>();
         Point[] pawnPath = boardScreen.getCaminhoCasas(activePlayerId);
         if (pawnPath == null || jogoFinalizado) return peoesValidos;
 
@@ -433,7 +435,7 @@ public class GameManager {
                 continue;
             }
 
-            if (isBackwards && pos >= 4 && isZonaSegura(pawnPath[pos])) {
+            if (isBackwards && pos >= 4 && (isZonaSegura(pawnPath[pos]) || isTrilhaSegura(pos, pawnPath.length))) {
                 if (activePlayerId == 0) this.pawnControlManager.updatePawnVisualState(i, "DESABILITADO");
                 continue;
             }
@@ -451,7 +453,7 @@ public class GameManager {
             
             if (pos < 4) {
                 if (Math.abs(cardValue) == 1 || Math.abs(cardValue) == 6) {
-                    destIndex = 4;
+                    destIndex = 5;
                     podeMoverLinguagemOriginal = true;
                 }
             } else {
@@ -463,14 +465,14 @@ public class GameManager {
                 }
 
                 if (destIndex >= pawnPath.length) destIndex = maxIndex;
-                if (destIndex < 4) destIndex = 4;
+                if (destIndex < 4) destIndex = 5;
                 podeMoverLinguagemOriginal = true;
             }
             
             if (podeMoverLinguagemOriginal && destIndex != -1) {
-                Point pontoDestinoFisico = pawnPath[destIndex];
                 
-                if (usarRegraTorre && isTorreInimigaEm(pontoDestinoFisico, activePlayerId)) {
+                // Valida se o trajeto (incluindo meio do caminho e destino) intercepta uma torre inimiga
+                if (usarRegraTorre && existeBloqueioNoTrajeto(activePlayerId, pos, destIndex, pawnPath)) {
                     if (activePlayerId == 0) this.pawnControlManager.updatePawnVisualState(i, "DESABILITADO");
                     continue; 
                 }
@@ -484,13 +486,37 @@ public class GameManager {
         return peoesValidos;
     }
 
+    /**
+     * Verifica se existe alguma torre inimiga no trajeto ou no destino.
+     * Permite pousar em zona segura mesmo com torre, mas impede a ULTRAPASSAGEM da zona segura.
+     */
+    private boolean existeBloqueioNoTrajeto(int activePlayerId, int posAtual, int destIndex, Point[] pawnPath) {
+        if (posAtual < 4) { // Saindo da base diretamente para a posição 5
+            Point pontoDestino = pawnPath[destIndex];
+            return isTorreInimigaEm(pontoDestino, activePlayerId, true);
+        }
+
+        int passo = (destIndex >= posAtual) ? 1 : -1;
+        for (int idx = posAtual + passo; idx != destIndex + passo; idx += passo) {
+            if (idx < 4 || idx >= pawnPath.length) continue;
+            
+            Point pontoAtual = pawnPath[idx];
+            boolean ehDestinoFinal = (idx == destIndex);
+
+            if (isTorreInimigaEm(pontoAtual, activePlayerId, ehDestinoFinal)) {
+                return true; 
+            }
+        }
+        return false;
+    }
+
     private boolean isZonaSegura(Point ponto) {
         if (!usarZonasSeguras || ponto == null) return false;
         
         for(int p = 0; p < 4; p++) {
             Point[] camino = boardScreen.getCaminhoCasas(p);
             if (camino != null && camino.length > 12) {
-                if (ponto.equals(camino[4]) || ponto.equals(camino[12])) {
+                if (ponto.equals(camino[5]) || ponto.equals(camino[13])) {
                     return true;
                 }
             }
@@ -498,9 +524,24 @@ public class GameManager {
         return false;
     }
 
-    private boolean isTorreInimigaEm(Point pontoDestino, int activePlayerId) {
+    public boolean isTrilhaSegura(int pos, int pathLength) {
+        int inicioTrilhaSegura = pathLength - 6; 
+        return pos >= inicioTrilhaSegura && pos < pathLength - 1;
+    }
+
+    /**
+     * Verifica se existe 2 ou mais peões de um oponente na casa especificada.
+     * @param pontoDestino Coordenada do tabuleiro.
+     * @param activePlayerId Jogador atual.
+     * @param ehDestinoFinal Indica se a casa analisada é a casa de chegada do peão.
+     */
+    private boolean isTorreInimigaEm(Point pontoDestino, int activePlayerId, boolean ehDestinoFinal) {
         if (pontoDestino == null) return false;
-        if (isZonaSegura(pontoDestino)) return false;
+        
+        // Se for destino final E for zona segura, o peão pode pousar lá
+        if (ehDestinoFinal && isZonaSegura(pontoDestino)) {
+            return false;
+        }
 
         for (int p = 0; p < 4; p++) {
             if (p == activePlayerId) continue;
@@ -534,37 +575,42 @@ public class GameManager {
     }
     
     private void pawnMovement(PlayerPawn playerPawn, final int pawnIndex, int fromWhere, int toWhere, Point[] mapaCasas, boolean ganhouTurnoExtra, boolean baseExit, boolean houveRebote) {
-        java.util.List<Point> pawnPathList = new java.util.ArrayList<>(); 
+        List<Point> pawnPathList = new ArrayList<>(); 
         int maxIndex = mapaCasas.length - 1;
         
         if (baseExit) {
-            pawnPathList.add(mapaCasas[fromWhere]); 
-            for (int i = 4; i <= toWhere; i++) {
-                pawnPathList.add(mapaCasas[i]);
+            pawnPathList.add(boardScreen != null ? boardScreen.convertTileToScreenPoint(mapaCasas[fromWhere]) : mapaCasas[fromWhere]); 
+            for (int i = 5; i <= toWhere; i++) {
+                pawnPathList.add(boardScreen != null ? boardScreen.convertTileToScreenPoint(mapaCasas[i]) : mapaCasas[i]);
             }
         } else if (houveRebote) {
             for (int i = fromWhere; i <= maxIndex; i++) {
-                pawnPathList.add(mapaCasas[i]);
+                pawnPathList.add(boardScreen != null ? boardScreen.convertTileToScreenPoint(mapaCasas[i]) : mapaCasas[i]);
             }
             for (int i = maxIndex - 1; i >= toWhere; i--) {
-                pawnPathList.add(mapaCasas[i]);
+                pawnPathList.add(boardScreen != null ? boardScreen.convertTileToScreenPoint(mapaCasas[i]) : mapaCasas[i]);
             }
         } else {
             if (fromWhere <= toWhere) {
                 for (int i = fromWhere; i <= toWhere; i++) {
-                    pawnPathList.add(mapaCasas[i]); 
+                    pawnPathList.add(boardScreen != null ? boardScreen.convertTileToScreenPoint(mapaCasas[i]) : mapaCasas[i]); 
                 }
             } else {
                 for (int i = fromWhere; i >= toWhere; i--) {
-                    pawnPathList.add(mapaCasas[i]);
+                    pawnPathList.add(boardScreen != null ? boardScreen.convertTileToScreenPoint(mapaCasas[i]) : mapaCasas[i]);
                 }
             }
         }
 
-        final int[] STEP_INDEX = {0}; 
-        final double[] VISUAL_POS_X = {playerPawn.getX()}; 
-        final double[] VISUAL_POS_Y = {playerPawn.getY()};
-        final int SPEED = 8; 
+        if (pawnPathList.size() <= 1) {
+            return;
+        }
+
+        final int[] STEP_INDEX = {0};
+        final double[] PROGRESS = {0.0}; 
+        
+        final double STEP_SPEED = 0.09;  
+        final int JUMP_HEIGHT = 28;       
 
         playerPawn.setMoving(true);
         playerPawn.stopBoardPawnShake();
@@ -572,6 +618,7 @@ public class GameManager {
         timerAnimation = new Timer(15, e -> {
             if (STEP_INDEX[0] >= pawnPathList.size() - 1) {
                 timerAnimation.stop();
+                playerPawn.setMoving(false);
                 if (boardScreen != null) {
                     boardScreen.clearPreview();
                     boardScreen.repositionAllPawns();
@@ -584,24 +631,38 @@ public class GameManager {
                 return;
             }
 
-            Point intermediateSteps = pawnPathList.get(STEP_INDEX[0] + 1); 
-            double dx = intermediateSteps.getX() - VISUAL_POS_X[0];
-            double dy = intermediateSteps.getY() - VISUAL_POS_Y[0];
-            double remainingDistance = Math.sqrt(dx * dx + dy * dy);
+            Point startPoint = pawnPathList.get(STEP_INDEX[0]);
+            Point endPoint = pawnPathList.get(STEP_INDEX[0] + 1);
 
-            if (remainingDistance <= SPEED) {
-                VISUAL_POS_X[0] = intermediateSteps.getX();
-                VISUAL_POS_Y[0] = intermediateSteps.getY();
-                playerPawn.setPawnVisualCoordinates(intermediateSteps);
-                playerPawn.setMoving(false);
+            PROGRESS[0] += STEP_SPEED;
+
+            if (PROGRESS[0] >= 1.0) {
+                PROGRESS[0] = 0.0;
+                STEP_INDEX[0]++;
                 
-                if (boardScreen != null) boardScreen.consumePreviewDot();
-                boardScreen.repaint();
-                STEP_INDEX[0]++;  
+                if (boardScreen != null) {
+                    boardScreen.consumePreviewDot();
+                }
+
+                if (STEP_INDEX[0] >= pawnPathList.size() - 1) {
+                    Point finalPoint = pawnPathList.get(pawnPathList.size() - 1);
+                    playerPawn.setPawnVisualCoordinates(finalPoint);
+                }
             } else {
-                VISUAL_POS_X[0] += (dx / remainingDistance) * SPEED; 
-                VISUAL_POS_Y[0] += (dy / remainingDistance) * SPEED;
-                playerPawn.setPawnVisualCoordinates(new Point((int) VISUAL_POS_X[0], (int) VISUAL_POS_Y[0]));
+                double t = PROGRESS[0];
+                double currentX = startPoint.getX() + t * (endPoint.getX() - startPoint.getX());
+                double currentY = startPoint.getY() + t * (endPoint.getY() - startPoint.getY());
+
+                double jumpArc = Math.sin(Math.PI * t) * JUMP_HEIGHT;
+
+                int visualY = (int) (currentY - jumpArc);
+                int visualX = (int) currentX;
+
+                playerPawn.setPawnVisualCoordinates(new Point(visualX, visualY));
+            }
+
+            if (boardScreen != null) {
+                boardScreen.repaint();
             }
         });
 
@@ -621,18 +682,18 @@ public class GameManager {
         
         if (pawnActualPosition >= pawnPath.length - 1) return false;
 
-        if (gameClient != null && turnManager != null && turnManager.isMyTurn()) {
-            String payload = pawnIndex + ":" + cardValue + ":" + (cardEffect != null ? cardEffect : "");
-            gameClient.send(new NetworkMessage("MOVE_PAWN", gameClient.getMyPlayerId(), payload));
-        }
-
         boolean isBackwards = "VOLTAR".equalsIgnoreCase(cardEffect) || 
                               "RETRÓGRADO".equalsIgnoreCase(cardEffect) || 
                               "RETROCEDER".equalsIgnoreCase(cardEffect);
         if (isBackwards && cardValue > 0) cardValue = -cardValue; 
         
-        boolean ganhouTurnoExtra = (Math.abs(cardValue) == 6 && !"SORTE".equalsIgnoreCase(this.currentCardType));
+        boolean ganhouTurnoExtra = (Math.abs(cardValue) == 6 
+            && !"SORTE".equalsIgnoreCase(this.currentCardType) 
+            && !"AZAR".equalsIgnoreCase(this.currentCardType));
         boolean exitBase = false;
+
+        int realPawnNumber = (this.pawnControlManager != null) ? 
+            this.pawnControlManager.getRealPawnNumber(pawnIndex) : (pawnIndex + 1);
 
         if (pawnActualPosition < 4) {
             if (isBackwards) {
@@ -640,7 +701,20 @@ public class GameManager {
                 return false;
             }
             if (Math.abs(cardValue) == 1 || Math.abs(cardValue) == 6) {
-                int pawnStarterPath = 4; 
+                int pawnStarterPath = 5; 
+                
+                if (usarRegraTorre && existeBloqueioNoTrajeto(activePlayerId, pawnActualPosition, pawnStarterPath, pawnPath)) {
+                    if (activePlayerId == 0) {
+                        emitirStatus(GameStatusManager.PEAO_BLOQUEADO_TORRE, realPawnNumber);
+                    }
+                    return false;
+                }
+
+                if (gameClient != null && turnManager != null && turnManager.isMyTurn()) {
+                    String payload = pawnIndex + ":" + cardValue + ":" + (cardEffect != null ? cardEffect : "");
+                    gameClient.send(new NetworkMessage("MOVE_PAWN", gameClient.getMyPlayerId(), payload));
+                }
+
                 chosenPawn.setPawnCurrentPos(pawnStarterPath);
                 exitBase = true; 
                 pawnMovement(chosenPawn, pawnIndex, pawnActualPosition, pawnStarterPath, pawnPath, ganhouTurnoExtra, exitBase, false);
@@ -669,6 +743,18 @@ public class GameManager {
 
         if (pawnStarterPath >= pawnPath.length) pawnStarterPath = maxIndex;
         if (pawnStarterPath < 4) pawnStarterPath = 4;
+
+        if (usarRegraTorre && existeBloqueioNoTrajeto(activePlayerId, pawnActualPosition, pawnStarterPath, pawnPath)) {
+            if (activePlayerId == 0) {
+                emitirStatus(GameStatusManager.PEAO_BLOQUEADO_TORRE, realPawnNumber);
+            }
+            return false;
+        }
+
+        if (gameClient != null && turnManager != null && turnManager.isMyTurn()) {
+            String payload = pawnIndex + ":" + cardValue + ":" + (cardEffect != null ? cardEffect : "");
+            gameClient.send(new NetworkMessage("MOVE_PAWN", gameClient.getMyPlayerId(), payload));
+        }
 
         chosenPawn.setPawnCurrentPos(pawnStarterPath);
         pawnMovement(chosenPawn, pawnIndex, pawnActualPosition, pawnStarterPath, pawnPath, ganhouTurnoExtra, exitBase, houveRebote);
@@ -702,7 +788,7 @@ public class GameManager {
 
         if (pawnActualPosition < 4) {
             if (Math.abs(localCardValue) == 1 || Math.abs(localCardValue) == 6) {
-                destIndex = 4;
+                destIndex = 5;
                 exitBase = true;
             } else {
                 boardScreen.clearPreview();
@@ -718,7 +804,7 @@ public class GameManager {
         if (destIndex >= pawnPath.length) destIndex = maxIndex;
         if (destIndex < 4 && !exitBase) destIndex = 4;
 
-        java.util.List<Point> previewPathList = new java.util.ArrayList<>();
+        List<Point> previewPathList = new ArrayList<>();
         if (exitBase) {
             previewPathList.add(pawnPath[4]);
         } else if (houveRebote) {
@@ -746,7 +832,9 @@ public class GameManager {
             if (this.pawnControlManager != null && activePlayerId == 0) {
                 this.pawnControlManager.updatePawnVisualState(pawnIndex, "DOURADO");
             }
-            peao.updatePawnVisual(boardScreen.getGoldenPawnImagePath(activePlayerId));
+            
+            peao.setPawnColor(new Color(255, 215, 0));
+            peao.setCrowned(true);
 
             emitirStatus(GameStatusManager.CHEGOU_CENTRO, pawnIndex + 1, peao.getPlayerName());
                 
@@ -771,7 +859,15 @@ public class GameManager {
             }
         }
 
-        if (ganhouTurnoExtra) {
+        if (consecutiveSixesCounters[activePlayerId] >= 3) {
+            consecutiveSixesCounters[activePlayerId] = 0;
+            passarVez = true;
+            if (activePlayerId == 0) {
+                emitirStatus(GameStatusManager.PENALIDADE_SEIS_SELF);
+            } else {
+                emitirStatus(GameStatusManager.PENALIDADE_SEIS_OTHER, getPlayerNameById(activePlayerId));
+            }
+        } else if (ganhouTurnoExtra) {
             if (activePlayerId == 0) {
                 emitirStatus(GameStatusManager.BONUS_SEIS_HUMANO);
             } else {
@@ -788,7 +884,6 @@ public class GameManager {
             delayTransicaoTurno.start();
             
         } else if (!passarVez && this.turnManager != null) {
-            setJogadaEmAndamento(false);
             Timer delayTransicaoExtra = new Timer(DELAY_FINAL_TURNO, eExtra -> {
                 this.turnManager.processExtraTurn();
             });
@@ -842,7 +937,7 @@ public class GameManager {
         }
     }
 
-    public int escolherMelhorPeaoParaCPU(int cpuId, java.util.List<Integer> peoesDisponiveis, int cardValue, String personality) {
+    public int escolherMelhorPeaoParaCPU(int cpuId, List<Integer> peoesDisponiveis, int cardValue, String personality) {
         int melhorPeao = -1;
         int maiorPontuacao = -9999;
 
@@ -911,13 +1006,15 @@ public class GameManager {
     public boolean areAllPawnsInBase(int playerId) {
         if (this.boardScreen == null) return true;
         
+        int peoesNaBase = 0;
         for (int i = 0; i < 4; i++) {
             PlayerPawn pawn = this.boardScreen.getPlayerPawn(playerId, i);
-            if (pawn != null && pawn.getPawnCurrentPos() >= 4) {
-                return false; 
+            if (pawn != null && pawn.getPawnCurrentPos() < 4) {
+                peoesNaBase++;
             }
         }
-        return true; 
+        
+        return peoesNaBase == 4;
     }
 
     public void resetHumanPawnsVisuals() {
@@ -944,7 +1041,7 @@ public class GameManager {
                 if (pos >= 4 && pos < pawnPath.length - 1) {
                     Point currentPoint = pawnPath[pos];
                     
-                    if (isZonaSegura(currentPoint)) {
+                    if (isZonaSegura(currentPoint) || isTrilhaSegura(pos, pawnPath.length)) {
                         continue;
                     }
 

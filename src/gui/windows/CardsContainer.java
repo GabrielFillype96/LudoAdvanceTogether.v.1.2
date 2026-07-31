@@ -148,7 +148,8 @@ public class CardsContainer extends JPanel {
             this.remove(this.activeCard);
         }
 
-        boolean todosNaBase = (gameManager.getFurthestPawnIndex(activePlayerId) == -1);
+        // ALTERAÇÃO AQUI: Chamada direta ao areAllPawnsInBase do GameManager
+        boolean todosNaBase = (this.gameManager != null) && this.gameManager.areAllPawnsInBase(activePlayerId);
         this.activeCard = this.deckManager.drawCard(activePlayerId, todosNaBase);
         
         if (this.activeCard == null) {

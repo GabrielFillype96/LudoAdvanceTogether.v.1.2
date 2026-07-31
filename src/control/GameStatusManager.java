@@ -139,7 +139,7 @@ public enum GameStatusManager {
         "/assets/img/gameBarStatus_emojis/machineLeg.gif" // Perna mecânica
     ),
     SEM_MOVIMENTOS_CPU(
-        "%s não tem movimentos válidos.", 
+        "%s não tem jogadas possíveis. Passando a vez...", 
         new Color(255, 255, 255), 
         "/assets/img/gameBarStatus_emojis/robot.gif" // Robô
     ),
@@ -154,7 +154,7 @@ public enum GameStatusManager {
         "/assets/img/gameBarStatus_emojis/partyHat.gif" // Chapéu de festa + Mão Ok
     ),
     SEM_PEOES_DISPONIVEIS(
-        "Infelizmente, não há peões disponíveis para jogar.", 
+        "Não há jogadas possíveis! Passando a vez...", 
         new Color(241, 196, 15), 
         "/assets/img/gameBarStatus_emojis/frustrated.gif" // Cara frustrada
     ),
@@ -195,6 +195,11 @@ public enum GameStatusManager {
         new Color(230, 180, 80), 
         "/assets/img/gameBarStatus_emojis/pawn.gif" // Peão
     ),
+    PEAO_BLOQUEADO_TORRE(
+        "O peão %d não pode ser movido pois há uma torre em seu caminho.", 
+        new Color(231, 76, 60), 
+        "/assets/img/gameBarStatus_emojis/crossMark.gif" // X cruzado
+    ),
 
     // === FINALIZAÇÃO E ATAQUE ===
     CHEGOU_CENTRO(
@@ -215,12 +220,12 @@ public enum GameStatusManager {
     BONUS_SEIS_HUMANO(
         "Turno Bônus! Você tirou 6 e poderá realizar uma nova jogada.", 
         new Color(46, 204, 113), 
-        "/assets/img/gameBarStatus_emojis/dice.png" // Dado
+        "/assets/img/gameBarStatus_emojis/dice.gif" // Dado
     ),
     BONUS_SEIS_CPU(
-        "%s tirou um 6 e ganhou turno extra!", 
+        "%s tirou um '6' e ganhou turno extra!", 
         new Color(255, 255, 255), 
-        "/assets/img/gameBarStatus_emojis/dice.png" // Dado
+        "/assets/img/gameBarStatus_emojis/dice.gif" // Dado
     ),
     ATAQUE_CAPTURAR(
         "ATAQUE! %s capturou o %s!", 

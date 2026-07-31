@@ -53,13 +53,12 @@ public class DeckManager {
     /**
      * Puxa a carta do topo filtrando por cartas válidas baseadas no estado dos peões e no Cooldown de Azar.
      */
-    public CustomCards drawCard(int playerId, boolean allPawnsInBase) {
+        public CustomCards drawCard(int playerId, boolean allPawnsInBase) {
         if (playerId < 0 || playerId >= 4) return null;
 
         List<CustomCards> drawPile = drawPiles.get(playerId);
         List<CustomCards> discardPile = discardPiles.get(playerId);
 
-        // Se o monte de compra estiver vazio, reabastece com o descarte
         if (drawPile.isEmpty()) {
             if (discardPile.isEmpty()) return null;
             drawPile.addAll(discardPile);
@@ -81,7 +80,8 @@ public class DeckManager {
                 devePular = true;
             }
 
-            // FILTRAGEM DE INÍCIO DE JOGO (Todos na base)
+            // --- RESTRIÇÃO DE INÍCIO DE JOGO ---
+            // Esta condição só entra se TODOS os 4 peões estiverem na base (allPawnsInBase == true)
             if (!devePular && allPawnsInBase) {
                 if (ehSorteOuAzar) {
                     devePular = true;
@@ -99,8 +99,6 @@ public class DeckManager {
             }
         }
 
-        // Se nenhuma carta válida foi encontrada para o estado atual (ex: todos na base sem 1 ou 6 no deck)
-        // Retorna null para indicar que não há cartas jogáveis no momento.
         System.out.println("[DeckManager] Nenhuma carta válida encontrada no monte para o Jogador " + playerId);
         return null;
     }
