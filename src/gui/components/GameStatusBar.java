@@ -4,24 +4,29 @@ import control.GameStatusManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GameStatusBar extends JPanel {
+
+    public enum TextAnimType {
+        FADE,           // Suave e padrão
+        SLOT_MACHINE,   // Giro vertical de caça-níquel
+        CASCADE_DROP,   // Letras caindo em cascata
+        SPLIT_MERGE     // Frase vindo dos dois lados e se fundindo
+    }
+
     private String message = "";
     private Color baseColor = Color.WHITE;
     private String currentIconPath = null;
-    private ImageIcon currentIcon = null; // Guardará a imagem/GIF carregado
-    private int alpha = 0; 
-    private final Timer fadeTimer;
-    private final Timer rollTimer; 
+    private ImageIcon currentIcon = null;
     private final double scale;
 
-    private int animType = 0; 
-    private int offsetY = 0;  
+    // Animação
+    private TextAnimType currentAnim = TextAnimType.FADE;
+    private float animProgress = 1.0f; // 0.0 (início) a 1.0 (fim)
+    private final Timer animTimer;
 
     public GameStatusBar(double scale) {
         this.scale = scale;
@@ -31,82 +36,62 @@ public class GameStatusBar extends JPanel {
         int height = (int) (46 * scale);
         setPreferredSize(new Dimension(width, height));
 
-        fadeTimer = new Timer(15, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                alpha += 17; 
-                if (alpha >= 255) {
-                    alpha = 255;
-                    fadeTimer.stop();
-                }
-                repaint();
+        // Timer de animação rodando a ~60 FPS (16ms)
+        animTimer = new Timer(16, e -> {
+            animProgress += 0.035f; // ~450ms de duração para a animação ser bem perceptível
+            if (animProgress >= 1.0f) {
+                animProgress = 1.0f;
+                ((Timer) e.getSource()).stop();
             }
-        });
-
-        rollTimer = new Timer(10, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                offsetY -= 5; 
-                if (offsetY <= 0) {
-                    offsetY = 0;
-                    rollTimer.stop();
-                }
-                repaint();
-            }
+            repaint();
         });
     }
 
     public void updateStatus(GameStatusManager status, Object... args) {
-        updateStatus(status.format(args), status.getColor(), status.getIconPath());
+        TextAnimType anim = TextAnimType.FADE;
+
+        if (status == GameStatusManager.SORTEIO_GIRO) {
+            anim = TextAnimType.SLOT_MACHINE;
+        } else if (status.name().contains("AZAR") || status.name().contains("PENALIDADE")) {
+            anim = TextAnimType.CASCADE_DROP;
+        } else if (status.name().contains("CARTA") || status.name().contains("ATAQUE") || status.name().contains("SUA_VEZ")) {
+            anim = TextAnimType.SPLIT_MERGE;
+        }
+
+        updateStatus(status.format(args), status.getColor(), status.getIconPath(), anim);
     }
 
     public void updateStatus(String newMessage, Color color) {
-        updateStatus(newMessage, color, null);
+        updateStatus(newMessage, color, currentIconPath, TextAnimType.FADE);
     }
 
-    public void updateStatus(String newMessage, Color color, String iconPath) {
-        if (fadeTimer.isRunning()) fadeTimer.stop();
-        if (rollTimer.isRunning()) rollTimer.stop();
-        
-        this.animType = 0; 
-        this.offsetY = 0;
+    public void updateStatus(String newMessage, Color color, String iconPath, TextAnimType animType) {
+        if (animTimer.isRunning()) animTimer.stop();
+
         this.message = newMessage.toUpperCase();
         this.baseColor = color;
-        this.currentIconPath = iconPath;
+        this.currentAnim = animType;
+        this.animProgress = 0.0f;
 
-        // Carrega o ícone/GIF a partir dos recursos
-        if (iconPath != null && !iconPath.isEmpty()) {
-            URL url = getClass().getResource(iconPath);
-            if (url != null) {
-                this.currentIcon = new ImageIcon(url);
-                // Garante que GIFs continuem animando no Swing
-                this.currentIcon.setImageObserver(this); 
+        // Mantém a instância do ícone se for o mesmo (evita resetar GIFs de animação)
+        boolean sameIcon = (iconPath != null && iconPath.equals(this.currentIconPath));
+        if (!sameIcon) {
+            this.currentIconPath = iconPath;
+            if (iconPath != null && !iconPath.isEmpty()) {
+                URL url = getClass().getResource(iconPath);
+                this.currentIcon = (url != null) ? new ImageIcon(url) : null;
+                if (this.currentIcon != null) this.currentIcon.setImageObserver(this);
             } else {
                 this.currentIcon = null;
             }
-        } else {
-            this.currentIcon = null;
         }
 
-        this.alpha = 0; 
         repaint();
-        fadeTimer.start(); 
+        animTimer.start();
     }
 
     public void updateSlotMachineStatus(String newMessage, Color color) {
-        if (fadeTimer.isRunning()) fadeTimer.stop();
-        if (rollTimer.isRunning()) rollTimer.stop();
-        
-        this.animType = 1; 
-        this.message = newMessage.toUpperCase();
-        this.baseColor = color;
-        this.currentIconPath = null;
-        this.currentIcon = null;
-        this.alpha = 255; 
-        this.offsetY = getHeight(); 
-        
-        repaint();
-        rollTimer.start();
+        updateStatus(newMessage, color, currentIconPath, TextAnimType.SLOT_MACHINE);
     }
 
     @Override
@@ -118,42 +103,56 @@ public class GameStatusBar extends JPanel {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
-        Color animatedColor = (animType == 0) ? new Color(baseColor.getRed(), baseColor.getGreen(), baseColor.getBlue(), alpha) : baseColor;
+        int h = getHeight();
+        int w = getWidth();
 
-        // Fundo
-        g2.setColor(new Color(15, 15, 20, 230));
-        g2.fillRoundRect(0, 0, getWidth(), getHeight(), getHeight(), getHeight());
+        int alpha = (currentAnim == TextAnimType.FADE) ? (int) (animProgress * 255) : 255;
+        Color animatedColor = new Color(baseColor.getRed(), baseColor.getGreen(), baseColor.getBlue(), alpha);
+        Color darkBg = new Color(15, 15, 20, 230);
+        Color borderColor = new Color(baseColor.getRed(), baseColor.getGreen(), baseColor.getBlue(), Math.min(alpha, 130));
 
-        // Borda
+        // --- 1. DESENHAR CÁPSULA DA BARRA ---
+        g2.setColor(darkBg);
+        g2.fillRoundRect(0, 0, w, h, h, h);
+
         g2.setStroke(new BasicStroke(1.5f));
-        g2.setColor(new Color(animatedColor.getRed(), animatedColor.getGreen(), animatedColor.getBlue(), Math.min(alpha, 130)));
-        g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, getHeight(), getHeight());
+        g2.setColor(borderColor);
+        g2.drawRoundRect(0, 0, w - 1, h - 1, h, h);
 
-        g2.setColor(animatedColor);
+        // --- 2. ESPAÇAMENTO E ÍCONE/GIF ---
+        int margin = (int) (10 * scale);
+        int iconSize = (int) (24 * scale);
+        int iconSpacing = (currentIcon != null) ? (int) (8 * scale) : 0;
 
-        // Define a fonte para o texto
+        int textX = margin;
+        int textW = w - (margin * 2);
+
+        if (currentIcon != null) {
+            int iconX = margin;
+            int iconY = (h - iconSize) / 2;
+            g2.drawImage(currentIcon.getImage(), iconX, iconY, iconSize, iconSize, this);
+
+            textX = iconX + iconSize + iconSpacing;
+            textW = w - textX - margin;
+        }
+
+        // --- 3. QUEBRA DE TEXTO EM MÚLTIPLAS LINHAS (WORD WRAP) ---
         Font font = new Font("SansSerif", Font.BOLD, (int) (11 * scale));
         g2.setFont(font);
         FontMetrics metrics = g2.getFontMetrics();
 
-        // Configurações da Imagem
-        int iconSize = (int) (24 * scale);
-        int iconSpacing = (currentIcon != null) ? (int) (8 * scale) : 0;
-        int maxLineWidth = getWidth() - (int) (30 * scale) - (currentIcon != null ? (iconSize + iconSpacing) : 0);
-
-        // Quebra de texto por linhas
         List<String> lines = new ArrayList<>();
         String[] words = message.split(" ");
         StringBuilder currentLine = new StringBuilder();
 
         for (String word : words) {
             String testLine = (currentLine.length() == 0) ? word : currentLine + " " + word;
-            if (metrics.stringWidth(testLine) > maxLineWidth) {
+            if (metrics.stringWidth(testLine) > textW) {
                 if (currentLine.length() > 0) {
                     lines.add(currentLine.toString());
                     currentLine = new StringBuilder(word);
                 } else {
-                    lines.add(word); 
+                    lines.add(word);
                 }
             } else {
                 currentLine.append((currentLine.length() == 0) ? word : " " + word);
@@ -163,38 +162,96 @@ public class GameStatusBar extends JPanel {
             lines.add(currentLine.toString());
         }
 
-        g2.setClip(0, 0, getWidth(), getHeight());
+        g2.setClip(textX, 0, textW, h);
 
         int lineHeight = metrics.getHeight();
         int totalTextHeight = lines.size() * lineHeight;
-        int startY = ((getHeight() - totalTextHeight) / 2) + metrics.getAscent();
+        int startY = ((h - totalTextHeight) / 2) + metrics.getAscent();
 
-        // Aplica transparência da animação para a imagem se necessário
-        if (animType == 0) {
-            float floatAlpha = alpha / 255.0f;
-            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, floatAlpha));
-        }
+        // --- 4. RENDERIZAÇÃO DAS ANIMAÇÕES MULTI-LINHAS ---
+        switch (currentAnim) {
 
-        // Desenhar Ícone (se existir)
-        int textXOffset = 0;
-        if (currentIcon != null) {
-            int iconX = (int) (12 * scale);
-            int iconY = (getHeight() - iconSize) / 2 + offsetY;
-            g2.drawImage(currentIcon.getImage(), iconX, iconY, iconSize, iconSize, this);
-            textXOffset = iconX + iconSize + iconSpacing;
-        }
+            case SLOT_MACHINE: {
+                // Desliza verticalmente de baixo para o centro
+                int offsetY = (int) ((1.0f - animProgress) * (h * 0.7f));
+                g2.setColor(baseColor);
 
-        // Desenhar Texto
-        for (int i = 0; i < lines.size(); i++) {
-            String line = lines.get(i);
-            int textX;
-            if (currentIcon != null) {
-                textX = textXOffset; // Alinhado à direita da imagem
-            } else {
-                textX = (getWidth() - metrics.stringWidth(line)) / 2; // Centralizado
+                for (int i = 0; i < lines.size(); i++) {
+                    String line = lines.get(i);
+                    int lineX = textX + (textW - metrics.stringWidth(line)) / 2;
+                    int lineY = startY + (i * lineHeight) + offsetY;
+                    g2.drawString(line, lineX, lineY);
+                }
+                break;
             }
-            int textY = startY + (i * lineHeight) + offsetY;
-            g2.drawString(line, textX, textY);
+
+            case CASCADE_DROP: {
+                // Letras caindo uma a uma respeitando as linhas
+                int globalCharIndex = 0;
+                int totalChars = message.length();
+
+                for (int i = 0; i < lines.size(); i++) {
+                    String line = lines.get(i);
+                    int lineX = textX + (textW - metrics.stringWidth(line)) / 2;
+                    int currentX = lineX;
+                    int lineY = startY + (i * lineHeight);
+
+                    for (int j = 0; j < line.length(); j++) {
+                        char ch = line.charAt(j);
+                        String charStr = String.valueOf(ch);
+                        int charW = metrics.charWidth(ch);
+
+                        float charDelay = (float) globalCharIndex / Math.max(1, totalChars) * 0.5f;
+                        float charProgress = Math.max(0.0f, Math.min(1.0f, (animProgress - charDelay) / 0.5f));
+
+                        int dropY = (int) ((1.0f - charProgress) * -16 * scale);
+                        int charAlpha = (int) (charProgress * 255);
+
+                        g2.setColor(new Color(baseColor.getRed(), baseColor.getGreen(), baseColor.getBlue(), charAlpha));
+                        g2.drawString(charStr, currentX, lineY + dropY);
+
+                        currentX += charW;
+                        globalCharIndex++;
+                    }
+                    globalCharIndex++; // Espaço entre linhas
+                }
+                break;
+            }
+
+            case SPLIT_MERGE: {
+                // Metade da frase vem da esquerda, a outra vem da direita
+                int offsetX = (int) ((1.0f - animProgress) * (25 * scale));
+                g2.setColor(animatedColor);
+
+                for (int i = 0; i < lines.size(); i++) {
+                    String line = lines.get(i);
+                    int midIndex = line.length() / 2;
+
+                    String leftPart = line.substring(0, midIndex);
+                    String rightPart = line.substring(midIndex);
+
+                    int leftWidth = metrics.stringWidth(leftPart);
+                    int lineX = textX + (textW - metrics.stringWidth(line)) / 2;
+                    int lineY = startY + (i * lineHeight);
+
+                    g2.drawString(leftPart, lineX - offsetX, lineY);
+                    g2.drawString(rightPart, lineX + leftWidth + offsetX, lineY);
+                }
+                break;
+            }
+
+            case FADE:
+            default: {
+                // Fade In padrão mantendo o texto totalmente centralizado
+                g2.setColor(animatedColor);
+                for (int i = 0; i < lines.size(); i++) {
+                    String line = lines.get(i);
+                    int lineX = textX + (textW - metrics.stringWidth(line)) / 2;
+                    int lineY = startY + (i * lineHeight);
+                    g2.drawString(line, lineX, lineY);
+                }
+                break;
+            }
         }
 
         g2.dispose();

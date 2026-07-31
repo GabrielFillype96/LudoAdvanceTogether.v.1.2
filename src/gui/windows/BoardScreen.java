@@ -253,29 +253,33 @@ public class BoardScreen extends JPanel {
         player4Path = new Point[pathLength];
 
         // 1. Spawns das Bases (Casas Iniciais 0..3)
-        // P1: Rosa/Roxo (Base Inferior)
-        player1Path[0] = new Point(440, 440);
-        player1Path[1] = new Point(520, 440);
-        player1Path[2] = new Point(440, 520);
-        player1Path[3] = new Point(520, 520);
+        // Disposição Isométrica em Tela:
+        // [0] Esquerda (Peão 1) | [1] Ao lado/Topo (Peão 2)
+        // [2] Embaixo (Peão 3)  | [3] Ao lado/Direita (Peão 4)
+
+        // P1: Roxo (Base Inferior)
+        player1Path[0] = new Point(440, 520); // Peão 1: Borda Esquerda
+        player1Path[1] = new Point(440, 440); // Peão 2: Ao lado do Peão 1
+        player1Path[2] = new Point(520, 520); // Peão 3: Embaixo do Peão 1
+        player1Path[3] = new Point(520, 440); // Peão 4: Ao lado do Peão 3
 
         // P2: Azul (Base Esquerda)
-        player2Path[0] = new Point(80, 440);
-        player2Path[1] = new Point(160, 440);
-        player2Path[2] = new Point(80, 520);
-        player2Path[3] = new Point(160, 520);
+        player2Path[0] = new Point(80, 520);  // Peão 1: Borda Esquerda
+        player2Path[1] = new Point(80, 440);  // Peão 2: Ao lado do Peão 1
+        player2Path[2] = new Point(160, 520); // Peão 3: Embaixo do Peão 1
+        player2Path[3] = new Point(160, 440); // Peão 4: Ao lado do Peão 3
 
         // P3: Amarelo (Base Superior)
-        player3Path[0] = new Point(80, 80);
-        player3Path[1] = new Point(160, 80);
-        player3Path[2] = new Point(80, 160);
-        player3Path[3] = new Point(160, 160);
+        player3Path[0] = new Point(80, 160);  // Peão 1: Borda Esquerda
+        player3Path[1] = new Point(80, 80);   // Peão 2: Ao lado do Peão 1
+        player3Path[2] = new Point(160, 160); // Peão 3: Embaixo do Peão 1
+        player3Path[3] = new Point(160, 80);  // Peão 4: Ao lado do Peão 3
 
         // P4: Rosa (Base Direita)
-        player4Path[0] = new Point(440, 80);
-        player4Path[1] = new Point(520, 80);
-        player4Path[2] = new Point(440, 160);
-        player4Path[3] = new Point(520, 160);
+        player4Path[0] = new Point(440, 160); // Peão 1: Borda Esquerda
+        player4Path[1] = new Point(440, 80);  // Peão 2: Ao lado do Peão 1
+        player4Path[2] = new Point(520, 160); // Peão 3: Embaixo do Peão 1
+        player4Path[3] = new Point(520, 80);  // Peão 4: Ao lado do Peão 3
 
         // 2. Trilha Principal do Tabuleiro
         Point[] circuitoTrilha = new Point[] {

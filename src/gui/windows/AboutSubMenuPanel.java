@@ -10,11 +10,10 @@ public class AboutSubMenuPanel extends JPanel {
 
     private static final double SCALE = 1.5;
     private static final Dimension MENU_DIMENSION = new Dimension(
-        (int) (560 * SCALE),
-        (int) (460 * SCALE)
+        (int) (600 * SCALE),
+        (int) (530 * SCALE)
     );
 
-    // Caminho da imagem da logo (Ajuste a pasta de assets se necessário)
     private static final String LOGO_PATH = "/assets/img/gameIcon.png";
 
     public AboutSubMenuPanel() {
@@ -27,24 +26,24 @@ public class AboutSubMenuPanel extends JPanel {
 
         // --- TÍTULO ---
         JLabel title = new JLabel("SOBRE O JOGO", SwingConstants.CENTER);
-        title.setFont(new Font("Serif", Font.BOLD, (int) (22 * SCALE)));
+        title.setFont(new Font("Serif", Font.BOLD, (int) (24 * SCALE)));
         title.setForeground(GameColors.GOLD_ACCENT);
-        title.setBounds((int) (0 * SCALE), (int) (20 * SCALE), (int) (560 * SCALE), (int) (30 * SCALE));
+        title.setBounds(0, (int) (15 * SCALE), (int) (600 * SCALE), (int) (35 * SCALE));
         add(title);
 
         // --- LOGO ---
         JLabel lblLogo = new JLabel();
         lblLogo.setHorizontalAlignment(SwingConstants.CENTER);
-        lblLogo.setBounds((int) (220 * SCALE), (int) (55 * SCALE), (int) (120 * SCALE), (int) (120 * SCALE));
+        lblLogo.setBounds((int) (240 * SCALE), (int) (55 * SCALE), (int) (120 * SCALE), (int) (120 * SCALE));
 
         URL logoUrl = getClass().getResource(LOGO_PATH);
         if (logoUrl != null) {
             ImageIcon icon = new ImageIcon(logoUrl);
-            Image img = icon.getImage().getScaledInstance((int) (110 * SCALE), (int) (110 * SCALE), Image.SCALE_SMOOTH);
+            Image img = icon.getImage().getScaledInstance((int) (115 * SCALE), (int) (115 * SCALE), Image.SCALE_SMOOTH);
             lblLogo.setIcon(new ImageIcon(img));
         } else {
             lblLogo.setText("<html><center><b>LUDO</b><br/>ADVANCE TOGETHER</center></html>");
-            lblLogo.setFont(new Font("SansSerif", Font.BOLD, (int) (11 * SCALE)));
+            lblLogo.setFont(new Font("SansSerif", Font.BOLD, (int) (12 * SCALE)));
             lblLogo.setForeground(GameColors.GOLD_ACCENT);
         }
         add(lblLogo);
@@ -57,12 +56,12 @@ public class AboutSubMenuPanel extends JPanel {
         txtRules.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, Boolean.TRUE);
 
         String htmlContent = "<html>"
-                + "<body style='font-family: SansSerif; color: #FFFFFF; font-size: 11px; margin: 5px;'>"
-                + "<h3 style='color: #F5C672; text-align: center; margin-bottom: 8px;'>REGRAS DO JOGO</h3>"
+                + "<body style='font-family: SansSerif; color: #FFFFFF; font-size: 14px; margin: 6px; line-height: 1.35;'>"
+                + "<h3 style='color: #F5C672; text-align: center; font-size: 16px; margin-bottom: 10px;'>REGRAS DO JOGO</h3>"
                 
                 + "<p><b>Bem-vindo(a)!</b> Este jogo é uma adaptação do clássico Ludo, projetado para divertir e informar sobre direitos, prevenção e canais de apoio no combate à violência contra a mulher. Você jogará contra 3 adversários controlados pelo computador. O objetivo é ser o primeiro a levar todos os seus peões até a base final.</p>"
                 
-                + "<h4 style='color: #F5C672; margin-top: 10px; margin-bottom: 4px;'>Como Funciona o Baralho?</h4>"
+                + "<h4 style='color: #F5C672; font-size: 15px; margin-top: 12px; margin-bottom: 4px;'>Como Funciona o Baralho?</h4>"
                 + "<p>Em vez de dados, a sua movimentação é definida por um baralho especial com 6 tipos de cartas. Cada carta traz uma pergunta educativa e o número de casas a avançar.</p>"
                 
                 + "<p><b>Cartas de Perguntas:</b><br/>"
@@ -76,13 +75,13 @@ public class AboutSubMenuPanel extends JPanel {
                 + "• <b>Prata (Pegadinhas):</b> Desafios divertidos.<br/>"
                 + "• <b>Bronze (Azar):</b> Obstáculos na pista.</p>"
                 
-                + "<h4 style='color: #F5C672; margin-top: 10px; margin-bottom: 4px;'>Saindo da Base</h4>"
-                + "<p>Para tirar um peão da base e colocá-lo na pista, tire uma carta de <b>6 casas</b> e acerte a pergunta.</p>"
+                + "<h4 style='color: #F5C672; font-size: 15px; margin-top: 12px; margin-bottom: 4px;'>Saindo da Base</h4>"
+                + "<p>Para tirar um peão da base e colocá-lo na pista, tire uma carta de <b>1 ou 6 casas</b> e acerte a pergunta.</p>"
                 
-                + "<h4 style='color: #F5C672; margin-top: 10px; margin-bottom: 4px;'>Fim de Jogo</h4>"
+                + "<h4 style='color: #F5C672; font-size: 15px; margin-top: 12px; margin-bottom: 4px;'>Fim de Jogo</h4>"
                 + "<p>A partida termina assim que você ou um dos computadores levar todos os peões ao centro do tabuleiro.</p>"
                 
-                + "<p style='text-align: center; color: #F5C672; margin-top: 12px;'><b>Dica:</b> Conhecimento é a nossa maior ferramenta de prevenção e proteção. Bom jogo!</p>"
+                + "<p style='text-align: center; color: #F5C672; margin-top: 14px;'><b>Dica:</b> Conhecimento é a nossa maior ferramenta de prevenção e proteção. Bom jogo!</p>"
                 + "</body></html>";
 
         txtRules.setText(htmlContent);
@@ -92,8 +91,10 @@ public class AboutSubMenuPanel extends JPanel {
         scrollPane.setOpaque(false);
         scrollPane.getViewport().setOpaque(false);
         scrollPane.setBorder(null);
-        scrollPane.getVerticalScrollBar().setUnitIncrement(10);
-        scrollPane.setBounds((int) (40 * SCALE), (int) (190 * SCALE), (int) (480 * SCALE), (int) (235 * SCALE));
+        scrollPane.getVerticalScrollBar().setUnitIncrement(12);
+        
+        // Posição e dimensões perfeitamente contidas dentro do card
+        scrollPane.setBounds((int) (35 * SCALE), (int) (195 * SCALE), (int) (530 * SCALE), (int) (310 * SCALE));
 
         add(scrollPane);
     }
@@ -104,7 +105,7 @@ public class AboutSubMenuPanel extends JPanel {
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        // Fundo principal (Roxo padrão)
+        // Fundo principal (Roxo)
         g2.setColor(GameColors.PURPLE_BG);
         g2.fillRoundRect(0, 0, getWidth(), getHeight(), (int) (24 * SCALE), (int) (24 * SCALE));
 
@@ -112,10 +113,10 @@ public class AboutSubMenuPanel extends JPanel {
         Color cardBg = new Color(42, 24, 54);
         Color cardBorder = new Color(222, 179, 102, 60);
 
-        int cardX = (int) (30 * SCALE);
-        int cardY = (int) (180 * SCALE);
-        int cardW = (int) (500 * SCALE);
-        int cardH = (int) (255 * SCALE);
+        int cardX = (int) (25 * SCALE);
+        int cardY = (int) (185 * SCALE);
+        int cardW = (int) (550 * SCALE);
+        int cardH = (int) (330 * SCALE);
 
         g2.setColor(cardBg);
         g2.fillRoundRect(cardX, cardY, cardW, cardH, (int) (12 * SCALE), (int) (12 * SCALE));

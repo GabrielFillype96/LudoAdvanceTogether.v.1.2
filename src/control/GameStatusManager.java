@@ -15,6 +15,11 @@ public enum GameStatusManager {
         new Color(241, 196, 15), 
         "/assets/img/gameBarStatus_emojis/machine.gif" // Caça Níquel
     ),
+    SORTEIO_GIRO(
+        "%s", 
+        new Color(241, 196, 15), 
+        "/assets/img/gameBarStatus_emojis/machine.gif" // GIF Estático na lateral
+    ),
     INICIO_VENCEDOR(
         "Começa com %s!", 
         new Color(46, 204, 113), 

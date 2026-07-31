@@ -1,8 +1,6 @@
-// Classe responsável por criar a interface do menu principal do jogo
-
 package gui.windows;
 
-// Import internos
+// Imports internos
 import gui.components.buttons.*;
 import actions.NewGameMenuAction;
 
@@ -14,28 +12,31 @@ import java.awt.Rectangle;
 import javax.swing.JPanel;
 
 public class MainMenuScreen extends JPanel {
-    // VARIÁVEIS DE INSTÂNCIA
     private SubMenuContainer subMenuContainer; 
     private static final double SCALE = 1.5; 
     private static final Rectangle BUTTON_NAVIGATION_CONTAINER_BOUNDS = new Rectangle( 
-        (int) (0 * SCALE), 
+        (int) (10 * SCALE), 
         (int) (35 * SCALE), 
-        (int) (300 * SCALE), 
+        (int) (240 * SCALE), 
         (int) (280 * SCALE)
     ); 
 
-    // Construtor da classe MainMenuScreen
+    // Referências dos botões promovidas a atributos da classe para gerenciar o estado
+    private final NewGameButton btnNewGame; 
+    private final ConnectionButton btnConnection; 
+    private final AboutButton btnAbout; 
+    private final ExitButton btnExit; 
+
     public MainMenuScreen(WindowManager windowManager) {
         setOpaque(false);  
         setLayout(null); 
         setBounds(MainScreenContainer.getMainScreenContainerBounds()); 
         
-        // Cria o layer transparente das opções do menu
+        // Layer das opções do menu principal
         JPanel buttonNavigationPanel = new JPanel(new GridBagLayout());
         buttonNavigationPanel.setOpaque(false); 
         buttonNavigationPanel.setBounds(BUTTON_NAVIGATION_CONTAINER_BOUNDS); 
 
-        // Configuração do grid
         GridBagConstraints gbc = new GridBagConstraints(); 
         gbc.gridx = 0; 
         gbc.gridy = GridBagConstraints.RELATIVE; 
@@ -48,12 +49,11 @@ public class MainMenuScreen extends JPanel {
         ); 
 
         // Instância dos botões
-        NewGameButton btnNewGame = new NewGameButton(); 
-        ConnectionButton btnConnection = new ConnectionButton(); 
-        AboutButton btnAbout = new AboutButton(); 
-        ExitButton btnExit = new ExitButton(); 
+        btnNewGame = new NewGameButton(); 
+        btnConnection = new ConnectionButton(); 
+        btnAbout = new AboutButton(); 
+        btnExit = new ExitButton(); 
 
-        // Adiciona os botões ao grid
         buttonNavigationPanel.add(btnNewGame, gbc);
         buttonNavigationPanel.add(btnConnection, gbc);
         buttonNavigationPanel.add(btnAbout, gbc);
@@ -61,22 +61,48 @@ public class MainMenuScreen extends JPanel {
 
         add(buttonNavigationPanel);
 
-        // Ações de clique dos botões
-        btnNewGame.addActionListener(new NewGameMenuAction(windowManager));
-        btnConnection.addActionListener(e -> windowManager.openLobbyMultiplayer());
-        btnAbout.addActionListener(e -> subMenuContainer.exibirSobreMenu());
-        btnExit.addActionListener(e -> System.exit(0)); // Encerra a aplicação ao clicar em SAIR
-
-        // SubMenuContainer
+        // SubMenuContainer posicionamento ajustado
         subMenuContainer = new SubMenuContainer(windowManager);
+        Rectangle bounds = SubMenuContainer.getSubMenuContainerBounds();
+        
         subMenuContainer.setBounds(
-            (int) (320 * SCALE), 
-            (int) (50 * SCALE), 
-            (int) (SubMenuContainer.getSubMenuContainerBounds().width * SCALE), 
-            (int) (SubMenuContainer.getSubMenuContainerBounds().height * SCALE)
+            (int) (260 * SCALE), 
+            (int) (25 * SCALE), 
+            bounds.width, 
+            bounds.height
         );
         
         add(subMenuContainer); 
+
+        // --- AÇÕES DOS BOTÕES COM SINCRO DE SELEÇÃO VISUAL ---
+        NewGameMenuAction newGameAction = new NewGameMenuAction(windowManager);
+        
+        btnNewGame.addActionListener(e -> {
+            selecionarBotao(btnNewGame);
+            newGameAction.actionPerformed(e);
+        });
+
+        btnConnection.addActionListener(e -> {
+            selecionarBotao(btnConnection);
+            windowManager.openLobbyMultiplayer();
+        });
+
+        btnAbout.addActionListener(e -> {
+            selecionarBotao(btnAbout);
+            subMenuContainer.exibirSobreMenu();
+        });
+
+        btnExit.addActionListener(e -> System.exit(0));
+    }
+
+    /**
+     * Garante que apenas o botão do submenu ativo permaneça com o destaque dourado.
+     */
+    private void selecionarBotao(CustomButton botaoAlvo) {
+        btnNewGame.setSelecionado(btnNewGame == botaoAlvo);
+        btnConnection.setSelecionado(btnConnection == botaoAlvo);
+        btnAbout.setSelecionado(btnAbout == botaoAlvo);
+        btnExit.setSelecionado(btnExit == botaoAlvo);
     }
 
     public SubMenuContainer getSubMenuContainer() {

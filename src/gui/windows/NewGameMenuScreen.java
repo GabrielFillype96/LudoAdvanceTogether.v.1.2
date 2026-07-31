@@ -1,4 +1,3 @@
-// Classe responsável por criar a interface do menu do modo de jogo offline
 package gui.windows;
 
 import gui.components.SlotsIcon;
@@ -15,9 +14,10 @@ public class NewGameMenuScreen extends JPanel {
     private SubMenuContainer subMenuContainer;
     private static final double SCALE = 1.5; 
 
+    // Dimensões expandidas sincronizadas com o SubMenuContainer (600x530)
     private static final Dimension OFFLINE_MENU_DIMENSION = new Dimension( 
-        (int) (560 * SCALE), 
-        (int) (460 * SCALE)
+        (int) (600 * SCALE), 
+        (int) (530 * SCALE)
     );
 
     private JToggleButton rbEasy, rbMedium, rbHard; 
@@ -38,28 +38,28 @@ public class NewGameMenuScreen extends JPanel {
         setOpaque(false); 
         setLayout(null); 
 
-        // Título do sub-menu
+        // --- TÍTULO ---
         JLabel title = new JLabel("MODO JOGO OFFLINE", SwingConstants.CENTER); 
         title.setFont(new Font("Serif", Font.BOLD, (int) (22 * SCALE)));
         title.setForeground(GameColors.GOLD_ACCENT);
-        title.setBounds((int) (0 * SCALE), (int) (25 * SCALE), (int) (560 * SCALE), (int) (30 * SCALE)); 
+        title.setBounds(0, (int) (20 * SCALE), (int) (600 * SCALE), (int) (30 * SCALE)); 
         add(title); 
 
-        // Seleção da dificuldade
+        // --- DIFICULDADE DA CPU (Centralizada) ---
         JLabel lblDif = new JLabel("Dificuldade da CPU:", SwingConstants.RIGHT);
         lblDif.setFont(new Font("SansSerif", Font.BOLD, (int) (13 * SCALE)));
         lblDif.setForeground(GameColors.GOLD_ACCENT);
-        lblDif.setBounds((int) (20 * SCALE), (int) (70 * SCALE), (int) (140 * SCALE), (int) (28 * SCALE));
+        lblDif.setBounds((int) (40 * SCALE), (int) (65 * SCALE), (int) (140 * SCALE), (int) (30 * SCALE));
         add(lblDif); 
 
         rbEasy = createChipButton("Fácil", false);
-        rbEasy.setBounds((int) (175 * SCALE), (int) (70 * SCALE), (int) (85 * SCALE), (int) (28 * SCALE));
+        rbEasy.setBounds((int) (195 * SCALE), (int) (65 * SCALE), (int) (95 * SCALE), (int) (30 * SCALE));
 
         rbMedium = createChipButton("Médio", true);
-        rbMedium.setBounds((int) (270 * SCALE), (int) (70 * SCALE), (int) (85 * SCALE), (int) (28 * SCALE));
+        rbMedium.setBounds((int) (300 * SCALE), (int) (65 * SCALE), (int) (95 * SCALE), (int) (30 * SCALE));
 
         rbHard = createChipButton("Difícil", false);
-        rbHard.setBounds((int) (365 * SCALE), (int) (70 * SCALE), (int) (85 * SCALE), (int) (28 * SCALE));
+        rbHard.setBounds((int) (405 * SCALE), (int) (65 * SCALE), (int) (95 * SCALE), (int) (30 * SCALE));
 
         ButtonGroup buttonGroup = new ButtonGroup();
         buttonGroup.add(rbEasy); 
@@ -69,45 +69,44 @@ public class NewGameMenuScreen extends JPanel {
         add(rbMedium); 
         add(rbHard);
 
-        // Subtítulo
+        // --- SUBTÍTULO ---
         JLabel subTitle = new JLabel("INSERIR NOMES DOS JOGADORES", SwingConstants.CENTER);
         subTitle.setFont(new Font("SansSerif", Font.BOLD, (int) (14 * SCALE)));
         subTitle.setForeground(GameColors.GOLD_ACCENT);
-        subTitle.setBounds((int) (0 * SCALE), (int) (120 * SCALE), (int) (560 * SCALE), (int) (20 * SCALE));
+        subTitle.setBounds(0, (int) (115 * SCALE), (int) (600 * SCALE), (int) (25 * SCALE));
         add(subTitle);
 
-        // --- LINHA 1 DE JOGADORES ---
-        lblIconP1 = SlotsIcon.slotIconLabel("👤", (int) (55 * SCALE), (int) (155 * SCALE), SCALE); 
-        lblIconCPU1 = SlotsIcon.slotIconLabel("💻", (int) (315 * SCALE), (int) (155 * SCALE), SCALE); 
+        // --- LINHA 1 DE JOGADORES (Card Esquerda: P1 / Card Direita: CPU 1) ---
+        lblIconP1 = SlotsIcon.slotIconLabel("👤", (int) (50 * SCALE), (int) (165 * SCALE), SCALE); 
+        lblIconCPU1 = SlotsIcon.slotIconLabel("💻", (int) (330 * SCALE), (int) (165 * SCALE), SCALE); 
         add(lblIconP1);
         add(lblIconCPU1);
 
-        // Posição x alterada de 82 para 90 para dar o "respiro", largura ajustada para 150
-        txtP1 = createPlayerTextField((int) (90 * SCALE), (int) (155 * SCALE), (int) (150 * SCALE), (int) (32 * SCALE), "Digite seu nome");
-        txtCPU1 = createPlayerTextField((int) (350 * SCALE), (int) (155 * SCALE), (int) (150 * SCALE), (int) (32 * SCALE), "Computador 1"); 
+        txtP1 = createPlayerTextField((int) (92 * SCALE), (int) (165 * SCALE), (int) (173 * SCALE), (int) (32 * SCALE), "Digite seu nome");
+        txtCPU1 = createPlayerTextField((int) (372 * SCALE), (int) (165 * SCALE), (int) (173 * SCALE), (int) (32 * SCALE), "Computador 1"); 
         add(txtP1);
         add(txtCPU1);
 
-        cbColorP1 = createColorComboBox((int) (90 * SCALE), (int) (193 * SCALE), (int) (150 * SCALE), (int) (25 * SCALE));
-        cbColorCPU1 = createColorComboBox((int) (350 * SCALE), (int) (193 * SCALE), (int) (150 * SCALE), (int) (25 * SCALE));
+        cbColorP1 = createColorComboBox((int) (92 * SCALE), (int) (205 * SCALE), (int) (173 * SCALE), (int) (28 * SCALE));
+        cbColorCPU1 = createColorComboBox((int) (372 * SCALE), (int) (205 * SCALE), (int) (173 * SCALE), (int) (28 * SCALE));
         cbColorP1.setSelectedIndex(0);   
         cbColorCPU1.setSelectedIndex(1); 
         add(cbColorP1);
         add(cbColorCPU1);
 
-        // --- LINHA 2 DE JOGADORES ---
-        lblIconCPU2 = SlotsIcon.slotIconLabel("💻", (int) (55 * SCALE), (int) (245 * SCALE), SCALE);
-        lblIconCPU3 = SlotsIcon.slotIconLabel("💻", (int) (315 * SCALE), (int) (245 * SCALE), SCALE);
+        // --- LINHA 2 DE JOGADORES (Card Esquerda: CPU 2 / Card Direita: CPU 3) ---
+        lblIconCPU2 = SlotsIcon.slotIconLabel("💻", (int) (50 * SCALE), (int) (280 * SCALE), SCALE);
+        lblIconCPU3 = SlotsIcon.slotIconLabel("💻", (int) (330 * SCALE), (int) (280 * SCALE), SCALE);
         add(lblIconCPU2);
         add(lblIconCPU3);
 
-        txtCPU2 = createPlayerTextField((int) (90 * SCALE), (int) (245 * SCALE), (int) (150 * SCALE), (int) (32 * SCALE), "Computador 2"); 
-        txtCPU3 = createPlayerTextField((int) (350 * SCALE), (int) (245 * SCALE), (int) (150 * SCALE), (int) (32 * SCALE), "Computador 3"); 
+        txtCPU2 = createPlayerTextField((int) (92 * SCALE), (int) (280 * SCALE), (int) (173 * SCALE), (int) (32 * SCALE), "Computador 2"); 
+        txtCPU3 = createPlayerTextField((int) (372 * SCALE), (int) (280 * SCALE), (int) (173 * SCALE), (int) (32 * SCALE), "Computador 3"); 
         add(txtCPU2);
         add(txtCPU3);
 
-        cbColorCPU2 = createColorComboBox((int) (90 * SCALE), (int) (283 * SCALE), (int) (150 * SCALE), (int) (25 * SCALE));
-        cbColorCPU3 = createColorComboBox((int) (350 * SCALE), (int) (283 * SCALE), (int) (150 * SCALE), (int) (25 * SCALE));
+        cbColorCPU2 = createColorComboBox((int) (92 * SCALE), (int) (320 * SCALE), (int) (173 * SCALE), (int) (28 * SCALE));
+        cbColorCPU3 = createColorComboBox((int) (372 * SCALE), (int) (320 * SCALE), (int) (173 * SCALE), (int) (28 * SCALE));
         cbColorCPU2.setSelectedIndex(2); 
         cbColorCPU3.setSelectedIndex(3); 
         add(cbColorCPU2);
@@ -115,16 +114,15 @@ public class NewGameMenuScreen extends JPanel {
 
         setupColorSelectionLogic();
 
-        // Botão Jogar
+        // --- BOTÃO JOGAR (Centralizado na Base) ---
         CustomButton playBtn = new PlayButton();
-        playBtn.setBounds((int) (180 * SCALE), (int) (355 * SCALE), (int) (200 * SCALE), (int) (45 * SCALE)); 
+        playBtn.setBounds((int) (200 * SCALE), (int) (430 * SCALE), (int) (200 * SCALE), (int) (45 * SCALE)); 
         
         StartGameAction startGameAction = new StartGameAction(this, this.windowManager); 
         playBtn.addActionListener(startGameAction); 
         add(playBtn); 
     }
 
-    // Campo de texto customizado com quinas arredondadas
     private JTextField createPlayerTextField(int x, int y, int w, int h, String placeholder) {
         JTextField tf = new JTextField(placeholder) {
             @Override
@@ -229,7 +227,6 @@ public class NewGameMenuScreen extends JPanel {
         return btn;
     }
 
-    // Caixa de seleção com quinas arredondadas
     private JComboBox<String> createColorComboBox(int x, int y, int w, int h) {
         String[] cores = {"Roxo", "Azul", "Amarelo", "Rosa"};
         JComboBox<String> cb = new JComboBox<String>(cores) {
@@ -238,7 +235,8 @@ public class NewGameMenuScreen extends JPanel {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 g2.setColor(GameColors.GOLD_ACCENT);
-                g2.setStroke(new BasicStroke(1));
+                g2.setStroke(new BasicStroke(1.2f));
+                // Desenha a borda arredondada contornando 100% da caixa
                 g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 8, 8);
                 g2.dispose();
             }
@@ -249,7 +247,7 @@ public class NewGameMenuScreen extends JPanel {
         cb.setBackground(new Color(25, 14, 33)); 
         cb.setForeground(Color.WHITE);
         cb.setFont(new Font("SansSerif", Font.BOLD, (int) (12 * SCALE)));
-        cb.setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 4));
+        cb.setBorder(BorderFactory.createEmptyBorder(0, 8, 0, 8));
         cb.setFocusable(false);
 
         cb.setUI(new javax.swing.plaf.basic.BasicComboBoxUI() {
@@ -261,9 +259,7 @@ public class NewGameMenuScreen extends JPanel {
                         Graphics2D g2 = (Graphics2D) g.create();
                         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                         
-                        g2.setColor(new Color(25, 14, 33));
-                        g2.fillRect(0, 0, getWidth(), getHeight());
-                        
+                        // Apenas desenha o triângulo dourado sem cobrir o fundo/borda arredondada
                         g2.setColor(GameColors.GOLD_ACCENT);
                         int cx = getWidth() / 2;
                         int cy = getHeight() / 2;
@@ -273,6 +269,7 @@ public class NewGameMenuScreen extends JPanel {
                         g2.dispose();
                     }
                 };
+                btn.setOpaque(false);
                 btn.setBorderPainted(false);
                 btn.setContentAreaFilled(false);
                 btn.setFocusPainted(false);
@@ -284,7 +281,8 @@ public class NewGameMenuScreen extends JPanel {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 g2.setColor(new Color(25, 14, 33));
-                g2.fillRoundRect(0, 0, comboBox.getWidth(), comboBox.getHeight(), 8, 8);
+                // Preenche o fundo roxo com o mesmo arredondamento da borda
+                g2.fillRoundRect(0, 0, comboBox.getWidth() - 1, comboBox.getHeight() - 1, 8, 8);
                 g2.dispose();
             }
         });
@@ -385,23 +383,23 @@ public class NewGameMenuScreen extends JPanel {
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        // Fundo principal
+        // Fundo principal (Roxo)
         g2.setColor(GameColors.PURPLE_BG);
         g2.fillRoundRect(0, 0, getWidth(), getHeight(), (int) (24 * SCALE), (int) (24 * SCALE));
 
-        // Cards dos Jogadores
+        // Cards dos Jogadores (Aumentados e centralizados)
         Color cardBg = new Color(42, 24, 54); 
         Color cardBorder = new Color(222, 179, 102, 60);
 
         int[][] cardPositions = {
-            {(int) (45 * SCALE), (int) (148 * SCALE)},
-            {(int) (305 * SCALE), (int) (148 * SCALE)},
-            {(int) (45 * SCALE), (int) (238 * SCALE)},
-            {(int) (305 * SCALE), (int) (238 * SCALE)}
+            {(int) (40 * SCALE), (int) (155 * SCALE)},
+            {(int) (320 * SCALE), (int) (155 * SCALE)},
+            {(int) (40 * SCALE), (int) (270 * SCALE)},
+            {(int) (320 * SCALE), (int) (270 * SCALE)}
         };
 
-        int cardW = (int) (210 * SCALE);
-        int cardH = (int) (78 * SCALE);
+        int cardW = (int) (240 * SCALE);
+        int cardH = (int) (95 * SCALE);
 
         for (int[] pos : cardPositions) {
             g2.setColor(cardBg);
@@ -412,7 +410,7 @@ public class NewGameMenuScreen extends JPanel {
             g2.drawRoundRect(pos[0], pos[1], cardW, cardH, (int) (12 * SCALE), (int) (12 * SCALE));
         }
 
-        // Borda externa principal
+        // Borda externa principal (Dourada)
         g2.setColor(GameColors.GOLD_ACCENT);
         g2.setStroke(new BasicStroke(3));
         g2.drawRoundRect((int) (2 * SCALE), (int) (2 * SCALE), getWidth() - (int) (5 * SCALE), getHeight() - (int) (5 * SCALE), (int) (24 * SCALE), (int)(24 * SCALE));

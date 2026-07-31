@@ -55,12 +55,19 @@ public class TurnManager {
     public void sortearPrimeiroJogador() {
         if (this.gameManager == null) return;
 
-        Color corAlerta = new Color(241, 196, 15);  
+        // 1. Inicia o carregamento dos baralhos em segundo plano
+        if (this.gameManager.getDeckManager() != null) {
+            this.gameManager.getDeckManager().initializeDecksAsync(() -> {
+                System.out.println("[TurnManager] Baralhos prontos para o início da partida.");
+            });
+        }
 
+        // 2. Muda o status visual imediatamente na tela
         javax.swing.SwingUtilities.invokeLater(() -> {
             this.gameManager.emitirStatus(GameStatusManager.TITULO_JOGO);
         });
 
+        // 3. Roda a animação visual do sorteio enquanto as cartas terminam de carregar em background
         Timer timerAviso = new Timer(2000, eAviso -> {
             this.gameManager.emitirStatus(GameStatusManager.SORTEANDO_JOGADOR);
 
@@ -73,7 +80,7 @@ public class TurnManager {
                     int jogadorFalso = (int) (Math.random() * 4);
                     String nomeSorteio = (jogadorFalso == 0) ? "VOCÊ" : this.gameManager.getPlayerNameById(jogadorFalso).toUpperCase();
                     
-                    this.gameManager.emitirStatusSorteio("🎰 " + nomeSorteio + " 🎰", corAlerta);
+                    this.gameManager.emitirStatus(GameStatusManager.SORTEIO_GIRO, nomeSorteio);
 
                     delayAtual[0] += 40; 
                     timerSorteio.setDelay(delayAtual[0]);
@@ -82,10 +89,8 @@ public class TurnManager {
                         timerSorteio.stop();
 
                         this.gameManager.setSorteioInicialAtivo(false);
-                        
                         this.currentTurn = (int) (Math.random() * 4);
                         
-                        // --- ATUALIZAÇÃO VISUAL DO SLOT APÓS SORTEIO ---
                         if (this.gameManager.getBoardScreen() != null) {
                             this.gameManager.getBoardScreen().updateActivePlayerSlot(this.currentTurn);
                         }

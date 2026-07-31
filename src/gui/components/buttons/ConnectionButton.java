@@ -7,6 +7,6 @@ package gui.components.buttons;
 public class ConnectionButton extends CustomButton {
     // Método para aplicar a arte ao botão
     public ConnectionButton() {
-        super("MULTIPLAYER");
+        super("MULTIPLAYER", true);
     }
 }

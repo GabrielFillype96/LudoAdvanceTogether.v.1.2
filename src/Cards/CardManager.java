@@ -13,11 +13,16 @@ import java.util.List;
 
 public class CardManager {
 
-    private final String CAMINHO_JSON = "/assets/data/cardsContent.json";
+    private static final String CAMINHO_JSON = "/assets/data/cardsContent.json";
+
+    // Cache estático em memória para evitar releitura do disco em cada filtro
+    private static JsonArray cachedJsonArray = null;
 
     /**
      * Carrega todas as cartas do arquivo JSON e filtra pela categoria ou tipo solicitado.
-     * @param filtro Categoria de filtragem (Ex: "FÁCIL", "MÉDIO", "DIFÍCIL", "SORTE", "AZAR")
+     * Utiliza cache em memória RAM após a primeira leitura.
+     * 
+     * @param filtro Categoria de filtragem (Ex: "FÁCIL", "MÉDIO", "DIFICIL", "SORTE", "AZAR")
      * @return Lista das cartas filtradas
      */
     public List<CustomCards> loadCard(String filtro) {
@@ -29,24 +34,22 @@ public class CardManager {
         }
 
         String filtroUpper = filtro.toUpperCase();
-        Gson gson = new Gson();
 
-        var inputStream = CardManager.class.getResourceAsStream(CAMINHO_JSON);
-        if (inputStream == null) {
-            System.err.println("[CardManager] Erro: Arquivo JSON não encontrado em: " + CAMINHO_JSON);
+        // 1. Garante que o JSON está carregado em memória (Lazy Load com Cache)
+        if (cachedJsonArray == null) {
+            carregarJsonEmMemoria();
+        }
+
+        if (cachedJsonArray == null) {
             return cartasFiltradas; 
         }
 
-        // Try-with-resources garante o fechamento automático do reader mesmo em caso de exceção
-        try (Reader reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8)) {
-            
-            JsonArray jsonArray = gson.fromJson(reader, JsonArray.class);
-            if (jsonArray == null) return cartasFiltradas;
-
-            for (JsonElement elemento : jsonArray) {
+        // 2. Filtra as cartas a partir do cache já parseado
+        try {
+            for (JsonElement elemento : cachedJsonArray) {
                 JsonObject obj = elemento.getAsJsonObject();
 
-                // Extrai apenas os campos universais (presentes em todas as cartas)
+                // Extrai apenas os campos universais
                 int id = obj.has("id") ? obj.get("id").getAsInt() : -1;
                 String tipoGeral = obj.has("tipoGeral") ? obj.get("tipoGeral").getAsString().toUpperCase() : "";
                 String enunciado = obj.has("enunciado") ? obj.get("enunciado").getAsString() : "";
@@ -66,10 +69,8 @@ public class CardManager {
                         String respostaCorreta = obj.has("respostaCorreta") ? obj.get("respostaCorreta").getAsString() : "";
 
                         if ("SIM_NAO".equals(tipoPergunta)) {
-                            // Construtor: Pergunta Sim / Não
                             novaCarta = new CustomCards(id, tipoGeral, enunciado, efeito, valorEfeito, iconePeao, dificuldade, respostaCorreta);
                         } else {
-                            // Construtor: Múltipla Escolha
                             String[] alternativas = new String[0];
                             if (obj.has("alternativas") && obj.get("alternativas").isJsonArray()) {
                                 JsonArray arrayAlt = obj.getAsJsonArray("alternativas");
@@ -78,11 +79,9 @@ public class CardManager {
                                     alternativas[i] = arrayAlt.get(i).getAsString();
                                 }
                             }
-                            
                             novaCarta = new CustomCards(id, tipoGeral, enunciado, efeito, valorEfeito, iconePeao, dificuldade, alternativas, respostaCorreta);
                         }
                     } else {
-                        // Construtor: Cartas Especiais (Sorte/Azar/etc.)
                         novaCarta = new CustomCards(id, tipoGeral, enunciado, efeito, valorEfeito, iconePeao);
                     }
 
@@ -90,10 +89,32 @@ public class CardManager {
                 }
             }
         } catch (Exception e) {
-            System.err.println("[CardManager] Erro crítico ao processar o JSON: " + e.getMessage());
+            System.err.println("[CardManager] Erro ao filtrar cartas do cache: " + e.getMessage());
             e.printStackTrace();
         }
 
         return cartasFiltradas;
+    }
+
+    /**
+     * Carrega o JSON do disco apenas uma vez. Thread-safe.
+     */
+    private static synchronized void carregarJsonEmMemoria() {
+        if (cachedJsonArray != null) return;
+
+        var inputStream = CardManager.class.getResourceAsStream(CAMINHO_JSON);
+        if (inputStream == null) {
+            System.err.println("[CardManager] Erro: Arquivo JSON não encontrado em: " + CAMINHO_JSON);
+            return; 
+        }
+
+        try (Reader reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8)) {
+            Gson gson = new Gson();
+            cachedJsonArray = gson.fromJson(reader, JsonArray.class);
+            System.out.println("[CardManager] Arquivo de cartas carregado no cache com sucesso!");
+        } catch (Exception e) {
+            System.err.println("[CardManager] Erro crítico ao carregar JSON para a memória: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 }

@@ -7,7 +7,7 @@ public class NewGameButton extends CustomButton {
     
     public NewGameButton() {
         // Envia o texto específico que este botão deve carregar para a classe mãe tratar
-        super("NOVO JOGO");
+        super("NOVO JOGO", true);
 
         // Ouvinte específico para capturar o clique e ativar o estado fixado dourado
         addMouseListener(new MouseAdapter() {

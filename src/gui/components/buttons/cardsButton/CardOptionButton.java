@@ -10,8 +10,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
-
-// --- NOVOS IMPORTS PARA A QUEBRA DE LINHA AUTOMÁTICA ---
 import java.awt.font.FontRenderContext;
 import java.awt.font.LineBreakMeasurer;
 import java.awt.font.TextAttribute;
@@ -20,49 +18,60 @@ import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
 import java.util.ArrayList;
 import java.util.List;
-// -------------------------------------------------------
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
-import actions.CardAnswerValidation;
-import cards.CustomCards;
-
 public class CardOptionButton extends JButton {
-    // VARIÁVEIS DE INSTÂNCIA
 
     private static final double SCALE = 1.5;
-    
     
     private final String CARD_QUESTION_TYPE;
     private String cardAnswerLetter = "";  
     private String cardAnswerTxt = "";  
     private boolean isHovered = false;
     
-    private final Color CARD_COLOR; // Copia a cor de fundo da carta (Ex: Verde claro da pergunta fácil)
-    private final Color COR_BORDA = new Color(35, 45, 35, 140); // Linha fina sutil ao redor da alternativa
-    private final Color COR_TEXTO_ESCURO = new Color(35, 35, 35); // Fonte combinando com o enunciado
+    private final Color CARD_COLOR;
+    private final Color COR_BORDA = new Color(35, 45, 35, 140);
+    private final Color COR_TEXTO_ESCURO = new Color(35, 35, 35);
     
-    private final Color COR_BOX_LETRA = new Color(240, 240, 240, 200); // Fundo claro para a letra
-    private final Color COR_BOX_HOVER = new Color(255, 255, 255); // Brilha um pouco mais no hover
+    private final Color COR_BOX_LETRA = new Color(240, 240, 240, 200);
+    private final Color COR_BOX_HOVER = new Color(255, 255, 255);
     private final Color COR_TEXTO_LETRA = new Color(35, 35, 35);
 
-    private Image cardBtnBGImg; // Variável para armazenar a imagem de fundo dos botões das alternativas
-    private final static String CARD_BTN_BG_IMG_PATH = "/assets/cardBtnImg_160x40.png"; // Caminho da imagem de fundo dos botões das alternativas
+    // =========================================================================
+    // OTIMIZAÇÃO: CACHE ESTÁTICO DE IMAGEM (Carrega no disco apenas 1 VEZ)
+    // =========================================================================
+    private static Image cardBtnBGImg; 
+    private static boolean imageLoaded = false;
+    private final static String CARD_BTN_BG_IMG_PATH = "/assets/cardBtnImg_160x40.png";
 
-    // Construtor para instanciar os botões de resposta
+    private static synchronized void loadBackgroundImage() {
+        if (!imageLoaded) {
+            java.net.URL path = CardOptionButton.class.getResource(CARD_BTN_BG_IMG_PATH);
+            if (path != null) {
+                cardBtnBGImg = new ImageIcon(path).getImage();
+                System.out.println("[CardOptionButton] Imagem de fundo carregada em CACHE ESTÁTICO: " + CARD_BTN_BG_IMG_PATH);
+            } else {
+                System.err.println("[CardOptionButton] Erro: Imagem de fundo não encontrada em " + CARD_BTN_BG_IMG_PATH);
+            }
+            imageLoaded = true;
+        }
+    }
+
+    // Construtor principal
     public CardOptionButton(String cardAnswerCompleteTxt, String cardQuestionType, Color cardColor, String tipoPergunta) {
         super(cardAnswerCompleteTxt);
         this.CARD_QUESTION_TYPE = cardQuestionType;
         this.CARD_COLOR = cardColor;
         
-        // Trata o texto para separar o índice ("A", "B", etc.) do enunciado
+        // Garante que a imagem seja carregada só na primeira vez
+        loadBackgroundImage();
+        
         cardAnswerTxtConfig(cardAnswerCompleteTxt);
         
-        // Configurações do JButton
         setText(cardAnswerTxt);
         setFont(new Font("Tahoma", Font.BOLD, (int) (10 * SCALE)));
-        setForeground(COR_TEXTO_ESCURO); // Texto escuro para contrastar no fundo claro
+        setForeground(COR_TEXTO_ESCURO);
         
         setContentAreaFilled(false);
         setBorderPainted(false);
@@ -70,21 +79,6 @@ public class CardOptionButton extends JButton {
         setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         setPreferredSize(new Dimension(152, 24));
 
-        // Procura o path da imagem de fundo dos botões de resposta
-        java.net.URL cardBtnBGImgPath = getClass().getResource(CARD_BTN_BG_IMG_PATH);
-        if (cardBtnBGImgPath != null) {
-            // Se encontrou a imagem, carrega e armazena na variável cardBtnBGImg
-            System.out.println(
-                "[CardOptionButton] Imagem de fundo das alternativas encontrada em: " + CARD_BTN_BG_IMG_PATH
-            );
-            this.cardBtnBGImg = new ImageIcon(cardBtnBGImgPath).getImage();
-        } else {
-            // Se não encontrou a imagem, imprime um erro no console
-            System.err.println(
-                "[CardOptionButton] Erro: Imagem de fundo das alternativas não encontrada em " + CARD_BTN_BG_IMG_PATH
-            );
-        }
-        
         addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -97,8 +91,9 @@ public class CardOptionButton extends JButton {
                 repaint();
             }
         });
-
     }
+
+    // Restante da classe (mantém o paintComponent e demais métodos iguais)...
 
     /**
      * NOVO CONSTRUTOR DE 2 PARÂMETROS:

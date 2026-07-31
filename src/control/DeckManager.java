@@ -30,15 +30,26 @@ public class DeckManager {
         this.gameManager = gameManager;
     }
 
-    public void initializeDecks() {
-        // Carrega todas as cartas uma única vez para otimizar desempenho
-        List<CustomCards> todasAsCartas = cardManager.loadCard(""); 
+    /**
+     * Inicializa os baralhos de forma assíncrona (em segundo plano).
+     */
+    public void initializeDecksAsync(Runnable onComplete) {
+        new Thread(() -> {
+            initializeDecks();
+            if (onComplete != null) {
+                javax.swing.SwingUtilities.invokeLater(onComplete);
+            }
+        }).start();
+    }
 
+    public void initializeDecks() {
+        long startTime = System.currentTimeMillis();
+        
+        // Carrega todas as cartas uma única vez para otimizar desempenho
         for (int i = 0; i < 4; i++) {
             this.drawPiles.get(i).clear();
             this.discardPiles.get(i).clear();
             
-            // Adiciona cópias ou recarrega o deck do jogador de forma limpa
             this.drawPiles.get(i).addAll(cardManager.loadCard("FÁCIL"));
             this.drawPiles.get(i).addAll(cardManager.loadCard("MÉDIO"));
             this.drawPiles.get(i).addAll(cardManager.loadCard("DIFÍCIL"));
@@ -48,6 +59,9 @@ public class DeckManager {
             Collections.shuffle(this.drawPiles.get(i));
             System.out.println("[DeckManager] Baralho do Jogador " + i + " inicializado com " + this.drawPiles.get(i).size() + " cartas!");
         }
+        
+        long endTime = System.currentTimeMillis();
+        System.out.println("[DeckManager] Carregamento de TODOS os baralhos concluído em " + (endTime - startTime) + "ms!");
     }
 
     /**
