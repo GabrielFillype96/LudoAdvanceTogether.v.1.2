@@ -2,31 +2,21 @@ package gui.windows;
 
 import java.awt.Component;
 import network.GameClient;
+import network.PlayerInfo;
 
-// Classe responsável por gerenciar as janelas e transições entre telas
 public class WindowManager {
-    // VARIÁVEIS DE INSTÂNCIA
-    private MainScreenContainer mainPanel; // referência ao painel de fundo principal
+    private MainScreenContainer mainPanel;
 
-    // Armazena as configurações do último jogo offline para permitir reiniciar a partida
     private String lastP1Name, lastP1Color;
     private String lastP2Name, lastP2Color;
     private String lastP3Name, lastP3Color;
     private String lastP4Name, lastP4Color;
     private String lastDifficulty;
 
-    /**
-    * @param mainPanel Tela principal do jogo
-    */
     public WindowManager(MainScreenContainer mainPanel) {
         this.mainPanel = mainPanel;
     }
 
-    /**
-     * Verifica se existe um Lobby ativo e se o usuário confirma a saída dele 
-     * antes de mudar para qualquer outra tela ou fechar o jogo.
-     * @return true se puder trocar de tela; false se o usuário cancelar.
-     */
     public boolean podeTrocarDeTela() {
         LobbyScreen lobbyAtual = getLobbyScreenAtual();
         if (lobbyAtual != null) {
@@ -35,9 +25,6 @@ public class WindowManager {
         return true;
     }
 
-    /**
-     * Procura se o LobbyScreen está aberto no container de submenus.
-     */
     private LobbyScreen getLobbyScreenAtual() {
         if (mainPanel != null && mainPanel.getComponentCount() > 0) {
             if (mainPanel.getComponent(0) instanceof MainMenuScreen) {
@@ -55,16 +42,12 @@ public class WindowManager {
         return null;
     }
 
-    // Método para abrir o menu do modo de jogo offline (NewGameMenuScreen)
     public void openMenuOffline() {
-        // Trava de confirmação caso o jogador esteja em uma sala multiplayer
         if (!podeTrocarDeTela()) {
             return;
         }
 
-        System.out.println(
-            "[WindowManager] Criando e centralizando o NewGameMenuScreen (Menu Offline)..."
-        );
+        System.out.println("[WindowManager] Criando e centralizando o NewGameMenuScreen (Menu Offline)...");
     
         if (mainPanel != null && mainPanel.getComponentCount() > 0) {
            if (mainPanel.getComponent(0) instanceof MainMenuScreen) {
@@ -77,16 +60,10 @@ public class WindowManager {
             mainPanel.revalidate();
             mainPanel.repaint();
         } else {
-            System.err.println(
-                "[WindowManager Erro] O plano de fundo está nulo!"
-            );
+            System.err.println("[WindowManager Erro] O plano de fundo está nulo!");
         }
     }
 
-    /**
-     * Método para abrir a tela SOBRE (AboutSubMenuPanel).
-     * Interceptado pela confirmação de saída caso esteja no Lobby.
-     */
     public void openMenuAbout() {
         if (!podeTrocarDeTela()) {
             return;
@@ -99,7 +76,6 @@ public class WindowManager {
                 MainMenuScreen mainMenuScreen = (MainMenuScreen) mainPanel.getComponent(0);
                 SubMenuContainer subMenuContainer = mainMenuScreen.getSubMenuContainer();
                 
-                // Instanciação corrigida (sem passar 'this')
                 AboutSubMenuPanel aboutScreen = new AboutSubMenuPanel();
                 subMenuContainer.displaySubMenu(aboutScreen);
             }
@@ -108,10 +84,6 @@ public class WindowManager {
         }
     }
 
-    /**
-     * Método para fechar o jogo (botão SAIR).
-     * Pede confirmação antes de encerrar se estiver no Lobby Multiplayer.
-     */
     public void fecharJogo() {
         if (!podeTrocarDeTela()) {
             return;
@@ -121,7 +93,6 @@ public class WindowManager {
         System.exit(0);
     }
 
-    // Método para iniciar o jogo offline com dados customizados
     public void startOfflineGameMode(
         String player1Name, String player1Color,
         String player2Name, String player2Color,
@@ -138,9 +109,7 @@ public class WindowManager {
         this.lastP4Name = player4Color;
         this.lastDifficulty = difficulty;
 
-        System.out.println(
-            "[WindowManager] Iniciando transição para a tela de jogo..."
-        );
+        System.out.println("[WindowManager] Iniciando transição para a tela de jogo...");
 
         if (mainPanel != null) {
             mainPanel.removeAll();
@@ -160,7 +129,6 @@ public class WindowManager {
         }
     }
 
-    // Reinicia a partida offline utilizando as mesmas configurações
     public void iniciarNovoJogoOffline() {
         if (!podeTrocarDeTela()) {
             return;
@@ -179,7 +147,6 @@ public class WindowManager {
         }
     }
 
-    // Retorna para a tela do menu principal
     public void exibirMenuPrincipal() {
         if (!podeTrocarDeTela()) {
             return;
@@ -193,9 +160,6 @@ public class WindowManager {
         }
     }
 
-    /**
-     * Força a exibição de uma tela sem confirmação (utilizado na desconexão remota por rede).
-     */
     public void forceShowScreen(String screenName) {
         if ("MAIN_MENU".equalsIgnoreCase(screenName)) {
             if (mainPanel != null) {
@@ -207,7 +171,6 @@ public class WindowManager {
         }
     }
 
-    // Método para abrir a tela de Lobby Multiplayer
     public void openLobbyMultiplayer() {
         if (!podeTrocarDeTela()) {
             return;
@@ -226,9 +189,18 @@ public class WindowManager {
         }
     }
 
-    /**
-     * Inicia a tela do jogo em modo Multiplayer Online.
-     */
+    public void startOnlineGame(GameClient client, int myPlayerId, PlayerInfo[] players) {
+        if (mainPanel != null) {
+            mainPanel.removeAll();
+
+            GameContainer gameContainer = new GameContainer(this, client, myPlayerId, players, "Médio");
+
+            mainPanel.add(gameContainer);
+            mainPanel.revalidate();
+            mainPanel.repaint();
+        }
+    }
+
     public void startOnlineGame(GameClient client, int myPlayerId, boolean[] slotIsCPU) {
         if (mainPanel != null) {
             mainPanel.removeAll();

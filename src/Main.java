@@ -9,7 +9,7 @@ import javax.swing.SwingUtilities;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
-public class Main { 
+public class Main {     
     public static void main(String[] args) throws Exception {
         System.setProperty("sun.java2d.uiScale", "1");
             

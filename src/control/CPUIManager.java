@@ -20,6 +20,26 @@ public class CPUIManager {
         inicializarPersonalidadesAleatorias();
     }
 
+    /**
+     * Verifica se o slot especificado é controlado por uma CPU.
+     */
+    public boolean isCPUSlot(int slot) {
+        if (slot < 0 || slot >= 4) {
+            return false;
+        }
+
+        // No modo Online conectado, assume-se que os outros slots são jogadores humanos
+        if (gameManager != null && gameManager.getGameClient() != null && gameManager.getGameClient().isConnected()) {
+            return false;
+        }
+
+        // No modo Offline, qualquer slot diferente do jogador local é uma CPU
+        int meuId = (gameManager != null && gameManager.getTurnManager() != null) 
+                    ? gameManager.getTurnManager().getMyPlayerId() : 0;
+
+        return slot != meuId;
+    }
+
     public void setJogoDificuldade(String dificuldade) {
         if (dificuldade != null && !dificuldade.trim().isEmpty()) {
             String difNormalizada = dificuldade.trim().toUpperCase();
@@ -64,7 +84,7 @@ public class CPUIManager {
         System.out.println("[CPUIManager] Iniciando o raciocínio da CPU " + cpuId + "...");
 
         Timer cpuTimer = new Timer(1800, e -> {
-            // CORREÇÃO: Tratamento para evitar congelar o jogo caso deckManager seja nulo
+            // Tratamento para evitar congelar o jogo caso deckManager seja nulo
             if (this.deckManager == null) {
                 System.err.println("[CPUIManager] Erro Crítico: DeckManager não foi inicializado!");
                 if (this.gameManager != null && this.gameManager.getTurnManager() != null) {
@@ -150,20 +170,20 @@ public class CPUIManager {
 
         switch (this.jogoDificuldade) {
             case "FÁCIL":
-                if (difCarta.contains("FÁCIL") || difCarta.contains("FACIL")) return chance <= 0.70;
-                if (difCarta.contains("MÉDIO") || difCarta.contains("MEDIO")) return chance <= 0.40;
-                return chance <= 0.15;
+                if (difCarta.contains("FÁCIL") || difCarta.contains("FACIL")) return chance <= 0.75;
+                if (difCarta.contains("MÉDIO") || difCarta.contains("MEDIO")) return chance <= 0.50;
+                return chance <= 0.25;
 
             case "DIFÍCIL":
                 if (difCarta.contains("FÁCIL") || difCarta.contains("FACIL")) return chance <= 0.98;
-                if (difCarta.contains("MÉDIO") || difCarta.contains("MEDIO")) return chance <= 0.80;
-                return chance <= 0.50;
+                if (difCarta.contains("MÉDIO") || difCarta.contains("MEDIO")) return chance <= 0.90;
+                return chance <= 0.70;
 
             case "MÉDIO":
             default:
-                if (difCarta.contains("FÁCIL") || difCarta.contains("FACIL")) return chance <= 0.85;
-                if (difCarta.contains("MÉDIO") || difCarta.contains("MEDIO")) return chance <= 0.60;
-                return chance <= 0.30;
+                if (difCarta.contains("FÁCIL") || difCarta.contains("FACIL")) return chance <= 0.90;
+                if (difCarta.contains("MÉDIO") || difCarta.contains("MEDIO")) return chance <= 0.75;
+                return chance <= 0.50;
         }
     }
 
@@ -171,6 +191,6 @@ public class CPUIManager {
         if (cpuId >= 1 && cpuId < this.personalidadesCPUs.length && this.personalidadesCPUs[cpuId] != null) {
             return this.personalidadesCPUs[cpuId];
         }
-        return "PADRAO"; // Retorna PADRAO em vez de null para o jogador (0) ou IDs inválidos
+        return "PADRAO";
     }
 }

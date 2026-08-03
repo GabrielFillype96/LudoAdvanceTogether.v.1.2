@@ -2680,11 +2680,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente o conceito de violência digital contra a mulher incluído na Lei Maria da Penha pela Lei 14.188/2021?",
     "alternativas": [
-      "Violências praticadas por meio de tecnologias digitais, como exposição de imagens íntimas sem consentimento, cyberstalking e ameaças por aplicativos de mensagem",
+      "Violências digitais, incluindo vazamento de imagens íntimas, perseguição e ameaças virtuais",
       "Apenas crimes cometidos exclusivamente em plataformas de redes sociais de grande alcance como Facebook e Instagram",
       "Ataques hackers contra sistemas governamentais que comprometem dados pessoais de mulheres cadastradas em programas sociais"
     ],
-    "respostaCorreta": "Violências praticadas por meio de tecnologias digitais, como exposição de imagens íntimas sem consentimento, cyberstalking e ameaças por aplicativos de mensagem",
+    "respostaCorreta": "Violências digitais, incluindo vazamento de imagens íntimas, perseguição e ameaças virtuais",
     "efeito": "AVANÇAR",
     "valorEfeito": "4/6",
     "iconePeao": ""
@@ -2694,13 +2694,13 @@
     "tipoGeral": "PERGUNTA",
     "dificuldade": "MÉDIO",
     "tipoPergunta": "MULTIPLA_ESCOLHA",
-    "enunciado": "O que é o Programa Mulher Segura e Protegida e qual é seu objetivo?",
+    "enunciado": "O que é o Programa Mulher Segura e Protegida?",
     "alternativas": [
-      "Programa federal que integra ações de prevenção, atenção e enfrentamento à violência doméstica, fortalecendo a rede de proteção e ampliando o acesso das vítimas a serviços especializados",
       "Programa de monitoramento eletrônico de agressores por tornozeleira realizado exclusivamente em grandes capitais brasileiras",
+      "Programa federal que integra ações de prevenção, atenção e enfrentamento à violência doméstica",
       "Projeto de capacitação de policiais militares em técnicas de negociação para situações de crise doméstica"
     ],
-    "respostaCorreta": "Programa federal que integra ações de prevenção, atenção e enfrentamento à violência doméstica, fortalecendo a rede de proteção e ampliando o acesso das vítimas a serviços especializados",
+    "respostaCorreta": "Programa federal que integra ações de prevenção, atenção e enfrentamento à violência doméstica",
     "efeito": "AVANÇAR",
     "valorEfeito": "3/6",
     "iconePeao": ""
@@ -2728,11 +2728,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente como a dependência financeira pode ser usada pelo agressor como instrumento de controle?",
     "alternativas": [
-      "O agressor impede a mulher de trabalhar ou de ter acesso ao próprio dinheiro, tornando-a economicamente dependente e dificultando sua saída do relacionamento abusivo",
       "O agressor solicita que a mulher economize recursos para que o casal possa viajar juntos no futuro",
-      "O agressor oferece presentes e dinheiro de forma espontânea como demonstração de afeto e cuidado com a parceira"
+      "O agressor oferece presentes e dinheiro de forma espontânea como demonstração de afeto e cuidado com a parceira",
+      "Impedimento do trabalho e do acesso ao dinheiro, gerando dependência econômica e dificultando a saída do relacionamento"
     ],
-    "respostaCorreta": "O agressor impede a mulher de trabalhar ou de ter acesso ao próprio dinheiro, tornando-a economicamente dependente e dificultando sua saída do relacionamento abusivo",
+    "respostaCorreta": "Impedimento do trabalho e do acesso ao dinheiro, gerando dependência econômica e dificultando a saída do relacionamento",
     "efeito": "AVANÇAR",
     "valorEfeito": "4/6",
     "iconePeao": ""
@@ -2744,11 +2744,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente o que é o assédio sexual no ambiente de trabalho?",
     "alternativas": [
-      "Constrangimento de pessoa com o objetivo de obter vantagem ou favorecimento sexual, prevalecendo-se o agente de sua condição de superior hierárquico ou ascendência",
-      "Elogios e comentários sobre a aparência entre colegas de trabalho considerados bem-humorados por ambas as partes",
-      "Conflitos interpessoais entre funcionários relacionados a diferenças de opinião sobre projetos e tarefas profissionais"
+      "Uso de superioridade hierárquica para constranger alguém visando vantagem sexual",
+      "Interações e elogios consensuais entre colegas",
+      "Divergências de opinião entre colegas sobre tarefas e projetos."
     ],
-    "respostaCorreta": "Constrangimento de pessoa com o objetivo de obter vantagem ou favorecimento sexual, prevalecendo-se o agente de sua condição de superior hierárquico ou ascendência",
+    "respostaCorreta": "Uso de superioridade hierárquica para constranger alguém visando vantagem sexual",
     "efeito": "AVANÇAR",
     "valorEfeito": "3/6",
     "iconePeao": ""
@@ -2792,8 +2792,8 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente o papel do profissional de assistência social no atendimento a mulheres em situação de violência?",
     "alternativas": [
-      "Realizar escuta qualificada, estudo social e articular a rede para garantir acesso a saúde, justiça e habitação",
       "Emitir laudos periciais para subsidiar ações criminais contra o agressor em substituição ao laudo médico",
+      "Realizar escuta qualificada, estudo social e articular a rede para garantir acesso a saúde, justiça e habitação",
       "Aplicar medidas de proteção à vítima com força coercitiva similar às medidas protetivas judiciais"
     ],
     "respostaCorreta": "Realizar escuta qualificada, estudo social e articular a rede para garantir acesso a saúde, justiça e habitação",
@@ -2936,11 +2936,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente o crime de estupro de vulnerável no contexto de violência contra a mulher?",
     "alternativas": [
-      "Prática de ato libidinoso com menor de 14 anos, pessoa com deficiência ou que por qualquer causa não possa oferecer resistência, sem necessidade de violência ou ameaça explícita",
       "Crime que exige obrigatoriamente o uso de violência física para sua configuração, mesmo quando a vítima é menor de idade",
+      "Ato libidinoso com menor de 14 anos ou pessoa incapaz de resistir, sem necessidade de violência ou ameaça.",
       "Conduta que só se caracteriza quando há penetração vaginal, excluindo outras formas de violência sexual"
     ],
-    "respostaCorreta": "Prática de ato libidinoso com menor de 14 anos, pessoa com deficiência ou que por qualquer causa não possa oferecer resistência, sem necessidade de violência ou ameaça explícita",
+    "respostaCorreta": "Ato libidinoso com menor de 14 anos ou pessoa incapaz de resistir, sem necessidade de violência ou ameaça.",
     "efeito": "AVANÇAR",
     "valorEfeito": "4/6",
     "iconePeao": ""
@@ -2965,7 +2965,7 @@
     "tipoGeral": "PERGUNTA",
     "dificuldade": "DIFÍCIL",
     "tipoPergunta": "SIM_NAO",
-    "enunciado": "A decisão do STF na ADI 4424 confirmou que a ação penal por lesão corporal leve no contexto da Lei Maria da Penha é pública incondicionada, ou seja, não depende de representação da vítima?",
+    "enunciado": "A decisão do STF na ADI 4424 confirmou que a ação penal por lesão corporal leve no contexto da Lei Maria da Penha é pública incondicionada?",
     "alternativas": [
       "Sim",
       "Não"
@@ -3177,11 +3177,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente o papel da ONU Mulheres no contexto do combate à violência de gênero no Brasil?",
     "alternativas": [
-      "Entidade da ONU que promove a igualdade de gênero e apoia políticas públicas de enfrentamento à violência contra a mulher",
-      "Órgão internacional com poder de polícia que pode prender agressores de mulheres em território brasileiro por requisição direta",
+      "ONU Mulheres: promoção da igualdade de gênero e apoio a políticas de proteção",
+      "Organismo internacional com poder de polícia para prender agressores no Brasil",
       "Tribunal internacional acessível a vítimas brasileiras para o julgamento de feminicídios e violência sexual"
     ],
-    "respostaCorreta": "Entidade da ONU que promove a igualdade de gênero e apoia políticas públicas de enfrentamento à violência contra a mulher",
+    "respostaCorreta": "ONU Mulheres: promoção da igualdade de gênero e apoio a políticas de proteção",
     "efeito": "AVANÇAR",
     "valorEfeito": "6/6",
     "iconePeao": ""
@@ -3209,11 +3209,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente o que é a perspectiva interseccional e por que ela é fundamental para políticas de enfrentamento à violência contra a mulher?",
     "alternativas": [
-      "Perspectiva que reconhece raça, classe, gênero, deficiência e outros marcadores, exigindo respostas diferenciadas das políticas públicas",
+      "Atendimento público diferenciado com base nos diferentes marcadores sociais",
       "Perspectiva que defende que todas as formas de discriminação devem ser tratadas de forma separada e hierarquizada",
-      "Perspectiva teórica sem impacto prático nas políticas de segurança pública e nas dinâmicas do atendimento à mulher em situação de violência"
+      "Abstração teórica sem aplicação prática na segurança e no atendimento a mulheres"
     ],
-    "respostaCorreta": "Perspectiva que reconhece raça, classe, gênero, deficiência e outros marcadores, exigindo respostas diferenciadas das políticas públicas",
+    "respostaCorreta": "Atendimento público diferenciado com base nos diferentes marcadores sociais",
     "efeito": "AVANÇAR",
     "valorEfeito": "6/6",
     "iconePeao": ""
@@ -3241,11 +3241,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente o conceito jurídico de violência doméstica estrutural e sua relação com a responsabilidade do Estado?",
     "alternativas": [
-      "Violência enraizada em estruturas sociais, culturais e institucionais que o Estado tem o dever de combater por meio de políticas públicas, legislação e educação",
       "Violência praticada por agentes públicos, que gera responsabilidade civil objetiva",
+      "Violência enraizada em estruturas sociais e institucionais que o Estado deve combater com políticas, leis e educação",
       "Modalidade de violência reconhecida apenas no direito internacional, sem correspondência na legislação brasileira vigente"
     ],
-    "respostaCorreta": "Violência enraizada em estruturas sociais, culturais e institucionais que o Estado tem o dever de combater por meio de políticas públicas, legislação e educação",
+    "respostaCorreta": "Violência enraizada em estruturas sociais e institucionais que o Estado deve combater com políticas, leis e educação",
     "efeito": "AVANÇAR",
     "valorEfeito": "6/6",
     "iconePeao": ""
@@ -3272,11 +3272,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente a diferença entre violência doméstica e violência familiar segundo a Lei Maria da Penha?",
     "alternativas": [
-      "Violência doméstica ocorre no âmbito da unidade doméstica; violência familiar ocorre entre pessoas com laços de parentesco, podendo acontecer fora do lar",
       "São expressões completamente sinônimas e a lei não faz distinção entre elas em nenhum artigo",
-      "Violência familiar se restringe a agressões entre pais e filhos, excluindo cônjuges e companheiros"
+      "Violência familiar se restringe a agressões entre pais e filhos, excluindo cônjuges e companheiros",
+      "Doméstica ocorre na unidade residencial; familiar ocorre entre parentes, mesmo fora do lar"
     ],
-    "respostaCorreta": "Violência doméstica ocorre no âmbito da unidade doméstica; violência familiar ocorre entre pessoas com laços de parentesco, podendo acontecer fora do lar",
+    "respostaCorreta": "Doméstica ocorre na unidade residencial; familiar ocorre entre parentes, mesmo fora do lar",
     "efeito": "AVANÇAR",
     "valorEfeito": "4/6",
     "iconePeao": ""
@@ -3288,11 +3288,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo explica corretamente por que homens que presenciam violência doméstica na infância não estão 'condenados' a repetir esse comportamento?",
     "alternativas": [
-      "A violência doméstica resulta de escolhas individuais e estruturas culturais, não de determinismo biológico, sendo possível romper o ciclo com apoio psicossocial, educação e responsabilização",
       "Homens que presenciam violência na infância sempre se tornam agressores, pois o comportamento é transmitido geneticamente entre gerações",
-      "O histórico familiar de violência impede completamente qualquer intervenção terapêutica eficaz, tornando a reincidência inevitável"
+      "O histórico familiar de violência impede completamente qualquer intervenção terapêutica eficaz, tornando a reincidência inevitável",
+      "A violência decorre de fatores culturais e escolhas, não da biologia, permitindo romper o ciclo com apoio e educação"
     ],
-    "respostaCorreta": "A violência doméstica resulta de escolhas individuais e estruturas culturais, não de determinismo biológico, sendo possível romper o ciclo com apoio psicossocial, educação e responsabilização",
+    "respostaCorreta": "A violência decorre de fatores culturais e escolhas, não da biologia, permitindo romper o ciclo com apoio e educação",
     "efeito": "AVANÇAR",
     "valorEfeito": "4/6",
     "iconePeao": ""
@@ -3304,11 +3304,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente o que é o atendimento humanizado à mulher vítima de violência sexual nos serviços de saúde?",
     "alternativas": [
-      "Acolhimento sem julgamento, oferta de anticoncepção de emergência, profilaxia para ISTs e HIV, acompanhamento psicológico e respeito à autonomia da vítima nas decisões sobre seu tratamento",
-      "Atendimento restrito ao registro fotográfico de lesões e encaminhamento imediato à delegacia, sem oferecimento de medicamentos ou suporte emocional",
-      "Procedimento que prioriza a coleta de provas periciais antes de qualquer cuidado com a saúde física ou psicológica da vítima"
+      "Atendimento restrito ao registro de lesões e encaminhamento à delegacia, sem medicação ou suporte emocional",
+      "Acolhimento sem julgamento, profilaxias de emergência, suporte psicológico e respeito à autonomia da vítima",
+      "Priorização de provas periciais antes de qualquer cuidado com a saúde física ou psicológica da vítima"
     ],
-    "respostaCorreta": "Acolhimento sem julgamento, oferta de anticoncepção de emergência, profilaxia para ISTs e HIV, acompanhamento psicológico e respeito à autonomia da vítima nas decisões sobre seu tratamento",
+    "respostaCorreta": "Acolhimento sem julgamento, profilaxias de emergência, suporte psicológico e respeito à autonomia da vítima",
     "efeito": "AVANÇAR",
     "valorEfeito": "4/6",
     "iconePeao": ""
@@ -3320,11 +3320,11 @@
     "tipoPergunta": "MULTIPLA_ESCOLHA",
     "enunciado": "Qual das alternativas abaixo descreve corretamente o papel das organizações da sociedade civil (ONGs feministas) no enfrentamento à violência contra a mulher?",
     "alternativas": [
-      "Complementam os serviços públicos oferecendo atendimento especializado, advocacia política, monitoramento de políticas públicas e mobilização social para prevenção da violência",
       "Substituem completamente os órgãos governamentais no atendimento a mulheres vítimas de violência, dispensando a necessidade de serviços públicos",
+      "Complementam serviços públicos com apoio especializado, advocacia política, monitoramento de políticas e mobilização preventiva",
       "Atuam exclusivamente como captadoras de recursos internacionais sem prestação direta de serviços ou influência em políticas públicas"
     ],
-    "respostaCorreta": "Complementam os serviços públicos oferecendo atendimento especializado, advocacia política, monitoramento de políticas públicas e mobilização social para prevenção da violência",
+    "respostaCorreta": "Complementam serviços públicos com apoio especializado, advocacia política, monitoramento de políticas e mobilização preventiva",
     "efeito": "AVANÇAR",
     "valorEfeito": "3/6",
     "iconePeao": ""

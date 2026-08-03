@@ -89,12 +89,15 @@ public class MainMenuScreen extends JPanel {
             sincronizarSelecaoComSubMenu();
         });
 
+        // CORRIGIDO: Agora vai direto para o WindowManager para validar a saída do Lobby antes de trocar a tela
         btnAbout.addActionListener(e -> {
-            subMenuContainer.exibirSobreMenu();
+            windowManager.openMenuAbout();
             sincronizarSelecaoComSubMenu();
         });
 
-        btnExit.addActionListener(e -> System.exit(0));
+        btnExit.addActionListener(e -> {
+            windowManager.fecharJogo();
+        });
 
         // Garante que a seleção inicial reflita a tela carregada por padrão
         SwingUtilities.invokeLater(this::sincronizarSelecaoComSubMenu);

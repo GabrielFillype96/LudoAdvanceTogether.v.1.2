@@ -269,64 +269,65 @@ public class BoardScreen extends JPanel {
     }
 
     private void pawnPath() {
-        int pathLength = 61; 
-        player1Path = new Point[pathLength];
-        player2Path = new Point[pathLength];
-        player3Path = new Point[pathLength];
-        player4Path = new Point[pathLength];
+    int pathLength = 62; // <-- ALTERADO DE 61 PARA 62
+    player1Path = new Point[pathLength];
+    player2Path = new Point[pathLength];
+    player3Path = new Point[pathLength];
+    player4Path = new Point[pathLength];
 
-        // 1. Spawns das Bases (Casas Iniciais 0..3)
-        player1Path[0] = new Point(440, 520);
-        player1Path[1] = new Point(440, 440);
-        player1Path[2] = new Point(520, 520);
-        player1Path[3] = new Point(520, 440);
+    // 1. Spawns das Bases (Casas Iniciais 0..3)
+    player1Path[0] = new Point(440, 520);
+    player1Path[1] = new Point(440, 440);
+    player1Path[2] = new Point(520, 520);
+    player1Path[3] = new Point(520, 440);
 
-        player2Path[0] = new Point(80, 520);
-        player2Path[1] = new Point(80, 440);
-        player2Path[2] = new Point(160, 520);
-        player2Path[3] = new Point(160, 440);
+    player2Path[0] = new Point(80, 520);
+    player2Path[1] = new Point(80, 440);
+    player2Path[2] = new Point(160, 520);
+    player2Path[3] = new Point(160, 440);
 
-        player3Path[0] = new Point(80, 160);
-        player3Path[1] = new Point(80, 80);
-        player3Path[2] = new Point(160, 160);
-        player3Path[3] = new Point(160, 80);
+    player3Path[0] = new Point(80, 160);
+    player3Path[1] = new Point(80, 80);
+    player3Path[2] = new Point(160, 160);
+    player3Path[3] = new Point(160, 80);
 
-        player4Path[0] = new Point(440, 160);
-        player4Path[1] = new Point(440, 80);
-        player4Path[2] = new Point(520, 160);
-        player4Path[3] = new Point(520, 80);
+    player4Path[0] = new Point(440, 160);
+    player4Path[1] = new Point(440, 80);
+    player4Path[2] = new Point(520, 160);
+    player4Path[3] = new Point(520, 80);
 
-        // 2. Trilha Principal do Tabuleiro
-        Point[] circuitoTrilha = new Point[] {
-            new Point(260, 580), new Point(260, 540), new Point(260, 500), new Point(260, 460), new Point(260, 420), new Point(260, 380),
-            new Point(220, 340), new Point(180, 340), new Point(140, 340), new Point(100, 340), new Point(60, 340),  new Point(20, 340),
-            new Point(20, 300),
-            new Point(20, 260),  new Point(60, 260),  new Point(100, 260), new Point(140, 260), new Point(180, 260), new Point(220, 260),
-            new Point(260, 220), new Point(260, 180), new Point(260, 140), new Point(260, 100), new Point(260, 60),  new Point(260, 20),
-            new Point(300, 20),
-            new Point(340, 20),  new Point(340, 60),  new Point(340, 100), new Point(340, 140), new Point(340, 180), new Point(340, 220),
-            new Point(380, 260), new Point(420, 260), new Point(460, 260), new Point(500, 260), new Point(540, 260), new Point(580, 260),
-            new Point(580, 300),
-            new Point(580, 340), new Point(540, 340), new Point(500, 340), new Point(460, 340), new Point(420, 340), new Point(380, 340),
-            new Point(340, 380), new Point(340, 420), new Point(340, 460), new Point(340, 500), new Point(340, 540), new Point(340, 580),
-            new Point(300, 580),
-            new Point(300, 540), new Point(300, 500), new Point(300, 460), new Point(300, 420), new Point(300, 380)
-        };
+    // 2. Trilha Principal do Tabuleiro
+    Point[] circuitoTrilha = new Point[] {
+        new Point(260, 580), new Point(260, 540), new Point(260, 500), new Point(260, 460), new Point(260, 420), new Point(260, 380),
+        new Point(220, 340), new Point(180, 340), new Point(140, 340), new Point(100, 340), new Point(60, 340),  new Point(20, 340),
+        new Point(20, 300),
+        new Point(20, 260),  new Point(60, 260),  new Point(100, 260), new Point(140, 260), new Point(180, 260), new Point(220, 260),
+        new Point(260, 220), new Point(260, 180), new Point(260, 140), new Point(260, 100), new Point(260, 60),  new Point(260, 20),
+        new Point(300, 20),
+        new Point(340, 20),  new Point(340, 60),  new Point(340, 100), new Point(340, 140), new Point(340, 180), new Point(340, 220),
+        new Point(380, 260), new Point(420, 260), new Point(460, 260), new Point(500, 260), new Point(540, 260), new Point(580, 260),
+        new Point(580, 300),
+        new Point(580, 340), new Point(540, 340), new Point(500, 340), new Point(460, 340), new Point(420, 340), new Point(380, 340),
+        new Point(340, 380), new Point(340, 420), new Point(340, 460), new Point(340, 500), new Point(340, 540), new Point(340, 580),
+        new Point(300, 580),
+        // Reta final + Ponto do Centro (300, 300)
+        new Point(300, 540), new Point(300, 500), new Point(300, 460), new Point(300, 420), new Point(300, 380), new Point(300, 300) // <-- (300, 300) ADICIONADO AQUI!
+    };
 
-        System.arraycopy(circuitoTrilha, 0, player2Path, 4, circuitoTrilha.length);
+    System.arraycopy(circuitoTrilha, 0, player2Path, 4, circuitoTrilha.length);
 
-        int centroX = 300, centroY = 300;
-        for (int i = 4; i < player2Path.length; i++) {
-            Point p2 = player2Path[i];
-            if (p2 == null) continue;
-            int dx = p2.x - centroX;
-            int dy = p2.y - centroY;
+    int centroX = 300, centroY = 300;
+    for (int i = 4; i < player2Path.length; i++) {
+        Point p2 = player2Path[i];
+        if (p2 == null) continue;
+        int dx = p2.x - centroX;
+        int dy = p2.y - centroY;
 
-            this.player3Path[i] = new Point(centroX - dy, centroY + dx);
-            this.player4Path[i] = new Point(centroX - dx, centroY - dy);
-            this.player1Path[i] = new Point(centroX + dy, centroY - dx);
-        }
+        this.player3Path[i] = new Point(centroX - dy, centroY + dx);
+        this.player4Path[i] = new Point(centroX - dx, centroY - dy);
+        this.player1Path[i] = new Point(centroX + dy, centroY - dx);
     }
+}
 
     public void startBoardPawnShake(int pawnIndex) {
         if (pawnIndex >= 0 && pawnIndex < 4 && playersPawns[0][pawnIndex] != null) {

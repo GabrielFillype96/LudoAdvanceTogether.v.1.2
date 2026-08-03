@@ -8,7 +8,6 @@ import java.util.List;
 
 public class DeckManager {
     
-    // Substituído array bruto por List<List<...>> para evitar avisos de generics
     private List<List<CustomCards>> drawPiles;    // Montes de Compra
     private List<List<CustomCards>> discardPiles; // Montes de Descarte
     
@@ -45,7 +44,6 @@ public class DeckManager {
     public void initializeDecks() {
         long startTime = System.currentTimeMillis();
         
-        // Carrega todas as cartas uma única vez para otimizar desempenho
         for (int i = 0; i < 4; i++) {
             this.drawPiles.get(i).clear();
             this.discardPiles.get(i).clear();
@@ -67,7 +65,7 @@ public class DeckManager {
     /**
      * Puxa a carta do topo filtrando por cartas válidas baseadas no estado dos peões e no Cooldown de Azar.
      */
-        public CustomCards drawCard(int playerId, boolean allPawnsInBase) {
+    public CustomCards drawCard(int playerId, boolean allPawnsInBase) {
         if (playerId < 0 || playerId >= 4) return null;
 
         List<CustomCards> drawPile = drawPiles.get(playerId);
@@ -95,7 +93,6 @@ public class DeckManager {
             }
 
             // --- RESTRIÇÃO DE INÍCIO DE JOGO ---
-            // Esta condição só entra se TODOS os 4 peões estiverem na base (allPawnsInBase == true)
             if (!devePular && allPawnsInBase) {
                 if (ehSorteOuAzar) {
                     devePular = true;
@@ -135,7 +132,6 @@ public class DeckManager {
             if (tratado.contains("/")) {
                 tratado = tratado.split("/")[0].trim();
             }
-            // Remove tudo que não for dígito
             String apenasDigitos = tratado.replaceAll("[^0-9]", "");
             if (apenasDigitos.isEmpty()) return 0;
             

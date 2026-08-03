@@ -33,6 +33,13 @@ public class PawnControlManager {
         this.gameClient = gameClient;
     }
 
+    private int getMyPlayerId() {
+        if (this.gameClient != null && this.gameClient.isConnected()) {
+            return this.gameClient.getMyPlayerId();
+        }
+        return 0;
+    }
+
     public String getPawnState(int pawnIndex) {
         if (pawnIndex < 0 || pawnIndex >= 4) {
             return "INVÁLIDO"; 
@@ -119,6 +126,7 @@ public class PawnControlManager {
 
         String state = getPawnState(pawnIndex);
         int numeroPeao = getRealPawnNumber(pawnIndex);
+        int myPlayerId = getMyPlayerId();
 
         if ("NORMAL".equalsIgnoreCase(state)) {
             this.selectedPawnIndex = pawnIndex;
@@ -149,7 +157,7 @@ public class PawnControlManager {
                     if ("DOURADO".equalsIgnoreCase(state)) {
                         gameManager.emitirStatus(GameStatusManager.PEAO_FINALIZADO, numeroPeao);
                     } else {
-                        if (gameManager.isPeaoNaBase(0, pawnIndex)) {
+                        if (gameManager.isPeaoNaBase(myPlayerId, pawnIndex)) {
                             gameManager.emitirStatus(GameStatusManager.PEAO_NA_BASE, numeroPeao);
                         } else {
                             gameManager.emitirStatus(GameStatusManager.PEAO_SEM_MOVIMENTO, numeroPeao);
@@ -185,7 +193,8 @@ public class PawnControlManager {
     }
 
     public void onBoardPawnHoverEntered(int pawnIndex) {
-        gui.components.PlayerPawn boardPawn = (boardScreen != null) ? boardScreen.getPlayerPawn(0, pawnIndex) : null;
+        int myPlayerId = getMyPlayerId();
+        gui.components.PlayerPawn boardPawn = (boardScreen != null) ? boardScreen.getPlayerPawn(myPlayerId, pawnIndex) : null;
         
         if (!awaitingPawnSelection) {
             if (boardPawn != null) boardPawn.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));

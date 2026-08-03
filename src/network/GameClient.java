@@ -24,10 +24,7 @@ public class GameClient {
     private WindowManager windowManager;
     private GameManager gameManager;
 
-    // Guarda a lista anterior de jogadores para detectar entradas e saídas
     private PlayerInfo[] previousPlayers = null;
-    
-    // Referência do aviso ativo para substituir pop-ups antigos sem empilhar
     private JDialog avisoAtualDialog = null;
 
     public void setLobbyScreen(LobbyScreen lobbyScreen) { this.lobbyScreen = lobbyScreen; }
@@ -88,7 +85,6 @@ public class GameClient {
                 case "LOBBY_UPDATE":
                     PlayerInfo[] players = gson.fromJson(msg.getPayload(), PlayerInfo[].class);
 
-                    // Se eu for o HOST, verifica se algum jogador realmente entrou ou saiu
                     if (myPlayerId == 0 && previousPlayers != null) {
                         verificarEntradaSaidaJogadores(previousPlayers, players);
                     }
@@ -101,12 +97,8 @@ public class GameClient {
 
                 case "START_GAME":
                     PlayerInfo[] finalPlayers = gson.fromJson(msg.getPayload(), PlayerInfo[].class);
-                    boolean[] slotIsCPU = new boolean[finalPlayers.length];
-                    for (int i = 0; i < finalPlayers.length; i++) {
-                        slotIsCPU[i] = finalPlayers[i].isCPU();
-                    }
                     if (windowManager != null) {
-                        windowManager.startOnlineGame(this, myPlayerId, slotIsCPU);
+                        windowManager.startOnlineGame(this, myPlayerId, finalPlayers);
                     }
                     break;
 
@@ -150,16 +142,13 @@ public class GameClient {
         });
     }
 
-    /**
-     * Compara a lista anterior com a nova para notificar o Host com o nome correto do jogador.
-     */
     private void verificarEntradaSaidaJogadores(PlayerInfo[] antigos, PlayerInfo[] novos) {
         if (antigos == null || novos == null) return;
 
         int len = Math.min(antigos.length, novos.length);
 
         for (int i = 0; i < len; i++) {
-            if (i == myPlayerId) continue; // Ignora o próprio Host
+            if (i == myPlayerId) continue; 
 
             PlayerInfo pAntigo = antigos[i];
             PlayerInfo pNovo = novos[i];
@@ -171,12 +160,10 @@ public class GameClient {
             String nomeNovo = (pNovo != null && pNovo.getName() != null) ? pNovo.getName().trim() : "";
             String nomePadraoSlot = "Jogador " + (i + 1);
 
-            // 1. Um jogador humano acabou de entrar no slot
             if (!antigoEraHumano && novoEHumano) {
                 String nomeExibicao = !nomeNovo.isEmpty() ? nomeNovo : nomePadraoSlot;
                 mostrarAvisoCustomizado("JOGADOR CONECTADO", nomeExibicao + " entrou na sala!");
             }
-            // 2. O jogador já conectado atualizou o nome temporário ("Jogador X") para o nome real escolhido
             else if (antigoEraHumano && novoEHumano) {
                 boolean eraNomePadrao = nomeAntigo.equalsIgnoreCase(nomePadraoSlot);
                 boolean agoraEhNomeCustomizado = !nomeNovo.isEmpty() && !nomeNovo.equalsIgnoreCase(nomePadraoSlot);
@@ -185,7 +172,6 @@ public class GameClient {
                     mostrarAvisoCustomizado("JOGADOR CONECTADO", nomeNovo + " entrou na sala!");
                 }
             }
-            // 3. Um jogador humano saiu da sala
             else if (antigoEraHumano && !novoEHumano) {
                 String nomeExibicao = (!nomeAntigo.isEmpty() && !nomeAntigo.equalsIgnoreCase(nomePadraoSlot)) 
                         ? nomeAntigo : nomePadraoSlot;
@@ -217,11 +203,7 @@ public class GameClient {
         }
     }
 
-    /**
-     * Exibe o diálogo de aviso com a identidade visual exata das telas do jogo.
-     */
     private void mostrarAvisoCustomizado(String titulo, String mensagem) {
-        // Se já houver um aviso na tela (ex: o temporário "Jogador 2 entrou"), fecha-o antes de exibir o novo
         if (avisoAtualDialog != null && avisoAtualDialog.isDisplayable()) {
             avisoAtualDialog.dispose();
         }
@@ -243,11 +225,9 @@ public class GameClient {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 
-                // Fundo Roxo Escuro
                 g2.setColor(new Color(30, 18, 38));
                 g2.fillRoundRect(0, 0, getWidth(), getHeight(), (int) (18 * scale), (int) (18 * scale));
                 
-                // Borda Dourada
                 g2.setColor(GameColors.GOLD_ACCENT);
                 g2.setStroke(new BasicStroke(2.5f));
                 g2.drawRoundRect(1, 1, getWidth() - 3, getHeight() - 3, (int) (18 * scale), (int) (18 * scale));
@@ -258,21 +238,18 @@ public class GameClient {
         content.setLayout(null);
         content.setPreferredSize(new Dimension(width, height));
 
-        // Título estilizado
         JLabel lblTitulo = new JLabel(titulo, SwingConstants.CENTER);
         lblTitulo.setFont(new Font("Serif", Font.BOLD, (int) (15 * scale)));
         lblTitulo.setForeground(GameColors.GOLD_ACCENT);
         lblTitulo.setBounds(0, (int) (16 * scale), width, (int) (24 * scale));
         content.add(lblTitulo);
 
-        // Mensagem estilizada em HTML
         String htmlMsg = "<html><div style='text-align: center; color: #FFFFFF; font-family: sans-serif; font-size: " 
                 + (int) (10 * scale) + "px;'>" + mensagem + "</div></html>";
         JLabel lblMsg = new JLabel(htmlMsg, SwingConstants.CENTER);
         lblMsg.setBounds((int) (20 * scale), (int) (45 * scale), width - (int) (40 * scale), (int) (65 * scale));
         content.add(lblMsg);
 
-        // Botão OK centralizado
         int btnW = (int) (120 * scale);
         int btnH = (int) (34 * scale);
         int btnX = (width - btnW) / 2;

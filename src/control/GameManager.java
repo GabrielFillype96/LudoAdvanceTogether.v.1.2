@@ -24,7 +24,7 @@ public class GameManager {
     private GameClient gameClient;
     private boolean movimentoAutomaticoEmAndamento = false;
     private String currentCardType = "";
-    private boolean sorteioInicialAtivo = true;
+    private boolean sorteioInicialAtivo = false;
     private boolean jogadaEmAndamento = false;
 
     private String gameDifficulty = "MEDIO"; 
@@ -44,6 +44,18 @@ public class GameManager {
 
     public GameManager(BoardScreen boardScreen) {
         this.boardScreen = boardScreen;
+    }
+
+    public boolean isCPU(int slot) {
+        if (this.cpuIManager != null) {
+            return this.cpuIManager.isCPUSlot(slot);
+        }
+        // Fallback: no modo offline, qualquer slot diferente do jogador local é CPU
+        if (this.gameClient == null) {
+            int meuId = (this.turnManager != null) ? this.turnManager.getMyPlayerId() : 0;
+            return slot != meuId;
+        }
+        return false;
     }
 
     public BoardScreen getBoardScreen() {
@@ -165,7 +177,11 @@ public class GameManager {
     }
 
     public String getPlayerNameById(int playerId) {
-        if (playerId == 0) return "Você";
+        int localPlayerId = (this.turnManager != null) ? this.turnManager.getMyPlayerId() : ((this.gameClient != null) ? this.gameClient.getMyPlayerId() : 0);
+        
+        if (playerId == localPlayerId) {
+            return "Você";
+        }
         
         if (this.boardScreen != null) {
             PlayerPawn pawn = this.boardScreen.getPlayerPawn(playerId, 0);
@@ -470,8 +486,6 @@ public class GameManager {
             }
             
             if (podeMoverLinguagemOriginal && destIndex != -1) {
-                
-                // Valida se o trajeto (incluindo meio do caminho e destino) intercepta uma torre inimiga
                 if (usarRegraTorre && existeBloqueioNoTrajeto(activePlayerId, pos, destIndex, pawnPath)) {
                     if (activePlayerId == 0) this.pawnControlManager.updatePawnVisualState(i, "DESABILITADO");
                     continue; 
@@ -486,12 +500,8 @@ public class GameManager {
         return peoesValidos;
     }
 
-    /**
-     * Verifica se existe alguma torre inimiga no trajeto ou no destino.
-     * Permite pousar em zona segura mesmo com torre, mas impede a ULTRAPASSAGEM da zona segura.
-     */
     private boolean existeBloqueioNoTrajeto(int activePlayerId, int posAtual, int destIndex, Point[] pawnPath) {
-        if (posAtual < 4) { // Saindo da base diretamente para a posição 5
+        if (posAtual < 4) {
             Point pontoDestino = pawnPath[destIndex];
             return isTorreInimigaEm(pontoDestino, activePlayerId, true);
         }
@@ -529,16 +539,9 @@ public class GameManager {
         return pos >= inicioTrilhaSegura && pos < pathLength - 1;
     }
 
-    /**
-     * Verifica se existe 2 ou mais peões de um oponente na casa especificada.
-     * @param pontoDestino Coordenada do tabuleiro.
-     * @param activePlayerId Jogador atual.
-     * @param ehDestinoFinal Indica se a casa analisada é a casa de chegada do peão.
-     */
     private boolean isTorreInimigaEm(Point pontoDestino, int activePlayerId, boolean ehDestinoFinal) {
         if (pontoDestino == null) return false;
         
-        // Se for destino final E for zona segura, o peão pode pousar lá
         if (ehDestinoFinal && isZonaSegura(pontoDestino)) {
             return false;
         }

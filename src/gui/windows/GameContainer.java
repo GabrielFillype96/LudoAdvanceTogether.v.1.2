@@ -10,6 +10,7 @@ import gui.components.buttons.CustomButton;
 import gui.components.GameStatusBar; 
 import gui.events.BoardPawnMouseListener;
 import network.GameClient;
+import network.PlayerInfo;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -27,8 +28,6 @@ public class GameContainer extends JPanel {
     private GameStatusBar statusBar; 
 
     private static final double SCALE = 1.5;
-
-    // Cor roxa padrão do painel lateral
     private static final Color ROXO_PAINEL = new Color(42, 24, 54);
 
     private GameManager gameManager;
@@ -39,7 +38,34 @@ public class GameContainer extends JPanel {
     private int myPlayerId;
     private boolean[] slotIsCPU;
     
-    // CONSTRUTOR MULTIPLAYER ONLINE
+    // CONSTRUTOR MULTIPLAYER ONLINE (com PlayerInfo[])
+    public GameContainer(
+        WindowManager windowManager,
+        GameClient client,
+        int myPlayerId,
+        PlayerInfo[] players,
+        String cpuDifficulty
+    ) {
+        this(
+            windowManager,
+            client, // Passa o cliente para o construtor mestre
+            extrairNomeSlot(players, 0), extrairCorSlot(players, 0),
+            extrairNomeSlot(players, 1), extrairCorSlot(players, 1),
+            extrairNomeSlot(players, 2), extrairCorSlot(players, 2),
+            extrairNomeSlot(players, 3), extrairCorSlot(players, 3),
+            cpuDifficulty,
+            myPlayerId
+        );
+
+        if (players != null) {
+            this.slotIsCPU = new boolean[players.length];
+            for (int i = 0; i < players.length; i++) {
+                this.slotIsCPU[i] = (players[i] != null && players[i].isCPU());
+            }
+        }
+    }
+
+    // CONSTRUTOR MULTIPLAYER ONLINE (Legado / Fallback)
     public GameContainer(
         WindowManager windowManager, 
         GameClient client, 
@@ -49,27 +75,19 @@ public class GameContainer extends JPanel {
     ) {
         this(
             windowManager,
+            client, // Passa o cliente para o construtor mestre
             "Jogador 1" + (slotIsCPU != null && slotIsCPU.length > 0 && slotIsCPU[0] ? " (CPU)" : ""), "azul",
             "Jogador 2" + (slotIsCPU != null && slotIsCPU.length > 1 && slotIsCPU[1] ? " (CPU)" : ""), "roxo",
             "Jogador 3" + (slotIsCPU != null && slotIsCPU.length > 2 && slotIsCPU[2] ? " (CPU)" : ""), "rosa",
             "Jogador 4" + (slotIsCPU != null && slotIsCPU.length > 3 && slotIsCPU[3] ? " (CPU)" : ""), "amarelo",
-            cpuDifficulty
+            cpuDifficulty,
+            myPlayerId
         );
 
-        this.client = client;
-        this.myPlayerId = myPlayerId;
         this.slotIsCPU = slotIsCPU;
-
-        if (this.client != null) {
-            this.client.setGameManager(this.gameManager);
-            this.gameManager.setGameClient(this.client);
-            this.turnManager.setGameClient(this.client);
-        }
-
-        configurarListenersDePeao(this.myPlayerId);
     }
 
-    // CONSTRUTOR PADRÃO / OFFLINE
+    // CONSTRUTOR OFFLINE
     public GameContainer(
         WindowManager windowManager,
         String player1Name, String player1Color, 
@@ -78,7 +96,32 @@ public class GameContainer extends JPanel {
         String player4Name, String player4Color, 
         String cpuDifficulty
     ) {
+        this(
+            windowManager,
+            null, // Modo offline: sem GameClient
+            player1Name, player1Color,
+            player2Name, player2Color,
+            player3Name, player3Color,
+            player4Name, player4Color,
+            cpuDifficulty,
+            0
+        );
+    }
+
+    // CONSTRUTOR MESTRE INTERNO (AGORA RECEBE O GAMECLIENT DIRECTAMENTE)
+    private GameContainer(
+        WindowManager windowManager,
+        GameClient client,
+        String player1Name, String player1Color, 
+        String player2Name, String player2Color, 
+        String player3Name, String player3Color, 
+        String player4Name, String player4Color, 
+        String cpuDifficulty,
+        int activeLocalPlayerId
+    ) {
         this.windowManager = windowManager;
+        this.client = client;
+        this.myPlayerId = activeLocalPlayerId;
         this.playerName = player1Name;
         this.cpuDifficulty = cpuDifficulty;
 
@@ -86,18 +129,16 @@ public class GameContainer extends JPanel {
         setBounds(0, 0, screenSize.width, screenSize.height);
         setLayout(null);
         
-        // Define o container principal como opaco com a cor roxa do painel
         setOpaque(true);
         setBackground(ROXO_PAINEL);
 
-        // Largura escalada original (300 * 1.5 = 450px) para acomodar o baralho sem cortes
         int sidebarWidth = (int) (300 * SCALE); 
         int boardWidth = screenSize.width - sidebarWidth;
 
         int cardsHeight = (int) (400 * SCALE);
         int pawnControlHeight = screenSize.height - cardsHeight;
 
-        // Painel de fundo para a área do tabuleiro
+        // 1. Tabuleiro
         JPanel boardBackgroundArea = new JPanel();
         boardBackgroundArea.setBounds(0, 0, boardWidth, screenSize.height);
         boardBackgroundArea.setBackground(ROXO_PAINEL);
@@ -110,24 +151,37 @@ public class GameContainer extends JPanel {
             player4Name, player4Color
         );
         this.boardScreen.setBounds(0, 0, boardWidth, screenSize.height);
-        this.boardScreen.setOpaque(false); // Permite visualizar o fundo roxo caso o BoardScreen seja transparente
+        this.boardScreen.setOpaque(false);
 
+        // 2. Gerenciadores do jogo
         this.gameManager = new GameManager(this.boardScreen);
+        this.gameManager.setGameDifficulty(cpuDifficulty);
+
+        if (this.client != null) {
+            this.client.setGameManager(this.gameManager);
+            this.gameManager.setGameClient(this.client);
+        }
         
         CPUIManager cpuManager = new CPUIManager(this.gameManager);
         this.gameManager.setCPUIManager(cpuManager);
 
         this.turnManager = new TurnManager(this.gameManager);
+        this.turnManager.setLocalPlayerId(activeLocalPlayerId);
         this.gameManager.setTurnManager(this.turnManager);
+
+        // VINCULA O GAMECLIENT NO TURNMANAGER ANTES DE QUALQUER AÇÃO DE TURNO
+        if (this.client != null) {
+            this.turnManager.setGameClient(this.client);
+        }
 
         cards.CardManager cardManager = new cards.CardManager();
         this.deckManager = new DeckManager(cardManager);
-        this.deckManager.initializeDecks();
+        this.gameManager.setDeckManager(this.deckManager);
 
         cpuManager.setDeckManager(this.deckManager);
         this.turnManager.setCPUIManager(cpuManager);
 
-        // Área das cartas (Painel Lateral Direito)
+        // 3. Painel Superior Lateral (Cartas)
         JPanel cardsArea = new JPanel();
         cardsArea.setBounds(boardWidth, 0, sidebarWidth, cardsHeight);
         cardsArea.setBackground(ROXO_PAINEL);
@@ -142,27 +196,33 @@ public class GameContainer extends JPanel {
 
         cardsContainer.setDeckManager(this.deckManager);
         cardsContainer.setTurnManager(this.turnManager);
+        this.turnManager.setCardsContainer(cardsContainer);
 
-        // Área de controle dos peões
+        // 4. Painel Inferior Lateral (Status, Controle de Peões e Menu)
         JPanel pawnControlArea = new JPanel();
         pawnControlArea.setBounds(boardWidth, cardsHeight, sidebarWidth, pawnControlHeight);
         pawnControlArea.setBackground(ROXO_PAINEL);
         pawnControlArea.setLayout(null);
 
+        // Barra de Status
         this.statusBar = new GameStatusBar(SCALE);
         this.statusBar.setBounds((int) (40 * SCALE), (int) (8 * SCALE), (int) (220 * SCALE), (int) (46 * SCALE));
-        
-        if (this.client == null) {
-            this.turnManager.sortearPrimeiroJogador();
-        }
-        
-        this.gameManager.setGameStatusBar(statusBar);
+        this.gameManager.setGameStatusBar(this.statusBar);
         pawnControlArea.add(this.statusBar);
 
+        // Gerenciador e Container de Peões
         this.pawnControlManager = new PawnControlManager(this.boardScreen, this.gameManager);
+        if (this.client != null) {
+            this.pawnControlManager.setGameClient(this.client);
+        }
         this.gameManager.setPawnControlManager(this.pawnControlManager);
         
-        PawnControlContainer pawnControlContainer = new PawnControlContainer(pawnControlManager, player1Color);
+        String localPlayerColor = player1Color;
+        if (activeLocalPlayerId == 1) localPlayerColor = player2Color;
+        else if (activeLocalPlayerId == 2) localPlayerColor = player3Color;
+        else if (activeLocalPlayerId == 3) localPlayerColor = player4Color;
+
+        PawnControlContainer pawnControlContainer = new PawnControlContainer(pawnControlManager, localPlayerColor);
         pawnControlContainer.setBounds((int) (40 * SCALE), (int) (62 * SCALE), (int) (220 * SCALE), (int) (120 * SCALE));
         pawnControlContainer.setBackground(new Color(38, 24, 16));
         pawnControlArea.add(pawnControlContainer);
@@ -172,13 +232,56 @@ public class GameContainer extends JPanel {
         btnMenu.addActionListener(e -> abrirMenuPausa());
         pawnControlArea.add(btnMenu);
 
-        // Adiciona o tabuleiro e os painéis ao container
+        // Montagem final do Layout
         add(this.boardScreen);
-        add(boardBackgroundArea); // Fundo roxo atrás do tabuleiro
+        add(boardBackgroundArea);
         add(cardsArea);
         add(pawnControlArea);
 
-        configurarListenersDePeao(0);
+        configurarListenersDePeao(activeLocalPlayerId);
+
+        // Inicializa a partida chamando o SORTEIO real
+        iniciarPartida();
+    }
+
+    private void iniciarPartida() {
+        if (this.turnManager != null) {
+            // Roda o sorteio sincronizado em vez de fixar setTurn(0)
+            this.turnManager.sortearPrimeiroJogador();
+        }
+    }
+
+    private static String extrairNomeSlot(PlayerInfo[] players, int slot) {
+        if (players != null && slot >= 0 && slot < players.length && players[slot] != null) {
+            String name = players[slot].getName();
+            if (name != null && !name.trim().isEmpty()) {
+                return name;
+            }
+        }
+        return "Jogador " + (slot + 1);
+    }
+
+    private static String extrairCorSlot(PlayerInfo[] players, int slot) {
+        if (players != null && slot >= 0 && slot < players.length && players[slot] != null) {
+            return converterColorIndexParaString(players[slot].getColorIndex());
+        }
+        switch (slot) {
+            case 0: return "azul";
+            case 1: return "roxo";
+            case 2: return "rosa";
+            case 3: return "amarelo";
+            default: return "azul";
+        }
+    }
+
+    private static String converterColorIndexParaString(int colorIndex) {
+        switch (colorIndex) {
+            case 0: return "azul";
+            case 1: return "roxo";
+            case 2: return "rosa";
+            case 3: return "amarelo";
+            default: return "azul";
+        }
     }
 
     private void abrirMenuPausa() {

@@ -1,14 +1,14 @@
 package control;
 
 import gui.windows.CardsContainer;
-import java.awt.Color;
 import javax.swing.Timer;
 import network.GameClient;
 import network.NetworkMessage;
 
 public class TurnManager {
     
-    private int currentTurn; 
+    private int currentTurn = -1; 
+    private int localPlayerId = 0; // ID do jogador local (offline)
     private GameManager gameManager;
     private CPUIManager cpuManager;
     private CardsContainer cardsContainer;
@@ -16,37 +16,63 @@ public class TurnManager {
 
     public TurnManager(GameManager gameManager) {
         this.gameManager = gameManager;
-        this.currentTurn = 0; 
+    }
+
+    public void setLocalPlayerId(int id) {
+        this.localPlayerId = id;
+        System.out.println("[TurnManager] ID Local configurado para: " + this.localPlayerId);
     }
 
     public void setGameClient(GameClient gameClient) {
         this.gameClient = gameClient;
+        System.out.println("[TurnManager] GameClient vinculado. ID de rede: " + getMyPlayerId());
+    }
+
+    public int getMyPlayerId() {
+        if (this.gameClient != null && this.gameClient.isConnected()) {
+            return this.gameClient.getMyPlayerId();
+        }
+        return this.localPlayerId; 
     }
 
     public boolean isMyTurn() {
-        if (this.gameClient == null) {
-            return this.currentTurn == 0;
-        }
-        return this.gameClient.getMyPlayerId() == this.currentTurn;
+        if (currentTurn == -1) return false;
+        return getMyPlayerId() == this.currentTurn;
     }
 
     public void setTurn(int playerTurn) {
         this.currentTurn = playerTurn;
-        System.out.println("[TurnManager] Turno atualizado via rede para Jogador: " + currentTurn);
+        int meuId = getMyPlayerId();
+        
+        System.out.println("[TurnManager] Turno alterado para: Jogador " + currentTurn + " | Meu ID: " + meuId);
         
         if (this.gameManager != null) {
             this.gameManager.resetHumanPawnsVisuals();
             this.gameManager.setJogadaEmAndamento(false);
             
-            // --- ATUALIZAÇÃO VISUAL DO SLOT ---
             if (this.gameManager.getBoardScreen() != null) {
                 this.gameManager.getBoardScreen().updateActivePlayerSlot(this.currentTurn);
             }
         }
 
+        boolean ehCpu = (this.gameManager != null && this.gameManager.isCPU(this.currentTurn));
+
+        // 1. SE FOR A SUA VEZ (Humano Local)
         if (isMyTurn()) {
             startHumanTurn();
-        } else if (this.gameManager != null) {
+        } 
+        // 2. SE FOR A VEZ DE UMA CPU
+        else if (ehCpu) {
+            // No modo Offline OU sendo o Host (Player 0) no Online, inicia a jogada da CPU
+            if (this.gameClient == null || meuId == 0) {
+                startCPUTurn(false);
+            } else {
+                String nome = this.gameManager.getPlayerNameById(this.currentTurn);
+                this.gameManager.emitirStatus(GameStatusManager.TURNO_CPU_INICIO, nome);
+            }
+        } 
+        // 3. SE FOR A VEZ DE OUTRO JOGADOR HUMANO (Online)
+        else {
             String nome = this.gameManager.getPlayerNameById(this.currentTurn);
             this.gameManager.emitirStatus(GameStatusManager.VEZ_DE_JOGADOR, nome);
         }
@@ -55,30 +81,26 @@ public class TurnManager {
     public void sortearPrimeiroJogador() {
         if (this.gameManager == null) return;
 
-        // 1. Inicia o carregamento dos baralhos em segundo plano
         if (this.gameManager.getDeckManager() != null) {
             this.gameManager.getDeckManager().initializeDecksAsync(() -> {
-                System.out.println("[TurnManager] Baralhos prontos para o início da partida.");
+                System.out.println("[TurnManager] Baralhos prontos para o início.");
             });
         }
 
-        // 2. Muda o status visual imediatamente na tela
         javax.swing.SwingUtilities.invokeLater(() -> {
             this.gameManager.emitirStatus(GameStatusManager.TITULO_JOGO);
         });
 
-        // 3. Roda a animação visual do sorteio enquanto as cartas terminam de carregar em background
         Timer timerAviso = new Timer(2000, eAviso -> {
             this.gameManager.emitirStatus(GameStatusManager.SORTEANDO_JOGADOR);
 
             Timer timerDelayRoleta = new Timer(1500, eRoleta -> {
-                
                 final int[] delayAtual = {50}; 
                 Timer timerSorteio = new Timer(delayAtual[0], null);
                 
                 timerSorteio.addActionListener(e -> {
                     int jogadorFalso = (int) (Math.random() * 4);
-                    String nomeSorteio = (jogadorFalso == 0) ? "VOCÊ" : this.gameManager.getPlayerNameById(jogadorFalso).toUpperCase();
+                    String nomeSorteio = (jogadorFalso == getMyPlayerId()) ? "VOCÊ" : this.gameManager.getPlayerNameById(jogadorFalso).toUpperCase();
                     
                     this.gameManager.emitirStatus(GameStatusManager.SORTEIO_GIRO, nomeSorteio);
 
@@ -87,26 +109,17 @@ public class TurnManager {
 
                     if (delayAtual[0] >= 500) {
                         timerSorteio.stop();
-
                         this.gameManager.setSorteioInicialAtivo(false);
-                        this.currentTurn = (int) (Math.random() * 4);
-                        
-                        if (this.gameManager.getBoardScreen() != null) {
-                            this.gameManager.getBoardScreen().updateActivePlayerSlot(this.currentTurn);
-                        }
 
-                        String nomeVencedor = (this.currentTurn == 0) ? "Você" : this.gameManager.getPlayerNameById(this.currentTurn);
-                        
-                        this.gameManager.emitirStatus(GameStatusManager.INICIO_VENCEDOR, nomeVencedor);
-
-                        if (this.currentTurn == 0) {
-                            Timer delayHumano = new Timer(1500, ev -> startHumanTurn());
-                            delayHumano.setRepeats(false);
-                            delayHumano.start();
-                        } else if (this.gameClient == null) {
-                            Timer delayCPU = new Timer(1500, ev -> startCPUTurn(false));
-                            delayCPU.setRepeats(false);
-                            delayCPU.start();
+                        // No offline ou sendo Host online, sorteia e aplica o turno inicial
+                        if (this.gameClient == null || getMyPlayerId() == 0) {
+                            int sorteado = (int) (Math.random() * 4);
+                            
+                            if (this.gameClient != null && this.gameClient.isConnected()) {
+                                this.gameClient.send(new NetworkMessage("SET_TURN", getMyPlayerId(), String.valueOf(sorteado)));
+                            }
+                            
+                            setTurn(sorteado);
                         }
                     }
                 });
@@ -115,7 +128,6 @@ public class TurnManager {
             });
             timerDelayRoleta.setRepeats(false);
             timerDelayRoleta.start();
-            
         });
         timerAviso.setRepeats(false);
         timerAviso.start();
@@ -138,7 +150,7 @@ public class TurnManager {
     }
 
     public void nextTurn() {
-        if (this.currentTurn == 0 && this.gameManager != null) {
+        if (isMyTurn() && this.gameManager != null) {
             this.gameManager.resetHumanPawnsVisuals();
         }
 
@@ -148,30 +160,17 @@ public class TurnManager {
             this.gameManager.decrementAzarCooldown(previousTurn);
         }
 
-        this.currentTurn = (this.currentTurn + 1) % 4;
-
-        // --- ATUALIZAÇÃO VISUAL DO SLOT DO PRÓXIMO JOGADOR ---
-        if (this.gameManager != null && this.gameManager.getBoardScreen() != null) {
-            this.gameManager.getBoardScreen().updateActivePlayerSlot(this.currentTurn);
-        }
-
-        System.out.println("\n=================================");
-        System.out.println("[TurnManager] Fim de turno. A vez agora é do Jogador: " + currentTurn);
-        System.out.println("=================================");
+        int next = (this.currentTurn + 1) % 4;
         
-        if (gameClient != null && gameClient.getMyPlayerId() == previousTurn) {
-            gameClient.send(new NetworkMessage("NEXT_TURN", gameClient.getMyPlayerId(), String.valueOf(this.currentTurn)));
-        }
-
-        if (isMyTurn()) {
-            startHumanTurn();
-        } else if (this.gameClient == null) {
-            startCPUTurn(false);
+        if (gameClient != null && gameClient.isConnected() && gameClient.getMyPlayerId() == previousTurn) {
+            gameClient.send(new NetworkMessage("NEXT_TURN", gameClient.getMyPlayerId(), String.valueOf(next)));
+        } else {
+            setTurn(next);
         }
     }
 
     private void startHumanTurn() {
-        System.out.println("[TurnManager] Vez do humano. Aguardando interação...");
+        System.out.println("[TurnManager] Sua vez (ID " + getMyPlayerId() + "). Controles liberados.");
         
         if (this.gameManager != null) {
             this.gameManager.setJogadaEmAndamento(false);
@@ -191,7 +190,7 @@ public class TurnManager {
         }
 
         String nomeCPU = this.gameManager.getPlayerNameById(this.currentTurn);
-        System.out.println("[TurnManager] Iniciando sequência de turno para: " + nomeCPU);
+        System.out.println("[TurnManager] Vez da CPU " + currentTurn + " (" + nomeCPU + ")");
         
         if (!ehTurnoExtra) {
             this.gameManager.emitirStatus(GameStatusManager.TURNO_CPU_INICIO, nomeCPU);
@@ -212,30 +211,35 @@ public class TurnManager {
         if (this.cpuManager != null) {
             this.cpuManager.playTurn(this.currentTurn);
         } else {
-            System.err.println("[TurnManager] Erro: CPUIManager não encontrado!");
+            System.err.println("[TurnManager] CPUIManager ausente! Passando turno...");
             nextTurn();
         }
     }
 
     public void processExtraTurn() {
-        System.out.println("\n=================================");
-        System.out.println("[TurnManager] TURNO EXTRA! A vez continua com o Jogador: " + currentTurn);
-        System.out.println("=================================");
-
-        // --- MANTO/REFORÇO VISUAL DO SLOT NO TURNO EXTRA ---
         if (this.gameManager != null && this.gameManager.getBoardScreen() != null) {
             this.gameManager.getBoardScreen().updateActivePlayerSlot(this.currentTurn);
         }
 
-        if (this.currentTurn == 0 && this.gameManager != null) {
+        if (isMyTurn() && this.gameManager != null) {
             this.gameManager.setJogadaEmAndamento(false);
             this.gameManager.resetHumanPawnsVisuals();
         }
         
+        boolean ehCpu = (this.gameManager != null && this.gameManager.isCPU(this.currentTurn));
+
         if (isMyTurn()) {
             startHumanTurn();
-        } else if (this.gameClient == null) {
-            startCPUTurn(true);
+        } else if (ehCpu) {
+            if (this.gameClient == null || getMyPlayerId() == 0) {
+                startCPUTurn(true);
+            } else {
+                String nome = this.gameManager.getPlayerNameById(this.currentTurn);
+                this.gameManager.emitirStatus(GameStatusManager.TURNO_CPU_INICIO, nome);
+            }
+        } else {
+            String nome = this.gameManager.getPlayerNameById(this.currentTurn);
+            this.gameManager.emitirStatus(GameStatusManager.VEZ_DE_JOGADOR, nome);
         }
     }
 
